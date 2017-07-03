@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widgetBackground">#e5e5e5</color>
+    <color name="widgetGrayLight">#d7d7d7</color>
+    <color name="widgetAccent">#17b9e8</color>
+    <color name="searchBackground">#f1f1f1</color>
+    <color name="searchHint">#c9c9c9</color>
+    <color name="searchText">#333333</color>
+    <color name="searchDivider">#999999</color>
+    <color name="refreshSchemeRed">#eb4f38</color>
+    <color name="refreshSchemeBlue">#359cea</color>
+    <color name="refreshSchemeOrange">#ff8236</color>
+</resources>

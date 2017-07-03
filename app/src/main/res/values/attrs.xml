@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="mainColor" format="color"/>
+    <attr name="tabBarTextColor" format="reference"/>
+
+    <!--底部TabBar 首页选择器-->
+    <attr name="tabBarIconHome" format="reference"/>
+    <!--底部TabBar 订单提报选择器-->
+    <attr name="tabBarIconOrder" format="reference"/>
+    <!--底部TabBar 更改函提报选择器-->
+    <attr name="tabBarIconModify" format="reference"/>
+</resources>

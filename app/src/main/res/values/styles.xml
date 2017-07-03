@@ -1,0 +1,26 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="mainColor">@color/colorPrimary</item>
+        <item name="tabBarTextColor">@drawable/tab_text_color</item>
+        <!--底部Tab图标-->
+        <item name="tabBarIconHome">@drawable/tab_icon_home</item>
+        <item name="tabBarIconOrder">@drawable/tab_icon_order</item>
+        <item name="tabBarIconModify">@drawable/tab_icon_modify</item>
+    </style>
+
+    <!--自定义editText下划线-->
+    <style name="MyText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/myEditLine</item>
+        <item name="colorControlActivated">@color/myEditLine</item>
+    </style>
+
+</resources>

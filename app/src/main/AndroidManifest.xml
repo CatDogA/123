@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shanghaigm.dms">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".DmsApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/kai_wo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 登录界面 -->
+        <activity
+            android:name=".view.activity.common.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.activity.BaseActivity" />
+        <activity
+            android:name=".view.activity.ck.HomeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.mm.OrderDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.mm.ContractReviewOrChangeLetterReviewActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".view.activity.mm.HomeActivity" />
+        <activity android:name=".view.activity.mm.ContractReviewDetailActivity" />
+        <activity android:name=".view.activity.mm.ChangeLetterDetailActivity" />
+        <activity android:name=".view.activity.mm.ChangeBillDetailActivity" />
+        <activity
+            android:name=".view.activity.ck.OrderModifyActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.ck.OrderAddActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".view.activity.ck.ChangeLetterAddActivity" />
+        <activity android:name=".view.activity.ck.ChangeLetterQueryDetailActivity" />
+        <activity android:name=".view.activity.ck.ChangeLetterModifyActivity" />
+        <activity android:name=".view.activity.ck.AllocationAddChooseUndefaultActivity" />
+    </application>
+
+</manifest>

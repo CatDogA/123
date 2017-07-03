@@ -1,0 +1,147 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginStart="5dp"
+    android:orientation="vertical"
+    tools:context="com.shanghaigm.dms.view.fragment.ck.OrderAddAllocationFragment">
+
+
+    <Button
+        android:id="@+id/btn_new_energy"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/ck_allocation_new_energy"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/new_energy_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/include_allocation_title" />
+
+        <ListView
+            android:id="@+id/list_new_energy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorBlack"
+            android:dividerHeight="1dp"
+            >
+
+        </ListView>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_under_pan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/ck_under_pan"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/under_pan_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/include_allocation_title" />
+
+        <ListView
+            android:id="@+id/list_under_pan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorBlack"
+            android:dividerHeight="1dp">
+
+        </ListView>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_car_body"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/ck_car_body"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/car_body_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/include_allocation_title" />
+
+        <ListView
+            android:id="@+id/list_car_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorBlack"
+            android:dividerHeight="1dp"></ListView>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_electric_appliance"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/ck_electric_appliance"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/electric_appliance_ll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/include_allocation_title" />
+
+        <ListView
+            android:id="@+id/list_electric_appliance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorBlack"
+            android:dividerHeight="1dp">
+
+        </ListView>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_self_define"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/ck_self_define"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/sef_define_ll"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_allocation__table_title" />
+
+        <include layout="@layout/include_allocation_add_bar" />
+    </LinearLayout>
+</LinearLayout>

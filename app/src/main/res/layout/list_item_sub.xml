@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="paper"
+            type="com.shanghaigm.dms.model.entity.mm.PaperInfo" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:context="com.shanghaigm.dms.view.fragment.mm.OrderReviewFragment">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+        <!--调用控制text颜色的方法-->
+        <TextView
+            android:onClick="@{paper.onCkQueryOrderDetailClick}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@{paper.number}"
+            app:set_text_color="@{paper.state}"
+            />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@{paper.name}"
+            app:set_text_color="@{paper.state}" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@{paper.model}"
+            app:set_text_color="@{paper.state}" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <LinearLayout
+            android:onClick="@{paper.onNoAccessClick}"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <!--mvvm利用构造传入的mipmap，从xml传入info，再set_img绑定的方法，把图片导入所在的imageview中，不知
+            imageview是如何导入方法的-->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="@{paper.onImageViewClick}"
+                android:padding="2dp"
+                app:set_img_modify="@{paper.state}" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="2dp"
+                app:set_img_delete="@{paper.state}" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+</layout>

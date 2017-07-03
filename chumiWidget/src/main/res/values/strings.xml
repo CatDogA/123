@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">widget</string>
+    <string name="widget_reminder">提示</string>
+    <string name="widget_load_more">加载更多</string>
+    <string name="widget_search">搜索</string>
+    <string name="widget_search_tip">搜索关键字不能为空</string>
+    <string name="widget_sure">确认</string>
+    <string name="widget_cancel">取消</string>
+    <string name="widget_choose_date">请选择时间</string>
+    <string name="widget_year">年</string>
+    <string name="widget_month">月</string>
+    <string name="widget_day">日</string>
+    <string name="widget_hour">时</string>
+    <string name="widget_minute">分</string>
+</resources>
