@@ -20,7 +20,7 @@ import java.util.List;
 public class OrderDetailAllocationInfoFragment extends BaseFragment {
     private ListView listview;
     private ListAdapter adapter;
-    
+
     private DmsApplication app;
     private ArrayList<OrderDetailInfoAllocation> allocations;
 

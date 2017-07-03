@@ -5,6 +5,7 @@ package com.shanghaigm.dms.model.entity.common;
  */
 
 public class MainData {
+    
     //账户
     private String account;
     //密码
