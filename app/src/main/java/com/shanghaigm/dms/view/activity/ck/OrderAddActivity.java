@@ -55,6 +55,7 @@ public class OrderAddActivity extends AppCompatActivity {
     private DmsApplication app;
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> assemblyList;
     private ArrayList<AllocationAddChooseUndefaultInfo> addAssemblyList;
+    private ArrayList<OrderDetailInfoAllocation> customAddList;
     private ArrayList<String> assemblyNames;
     private OrderDetailInfoOne addBaseInfo = null;
     private OrderDetailInfoTwo addPayInfo = null;
@@ -197,9 +198,7 @@ public class OrderAddActivity extends AppCompatActivity {
                                         allocation.put("number", assemblyInfos.get(j).getNum());     //是什么类型？
                                         allocation.put("prices", assemblyInfos.get(j).getPrice());
                                         allocation.put("remark", assemblyInfos.get(j).getRemarks());
-                                        //=0
                                     } else {
-                                        Log.i(TAG, "onClick: " + "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
                                     }
                                 } else {
                                     allocation.put("zongc", assemblyInfos.get(j).getAssembly());
@@ -216,34 +215,27 @@ public class OrderAddActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                Log.i(TAG, "onClick: getCustomAddList   " + getCustomAddList().size() + "   getEntry_name   " + getCustomAddList().get(0).getEntry_name());
                 //提交请求
                 RequestParams requestParams = new RequestParams();
                 requestParams.put("order", paramObject.toString());
-                JSONObject all = null;
-                
-                try {
-                    all = new JSONObject(allocations.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (allocations != null) {
+                    requestParams.put("standardVo", allocations.toString());
+                    requestParams.put("matching", "");
+                    requestParams.put("loginName", app.getAccount());
+                    CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_ORDER_ADD, requestParams), new DisposeDataHandle(new DisposeDataListener() {
+                        @Override
+                        public void onSuccess(Object responseObj) {
+                            Log.i(TAG, "onSuccess:          " + responseObj.toString());
+                        }
+
+                        @Override
+                        public void onFailure(Object reasonObj) {
+                            Log.i(TAG, "onFailure:          " + reasonObj.toString());
+                            Toast.makeText(OrderAddActivity.this, "", Toast.LENGTH_SHORT).show();
+                        }
+                    }));
                 }
-
-                requestParams.put("standardVo", all.toString());
-                requestParams.put("matching", "");
-                requestParams.put("loginName", app.getAccount());
-                CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_ORDER_ADD, requestParams), new DisposeDataHandle(new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-                        Log.i(TAG, "onSuccess:          " + responseObj.toString());
-                    }
-
-                    @Override
-                    public void onFailure(Object reasonObj) {
-                        Log.i(TAG, "onFailure:          " + reasonObj.toString());
-                        Toast.makeText(OrderAddActivity.this, "", Toast.LENGTH_SHORT).show();
-                    }
-                }));
-
             }
         });
         titleText.setText(String.format(getString(R.string.ck_order_add)));
@@ -305,6 +297,9 @@ public class OrderAddActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        customAddList = new ArrayList<>();
+        customAddList.add(new OrderDetailInfoAllocation());
+
         tabLayout.setSelectedTabIndicatorColor(Color.GRAY);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
@@ -345,5 +340,13 @@ public class OrderAddActivity extends AppCompatActivity {
 
     public void setAssemblyNames(ArrayList<String> assemblyNames) {
         this.assemblyNames = assemblyNames;
+    }
+
+    public ArrayList<OrderDetailInfoAllocation> getCustomAddList() {
+        return customAddList;
+    }
+
+    public void setCustomAddList(ArrayList<OrderDetailInfoAllocation> customAddList) {
+        this.customAddList = customAddList;
     }
 }

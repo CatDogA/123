@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -11,48 +12,53 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/colorBlack" />
+
         <RelativeLayout
-            android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
             <EditText
-                android:focusable="false"
-                android:textSize="13sp"
                 android:id="@+id/edit_system"
-                android:layout_margin="3dp"
-                android:background="@color/colorWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:background="@color/colorWhite"
+                android:focusable="false"
                 android:gravity="center"
                 android:textColor="@color/colorBlack"
-                />
+                android:textSize="13sp" />
+
             <ImageView
                 android:id="@+id/img_system"
-                android:layout_alignRight="@+id/edit_system"
-                android:layout_alignBottom="@+id/edit_system"
-                android:src="@mipmap/down"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/edit_system"
+                android:layout_alignRight="@+id/edit_system"
+                android:src="@mipmap/down" />
         </RelativeLayout>
+
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/colorBlack" />
+
         <RelativeLayout
-            android:layout_weight="4"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="4">
+
             <EditText
                 android:id="@+id/edt_assembly"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
-                android:layout_margin="3dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_margin="3dp"
                 android:background="@color/colorWhite"
-                android:textColor="@color/colorBlack" />
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp" />
         </RelativeLayout>
 
 
@@ -62,19 +68,20 @@
             android:background="@color/colorBlack" />
 
         <RelativeLayout
-            android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
             <EditText
                 android:id="@+id/edt_config"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
-                android:layout_margin="3dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_margin="3dp"
                 android:background="@color/colorWhite"
-                android:textColor="@color/colorBlack" />
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
@@ -83,20 +90,21 @@
             android:background="@color/colorBlack" />
 
         <RelativeLayout
-            android:layout_weight="2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
             <EditText
                 android:id="@+id/edt_num"
-                android:textSize="13sp"
-                android:numeric="integer"
                 android:layout_width="match_parent"
-                android:layout_margin="3dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_margin="3dp"
                 android:background="@color/colorWhite"
-                android:textColor="@color/colorBlack" />
+                android:gravity="center"
+                android:inputType="number"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
@@ -105,19 +113,20 @@
             android:background="@color/colorBlack" />
 
         <RelativeLayout
-            android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
             <EditText
                 android:id="@+id/edt_remarks"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
-                android:layout_margin="3dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_margin="3dp"
                 android:background="@color/colorWhite"
-                android:textColor="@color/colorBlack" />
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
@@ -127,7 +136,7 @@
     </LinearLayout>
 
     <TextView
-        android:background="@color/colorBlack"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:background="@color/colorBlack" />
 </LinearLayout>

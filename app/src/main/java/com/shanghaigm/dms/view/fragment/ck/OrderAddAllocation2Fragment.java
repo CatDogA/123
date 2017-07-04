@@ -34,7 +34,7 @@ import static com.shanghaigm.dms.R.mipmap.back;
 
 //动态添加
 public class OrderAddAllocation2Fragment extends BaseFragment {
-    private static String TAG = "OrderAddAllocation2Fragment";
+    private static String TAG = "OrderAddAllocation2";
     private ArrayList<Button> btns = new ArrayList<>();
     private Handler mHandler = new Handler();   //接收
     private ArrayList<AllocationUnDefaultChoosePopupWindow> popWindows = new ArrayList<>();
@@ -45,7 +45,12 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
     private ArrayList<AllocationTable> tables = new ArrayList<>();
     private ArrayList<String> names = null;
     private LinearLayout ll;
+    private Button btnAdd;
+    private CustomAllocationTable customAllocationTable;
     public static OrderAddAllocation2Fragment fragment = null;
+    private ArrayList<OrderDetailInfoAllocation> customerAllocationList;
+    private Handler customHandler = new Handler();
+
     public OrderAddAllocation2Fragment() {
     }
 
@@ -77,6 +82,16 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
                 ((OrderAddActivity) getActivity()).setAssemblyList(saveLists);    //把改变后的选配数据传给activity
             }
         };
+
+        customHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+                customerAllocationList = (ArrayList<OrderDetailInfoAllocation>) bundle.getSerializable(CustomAllocationTable.GET_CUSTOM_ALLOCATIN_INFO);
+                Log.i(TAG, "handleMessage: " + customerAllocationList.size());
+                ((OrderAddActivity) getActivity()).setCustomAddList(customerAllocationList);
+            }
+        };
     }
 
     private void initView(View v) {
@@ -94,6 +109,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (hidden) {// 不在最前端界面显示
         } else {// 重新显示到最前端中
+            Toast.makeText(getActivity(), "123", Toast.LENGTH_SHORT).show();
             initData();
         }
     }
@@ -103,7 +119,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         if (((OrderAddActivity) getActivity()).getAssemblyList() != null) {
             allAssemblyList = ((OrderAddActivity) getActivity()).getAssemblyList();
             names = ((OrderAddActivity) getActivity()).getAssemblyNames();
-            Log.i(TAG, "initData: " + allAssemblyList.size() + "      names     " + names.size()+"       name"+names.get(0));
+            Log.i(TAG, "initData: " + allAssemblyList.size() + "      names     " + names.size() + "       name" + names.get(0));
             for (int i = 0; i < allAssemblyList.size(); i++) {
                 //保存lists
                 saveLists.add(allAssemblyList.get(i));
@@ -134,57 +150,55 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
                 tables.add(table);
                 linearLayouts.add(linearLayout);
                 ll.addView(linearLayout);
-//                for (LinearLayout l : linearLayouts) {
-//                    l.setVisibility(View.GONE);
-//                }
             }
-            setUpView();
         } else {
-            Toast.makeText(getActivity(), "请选择车型", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "请选择车型", Toast.LENGTH_SHORT).show();
         }
         //新建linearlayout套button
         LinearLayout btnlinearLayout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams llParams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams llParams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         llParams1.setMargins(0, -15, 0, -15);
         btnlinearLayout.setLayoutParams(llParams1);
         btnlinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         Button btn = new Button(getActivity());
         btn.setText("自定义");
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,1);
-        params.setMargins(0,0,-15,0);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        params.setMargins(0, 0, -15, 0);
         params.gravity = Gravity.CENTER_HORIZONTAL;
         btn.setLayoutParams(params);
 //        ll.addView(btn);
+        btns.add(btn);
         btnlinearLayout.addView(btn);
 
-        Button btnAdd = new Button(getActivity());
+        btnAdd = new Button(getActivity());
         btnAdd.setText("+");
-        LinearLayout.LayoutParams paramsAdd = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(-15,0,0,0);
+        LinearLayout.LayoutParams paramsAdd = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(-15, 0, 0, 0);
         paramsAdd.gravity = Gravity.CENTER_HORIZONTAL;
         btnAdd.setLayoutParams(paramsAdd);
+
         btnlinearLayout.addView(btnAdd);
-
         ll.addView(btnlinearLayout);
-
 
         //建linearlayout
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
         linearLayout.setLayoutParams(llParams);
         //建表
-        CustomAllocationTable customAllocationTable = new CustomAllocationTable(getActivity());
-//        AllocationTable table = new AllocationTable(getActivity(), allAssemblyList.get(i), btn, i, mHandler);
+        customerAllocationList = ((OrderAddActivity) getActivity()).getCustomAddList();
+        Log.i(TAG, "initData: " + customerAllocationList);
+
+        customAllocationTable = new CustomAllocationTable(getActivity(), customerAllocationList, customHandler, ((OrderAddActivity) getActivity()).getAssemblyNames());
         LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//        table.setLayoutParams(tableParams);
-//        linearLayout.addView(table);
-//        tables.add(table);
+        customAllocationTable.setLayoutParams(tableParams);
+        linearLayout.addView(customAllocationTable);
         linearLayouts.add(linearLayout);
         ll.addView(linearLayout);
         for (LinearLayout l : linearLayouts) {
             l.setVisibility(View.GONE);
         }
+        setUpView();
     }
 
     private void setUpView() {
@@ -208,7 +222,12 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
             });
 
         }
-
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customAllocationTable.AddItem();
+            }
+        });
     }
 
     private void allGone() {

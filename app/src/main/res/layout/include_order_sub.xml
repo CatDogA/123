@@ -139,7 +139,7 @@
 
             <Button
                 android:id="@+id/mm_query_button"
-                android:layout_width="250dp"
+                android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
@@ -147,7 +147,6 @@
                 android:text="@string/query" />
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/mm_add_button"
                 android:layout_width="150dp"
                 android:layout_height="50dp"

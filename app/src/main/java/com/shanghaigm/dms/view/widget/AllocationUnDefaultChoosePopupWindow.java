@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
     private DmsApplication app = DmsApplication.getInstance();
-    private static String TAG = "AllocationUnDefaultChoosePopupWindow";
+    private static String TAG = "AllocationUnDefault";
     //saveList用来先存着选配数据,list接收listview传来的选配数据,appInfolist用来全局储存,saveUndefaultList存储用来刷新界面的数据
     private ArrayList<AllocationAddChooseUndefaultInfo> list, saveList, appInfoList;
     private ArrayList<OrderDetailInfoAllocation> saveUndefaultList;
@@ -167,9 +167,11 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
                 price = (EditText) v.findViewById(R.id.edt_allocation_price);
                 num = (EditText) v.findViewById(R.id.edt_allocation_num);
                 remarks = (EditText) v.findViewById(R.id.edt_allocation_remarks);
+
                 price.setTag(position);         //存位置
                 num.setTag(position);
                 remarks.setTag(position);
+
                 price.addTextChangedListener(new GetTextAdapter.TextSwitcher(1, this));
                 num.addTextChangedListener(new GetTextAdapter.TextSwitcher(2, this));
                 remarks.addTextChangedListener(new GetTextAdapter.TextSwitcher(3, this));
@@ -238,7 +240,7 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
     //1.定义一个回调接口
     public interface CallBack {
         /**
-         * @param changeList
+         * @param
          * @param position
          */
         void getResult(ArrayList<OrderDetailInfoAllocation> saveUndefaultList, int position);//将要回调的数据作为参数写在接口方法中
