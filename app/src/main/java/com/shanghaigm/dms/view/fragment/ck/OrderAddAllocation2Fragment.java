@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -132,7 +133,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
                 Button btn = new Button(getActivity());
                 btn.setText(btnText);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0, -15, 0, -15);
+                params.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
                 params.gravity = Gravity.CENTER_HORIZONTAL;
                 btn.setLayoutParams(params);
                 ll.addView(btn);
@@ -157,14 +158,14 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         //新建linearlayout套button
         LinearLayout btnlinearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams llParams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        llParams1.setMargins(0, -15, 0, -15);
+        llParams1.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
         btnlinearLayout.setLayoutParams(llParams1);
         btnlinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         Button btn = new Button(getActivity());
         btn.setText("自定义");
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-        params.setMargins(0, 0, -15, 0);
+        params.setMargins(0, 0, getPixelsFromDp(-5), 0);
         params.gravity = Gravity.CENTER_HORIZONTAL;
         btn.setLayoutParams(params);
 //        ll.addView(btn);
@@ -174,7 +175,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         btnAdd = new Button(getActivity());
         btnAdd.setText("+");
         LinearLayout.LayoutParams paramsAdd = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(-15, 0, 0, 0);
+        params.setMargins(getPixelsFromDp(-5), 0, 0, 0);
         paramsAdd.gravity = Gravity.CENTER_HORIZONTAL;
         btnAdd.setLayoutParams(paramsAdd);
 
@@ -237,6 +238,16 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         }
     }
 
+    //把dp转化为px
+    private int getPixelsFromDp(int size) {
+        //DisplayMetrics：显示度量
+        DisplayMetrics metrics = new DisplayMetrics();
+        //度量屏幕
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        //dp*dpi/160    dpi/160:是dp长度和像素px的比值
+        return (size * metrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT;
+
+    }
     //接口回调
 //    public interface CallAllcocationInfoBack {
 //        void getAllocationInfo(ArrayList<ArrayList<OrderDetailInfoAllocation>> saveData);

@@ -324,7 +324,6 @@ public class OrderAddActivity extends AppCompatActivity {
         fragments = new ArrayList<>();
         fragments.add(OrderAddBaseFragment.getInstance());
         fragments.add(OrderAddPayFragment.getInstance());
-//        fragments.add(OrderAddAllocationFragment.getInstance());
         fragments.add(OrderAddAllocation2Fragment.getInstance());
 
         manager = getFragmentManager();

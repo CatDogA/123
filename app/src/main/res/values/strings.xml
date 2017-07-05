@@ -31,6 +31,19 @@
     <string name="ck_car_body">车身</string>
     <string name="ck_electric_appliance">电器</string>
     <string name="ck_self_define">自定义</string>
+
+    <!--日报提报-->
+    <string name="report_sub">日报提报</string>
+    <string name="after_report_sub">售后日报提报</string>
+    <string name="report_id">日报编号</string>
+    <string name="report_info">日报信息</string>
+    <string name="attach_sub">附件上传</string>
+
+    <!--日报查询-->
+    <string name="report_query">日报查询</string>
+    <string name="after_report_query">售后日报查询</string>
+    <string name="car_id">车牌号</string>
+
     <!--mm订单审核-->
     <string name="mm_order_title">订单审核</string>
     <string name="mm_order_review">订单审核</string>
@@ -89,4 +102,7 @@
     <string name="mm_change">更改如下</string>
     <string name="address">地址</string>
     <string name="change_date">更改日期</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

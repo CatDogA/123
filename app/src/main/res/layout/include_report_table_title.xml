@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorBlack" />
@@ -20,37 +20,21 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="@string/order_number"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="@string/customer"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_weight="4"
+            android:gravity="center"
+            android:text="@string/report_id"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:gravity="center"
             android:text="@string/model"
             android:textColor="@color/colorBlack" />
@@ -62,8 +46,33 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="@string/car_id"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/mm_order_state"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center"
             android:text="@string/operation"
@@ -71,12 +80,11 @@
 
         <TextView
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/colorBlack" />
     </LinearLayout>
-
     <TextView
+        android:background="@color/colorBlack"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBlack" />
+        android:layout_height="1dp" />
 </LinearLayout>

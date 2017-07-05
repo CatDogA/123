@@ -146,7 +146,8 @@ public class LoginActivity extends BaseActivity {
         Log.i(TAG, "login: " + roleCode);
         switch (roleCode) {
             case "ywy":
-                goToActivity(HomeActivity.class);
+                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
+//                goToActivity(HomeActivity.class);
                 finish();
                 break;
             case "ssbspy":
