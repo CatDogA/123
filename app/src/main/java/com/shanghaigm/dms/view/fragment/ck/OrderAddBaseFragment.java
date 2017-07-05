@@ -239,7 +239,7 @@ public class OrderAddBaseFragment extends BaseFragment {
             @Override
             public void onSuccess(Object responseObj) {
                 Log.i(TAG, "onSuccess:     " + responseObj.toString());
-                ArrayList<OrderDetailInfoAllocation> list = new ArrayList<>();
+                ArrayList<OrderDetailInfoAllocation> list = new ArrayList<>();    //每种标配信息
                 JSONObject object = (JSONObject) responseObj;
                 try {
                     JSONArray array = object.getJSONArray("resultEntity");
@@ -271,7 +271,8 @@ public class OrderAddBaseFragment extends BaseFragment {
                         list.add(new OrderDetailInfoAllocation(assemblyStr, "", "", "", "", 0, null, 0));
                         allAssemblyList.add(list);
                     }
-                    ((OrderAddActivity) getActivity()).setAssemblyList(allAssemblyList);
+                    ((OrderAddActivity) getActivity()).setAssemblyList(allAssemblyList);   //用于被改变
+                    ((OrderAddActivity)getActivity()).setOriginalList(allAssemblyList);
                     Log.i(TAG, "onSuccess: " + allAssemblyList.size() + "    " + assemblyCount);
                     if (allAssemblyList.size() == assemblyCount) {
                         dialog.dismissLoadingDlg();

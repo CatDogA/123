@@ -44,7 +44,7 @@ import javax.crypto.AEADBadTagException;
 import static android.media.CamcorderProfile.get;
 
 public class OrderAddActivity extends AppCompatActivity {
-    private static String TAG = "OrderDetailActivity";
+    private static String TAG = "OrderAddActivity";
     private TextView titleText;
     private RelativeLayout rl_back, rl_end;
     private TabLayout tabLayout;
@@ -53,7 +53,8 @@ public class OrderAddActivity extends AppCompatActivity {
     private Button saveBtn, submitBtn;
     private LoadingDialog dialog;
     private DmsApplication app;
-    private ArrayList<ArrayList<OrderDetailInfoAllocation>> assemblyList;
+    private ArrayList<ArrayList<OrderDetailInfoAllocation>> assemblyList;   //所有修改后的配置信息
+    private ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList;   //所有原始选配信息
     private ArrayList<AllocationAddChooseUndefaultInfo> addAssemblyList;
     private ArrayList<OrderDetailInfoAllocation> customAddList;
     private ArrayList<String> assemblyNames;
@@ -146,6 +147,7 @@ public class OrderAddActivity extends AppCompatActivity {
                 JSONObject paramObject = new JSONObject();
                 JSONArray paramArray = new JSONArray();
                 JSONArray allocations = new JSONArray();    //全部配置信息
+                JSONArray originAllocations = new JSONArray();
                 try {
                     paramObject.put("company_name", companyName);
                     paramObject.put("order_number", orderNumber);
@@ -183,35 +185,46 @@ public class OrderAddActivity extends AppCompatActivity {
                     paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
                     paramArray.put(paramObject);
 
-                    //第三页信息    matching
+                    //第三页信息    standardVo
+//                    if (assemblyList != null) {
+//                        for (int i = 0; i < assemblyList.size(); i++) {
+//                            ArrayList<OrderDetailInfoAllocation> assemblyInfos = assemblyList.get(i);
+//                            JSONObject allocation = new JSONObject();
+//                            for (int j = 0; j < assemblyInfos.size(); j++) {
+//                                if (!assemblyInfos.get(j).getNum().equals("")) {
+//                                    //修改了的数据,>0
+//                                    if (Integer.parseInt(assemblyInfos.get(j).getNum()) > 0) {
+//                                        allocation.put("assembly", assemblyInfos.get(j).getAssembly());
+//                                        allocation.put("xmmc", assemblyInfos.get(j).getEntry_name());
+//                                        allocation.put("peizhix", assemblyInfos.get(j).getConfig_information());
+//                                        allocation.put("number", assemblyInfos.get(j).getNum());     //是什么类型？
+//                                        allocation.put("prices", assemblyInfos.get(j).getPrice());
+//                                        allocation.put("remark", assemblyInfos.get(j).getRemarks());
+//                                    } else {
+//                                    }
+//                                } else {
+//                                    allocation.put("zongc", assemblyInfos.get(j).getAssembly());
+//                                    allocation.put("xmmc", assemblyInfos.get(j).getEntry_name());
+//                                    allocation.put("peizhix", assemblyInfos.get(j).getConfig_information());
+//                                    allocation.put("number", assemblyInfos.get(j).getNum());
+//                                    allocation.put("prices", assemblyInfos.get(j).getPrice());
+//                                    allocation.put("remark", assemblyInfos.get(j).getRemarks());
+//                                }
+//                                allocations.put(allocation);
+//                            }
+//                        }
+//                    }
                     if (assemblyList != null) {
-                        for (int i = 0; i < assemblyList.size(); i++) {
-                            ArrayList<OrderDetailInfoAllocation> assemblyInfos = assemblyList.get(i);
-                            JSONObject allocation = new JSONObject();
-                            for (int j = 0; j < assemblyInfos.size(); j++) {
-                                if (!assemblyInfos.get(j).getNum().equals("")) {
-                                    //修改了的数据,>0
-                                    if (Integer.parseInt(assemblyInfos.get(j).getNum()) > 0) {
-                                        allocation.put("zongc", assemblyInfos.get(j).getAssembly());
-                                        allocation.put("xmmc", assemblyInfos.get(j).getEntry_name());
-                                        allocation.put("peizhix", assemblyInfos.get(j).getConfig_information());
-                                        allocation.put("number", assemblyInfos.get(j).getNum());     //是什么类型？
-                                        allocation.put("prices", assemblyInfos.get(j).getPrice());
-                                        allocation.put("remark", assemblyInfos.get(j).getRemarks());
-                                    } else {
-                                    }
-                                } else {
-                                    allocation.put("zongc", assemblyInfos.get(j).getAssembly());
-                                    allocation.put("xmmc", assemblyInfos.get(j).getEntry_name());
-                                    allocation.put("peizhix", assemblyInfos.get(j).getConfig_information());
-                                    allocation.put("number", assemblyInfos.get(j).getNum());
-                                    allocation.put("prices", assemblyInfos.get(j).getPrice());
-                                    allocation.put("remark", assemblyInfos.get(j).getRemarks());
-                                }
-                                allocations.put(allocation);
-                            }
+                        for (ArrayList<OrderDetailInfoAllocation> changelist : assemblyList) {
+                            Log.i(TAG, "onClick: changelist      " + changelist.size());
                         }
                     }
+//
+//                    if (originalList != null) {
+//                        for (ArrayList<OrderDetailInfoAllocation> originList : originalList) {
+//                            Log.i(TAG, "onClick: originList     " + originList.size());
+//                        }
+//                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -348,5 +361,13 @@ public class OrderAddActivity extends AppCompatActivity {
 
     public void setCustomAddList(ArrayList<OrderDetailInfoAllocation> customAddList) {
         this.customAddList = customAddList;
+    }
+
+    public ArrayList<ArrayList<OrderDetailInfoAllocation>> getOriginalList() {
+        return originalList;
+    }
+
+    public void setOriginalList(ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList) {
+        this.originalList = originalList;
     }
 }

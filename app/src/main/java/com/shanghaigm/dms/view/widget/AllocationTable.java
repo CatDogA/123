@@ -36,7 +36,7 @@ public class AllocationTable extends LinearLayout {
     private AllocationUnDefaultChoosePopupWindow popupWindow;
     private ArrayList<OrderDetailInfoAllocation> saveList = new ArrayList<>();
 
-    public AllocationTable(final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type,Handler mHandler) {
+    public AllocationTable(final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, Handler mHandler) {
         super(context);
         this.data = data;
         this.context = context;
@@ -54,7 +54,7 @@ public class AllocationTable extends LinearLayout {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (data.get(position).getMatchLength() > 0) {
-                    popupWindow = new AllocationUnDefaultChoosePopupWindow(context, position, 1, data.get(position).getList(), data, handler,1);
+                    popupWindow = new AllocationUnDefaultChoosePopupWindow(context, position, 1, data.get(position).getList(), data, handler, 1);
                     popupWindow.showPopup(btn);
                 }
             }
@@ -131,7 +131,8 @@ public class AllocationTable extends LinearLayout {
                 //此时的infoList就是要传给后台的数据
                 Message msg = mHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(AllocationTable.GET_ALLOCATION_DATA,infoList);
+                bundle.putSerializable(AllocationTable.GET_ALLOCATION_DATA, infoList);
+                Log.i(TAG, "getResult: " + infoList.size());
                 msg.setData(bundle);
                 msg.sendToTarget();
 
