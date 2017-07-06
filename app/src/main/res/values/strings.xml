@@ -38,8 +38,33 @@
     <string name="report_id">日报编号</string>
     <string name="report_info">日报信息</string>
     <string name="attach_sub">附件上传</string>
-
+    <string name="attacn_preview">附件预览</string>
+    <string name="report_fill">日报填写</string>
+    
+    <!--日报填写  日报信息-->
+    <string name="back_date">反馈日期</string>
+    <string name="model_series">车型系列</string>
+    <string name="factory_id">出厂编号</string>
+    <string name="vin">底盘VIN码</string>
+    <string name="get_license_date">上牌日期</string>
+    <string name="drive_miles">行驶里程</string>
+    <string name="break_down_description">故障描述</string>
+    <string name="produce_date">生产日期</string>
+    <string name="solve_process">处理过程</string>
+    <string name="solve_result">处理结果</string>
+    <string name="duty_type">责任分类</string>
+    <string name="first_trouble_thing_name">首祸故障件名称</string>
+    <string name="trouble_thing_factory">故障件厂家</string>
+    <string name="auto_out">自动带出</string>
+    <string name="scan">浏览</string>
+    <!--日报填写  附件上传-->
+    <string name="car_name_plate">整车铭牌</string>
+    <string name="trouble_thing_picture">故障件照片</string>
+    <string name="after_repair_pic">修复后照片</string>
+    <string name="else_pic">其他</string>
+    <string name="video">相关视频</string>
     <!--日报查询-->
+    <string name="report_detail">日报明细</string>
     <string name="report_query">日报查询</string>
     <string name="after_report_query">售后日报查询</string>
     <string name="car_id">车牌号</string>

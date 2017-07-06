@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/mainColorGD"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
-    android:orientation="vertical"
-    tools:context="com.shanghaigm.dms.view.activity.as.ReportAddActivity">
+    tools:context="com.shanghaigm.dms.view.activity.as.ReportDetailActivity">
     <include layout="@layout/include_title_bar"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         app:tabPaddingStart="40dp"
         app:tabPaddingEnd="40dp"
-        app:tabSelectedTextColor="@color/colorBlueText"
-        app:tabTextColor="@color/colorBlackText">
+        app:tabSelectedTextColor="@color/colorBlue"
+        app:tabTextColor="@color/colorBlackText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     </android.support.design.widget.TabLayout>
-
     <FrameLayout
-        android:id="@+id/report_add_content"
         android:layout_weight="1"
+        android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
     </FrameLayout>
-    <include layout="@layout/include_report_save_and_sub"/>
 </LinearLayout>

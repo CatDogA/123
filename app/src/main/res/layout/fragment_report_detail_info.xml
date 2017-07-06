@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.shanghaigm.dms.view.fragment.as.ReportInfoFragment">
+    tools:context="com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,13 +20,12 @@
             android:text="@string/back_date" />
 
         <EditText
+            android:id="@+id/editText14"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:focusable="false"
             android:gravity="center"
-            android:hint="@string/auto_out"
-            android:textColorHint="@color/colorLine"
             android:textSize="14dp" />
 
         <TextView
@@ -35,27 +35,13 @@
             android:gravity="right"
             android:text="@string/model" />
 
-        <RelativeLayout
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14dp" />
 
-            <EditText
-                android:id="@+id/edt_model"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/img_model"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_model"
-                android:layout_alignRight="@+id/edt_model"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down_grey" />
-        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -72,27 +58,12 @@
             android:gravity="right"
             android:text="@string/model_series" />
 
-        <RelativeLayout
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/edt_model_series"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/img_model_series"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_model_series"
-                android:layout_alignRight="@+id/edt_model_series"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down_grey" />
-        </RelativeLayout>
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -101,27 +72,12 @@
             android:gravity="right"
             android:text="@string/factory_id" />
 
-        <RelativeLayout
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/edt_factory_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/img_factory_id"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_factory_id"
-                android:layout_alignRight="@+id/edt_factory_id"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down_grey" />
-        </RelativeLayout>
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -139,14 +95,10 @@
             android:text="@string/car_id" />
 
         <EditText
-            android:id="@+id/editText11"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:focusable="false"
             android:gravity="center"
-            android:hint="@string/auto_out"
-            android:textColorHint="@color/colorLine"
             android:textSize="14dp" />
 
         <TextView
@@ -160,10 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:focusable="false"
             android:gravity="center"
-            android:hint="@string/auto_out"
-            android:textColorHint="@color/colorLine"
             android:textSize="14dp" />
     </LinearLayout>
 
@@ -182,14 +131,10 @@
             android:text="@string/produce_date" />
 
         <EditText
-            android:id="@+id/editText12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:focusable="false"
             android:gravity="center"
-            android:hint="@string/auto_out"
-            android:textColorHint="@color/colorLine"
             android:textSize="14dp" />
 
         <TextView
@@ -203,10 +148,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:focusable="false"
             android:gravity="center"
-            android:hint="@string/auto_out"
-            android:textColorHint="@color/colorLine"
             android:textSize="14dp" />
     </LinearLayout>
 
@@ -317,27 +259,12 @@
             android:gravity="right"
             android:text="@string/duty_type" />
 
-        <RelativeLayout
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4">
-
-            <EditText
-                android:id="@+id/edt_duty_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/img_duty_type"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_duty_type"
-                android:layout_alignRight="@+id/edt_duty_type"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down_grey" />
-        </RelativeLayout>
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textSize="14dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -346,27 +273,12 @@
             android:gravity="right"
             android:text="@string/first_trouble_thing_name" />
 
-        <RelativeLayout
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <EditText
-                android:id="@+id/edt_first_trouble_thing_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/img_first_trouble_thing"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_first_trouble_thing_name"
-                android:layout_alignRight="@+id/edt_first_trouble_thing_name"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down_grey" />
-        </RelativeLayout>
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textSize="14dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -383,31 +295,17 @@
             android:gravity="right"
             android:text="@string/trouble_thing_factory" />
 
-        <RelativeLayout
+        <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/edt_trouble_thing_factory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="14dp" />
-
-            <ImageView
-                android:id="@+id/img_trouble_thing_factory"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_trouble_thing_factory"
-                android:layout_alignRight="@+id/edt_trouble_thing_factory"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down_grey" />
-        </RelativeLayout>
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14dp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
     </LinearLayout>
+
 </LinearLayout>

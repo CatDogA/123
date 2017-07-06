@@ -14,7 +14,6 @@ import com.shanghaigm.dms.view.fragment.BaseFragment;
 
 public class ReportAttachSubFragment extends BaseFragment {
     private static ReportAttachSubFragment reportAttachSubFragment;
-    private Button btn_add;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,7 +24,6 @@ public class ReportAttachSubFragment extends BaseFragment {
     }
 
     private void initView(View v) {
-//        btn_add = v.findViewById(R.id.)
     }
 
     public static ReportAttachSubFragment getInstance() {
