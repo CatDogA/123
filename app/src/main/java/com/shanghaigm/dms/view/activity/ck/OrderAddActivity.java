@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,14 +21,11 @@ import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
-import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
-import com.shanghaigm.dms.view.activity.common.LoginActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
-import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocationFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddBaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddPayFragment;
 
@@ -38,10 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import javax.crypto.AEADBadTagException;
-
-import static android.media.CamcorderProfile.get;
 
 public class OrderAddActivity extends AppCompatActivity {
     private static String TAG = "OrderAddActivity";
@@ -55,8 +47,9 @@ public class OrderAddActivity extends AppCompatActivity {
     private DmsApplication app;
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> assemblyList;   //所有修改后的配置信息
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList;   //所有原始选配信息
-    private ArrayList<AllocationAddChooseUndefaultInfo> addAssemblyList;
-    private ArrayList<OrderDetailInfoAllocation> customAddList;
+    private ArrayList<OrderDetailInfoAllocation> allUndefaultAssemblyList;           //所有选配信息
+    private ArrayList<OrderDetailInfoAllocation> customAddList;             //自定义信息
+    private ArrayList<OrderDetailInfoAllocation> singleAllocationList;
     private ArrayList<String> assemblyNames;
     private OrderDetailInfoOne addBaseInfo = null;
     private OrderDetailInfoTwo addPayInfo = null;
@@ -101,6 +94,11 @@ public class OrderAddActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (singleAllocationList != null) {
+                    Log.i(TAG, "onClick:singleAllocationList        " + singleAllocationList.size());
+                } else {
+                    Log.i(TAG, "onClick: " + "不懂");
+                }
                 RequestParams params = new RequestParams();
                 params.put("loginName", app.getAccount());
                 dialog.showLoadingDlg();
@@ -108,7 +106,7 @@ public class OrderAddActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Object responseObj) {
                         dialog.dismissLoadingDlg();
-                        Log.i(TAG, "onSuccess: " + responseObj.toString());
+//                        Log.i(TAG, "onSuccess: " + responseObj.toString());
                         JSONObject object = (JSONObject) responseObj;
                         try {
                             JSONObject resultEntity = object.getJSONObject("resultEntity");
@@ -143,11 +141,9 @@ public class OrderAddActivity extends AppCompatActivity {
                 });
 
                 //前两页信息   order
-
                 JSONObject paramObject = new JSONObject();
                 JSONArray paramArray = new JSONArray();
                 JSONArray allocations = new JSONArray();    //全部配置信息
-                JSONArray originAllocations = new JSONArray();
                 try {
                     paramObject.put("company_name", companyName);
                     paramObject.put("order_number", orderNumber);
@@ -186,49 +182,38 @@ public class OrderAddActivity extends AppCompatActivity {
                     paramArray.put(paramObject);
 
                     //第三页信息    standardVo
-//                    if (assemblyList != null) {
-//                        for (int i = 0; i < assemblyList.size(); i++) {
-//                            ArrayList<OrderDetailInfoAllocation> assemblyInfos = assemblyList.get(i);
-//                            JSONObject allocation = new JSONObject();
-//                            for (int j = 0; j < assemblyInfos.size(); j++) {
-//                                if (!assemblyInfos.get(j).getNum().equals("")) {
-//                                    //修改了的数据,>0
-//                                    if (Integer.parseInt(assemblyInfos.get(j).getNum()) > 0) {
-//                                        allocation.put("assembly", assemblyInfos.get(j).getAssembly());
-//                                        allocation.put("xmmc", assemblyInfos.get(j).getEntry_name());
-//                                        allocation.put("peizhix", assemblyInfos.get(j).getConfig_information());
-//                                        allocation.put("number", assemblyInfos.get(j).getNum());     //是什么类型？
-//                                        allocation.put("prices", assemblyInfos.get(j).getPrice());
-//                                        allocation.put("remark", assemblyInfos.get(j).getRemarks());
-//                                    } else {
-//                                    }
-//                                } else {
-//                                    allocation.put("zongc", assemblyInfos.get(j).getAssembly());
-//                                    allocation.put("xmmc", assemblyInfos.get(j).getEntry_name());
-//                                    allocation.put("peizhix", assemblyInfos.get(j).getConfig_information());
-//                                    allocation.put("number", assemblyInfos.get(j).getNum());
-//                                    allocation.put("prices", assemblyInfos.get(j).getPrice());
-//                                    allocation.put("remark", assemblyInfos.get(j).getRemarks());
-//                                }
-//                                allocations.put(allocation);
-//                            }
-//                        }
-//                    }
-                    if (assemblyList != null) {
-                        for (ArrayList<OrderDetailInfoAllocation> changelist : assemblyList) {
-                            Log.i(TAG, "onClick: changelist      " + changelist.size());
+                    //1.取出整体信息
+                    ArrayList<OrderDetailInfoAllocation> listToPost = new ArrayList<>();
+                    if (originalList != null) {
+                        for (ArrayList<OrderDetailInfoAllocation> originList : originalList) {
+                            Log.i(TAG, "onClick: originList     " + originList.size());
+                            for (int i = 0; i < originList.size(); i++) {
+                                listToPost.add(originList.get(i));
+                            }
                         }
                     }
-//
-//                    if (originalList != null) {
-//                        for (ArrayList<OrderDetailInfoAllocation> originList : originalList) {
-//                            Log.i(TAG, "onClick: originList     " + originList.size());
-//                        }
-//                    }
+                    //2.获取要添加作为matching属性的信息
+                    ArrayList<OrderDetailInfoAllocation> listForChange = new ArrayList<OrderDetailInfoAllocation>();
+                    for (OrderDetailInfoAllocation changeInfo : singleAllocationList) {
+                        if (!changeInfo.getNum().equals("")) {
+                            if (Integer.parseInt(changeInfo.getNum()) > 0) ;
+                            listForChange.add(changeInfo);
+                        }
+                    }
+
+                    for(int i=0;i<listToPost.size();i++){
+                        for(int j=0;j<listForChange.size();j++){
+                            if(listToPost.get(i).getStandard_id()==listForChange.get(j).getStandard_id()){
+//                                listToPost.get(i).setMatching
+                            }
+                        }
+                    }
+
+                    Log.i(TAG, "onClick: listForChange  " + listForChange.size() + "    listToPost  " + listToPost.size());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.i(TAG, "onClick: getCustomAddList   " + getCustomAddList().size() + "   getEntry_name   " + getCustomAddList().get(0).getEntry_name());
+
                 //提交请求
                 RequestParams requestParams = new RequestParams();
                 requestParams.put("order", paramObject.toString());
@@ -236,18 +221,18 @@ public class OrderAddActivity extends AppCompatActivity {
                     requestParams.put("standardVo", allocations.toString());
                     requestParams.put("matching", "");
                     requestParams.put("loginName", app.getAccount());
-                    CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_ORDER_ADD, requestParams), new DisposeDataHandle(new DisposeDataListener() {
-                        @Override
-                        public void onSuccess(Object responseObj) {
-                            Log.i(TAG, "onSuccess:          " + responseObj.toString());
-                        }
-
-                        @Override
-                        public void onFailure(Object reasonObj) {
-                            Log.i(TAG, "onFailure:          " + reasonObj.toString());
-                            Toast.makeText(OrderAddActivity.this, "", Toast.LENGTH_SHORT).show();
-                        }
-                    }));
+//                    CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_ORDER_ADD, requestParams), new DisposeDataHandle(new DisposeDataListener() {
+//                        @Override
+//                        public void onSuccess(Object responseObj) {
+//                            Log.i(TAG, "onSuccess:          " + responseObj.toString());
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Object reasonObj) {
+//                            Log.i(TAG, "onFailure:          " + reasonObj.toString());
+//                            Toast.makeText(OrderAddActivity.this, "", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }));
                 }
             }
         });
@@ -313,6 +298,8 @@ public class OrderAddActivity extends AppCompatActivity {
         customAddList = new ArrayList<>();
         customAddList.add(new OrderDetailInfoAllocation());
 
+        singleAllocationList = new ArrayList<>();
+
         tabLayout.setSelectedTabIndicatorColor(Color.GRAY);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
@@ -338,13 +325,6 @@ public class OrderAddActivity extends AppCompatActivity {
         this.assemblyList = assemblyList;
     }
 
-    public ArrayList<AllocationAddChooseUndefaultInfo> getAddAssemblyList() {
-        return addAssemblyList;
-    }
-
-    public void setAddAssemblyList(ArrayList<AllocationAddChooseUndefaultInfo> addAssemblyList) {
-        this.addAssemblyList = addAssemblyList;
-    }
 
     public ArrayList<String> getAssemblyNames() {
         return assemblyNames;
@@ -368,5 +348,21 @@ public class OrderAddActivity extends AppCompatActivity {
 
     public void setOriginalList(ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList) {
         this.originalList = originalList;
+    }
+
+    public ArrayList<OrderDetailInfoAllocation> getAllUndefaultAssemblyList() {
+        return allUndefaultAssemblyList;
+    }
+
+    public void setAllUndefaultAssemblyList(ArrayList<OrderDetailInfoAllocation> allUndefaultAssemblyList) {
+        this.allUndefaultAssemblyList = allUndefaultAssemblyList;
+    }
+
+    public ArrayList<OrderDetailInfoAllocation> getSingleAllocationList() {
+        return singleAllocationList;
+    }
+
+    public void setSingleAllocationList(ArrayList<OrderDetailInfoAllocation> singleAllocationList) {
+        this.singleAllocationList = singleAllocationList;
     }
 }

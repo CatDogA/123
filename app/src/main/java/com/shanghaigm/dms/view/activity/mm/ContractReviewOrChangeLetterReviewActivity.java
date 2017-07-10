@@ -44,7 +44,7 @@ import java.util.List;
 public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
     private int flag = 0;
     private String url;
-    private static String TAG = "ContractReviewOrChangeLetterReviewActivity";
+    private static String TAG = "ContractReview";
     private EditText areaSelectEdt, modelSelecctEdt, stateSelectEdt, numberEdt, customerEdt, ckEdt;
     private Button btnQuery;
     private ImageView vpRight, vpLeft;
@@ -333,7 +333,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
                             ContractInfoBean.ResultEntity.OrderInfo orderInfo = rows.get(i);
                             String customerName = orderInfo.customer_name;
                             String model = orderInfo.models_name;
-                            String orderNumber = orderInfo.order_number;
+                            String orderNumber = orderInfo.contract_id;
                             int orderId = orderInfo.order_id;
                             int flow_details_id = 0;
                             if (!rowArray.getJSONObject(i).get("flowdetails").equals("")) {
@@ -341,7 +341,6 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
                                 flow_details_id = flow_details.getJSONObject(flow_details.length() - 1).getInt("flow_details_id");
                             }
                             String examination_result = orderInfo.examination_resul;
-                            Log.i(TAG, "onSuccess: " + examination_result);
                             ContractDetailInfo contractDetailInfo = new ContractDetailInfo(orderInfo.contract_id, orderInfo.company_name, orderInfo.creator_by, orderInfo.delivery_time, orderInfo.deposit, orderInfo.models_name, orderInfo.battery_manufacturer, orderInfo.battery_system, orderInfo.vehicle_number, orderInfo.number, orderInfo.delivery_mode, orderInfo.purpose, orderInfo.seat_number);
                             paperInfos.add(new PaperInfo(customerName, orderNumber, model, true, orderId, ContractReviewOrChangeLetterReviewActivity.this, flag, contractDetailInfo, examination_result, flow_details_id));
                         }
@@ -364,7 +363,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
                             ChangeLetterInfoBean.ResultEntity.OrderInfo orderInfo = rows.get(i);
                             String customerName = orderInfo.customer_name;
                             String model = orderInfo.models_name;
-                            String orderNumber = orderInfo.order_number;
+                            String orderNumber = orderInfo.change_letter_number;
                             int orderId = orderInfo.order_id;
                             String examination_result = orderInfo.examination_resul;
                             int flow_details_id = 0;
@@ -377,8 +376,13 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
                             paperInfos.add(new PaperInfo(customerName, orderNumber, model, true, orderId, ContractReviewOrChangeLetterReviewActivity.this, flag, changeLetterDetailInfo, examination_result, flow_details_id));
                         }
                     }
-                    Log.i(TAG, "onSuccess: " + "???");
-                    ReviewTable table = new ReviewTable(ContractReviewOrChangeLetterReviewActivity.this, paperInfos, 1);
+                    ReviewTable table = null;
+                    if (flag == 2) {
+                        table = new ReviewTable(ContractReviewOrChangeLetterReviewActivity.this, paperInfos, 2);
+                    }
+                    if (flag == 3) {
+                        table = new ReviewTable(ContractReviewOrChangeLetterReviewActivity.this, paperInfos, 3);
+                    }
                     table.setLayoutParams(lp);
                     if (IsQuery) {
                         tables.clear();
@@ -434,7 +438,13 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
 
     private void initViewPager() {
         papers = new ArrayList<>();
-        ReviewTable table = new ReviewTable(this, papers, 1);
+        ReviewTable table = null;
+        if (flag == 2) {
+            table = new ReviewTable(this, papers, 2);
+        }
+        if (flag == 3) {
+            table = new ReviewTable(this, papers, 3);
+        }
         table.setLayoutParams(lp);
         tables.add(table);
         pagerAdapter = new TablePagerAdapter(this, tables);

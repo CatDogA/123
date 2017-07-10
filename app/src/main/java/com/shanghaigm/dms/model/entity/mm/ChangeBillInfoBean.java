@@ -22,7 +22,7 @@ public class ChangeBillInfoBean {
             public int order_id;
             public String examination_result;
             public String examination_resul;
-
+            public String config_change_sheet_number;
             public String customer_name;//客户
             public String org_name;
             public String user_name;  //业务员

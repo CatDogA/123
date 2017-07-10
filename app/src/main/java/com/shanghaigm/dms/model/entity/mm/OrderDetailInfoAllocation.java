@@ -24,14 +24,16 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
     public static String UNDEFALT_ALLOCATION_INFO;
     private String assembly;                //系统
     private String entry_name;              //项目名
-    private String config_information;      //配置
+    private String standard_information;      //配置
     private String num;                     //数量
     private String remarks;                 //备注
     private int isdefault;
     private int matchLength;                 //选配数量
     private Double price;                    //价格
-    private ArrayList<AllocationAddChooseUndefaultInfo> list;
+    private ArrayList<AllocationAddChooseUndefaultInfo> matching;
     private int standard_id;     //判断唯一性
+    private String cost_change;
+    private String supporting_id;
 
 
     public OrderDetailInfoAllocation() {
@@ -40,31 +42,33 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
     public OrderDetailInfoAllocation(String assembly, String entry_name, String config_information, String num, String remarks, int isdefault) {
         this.assembly = assembly;
         this.entry_name = entry_name;
-        this.config_information = config_information;
+        this.standard_information = config_information;
         this.num = num;
         this.remarks = remarks;
         this.isdefault = isdefault;
     }
-
-    public OrderDetailInfoAllocation(String assembly, String entry_name, String config_information, String num, String remarks, int matchLength, ArrayList<AllocationAddChooseUndefaultInfo> list, int standard_id) {
+    //最正规规的标配
+    public OrderDetailInfoAllocation(String assembly, String entry_name, String standard_information,String cost_change,String supporting_id, String num, String remarks, int matchLength, ArrayList<AllocationAddChooseUndefaultInfo> list, int standard_id) {
         this.assembly = assembly;
         this.entry_name = entry_name;
-        this.config_information = config_information;
+        this.standard_information = standard_information;
         this.num = num;
         this.remarks = remarks;
         this.matchLength = matchLength;
-        this.list = list;
+        this.matching = list;
+        this.cost_change = cost_change;
+        this.supporting_id = supporting_id;
         this.standard_id = standard_id;
     }
-
+    //利用选配伪造的标配
     public OrderDetailInfoAllocation(String assembly, String entry_name, String config_information, Double price, String num, String remarks, int matchLength, ArrayList<AllocationAddChooseUndefaultInfo> list, int standard_id) {
         this.assembly = assembly;
         this.entry_name = entry_name;
-        this.config_information = config_information;
+        this.standard_information = config_information;
         this.num = num;
         this.remarks = remarks;
         this.matchLength = matchLength;
-        this.list = list;
+        this.matching = list;
         this.price = price;
         this.standard_id = standard_id;
     }
@@ -90,7 +94,7 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
     public void onQueryUndefaultClick(final View v) {
         if (matchLength > 0) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable(OrderDetailInfoAllocation.UNDEFALT_ALLOCATION_INFO, list);
+            bundle.putSerializable(OrderDetailInfoAllocation.UNDEFALT_ALLOCATION_INFO, matching);
             Intent intent = new Intent(v.getContext(), AllocationAddChooseUndefaultActivity.class);
             intent.putExtras(bundle);
             v.getContext().startActivity(intent);
@@ -117,11 +121,11 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
 
     @Bindable
     public String getConfig_information() {
-        return config_information;
+        return standard_information;
     }
 
     public void setConfig_information(String config_information) {
-        this.config_information = config_information;
+        this.standard_information = config_information;
     }
 
     @Bindable
@@ -161,11 +165,11 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
     }
 
     public ArrayList<AllocationAddChooseUndefaultInfo> getList() {
-        return list;
+        return matching;
     }
 
     public void setList(ArrayList<AllocationAddChooseUndefaultInfo> list) {
-        this.list = list;
+        this.matching = list;
     }
 
     public Double getPrice() {

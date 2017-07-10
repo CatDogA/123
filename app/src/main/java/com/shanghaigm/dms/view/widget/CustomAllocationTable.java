@@ -35,14 +35,12 @@ public class CustomAllocationTable extends LinearLayout {
     private ListView listView;
     private ArrayList<OrderDetailInfoAllocation> saveList;//存储输入信息
     private AddAllocationAdapter adapter;
-    private Handler customHandler;
     private ArrayList<String> systems;
 
-    public CustomAllocationTable(Context context, ArrayList<OrderDetailInfoAllocation> saveList, Handler customHandler, ArrayList<String> systems) {
+    public CustomAllocationTable(Context context, ArrayList<OrderDetailInfoAllocation> saveList, ArrayList<String> systems) {
         super(context);
         this.context = context;
         this.saveList = saveList;
-        this.customHandler = customHandler;
         this.systems = systems;
         LayoutInflater lf = LayoutInflater.from(context);
         View v = lf.inflate(R.layout.table_custom_allocation, this, true);
@@ -106,7 +104,7 @@ public class CustomAllocationTable extends LinearLayout {
                         pop.showPopup(holder.edtSystem);
                     }
                 });
-            }else{
+            } else {
                 holder.edtSystem.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -189,11 +187,6 @@ public class CustomAllocationTable extends LinearLayout {
                         saveEdtInfo(5, s.toString(), position);
                         break;
                 }
-                Message msg = customHandler.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(CustomAllocationTable.GET_CUSTOM_ALLOCATIN_INFO, saveList);
-                msg.setData(bundle);
-                msg.sendToTarget();
             }
 
             @Override

@@ -25,6 +25,7 @@ public class ChangeLetterInfoBean {
             public String state;
             public int order_id;
 
+            public String change_letter_number;
             public String contract_id;
             public String contract_price;
             public String number;

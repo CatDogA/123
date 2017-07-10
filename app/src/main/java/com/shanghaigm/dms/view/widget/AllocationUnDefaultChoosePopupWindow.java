@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
     private DmsApplication app = DmsApplication.getInstance();
     private static String TAG = "AllocationUnDefault";
-    //saveList用来先存着选配数据,list接收listview传来的选配数据,appInfolist用来全局储存,saveUndefaultList存储用来刷新界面的数据
+    //saveList用来先存着选配数据,list接收listview传来的选配数据,appInfolist用来全局储存,saveUndefaultList存储num>1的选配信息
     private ArrayList<AllocationAddChooseUndefaultInfo> list, saveList, appInfoList;
     private ArrayList<OrderDetailInfoAllocation> saveUndefaultList;
     private int position;
@@ -80,10 +80,13 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
                     }
                 }
                 Log.i(TAG, "onClick: " + list.size() + "    " + saveList.size() + "   " + appInfoList.size() + "     " + saveUndefaultList.size());
+
                 Message msg = handler.obtainMessage();
                 msg.what = 1;
                 handler.sendMessage(msg);
+
                 hidePopup();
+
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {

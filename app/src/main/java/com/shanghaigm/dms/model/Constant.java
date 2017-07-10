@@ -6,6 +6,7 @@ package com.shanghaigm.dms.model;
 
 public class Constant {
     //GET
+    //订单、合同、更改函、更改单
     public static final String URL_GET_JOB_LIST = Config.URL_BASE + "/appLogin/getJobList";
     public static final String URL_GET_HOME_DATA = Config.URL_BASE + "/appDKXS/getDetailTaskItems";//包含4项功能
     public static final String URL_QUERY_ORDER_SUB_INFO = Config.URL_BASE + "/appDKXS/getOrderInfoPageData";//提交分页查询
@@ -33,7 +34,11 @@ public class Constant {
     public static final String URL_GET_ADD_ORDER_NAME = Config.URL_BASE + "/appDKXS/getCustomerList";   //订单新增选择用户列表
     public static final String URL_GET_ORDER_NUMBER = Config.URL_BASE + "/appDKXS/getOrderNumber";  //获取orderNumber
 
+    //日报
+    public static final String URL_GET_QUERY_REPORT_LIST = Config.URL_BASE + "/appDKSH/getAftersaleDailyPageData";    //查询日报列表
+    public static final String URL_GET_REPORT_DETAIL = Config.URL_BASE + "/appDKSH/getAftersaleDailyDetail";      //日报明细
+    public static final String URL_GET_ADD_REPORT = Config.URL_BASE + "/appDKSH/addDaily";     //日报添加
+    public static final String URL_GET_MODIFY_REPORT = Config.URL_BASE + "/appDKSH/updateDaily";
     //POST
     public static final String URL_GET_ACCESS_TOKEN = Config.URL_BASE + "/appLogin/appLogin";
-
 }

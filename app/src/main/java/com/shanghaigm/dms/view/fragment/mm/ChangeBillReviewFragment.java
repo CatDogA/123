@@ -49,7 +49,7 @@ import static android.support.design.R.id.info;
 
 
 public class ChangeBillReviewFragment extends BaseFragment {
-    private static String TAG = "ChangeBillReviewFragment";
+    private static String TAG = "ChangeBillReview";
     private EditText areaSelectEdt, modelSelecctEdt, stateSelectEdt, numberEdt, customerEdt, ckEdt;
     private Button btnQuery;
     private ImageView vpRight, vpLeft;
@@ -325,7 +325,7 @@ public class ChangeBillReviewFragment extends BaseFragment {
                         ChangeBillInfoBean.ResultEntity.OrderInfo orderInfo = rows.get(i);
                         String customerName = orderInfo.customer_name;
                         String model = orderInfo.models_name;
-                        String orderNumber = orderInfo.order_number;
+                        String orderNumber = orderInfo.config_change_sheet_number;
                         String state = orderInfo.state;
                         int orderId = orderInfo.order_id;
                         JSONArray flow_details = jsonRows.getJSONObject(i).getJSONArray("flowdetails");
@@ -336,7 +336,7 @@ public class ChangeBillReviewFragment extends BaseFragment {
                         paperInfos.add(new PaperInfo(customerName, orderNumber, model, true, orderId, getActivity(), 4, changeBillDetailInfo, examination_result, flow_details_id));
 
                     }
-                    ReviewTable table = new ReviewTable(getActivity(), paperInfos, 1);
+                    ReviewTable table = new ReviewTable(getActivity(), paperInfos, 4);
                     table.setLayoutParams(lp);
                     if (IsQuery) {
                         tables.clear();
@@ -396,7 +396,7 @@ public class ChangeBillReviewFragment extends BaseFragment {
 
     private void initViewPager() {
         papers = new ArrayList<>();
-        ReviewTable table = new ReviewTable(getActivity(), papers, 1);
+        ReviewTable table = new ReviewTable(getActivity(), papers, 4);
         table.setLayoutParams(lp);
         tables.add(table);
         pagerAdapter = new TablePagerAdapter(getActivity(), tables);

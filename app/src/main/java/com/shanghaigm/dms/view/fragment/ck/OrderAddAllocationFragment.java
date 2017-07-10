@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class OrderAddAllocationFragment extends BaseFragment {
     public Handler mHandler;
-    private static String TAG = "OrderAddAllocationFragment";
+    private static String TAG = "OrderAddAllocation";
     private EditText edtSystem, edtAssembly, edtConfig, edtNum, edtReMarks;
     private Button btnNewEnergy, btnCarBody, btnElectric, btnUnderPan;
     private LinearLayout newEnergyLL, carBodyLL, electricLL, underPanLL;
@@ -268,12 +268,7 @@ public class OrderAddAllocationFragment extends BaseFragment {
 
 
     private void initView(View v) {
-//        edtSystem = (EditText) v.findViewById(R.id.edit_system);
-//        edtAssembly = (EditText) v.findViewById(R.id.edt_assembly);
-//        edtConfig = (EditText) v.findViewById(R.id.edt_config);
-//        edtNum = (EditText) v.findViewById(R.id.edt_num);
-//        edtReMarks = (EditText) v.findViewById(R.id.edt_remarks);
-//        imgSystem = (ImageView) v.findViewById(R.id.img_system);
+
         listNewEnergy = (ListView) v.findViewById(R.id.list_new_energy);
         listCarBody = (ListView) v.findViewById(R.id.list_car_body);
         listElectric = (ListView) v.findViewById(R.id.list_electric_appliance);

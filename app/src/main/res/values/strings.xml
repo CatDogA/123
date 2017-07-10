@@ -70,6 +70,7 @@
     <string name="car_id">车牌号</string>
 
     <!--mm订单审核-->
+    <string name="review_number">合同号</string>
     <string name="mm_order_title">订单审核</string>
     <string name="mm_order_review">订单审核</string>
     <string name="mm_contract_review">合同审核</string>
@@ -111,7 +112,8 @@
     <string name="mm_car_use">购车用途</string>
     <string name="mm_namepalte_seat_num">铭牌座位数</string>
 
-    <!--mm变更函明细-->
+    <!--mm变更函-->
+    <string name="change_letter_number">变更函号</string>
     <string name="mm_unit_name">单位名称</string>
     <string name="mm_car_model">车型</string>
     <string name="mm_primary_price">原合同价格(万元/台)</string>
@@ -120,7 +122,8 @@
     <string name="mm_contract_commit_date">合同交货期</string>
     <string name="mm_after_allocation_date">配置更改后交货期</string>
 
-    <!--mm更改单明细-->
+    <!--mm更改单-->
+    <string name="change_bill_number">变更单号</string>
     <string name="sex">性别</string>
     <string name="mm_car_state">车辆状态</string>
     <string name="mm_deliver_palace">交车地点</string>
@@ -128,6 +131,4 @@
     <string name="address">地址</string>
     <string name="change_date">更改日期</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

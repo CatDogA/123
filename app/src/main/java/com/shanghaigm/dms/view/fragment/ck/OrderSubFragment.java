@@ -283,7 +283,7 @@ public class OrderSubFragment extends BaseFragment {
                     Log.i(TAG, "onSuccess: " + state + "," + model + "," + orderNumber + "," + customerName);
                     paperInfos.add(new PaperInfo(customerName, orderNumber, model, state, true, orderId, getActivity(), 5));
                 }
-                ReviewTable table = new ReviewTable(getActivity(), paperInfos, 2);
+                ReviewTable table = new ReviewTable(getActivity(), paperInfos, 5);
                 table.setLayoutParams(lp);
                 if (IsQuery) {
                     tables.clear();
@@ -332,7 +332,7 @@ public class OrderSubFragment extends BaseFragment {
 
     private void initViewPager() {
         papers = new ArrayList<>();
-        ReviewTable table = new ReviewTable(getActivity(), papers, 2);
+        ReviewTable table = new ReviewTable(getActivity(), papers, 5);
         table.setLayoutParams(lp);
         tables.add(table);
         pagerAdapter = new TablePagerAdapter(getActivity(), tables);

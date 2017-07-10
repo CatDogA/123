@@ -258,21 +258,20 @@ public class OrderAddBaseFragment extends BaseFragment {
                                 matchLength = matchArray.length();
                                 if (matchLength > 0) {
                                     for (int j = 0; j < matchLength; j++) {
-                                        //TODO-有没有standard_information,与config_information的差别
                                         undefaultInfoList.add(new AllocationAddChooseUndefaultInfo(matchArray.getJSONObject(j).getString("assembly"), matchArray.getJSONObject(j).getString("config_information"), 0.0, 0, "", id));
                                     }
                                 }
                             }
-                            list.add(new OrderDetailInfoAllocation(info.getString("assembly"), info.getString("entry_name"), info.getString("standard_information"), "", info.getString("remarks"), matchLength, undefaultInfoList, id));
+                            list.add(new OrderDetailInfoAllocation(info.getString("assembly"), info.getString("entry_name"), info.getString("standard_information"), info.getString("cost_change"), info.getString("supporting_id"), "", info.getString("remarks"), matchLength, undefaultInfoList, id));
                         }
                         allAssemblyList.add(list);
                         Log.i(TAG, "onSuccess: " + allAssemblyList.get(0).get(0).getAssembly());
                     } else {
-                        list.add(new OrderDetailInfoAllocation(assemblyStr, "", "", "", "", 0, null, 0));
+                        list.add(new OrderDetailInfoAllocation(assemblyStr, "", "", "", "", "", "", 0, null, 0));
                         allAssemblyList.add(list);
                     }
                     ((OrderAddActivity) getActivity()).setAssemblyList(allAssemblyList);   //用于被改变
-                    ((OrderAddActivity)getActivity()).setOriginalList(allAssemblyList);
+                    ((OrderAddActivity) getActivity()).setOriginalList(allAssemblyList);
                     Log.i(TAG, "onSuccess: " + allAssemblyList.size() + "    " + assemblyCount);
                     if (allAssemblyList.size() == assemblyCount) {
                         dialog.dismissLoadingDlg();

@@ -215,7 +215,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         try {
             paramObject.put("contract_id", contractId);
             paramObject.put("customer_name", customerText);
-            paramObject.put("change_letter_number", changeLetterId);
+            paramObject.put("include_change_letter_title", changeLetterId);
             paramObject.put("state", stateId);
             paramArray.put(paramObject);
 
@@ -259,7 +259,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
                     ChangeLetterSubDetailInfo changeLetterSubDetailInfo = new ChangeLetterSubDetailInfo(orderInfo);
                     paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo));
                 }
-                ReviewTable table = new ReviewTable(getActivity(), paperInfos, 3, true);
+                ReviewTable table = new ReviewTable(getActivity(), paperInfos, 6);
                 table.setLayoutParams(lp);
                 if (IsQuery) {
                     tables.clear();
@@ -310,7 +310,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
 
     private void initViewPager() {
         papers = new ArrayList<>();
-        ReviewTable table = new ReviewTable(getActivity(), papers, 3, true);
+        ReviewTable table = new ReviewTable(getActivity(), papers, 6);
         table.setLayoutParams(lp);
         tables.add(table);
         pagerAdapter = new TablePagerAdapter(getActivity(), tables);

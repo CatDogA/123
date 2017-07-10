@@ -32,15 +32,17 @@ public class AllocationTable extends LinearLayout {
     private ListAdapter adapter;
     private ListView list;
     private Handler handler;
-    private Handler mHandler;
     private AllocationUnDefaultChoosePopupWindow popupWindow;
     private ArrayList<OrderDetailInfoAllocation> saveList = new ArrayList<>();
+    private ArrayList<OrderDetailInfoAllocation> listToSend;
+    private int type;
 
-    public AllocationTable(final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, Handler mHandler) {
+    public AllocationTable(final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, ArrayList<OrderDetailInfoAllocation> singleList) {
         super(context);
         this.data = data;
         this.context = context;
-        this.mHandler = mHandler;
+        this.type = type;
+        this.listToSend = singleList;
         LayoutInflater lf = LayoutInflater.from(context);
         View view = lf.inflate(R.layout.table_allocation, this, true);
         initHandler();
@@ -56,6 +58,9 @@ public class AllocationTable extends LinearLayout {
                 if (data.get(position).getMatchLength() > 0) {
                     popupWindow = new AllocationUnDefaultChoosePopupWindow(context, position, 1, data.get(position).getList(), data, handler, 1);
                     popupWindow.showPopup(btn);
+
+
+//                    allocationHandler.sendMessage(msg);
                 }
             }
         });
@@ -65,13 +70,16 @@ public class AllocationTable extends LinearLayout {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                //刷新界面的瞬间
                 HandlerRefresh(popupWindow, list, data, saveList);
             }
         };
     }
 
     private void HandlerRefresh(AllocationUnDefaultChoosePopupWindow popupWindow, final ListView listview, final ArrayList<OrderDetailInfoAllocation> infoList, final ArrayList<OrderDetailInfoAllocation> saveList) {
+        //接口回调
         popupWindow.getListViewInfo(new AllocationUnDefaultChoosePopupWindow.CallBack() {
+
             @Override
             public void getResult(ArrayList<OrderDetailInfoAllocation> saveUndefaultList, int position) {
                 if (saveUndefaultList.size() == 0) {
@@ -83,17 +91,17 @@ public class AllocationTable extends LinearLayout {
                             toDeleteList.add(infoList.get(i));
                         }
                     }
-                    Log.i(TAG, "getResult: saveList    " + saveList.size() + "     infoList     " + infoList.size() + "    toDeleteList    " + toDeleteList.size());
+//                    Log.i(TAG, "getResult: saveList    " + saveList.size() + "     infoList     " + infoList.size() + "    toDeleteList    " + toDeleteList.size());
                     for (OrderDetailInfoAllocation info : toDeleteList) {
                         infoList.remove(info);
                     }
-                    Log.i(TAG, "getResult: saveList    " + saveList.size() + "     infoList     " + infoList.size() + "    toDeleteList    " + toDeleteList.size());
+//                    Log.i(TAG, "getResult: saveList    " + saveList.size() + "     infoList     " + infoList.size() + "    toDeleteList    " + toDeleteList.size());
                     for (OrderDetailInfoAllocation info : saveList) {
                         if (info.getStandard_id() == id) {
                             infoList.add(info);
                         }
                     }
-                    Log.i(TAG, "getResult: saveList    " + saveList.size() + "     infoList     " + infoList.size() + "    toDeleteList    " + toDeleteList.size());
+//                    Log.i(TAG, "getResult: saveList    " + saveList.size() + "     infoList     " + infoList.size() + "    toDeleteList    " + toDeleteList.size());
 
                 } else {
                     //判断是否删除原条目
@@ -108,7 +116,7 @@ public class AllocationTable extends LinearLayout {
                         //获取已添加的选配条目unDefaultList，进行删除
                         if (saveUndefaultList.size() > 0) {
                             int id = saveUndefaultList.get(0).getStandard_id();
-                            Log.i(TAG, "getStandard_id()     " + id);
+//                            Log.i(TAG, "getStandard_id()     " + id);
                             ArrayList<OrderDetailInfoAllocation> unDefaultList = new ArrayList<>();
                             for (int j = 0; j < infoList.size(); j++) {
                                 if (infoList.get(j).getNum().equals("")) {
@@ -128,18 +136,29 @@ public class AllocationTable extends LinearLayout {
                         }
                     }
                 }
-                //此时的infoList就是要传给后台的数据
-                Message msg = mHandler.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(AllocationTable.GET_ALLOCATION_DATA, infoList);
-                Log.i(TAG, "getResult: " + infoList.size());
-                msg.setData(bundle);
-                msg.sendToTarget();
-
                 adapter.notifyDataSetChanged();
                 listview.setAdapter(adapter);
+                //此时的infoList就是要传给后台的数据
+                listToSend.clear();
+                for (OrderDetailInfoAllocation info : infoList) {
+                    listToSend.add(info);
+                }
+//                Message msg = allocationHandler.obtainMessage();
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(AllocationTable.GET_ALLOCATION_DATA, 1);
+//                msg.setData(bundle);
+//                msg.sendToTarget();
+//                Log.i(TAG, "onItemClick: " + "消息已发");
             }
         });
     }
 
+    //接口回调
+//    public interface CallAllocationBack {
+//        void getAllocation(ArrayList<OrderDetailInfoAllocation> allocationInfos);
+//    }
+//
+//    public void getAllocationInfo(CallAllocationBack call) {
+//        call.getAllocation(listToSend);
+//    }
 }
