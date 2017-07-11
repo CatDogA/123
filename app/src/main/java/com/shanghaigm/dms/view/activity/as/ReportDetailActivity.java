@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailAttachFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
@@ -27,22 +30,35 @@ public class ReportDetailActivity extends AppCompatActivity {
     private TextView title;
     private FragmentManager fm;
     private DmsApplication app;
+    private static String TAG = "ReportDetailActivity";
+    public static String REPORT_DETAIL_INFO = "report_detail_info_one";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
+        initIntent();
         initView();
         initData();
         setUpView();
+    }
+
+    private void initIntent() {
+        fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Bundle bundle = getIntent().getExtras();
+        ReportQueryDetailInfoBean reportDetailInfo = (ReportQueryDetailInfoBean) bundle.getSerializable(PaperInfo.REPORT_DETAI_INFO);
+        Bundle fragmentBundle = new Bundle();
+        fragmentBundle.putSerializable(ReportDetailActivity.REPORT_DETAIL_INFO, reportDetailInfo);
+        ReportDetailInfoFragment fragment = ReportDetailInfoFragment.getInstance();
+        fragment.setArguments(fragmentBundle);
+        ft.add(R.id.fragment_content,fragment).commit();
     }
 
     private void initData() {
         fragments = new ArrayList<>();
         fragments.add(ReportDetailInfoFragment.getInstance());
         fragments.add(ReportDetailAttachFragment.getInstance());
-
-        fm = getFragmentManager();
         app = DmsApplication.getInstance();
     }
 
@@ -67,7 +83,7 @@ public class ReportDetailActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.report_info)).setTag(0));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.attacn_preview)).setTag(1));
 
-        fm.beginTransaction().add(R.id.fragment_content,fragments.get(0)).commit();
+//        fm.beginTransaction().add(R.id.fragment_content, fragments.get(0)).commit();
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

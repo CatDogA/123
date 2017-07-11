@@ -22,9 +22,12 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.BasePaperInfo;
+import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
+import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
@@ -37,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +55,7 @@ public class PaperInfo extends BasePaperInfo {
     public static String ORDER_TYPE = "order_type";
     public static String ORDER_SUB_DETAIL_INFO = "query_order_sub_detail";      //判断查询还是修改
     public static String ORDER_REVIEW_DETIAL_INFO = "query_order_review_detail";
+    public static String REPORT_DETAI_INFO = "report_detail_info";
     private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交
     private LoadingDialog dialog;
     private static String TAG = "PaperInfo";
@@ -64,6 +69,11 @@ public class PaperInfo extends BasePaperInfo {
     private String examination_result;
     private int flow_details_id;
 
+    private int report_state;
+    private String car_sign;
+    private String daily_code;
+    private int daily_id;
+
     private Context context;
     private ChangeLetterDetailInfo changeLetterDetailInfo;
     private ContractDetailInfo contractDetailInfo;
@@ -74,7 +84,7 @@ public class PaperInfo extends BasePaperInfo {
 
     }
 
-    //合同
+    //合同审核
     public PaperInfo(String name, String number, String model, Boolean isModify, int orderId, Context context, int flag, ContractDetailInfo contractDetailInfo, String examination_result, int flow_details_id) {
         super(name);
         this.number = number;
@@ -88,7 +98,7 @@ public class PaperInfo extends BasePaperInfo {
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
-    //更改函
+    //更改函审核
     public PaperInfo(String name, String number, String model, Boolean isModify, int orderId, Context context, int flag, ChangeLetterDetailInfo changeLetterDetailInfo, String examination_result, int flow_details_id) {
         super(name);
         this.number = number;
@@ -102,7 +112,7 @@ public class PaperInfo extends BasePaperInfo {
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
-    //更改单
+    //更改单审核
     public PaperInfo(String name, String number, String model, Boolean isModify, int orderId, Context context, int flag, ChangeBillDetailInfo changeBillDetailInfo, String examination_result, int flow_details_id) {
         super(name);
         this.number = number;
@@ -116,7 +126,7 @@ public class PaperInfo extends BasePaperInfo {
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
-    //更改函
+    //更改函提交
     public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo) {
         super(name);
         this.state = state;
@@ -128,7 +138,7 @@ public class PaperInfo extends BasePaperInfo {
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
-
+    //订单提交
     public PaperInfo(String name, String number, String model, String state, Boolean isModify, int orderId, Context context, int flag) {
         super(name);
         this.number = number;
@@ -140,6 +150,7 @@ public class PaperInfo extends BasePaperInfo {
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
+    //订单审核
     public PaperInfo(String name, String number, String model, Boolean isModify, int orderId, Context context, int flag, String examination_result) {
         super(name);
         this.number = number;
@@ -148,6 +159,18 @@ public class PaperInfo extends BasePaperInfo {
         this.context = context;
         this.flag = flag;
         this.examination_result = examination_result;
+        dialog = new LoadingDialog(this.context, "正在加载");
+    }
+
+    //日报审核
+    public PaperInfo(Context context, String daily_code, String model, String car_sign, int state, int daily_id, int flag) {
+        this.daily_code = daily_code;
+        this.report_state = state;
+        this.model = model;
+        this.car_sign = car_sign;
+        this.daily_id = daily_id;
+        this.flag = flag;
+        this.context = context;
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
@@ -271,7 +294,6 @@ public class PaperInfo extends BasePaperInfo {
 
         if (flag == 6) {
             app.setChangeLetterSubDetailInfo(changeLetterSubDetailInfo);
-            Log.i(TAG, "onCkQueryOrderDetailClick: " + "你好");
             Intent intent = new Intent(view.getContext(), ChangeLetterQueryDetailActivity.class);
             view.getContext().startActivity(intent);
         }
@@ -298,7 +320,7 @@ public class PaperInfo extends BasePaperInfo {
                                 JSONObject resultEntity = object.getJSONObject("resultEntity");
                                 Object matching = resultEntity.get("matching");
                                 if (matching.toString().equals("")) {
-                                    Log.i(TAG, "onSuccess: "+"没有match");
+                                    Log.i(TAG, "onSuccess: " + "没有match");
                                 } else {
                                     JSONArray matches = new JSONArray(matching.toString());
                                     for (int i = 0; i < matches.length(); i++) {
@@ -359,6 +381,34 @@ public class PaperInfo extends BasePaperInfo {
                     Intent intent4 = new Intent(view.getContext(), ChangeBillDetailActivity.class);
                     view.getContext().startActivity(intent4);
                 }
+                break;
+            case 7:
+                Map<String, Object> params = new HashMap<>();
+                params.put("daily_id", daily_id);
+                dialog.showLoadingDlg();
+                OkhttpRequestCenter.ReportDetailQuery(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        dialog.dismissLoadingDlg();
+                        JSONObject object = (JSONObject) responseObj;
+                        try {
+                            JSONObject resultEntity = object.getJSONObject("resultEntity");
+                            ReportQueryDetailInfoBean reportDetailInfo = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(PaperInfo.REPORT_DETAI_INFO, reportDetailInfo);
+                            Intent intent7 = new Intent(view.getContext(), ReportDetailActivity.class);
+                            intent7.putExtras(bundle);
+                            view.getContext().startActivity(intent7);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Object reasonObj) {
+
+                    }
+                });
                 break;
         }
 
@@ -526,5 +576,32 @@ public class PaperInfo extends BasePaperInfo {
 
     public void setFlow_details_id(int flow_details_id) {
         this.flow_details_id = flow_details_id;
+    }
+
+    @Bindable
+    public int getReport_state() {
+        return report_state;
+    }
+
+    public void setReport_state(int report_state) {
+        this.report_state = report_state;
+    }
+
+    @Bindable
+    public String getCar_sign() {
+        return car_sign;
+    }
+
+    public void setCar_sign(String car_sign) {
+        this.car_sign = car_sign;
+    }
+
+    @Bindable
+    public String getDaily_code() {
+        return daily_code;
+    }
+
+    public void setDaily_code(String daily_code) {
+        this.daily_code = daily_code;
     }
 }

@@ -25,7 +25,8 @@ public class ReviewTable extends LinearLayout {
     private ArrayList<PaperInfo> papers;
     private ListAdapter adapter;
     private int flag;       //1,订单审核，2，合同审核，3，更改函，4，更改单，5，订单提交，6，更改函提交
-    private RelativeLayout rl_order, rl_contract, rl_change_letter, rl_change_bill, rl_change_letter_sub;
+    private RelativeLayout rl_order, rl_contract, rl_change_letter, rl_change_bill, rl_change_letter_sub,
+            rl_report;
 
     public ReviewTable(Context context, ArrayList<PaperInfo> papers, int flag) {
         super(context);
@@ -71,6 +72,11 @@ public class ReviewTable extends LinearLayout {
                 rl_change_letter_sub.setVisibility(View.VISIBLE);
                 adapter = new ListAdapter(context, R.layout.list_item_change_letter_sub, BR.paper, papers);
                 break;
+            //日报审核
+            case 7:
+                rl_report.setVisibility(View.VISIBLE);
+                adapter = new ListAdapter(context,R.layout.list_item_report_review,BR.paper,papers);
+                break;
         }
 
         lv.setAdapter(adapter);
@@ -83,6 +89,7 @@ public class ReviewTable extends LinearLayout {
         rl_change_bill = (RelativeLayout) view.findViewById(R.id.change_bill_table_title);
         rl_change_letter = (RelativeLayout) view.findViewById(R.id.change_letter_table_title);
         rl_change_letter_sub = (RelativeLayout) view.findViewById(R.id.change_letter_sub_table_title);
+        rl_report = (RelativeLayout) view.findViewById(R.id.report_review_table_title);
     }
 
     private void AllGone() {
@@ -91,6 +98,7 @@ public class ReviewTable extends LinearLayout {
         rl_change_letter.setVisibility(View.GONE);
         rl_change_bill.setVisibility(View.GONE);
         rl_change_letter_sub.setVisibility(View.GONE);
+        rl_report.setVisibility(View.GONE);
     }
 
 }

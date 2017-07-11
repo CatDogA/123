@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/mainColorGD"
     tools:context="com.shanghaigm.dms.view.fragment.as.ReportSubFragment">
     <include layout="@layout/include_report_sub_info"/>
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.shanghaigm.dms.model.entity.mm;
 
+import com.shanghaigm.dms.model.entity.as.ReportQueryInfoBean;
+
 import java.io.Serializable;
 import java.util.List;
 

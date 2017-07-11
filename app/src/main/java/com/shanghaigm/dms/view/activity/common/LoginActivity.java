@@ -145,8 +145,8 @@ public class LoginActivity extends BaseActivity {
         Log.i(TAG, "login: " + roleCode);
         switch (roleCode) {
             case "ywy":
-                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
-//                goToActivity(HomeActivity.class);
+//                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
+                goToActivity(HomeActivity.class);
                 finish();
                 break;
             case "ssbspy":
@@ -170,7 +170,8 @@ public class LoginActivity extends BaseActivity {
                 finish();
                 break;
             default:
-                Toast.makeText(this, "抱歉没有对应岗位", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "抱歉没有对应岗位", Toast.LENGTH_SHORT).show();
+                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
                 break;
         }
     }
