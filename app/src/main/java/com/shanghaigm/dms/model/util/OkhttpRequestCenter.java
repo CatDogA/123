@@ -24,11 +24,8 @@ public class OkhttpRequestCenter {
         CommonOkHttpClient.get(CommonRequest.createGetRequestInt(url, params), new DisposeDataHandle(listener));
     }
 
-    //日报查询列表
-    public static void ReportQuery(String url, Map<String, Object> params, DisposeDataListener listener) {
-        getRequest(url, params, listener);
-    }
-    public static void ReportDetailQuery(String url, Map<String, Object> params, DisposeDataListener listener){
+    //大多数的get请求
+    public static void getCommonRequest(String url, Map<String, Object> params, DisposeDataListener listener) {
         getRequest(url, params, listener);
     }
 }

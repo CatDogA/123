@@ -175,7 +175,7 @@ public class ReportQueryFragment extends BaseFragment {
         params.put("page", page + "");
         params.put("rows", "8");
         Log.i(TAG, "requestOrderInfo: " + app.getJobCode());
-        OkhttpRequestCenter.ReportQuery(Constant.URL_GET_QUERY_REPORT_LIST, params, new DisposeDataListener() {
+        OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_QUERY_REPORT_LIST, params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 Log.i(TAG, "onSuccess: " + responseObj.toString());

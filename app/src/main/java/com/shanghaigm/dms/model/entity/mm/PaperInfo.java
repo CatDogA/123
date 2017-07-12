@@ -386,7 +386,7 @@ public class PaperInfo extends BasePaperInfo {
                 Map<String, Object> params = new HashMap<>();
                 params.put("daily_id", daily_id);
                 dialog.showLoadingDlg();
-                OkhttpRequestCenter.ReportDetailQuery(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
+                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
                         dialog.dismissLoadingDlg();

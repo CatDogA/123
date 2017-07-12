@@ -21,6 +21,9 @@
     <string name="submit">提交</string>
     <string name="save">保存</string>
     <string name="return_back">驳回</string>
+    <string name="choose_model">请选择车型</string>
+    <string name="choose_car_no">请选择出厂编号</string>
+    <string name="sub_success">提交成功</string>
     <!--ck提报-->
     <string name="ck_order_sub">订单提报</string>
     <string name="ck_change_letter_sub">更改函提报</string>
@@ -63,6 +66,9 @@
     <string name="after_repair_pic">修复后照片</string>
     <string name="else_pic">其他</string>
     <string name="video">相关视频</string>
+    <string name="city_car">城市客车</string>
+    <string name="between_city_car">城间客车</string>
+    <string name="full_filled">请填写完整信息</string>
     <!--日报查询-->
     <string name="report_detail">日报明细</string>
     <string name="report_query">日报查询</string>

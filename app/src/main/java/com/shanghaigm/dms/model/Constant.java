@@ -39,6 +39,8 @@ public class Constant {
     public static final String URL_GET_REPORT_DETAIL = Config.URL_BASE + "/appDKSH/getAftersaleDailyDetail";      //日报明细
     public static final String URL_GET_ADD_REPORT = Config.URL_BASE + "/appDKSH/addDaily";     //日报添加
     public static final String URL_GET_MODIFY_REPORT = Config.URL_BASE + "/appDKSH/updateDaily";
+    public static final String URL_GET_CAR_NO = Config.URL_BASE + "/appDKSH/getCarNoAll";
+    public static final String URL_GET_FOUR_CAR_INFO = Config.URL_BASE + "/appDKSH/getCarDetail";
     //POST
     public static final String URL_GET_ACCESS_TOKEN = Config.URL_BASE + "/appLogin/appLogin";
 }
