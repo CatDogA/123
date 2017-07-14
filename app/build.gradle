@@ -7,6 +7,7 @@ android {
         applicationId "com.shanghaigm.dms"
         minSdkVersion 15
         targetSdkVersion 25
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -42,4 +43,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     testCompile 'junit:junit:4.12'
+    compile 'org.eclipse.ecf:org.apache.log4j:1.2.15.v201012070815'
+    compile 'org.code-house.eaio-uuid:uuid:3.4.1'
 }

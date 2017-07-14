@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +23,7 @@ import android.widget.TextView;
 
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.util.ContentUriUtil;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
@@ -40,7 +45,15 @@ public class ReportAddActivity extends AppCompatActivity {
     private ArrayList<Bitmap> bitmaps2 = new ArrayList<>();
     private ArrayList<Bitmap> bitmaps3 = new ArrayList<>();
     private ArrayList<Bitmap> bitmaps4 = new ArrayList<>();
+    private ArrayList<String> uris = new ArrayList<>();
+    private ArrayList<String> uris2 = new ArrayList<>();
+    private ArrayList<String> uris3 = new ArrayList<>();
+    private ArrayList<String> uris4 = new ArrayList<>();
+
     private static String TAG = "ReportAddActivity";
+
+    public ReportAddActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +133,7 @@ public class ReportAddActivity extends AppCompatActivity {
         app = DmsApplication.getInstance();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -142,6 +156,7 @@ public class ReportAddActivity extends AppCompatActivity {
                 bmOptions = new BitmapFactory.Options();
                 bmOptions.inJustDecodeBounds = true;
                 BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+                Log.i(TAG, "onActivityResult:   " + SolvePicturePopupWindow.mPublicPhotoPath);
                 int photoW = bmOptions.outWidth;
                 int photoH = bmOptions.outHeight;
 
@@ -156,15 +171,19 @@ public class ReportAddActivity extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
                 switch (requestCode) {
                     case SolvePicturePopupWindow.CAMERA1:
+                        uris.add(SolvePicturePopupWindow.mPublicPhotoPath);
                         bitmaps.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA2:
+                        uris2.add(SolvePicturePopupWindow.mPublicPhotoPath);
                         bitmaps2.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA3:
+                        uris3.add(SolvePicturePopupWindow.mPublicPhotoPath);
                         bitmaps3.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA4:
+                        uris4.add(SolvePicturePopupWindow.mPublicPhotoPath);
                         bitmaps4.add(bitmap);
                         break;
                 }
@@ -174,8 +193,10 @@ public class ReportAddActivity extends AppCompatActivity {
             case SolvePicturePopupWindow.ALBUM3:
             case SolvePicturePopupWindow.ALBUM4:
                 if (resultCode != Activity.RESULT_OK) return;
-
                 Uri uri = data.getData();
+                //将Uri转化为路径
+                String path = ContentUriUtil.getPath(this, uri);
+                Log.i(TAG, "onActivityResult: " + path);
                 Bitmap bit = null;
                 try {
                     bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
@@ -184,15 +205,19 @@ public class ReportAddActivity extends AppCompatActivity {
                 }
                 switch (requestCode) {
                     case SolvePicturePopupWindow.ALBUM1:
+                        uris.add(path);
                         bitmaps.add(bit);
                         break;
                     case SolvePicturePopupWindow.ALBUM2:
+                        uris2.add(path);
                         bitmaps2.add(bit);
                         break;
                     case SolvePicturePopupWindow.ALBUM3:
+                        uris3.add(path);
                         bitmaps3.add(bit);
                         break;
                     case SolvePicturePopupWindow.ALBUM4:
+                        uris4.add(path);
                         bitmaps4.add(bit);
                         break;
                 }
@@ -230,5 +255,44 @@ public class ReportAddActivity extends AppCompatActivity {
 
     public void setBitmaps4(ArrayList<Bitmap> bitmaps4) {
         this.bitmaps4 = bitmaps4;
+    }
+
+    public ArrayList<String> getUris() {
+        return uris;
+    }
+
+    public void setUris(ArrayList<String> uris) {
+        this.uris = uris;
+    }
+
+    public ArrayList<String> getUris2() {
+        return uris2;
+    }
+
+    public void setUris2(ArrayList<String> uris2) {
+        this.uris2 = uris2;
+    }
+
+    public ArrayList<String> getUris3() {
+        return uris3;
+    }
+
+    public void setUris3(ArrayList<String> uris3) {
+        this.uris3 = uris3;
+    }
+
+    public ArrayList<String> getUris4() {
+        return uris4;
+    }
+
+    public void setUris4(ArrayList<String> uris4) {
+        this.uris4 = uris4;
+    }
+
+    public ReportAddActivity(ArrayList<String> uris, ArrayList<String> uris2, ArrayList<String> uris3, ArrayList<String> uris4) {
+        this.uris = uris;
+        this.uris2 = uris2;
+        this.uris3 = uris3;
+        this.uris4 = uris4;
     }
 }
