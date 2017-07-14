@@ -1,12 +1,19 @@
 package com.shanghaigm.dms.view.activity.as;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,8 +21,11 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
+import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportInfoFragment;
+import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class ReportAddActivity extends AppCompatActivity {
@@ -23,9 +33,15 @@ public class ReportAddActivity extends AppCompatActivity {
     private FragmentManager fm;
     private ReportInfoFragment reportInfoFragment;
     private ArrayList<BaseFragment> fragments;
-    private RelativeLayout rl_back,rl_end;
+    private RelativeLayout rl_back, rl_end;
     private DmsApplication app;
     private TextView title;
+    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
+    private ArrayList<Bitmap> bitmaps2 = new ArrayList<>();
+    private ArrayList<Bitmap> bitmaps3 = new ArrayList<>();
+    private ArrayList<Bitmap> bitmaps4 = new ArrayList<>();
+    private static String TAG = "ReportAddActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,5 +118,117 @@ public class ReportAddActivity extends AppCompatActivity {
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
         app = DmsApplication.getInstance();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SolvePicturePopupWindow.CAMERA1:
+            case SolvePicturePopupWindow.CAMERA2:
+            case SolvePicturePopupWindow.CAMERA3:
+            case SolvePicturePopupWindow.CAMERA4:
+                if (resultCode != Activity.RESULT_OK) return;
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                // Get the dimensions of the View
+                WindowManager wm1 = this.getWindowManager();
+                int width1 = wm1.getDefaultDisplay().getWidth();
+                int height1 = wm1.getDefaultDisplay().getHeight();
+                int targetW = width1;
+                int targetH = height1;
+
+                // Get the dimensions of the bitmap
+                bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                // Determine how much to scale down the image
+                int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+                // Decode the image file into a Bitmap sized to fill the View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+
+                Bitmap bitmap = BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+                switch (requestCode) {
+                    case SolvePicturePopupWindow.CAMERA1:
+                        bitmaps.add(bitmap);
+                        break;
+                    case SolvePicturePopupWindow.CAMERA2:
+                        bitmaps2.add(bitmap);
+                        break;
+                    case SolvePicturePopupWindow.CAMERA3:
+                        bitmaps3.add(bitmap);
+                        break;
+                    case SolvePicturePopupWindow.CAMERA4:
+                        bitmaps4.add(bitmap);
+                        break;
+                }
+                break;
+            case SolvePicturePopupWindow.ALBUM1:
+            case SolvePicturePopupWindow.ALBUM2:
+            case SolvePicturePopupWindow.ALBUM3:
+            case SolvePicturePopupWindow.ALBUM4:
+                if (resultCode != Activity.RESULT_OK) return;
+
+                Uri uri = data.getData();
+                Bitmap bit = null;
+                try {
+                    bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                switch (requestCode) {
+                    case SolvePicturePopupWindow.ALBUM1:
+                        bitmaps.add(bit);
+                        break;
+                    case SolvePicturePopupWindow.ALBUM2:
+                        bitmaps2.add(bit);
+                        break;
+                    case SolvePicturePopupWindow.ALBUM3:
+                        bitmaps3.add(bit);
+                        break;
+                    case SolvePicturePopupWindow.ALBUM4:
+                        bitmaps4.add(bit);
+                        break;
+                }
+                break;
+        }
+    }
+
+    public ArrayList<Bitmap> getBitmaps() {
+        return bitmaps;
+    }
+
+    public void setBitmaps(ArrayList<Bitmap> bitmaps) {
+        this.bitmaps = bitmaps;
+    }
+
+    public ArrayList<Bitmap> getBitmaps2() {
+        return bitmaps2;
+    }
+
+    public void setBitmaps2(ArrayList<Bitmap> bitmaps2) {
+        this.bitmaps2 = bitmaps2;
+    }
+
+    public ArrayList<Bitmap> getBitmaps3() {
+        return bitmaps3;
+    }
+
+    public void setBitmaps3(ArrayList<Bitmap> bitmaps3) {
+        this.bitmaps3 = bitmaps3;
+    }
+
+    public ArrayList<Bitmap> getBitmaps4() {
+        return bitmaps4;
+    }
+
+    public void setBitmaps4(ArrayList<Bitmap> bitmaps4) {
+        this.bitmaps4 = bitmaps4;
     }
 }

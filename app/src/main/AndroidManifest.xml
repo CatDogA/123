@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    //存取
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".DmsApplication"
@@ -54,8 +57,22 @@
         <activity android:name=".view.activity.ck.ChangeLetterModifyActivity" />
         <activity android:name=".view.activity.ck.AllocationAddChooseUndefaultActivity" />
         <activity android:name=".view.activity.as.HomeActivity" />
-        <activity android:name=".view.activity.as.ReportAddActivity" />
-        <activity android:name=".view.activity.as.ReportDetailActivity"></activity>
+        <activity android:name=".view.activity.as.ReportAddActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".view.activity.as.ReportDetailActivity" />
+        <activity android:name=".view.activity.as.PictureSolveActivity"></activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.shanghaigm.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".view.activity.as.ShowPhotoActivity"></activity>
     </application>
 
 </manifest>

@@ -4,13 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -18,21 +21,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="right"
+                android:gravity="left"
                 android:text="@string/car_name_plate" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@color/colorWhite" />
-
             <Button
+                android:id="@+id/btn_car_sign"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="@string/scan" />
+                android:text="@string/scan"
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -40,31 +38,35 @@
                 android:layout_weight="2" />
         </LinearLayout>
 
+        <com.shanghaigm.dms.view.widget.MyGridView
+            android:id="@+id/gv_car_sign"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:numColumns="4">
+
+        </com.shanghaigm.dms.view.widget.MyGridView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="right"
+                android:gravity="left"
                 android:text="@string/trouble_thing_picture" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@color/colorWhite" />
-
             <Button
+                android:id="@+id/btn_trouble"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="@string/scan" />
+                android:text="@string/scan"
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -72,9 +74,18 @@
                 android:layout_weight="2" />
         </LinearLayout>
 
+        <com.shanghaigm.dms.view.widget.MyGridView
+            android:id="@+id/gv_trouble"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:numColumns="4">
+
+        </com.shanghaigm.dms.view.widget.MyGridView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -82,53 +93,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="right"
-                android:text="@string/trouble_thing_picture" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@color/colorWhite" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/scan" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="right"
+                android:gravity="left"
                 android:text="@string/after_repair_pic" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@color/colorWhite" />
-
             <Button
+                android:id="@+id/btn_repair"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="@string/scan" />
+                android:text="@string/scan"
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -136,9 +110,18 @@
                 android:layout_weight="2" />
         </LinearLayout>
 
+        <com.shanghaigm.dms.view.widget.MyGridView
+            android:id="@+id/gv_repair"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:numColumns="4">
+
+        </com.shanghaigm.dms.view.widget.MyGridView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -146,21 +129,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="right"
+                android:gravity="left"
                 android:text="@string/else_pic" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@color/colorWhite" />
-
             <Button
+                android:id="@+id/btn_other"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="@string/scan" />
+                android:text="@string/scan"
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -168,31 +146,42 @@
                 android:layout_weight="2" />
         </LinearLayout>
 
+        <com.shanghaigm.dms.view.widget.MyGridView
+            android:id="@+id/gv_other"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:numColumns="4">
+
+        </com.shanghaigm.dms.view.widget.MyGridView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/textView3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="right"
+                android:gravity="left"
                 android:text="@string/video" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@color/colorWhite" />
+            ImageView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:src="@color/colorWhite" />
 
             <Button
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="@string/scan" />
+                android:text="@string/scan"
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="0dp"

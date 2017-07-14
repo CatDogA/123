@@ -154,6 +154,7 @@ public class ReportInfoFragment extends BaseFragment {
                         @Override
                         public void onSuccess(Object responseObj) {
                             dialog.dismissLoadingDlg();
+                            Log.i(TAG, "onSuccess: "+responseObj.toString());
                             Toast.makeText(getActivity(),getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
                         }
 
