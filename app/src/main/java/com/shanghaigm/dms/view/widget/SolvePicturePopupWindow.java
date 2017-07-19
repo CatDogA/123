@@ -38,9 +38,9 @@ import java.util.Locale;
  */
 
 public class SolvePicturePopupWindow extends PopupWindow {
-    private Button btn_camera, btn_album;
+    private Button btn_camera, btn_album, btn_video;
     public static final int CAMERA1 = 10001;
-    public static final int ALBUM1= 10002;
+    public static final int ALBUM1 = 10002;
 
     public static final int CAMERA2 = 20001;
     public static final int ALBUM2 = 20002;
@@ -51,10 +51,13 @@ public class SolvePicturePopupWindow extends PopupWindow {
     public static final int CAMERA4 = 40001;
     public static final int ALBUM4 = 40002;
 
+    public static final int VIDEO = 50001;
     private static String TAG = "SolvePicturePopupWindow";
     private Context context;
     public static String mPublicPhotoPath;
+    public static String mPublicVideoPath;
     private int flag;
+    private boolean IsVersion7 = false;
 
     public SolvePicturePopupWindow(Context context, int flag) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -77,6 +80,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
 
     private void initData() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            IsVersion7 = true;
             ((Activity) context).requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
         }
     }
@@ -97,11 +101,16 @@ public class SolvePicturePopupWindow extends PopupWindow {
                     }
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(context,
-                                "com.shanghaigm.fileprovider",
-                                photoFile);
+                        Uri photoURI = null;
+                        if (IsVersion7) {
+                            photoURI = FileProvider.getUriForFile(context,
+                                    "com.shanghaigm.fileprovider",
+                                    photoFile);
+                        } else {
+                            photoURI = Uri.fromFile(photoFile);
+                        }
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        switch (flag){
+                        switch (flag) {
                             case 1:
                                 ((Activity) context).startActivityForResult(takePictureIntent, CAMERA1);
                                 break;
@@ -115,11 +124,10 @@ public class SolvePicturePopupWindow extends PopupWindow {
                                 ((Activity) context).startActivityForResult(takePictureIntent, CAMERA4);
                                 break;
                         }
-
                     }
+                    galleryAddPic();
+                    dismiss();
                 }
-                galleryAddPic();
-                dismiss();
             }
         });
         btn_album.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +135,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
             public void onClick(View v) {
                 Intent chooseIntent = new Intent(Intent.ACTION_PICK);
                 chooseIntent.setType("image/*");
-                switch (flag){
+                switch (flag) {
                     case 1:
                         ((Activity) context).startActivityForResult(chooseIntent, ALBUM1);
                         break;
@@ -141,7 +149,33 @@ public class SolvePicturePopupWindow extends PopupWindow {
                         ((Activity) context).startActivityForResult(chooseIntent, ALBUM4);
                         break;
                 }
-
+                dismiss();
+            }
+        });
+        btn_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                if (videoIntent.resolveActivity(context.getPackageManager()) != null) {
+                    File videoFile = null;
+                    try {
+                        videoFile = createPublicVideoFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (videoFile != null) {
+                        Uri videoUri = null;
+                        if (IsVersion7) {
+                            videoUri = FileProvider.getUriForFile(context, "com.shanghaigm.fileprovider", videoFile);
+                        } else {
+                            videoUri = Uri.fromFile(videoFile);
+                        }
+                        videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+                    }
+                }
+                videoIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                ((Activity) context).startActivityForResult(videoIntent, VIDEO);
+                galleryAddVideo();
                 dismiss();
             }
         });
@@ -150,22 +184,44 @@ public class SolvePicturePopupWindow extends PopupWindow {
     private void initView(View v) {
         btn_camera = (Button) v.findViewById(R.id.btn_camera);
         btn_album = (Button) v.findViewById(R.id.btn_album);
+        btn_video = (Button) v.findViewById(R.id.btn_video);
+        if (flag == 5) {
+            btn_camera.setVisibility(View.GONE);
+            btn_album.setVisibility(View.GONE);
+        } else {
+            btn_video.setVisibility(View.GONE);
+        }
     }
 
     private File createPublicImageFile() throws IOException {
         File path = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM);
         // Create an image file name
-        Log.i(TAG, "path:" + path.getAbsolutePath());
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp;
+        String imageFileName = "PNG" + timeStamp;
         File image = File.createTempFile(
                 imageFileName,  /* 前缀 */
-                ".jpg",         /* 后缀 */
+                ".png",         /* 后缀 */
                 path      /* 文件夹 */
         );
         mPublicPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private File createPublicVideoFile() throws IOException {
+        File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM);
+        // Create an video file name
+        Log.i(TAG, "path:" + path.getAbsolutePath());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
+        String videoFileName = "VID" + timeStamp;
+        File video = File.createTempFile(
+                videoFileName,  /* 前缀 */
+                ".3gp",         /* 后缀 */
+                path      /* 文件夹 */
+        );
+        mPublicVideoPath = video.getAbsolutePath();
+        return video;
     }
 
     private void galleryAddPic() {
@@ -176,65 +232,14 @@ public class SolvePicturePopupWindow extends PopupWindow {
         context.sendBroadcast(mediaScanIntent);
     }
 
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (requestCode) {
-//            case CAMERA:
-//                if (resultCode != Activity.RESULT_OK) return;
-//                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//                bmOptions.inJustDecodeBounds = true;
-//                // Get the dimensions of the View
-//                int targetW = 100;
-//                int targetH = 100;
-//
-//                // Get the dimensions of the bitmap
-//                bmOptions = new BitmapFactory.Options();
-//                bmOptions.inJustDecodeBounds = true;
-//                BitmapFactory.decodeFile(mPublicPhotoPath, bmOptions);
-//                int photoW = bmOptions.outWidth;
-//                int photoH = bmOptions.outHeight;
-//
-//                // Determine how much to scale down the image
-//                int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-//
-//                // Decode the image file into a Bitmap sized to fill the View
-//                bmOptions.inJustDecodeBounds = false;
-//                bmOptions.inSampleSize = scaleFactor;
-//                bmOptions.inPurgeable = true;
-//
-//                Bitmap bitmap = BitmapFactory.decodeFile(mPublicPhotoPath, bmOptions);
-////                img1.setImageBitmap(bitmap);
-////                list_img.add(bitmap);
-////                adapter.notifyDataSetChanged();
-//                Intent intent = new Intent(PictureSolveActivity.this, ReportAddActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putParcelable(GET_BITMAP, bitmap);
-////                intent.putExtras(bundle);
-//                startActivity(intent);
-//                break;
-//            case ALBUM:
-//                if (resultCode != Activity.RESULT_OK) return;
-//
-//                Uri uri = data.getData();
-//                Bitmap bit = null;
-//                try {
-//                    bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//                Intent intent1 = new Intent(this,ReportAddActivity.class);
-//                Bundle bundle1 = new Bundle();
-//                bundle1.putParcelable(GET_BITMAP, bit);
-////                intent1.putExtras(bundle1);
-//                startActivity(intent1);
-////                img1.setImageBitmap(bit);
-////                list_img.add(bit);
-////                adapter.notifyDataSetChanged();
-//
-//                break;
-//        }
-//    }
+    private void galleryAddVideo() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mPublicVideoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
+
     public void showPopup(View parent) {
         if (!this.isShowing()) {
             this.showAsDropDown(parent, 0, 0);

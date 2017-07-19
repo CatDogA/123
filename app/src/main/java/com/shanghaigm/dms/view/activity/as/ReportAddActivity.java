@@ -49,11 +49,7 @@ public class ReportAddActivity extends AppCompatActivity {
     private ArrayList<String> uris2 = new ArrayList<>();
     private ArrayList<String> uris3 = new ArrayList<>();
     private ArrayList<String> uris4 = new ArrayList<>();
-
     private static String TAG = "ReportAddActivity";
-
-    public ReportAddActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +168,7 @@ public class ReportAddActivity extends AppCompatActivity {
                 switch (requestCode) {
                     case SolvePicturePopupWindow.CAMERA1:
                         uris.add(SolvePicturePopupWindow.mPublicPhotoPath);
+                        Log.i(TAG, "onActivityResult: " + SolvePicturePopupWindow.mPublicPhotoPath);
                         bitmaps.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA2:
@@ -222,6 +219,9 @@ public class ReportAddActivity extends AppCompatActivity {
                         break;
                 }
                 break;
+            case SolvePicturePopupWindow.VIDEO:
+                ReportAttachSubFragment fragment = ReportAttachSubFragment.getInstance();
+                fragment.ChangeImage(SolvePicturePopupWindow.mPublicVideoPath);
         }
     }
 
@@ -289,10 +289,4 @@ public class ReportAddActivity extends AppCompatActivity {
         this.uris4 = uris4;
     }
 
-    public ReportAddActivity(ArrayList<String> uris, ArrayList<String> uris2, ArrayList<String> uris3, ArrayList<String> uris4) {
-        this.uris = uris;
-        this.uris2 = uris2;
-        this.uris3 = uris3;
-        this.uris4 = uris4;
-    }
 }

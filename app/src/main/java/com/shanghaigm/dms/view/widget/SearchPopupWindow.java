@@ -52,15 +52,6 @@ public class SearchPopupWindow extends PopupWindow {
         btnSure = (Button) v.findViewById(R.id.btn_sure);
         listView = (ListView) v.findViewById(R.id.pop_search_list);
         final ArrayList<OrderAddSearchInfo> list1 = new ArrayList<>();
-//        list1.add(new OrderAddSearchInfo("你好", "123435252","初米"));
-//        list1.add(new OrderAddSearchInfo("你好", "4787429829","金龙"));
-//        list1.add(new OrderAddSearchInfo("滚蛋", "3149237492394","666"));
-//        list1.add(new OrderAddSearchInfo("他好", "123435252","亦歌"));
-//        list1.add(new OrderAddSearchInfo("他好", "123435252","初米"));
-//        list1.add(new OrderAddSearchInfo("他好", "4787429829","金龙"));
-//        list1.add(new OrderAddSearchInfo("车蛋", "3149237492394","666"));
-//        list1.add(new OrderAddSearchInfo("哈哈好", "123435252","亦歌"));
-
         for (OrderAddSearchInfo info : list1) {
             listData.add(info);
         }

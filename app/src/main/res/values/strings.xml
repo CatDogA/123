@@ -24,6 +24,8 @@
     <string name="choose_model">请选择车型</string>
     <string name="choose_car_no">请选择出厂编号</string>
     <string name="sub_success">提交成功</string>
+    <string name="loading">正在加载</string>
+    <string name="upload">正在上传</string>
     <!--ck提报-->
     <string name="ck_order_sub">订单提报</string>
     <string name="ck_change_letter_sub">更改函提报</string>

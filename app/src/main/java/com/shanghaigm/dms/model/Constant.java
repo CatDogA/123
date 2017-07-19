@@ -41,6 +41,9 @@ public class Constant {
     public static final String URL_GET_MODIFY_REPORT = Config.URL_BASE + "/appDKSH/updateDaily";
     public static final String URL_GET_CAR_NO = Config.URL_BASE + "/appDKSH/getCarNoAll";
     public static final String URL_GET_FOUR_CAR_INFO = Config.URL_BASE + "/appDKSH/getCarDetail";
+    public static final String URL_GET_PICTURE_VIDEO_FILE = Config.URL_BASE2 +"/appFileUploadController/fileUpload";
+//    https://dms.njgdbus.com:8443/skywelldms/appFileUploadController/fileUpload
+
     //POST
     public static final String URL_GET_ACCESS_TOKEN = Config.URL_BASE + "/appLogin/appLogin";
 }

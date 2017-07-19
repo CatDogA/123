@@ -1,4 +1,5 @@
 package com.shanghaigm.dms.model.util;
+
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Administrator on 2017/7/14.
@@ -24,8 +26,9 @@ public class HTTP {
 
     /**
      * 向指定URL发送GET方法的请求
+     * <p>
+     * //     * @param url请求地址
      *
-     * @param url请求地址
      * @return
      */
     public static String get(String url) {
@@ -35,7 +38,7 @@ public class HTTP {
     /**
      * 向指定URL发送GET方法的请求
      *
-     * @param url 发送请求的URL
+     * @param url      发送请求的URL
      * @param mapParam 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return URL 所代表远程资源的响应结果
      */
@@ -89,7 +92,7 @@ public class HTTP {
     /**
      * 发送POST方法的请求
      *
-     * @param url 发送请求的 URL
+     * @param url  发送请求的 URL
      * @param data POST的数据
      * @return
      */
@@ -100,9 +103,9 @@ public class HTTP {
     /**
      * 向指定 URL 发送POST方法的请求
      *
-     * @param url 发送请求的 URL
+     * @param url      发送请求的 URL
      * @param mapParam GET请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @param data POST的数据
+     * @param data     POST的数据
      * @return
      */
     public static String post(String url, Map<String, String> mapParam, String data) {
@@ -194,7 +197,7 @@ public class HTTP {
     /**
      * 得到文件流,下载文件
      *
-     * @param url 下载文件地址
+     * @param url      下载文件地址
      * @param mapParam 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return
      */
@@ -242,13 +245,13 @@ public class HTTP {
     }
 
     /**
-     * @param url 上传文件地址
+     * @param url  上传文件地址
      * @param file 请求参数应该是 name1=value1&name2=value2 的形式。
      * @return
      */
     public static String postFile(String url, File file) {
         try {
-            return postFile(url,null,file.getName(),new FileInputStream(file));
+            return postFile(url, null, file.getName(), new FileInputStream(file));
         } catch (FileNotFoundException e) {
             log.error("错误-上传文件失败:" + e);
         }
@@ -256,26 +259,26 @@ public class HTTP {
     }
 
     /**
-     * @param url 上传文件地址
+     * @param url      上传文件地址
      * @param mapParam 请求参数应该是 name1=value1&name2=value2 的形式。
-     * @param file 文件
+     * @param file     文件
      * @return
      */
     public static String postFile(String url, Map<String, String> mapParam, File file) {
         try {
-            return postFile(url,mapParam,file.getName(),new FileInputStream(file));
+            return postFile(url, mapParam, file.getName(), new FileInputStream(file));
         } catch (FileNotFoundException e) {
             log.error("错误-上传文件失败:" + e);
         }
         return null;
     }
 
-    public static String postFile(String url, Map<String, String> mapParam,String fileName, InputStream inputStream) {
+    public static String postFile(String url, Map<String, String> mapParam, String fileName, InputStream inputStream) {
         DataOutputStream out = null;
         BufferedReader in = null;
         StringBuilder result = null;
-        String boundary = "----" ;
-//                + UUID.get32();
+        String boundary = "----" + UUID.randomUUID().toString();
+
         try {
             String urlNameString = url + mapToParam(mapParam);
             URL realUrl = new URL(urlNameString);
@@ -304,7 +307,7 @@ public class HTTP {
 
             // 发送请求参数
             out.writeBytes("--" + boundary + "\r\n");
-            out.writeBytes("Content-Disposition:    form-data;    name=\"media\";    filename=\"" + fileName + "\"\r\n");
+            out.writeBytes("Content-Disposition:    form-data;    name=\"myFile\";    filename=\"" + fileName + "\"\r\n");
             out.writeBytes("Content-Type:   application/octet-stream\r\n\r\n");
 
             while (true) {

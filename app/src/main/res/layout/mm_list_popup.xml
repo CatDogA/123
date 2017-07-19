@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorWhite"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/pop_list"
-            android:layout_width="100dp"
-            android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
-        </ListView>
+    <ListView
+        android:id="@+id/pop_list"
+        android:layout_width="100dp"
+        android:layout_height="match_parent">
+
+    </ListView>
 </LinearLayout>

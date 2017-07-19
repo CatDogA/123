@@ -111,7 +111,7 @@ public class ReportQueryFragment extends BaseFragment {
                             vpRight.setImageResource(R.mipmap.right_switch);
                             return;
                         }
-//                        requestOrderInfo(IsQuery);
+                        requestOrderInfo(IsQuery);
                     } else {
                         vp.setCurrentItem(++currentItem);
                         setPages(currentItem + 1, pages);
@@ -199,7 +199,7 @@ public class ReportQueryFragment extends BaseFragment {
                     String car_sign = reportInfo.car_sign;
                     int state = reportInfo.state;
                     int daily_id = reportInfo.daily_id;
-                    paperInfos.add(new PaperInfo(getActivity(),daily_code, model, car_sign, state, daily_id, 7));
+                    paperInfos.add(new PaperInfo(getActivity(), daily_code, model, car_sign, state, daily_id, 7));
                 }
                 ReviewTable table = new ReviewTable(getActivity(), paperInfos, 7);
                 table.setLayoutParams(lp);
