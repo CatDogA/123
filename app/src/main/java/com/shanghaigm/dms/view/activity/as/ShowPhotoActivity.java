@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import com.shanghaigm.dms.R;
@@ -28,7 +29,7 @@ public class ShowPhotoActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String path = bundle.getString(ReportAttachSubFragment.SHOW_PHOTO);
-
+            Log.i("hahaha", "initIntent: "+path);
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
             // Get the dimensions of the View
@@ -41,7 +42,7 @@ public class ShowPhotoActivity extends AppCompatActivity {
             // Get the dimensions of the bitmap
             bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+            BitmapFactory.decodeFile(path, bmOptions);
             int photoW = bmOptions.outWidth;
             int photoH = bmOptions.outHeight;
 

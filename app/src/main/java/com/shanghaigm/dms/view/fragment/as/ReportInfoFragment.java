@@ -22,6 +22,7 @@ import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.as.ModelInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
+import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 
@@ -42,9 +43,13 @@ public class ReportInfoFragment extends BaseFragment {
             edt_factory_date, edt_license_date, edt_mile, edt_fault_describe, edt_treatment_process,
             edt_treatment_result, edt_rc, edt_first_fault_name, edt_fault_makers;
     private DmsApplication app;
-    private ImageView img_model, img_factory_id,img_model_series,img_duty_type;
+    private ImageView img_model, img_factory_id, img_model_series, img_duty_type;
     private LoadingDialog dialog;
     private ArrayList<ModelInfo> models;
+    private Boolean isInfoAdd = false;
+    private String[] infos;
+    private int file_id;
+    private JSONObject subObj;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,46 +62,46 @@ public class ReportInfoFragment extends BaseFragment {
 
     private void setUpView() {
         edt_feed_back.setText(getDate());
-        btn_sub.setOnClickListener(new View.OnClickListener() {
+        btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String feed_back = edt_feed_back.getText().toString();
-                 String model = edt_model.getText().toString();
-                 String vehicle = edt_vehicle.getText().toString();
-                 String car_no = edt_car_no.getText().toString();
-                 String car_sign = edt_car_sign.getText().toString();
-                 String chassis_num = edt_chassis_num.getText().toString();
-                 String factory_date = edt_factory_date.getText().toString();
-                 String license_date = edt_license_date.getText().toString();
-                 String mile = edt_mile.getText().toString();
-                 String fault_describe = edt_fault_describe.getText().toString();
-                 String treatment_process = edt_treatment_process.getText().toString();
-                 String treatment_result = edt_treatment_result.getText().toString();    //不需要？
-                 String rc = edt_rc.getText().toString();
-                 String first_fault_name = edt_first_fault_name.getText().toString();
-                 String fault_makers = edt_fault_makers.getText().toString();
-                 String[] infos = {feed_back,model,vehicle,car_no,car_sign,chassis_num,factory_date,license_date,mile,fault_describe,treatment_process,treatment_result,rc,first_fault_name,fault_makers};
+                String model = edt_model.getText().toString();
+                String vehicle = edt_vehicle.getText().toString();
+                String car_no = edt_car_no.getText().toString();
+                String car_sign = edt_car_sign.getText().toString();
+                String chassis_num = edt_chassis_num.getText().toString();
+                String factory_date = edt_factory_date.getText().toString();
+                String license_date = edt_license_date.getText().toString();
+                String mile = edt_mile.getText().toString();
+                String fault_describe = edt_fault_describe.getText().toString();
+                String treatment_process = edt_treatment_process.getText().toString();
+                String treatment_result = edt_treatment_result.getText().toString();
+                String rc = edt_rc.getText().toString();
+                String first_fault_name = edt_first_fault_name.getText().toString();
+                String fault_makers = edt_fault_makers.getText().toString();
+                infos = new String[]{feed_back, model, vehicle, car_no, car_sign, chassis_num, factory_date, license_date, mile, fault_describe, treatment_process, treatment_result, rc, first_fault_name, fault_makers};
                 Boolean flag = true;
-                for(int i=0;i<infos.length;i++){
-                    if(infos[i].equals("")){
+                for (int i = 0; i < infos.length; i++) {
+                    if (infos[i].equals("")) {
                         flag = false;
                         Toast.makeText(getActivity(), getResources().getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
                     }
                 }
-                if(flag){
+                if (flag) {
                     int model_id = 0;
-                    if(models!=null){
-                        for(ModelInfo modelInfo:models){
-                            if(modelInfo.model_name.equals(model)){
+                    if (models != null) {
+                        for (ModelInfo modelInfo : models) {
+                            if (modelInfo.model_name.equals(model)) {
                                 model_id = Integer.parseInt(modelInfo.model_Id);
                             }
                         }
                     }
                     int vehicle_id = 0;
-                    if(!vehicle.equals("")){
-                        if(vehicle.equals(getResources().getString(R.string.city_car))){
-                            vehicle_id=1;
-                        }else {
+                    if (!vehicle.equals("")) {
+                        if (vehicle.equals(getResources().getString(R.string.city_car))) {
+                            vehicle_id = 1;
+                        } else {
                             vehicle_id = 2;
                         }
                     }
@@ -104,7 +109,7 @@ public class ReportInfoFragment extends BaseFragment {
 
                     //                1生产、2配套、3设计、4商务、5其他
                     int rc_type = 0;
-                    switch (rc){
+                    switch (rc) {
                         case "生产":
                             rc_type = 1;
                             break;
@@ -126,8 +131,8 @@ public class ReportInfoFragment extends BaseFragment {
                     Map<String, Object> map = new HashMap<>();
                     try {
                         params.put("feedback_date", feed_back);
-                        params.put("models_Id",model_id);
-                        params.put("vehicle_series",vehicle_id);
+                        params.put("models_Id", model_id);
+                        params.put("vehicle_series", vehicle_id);
                         params.put("car_no", car_no);
                         params.put("car_sign", car_sign);
                         params.put("chassis_num", chassis_num);
@@ -136,40 +141,95 @@ public class ReportInfoFragment extends BaseFragment {
                         params.put("mileage_num", miles);
                         params.put("fault_describe", fault_describe);
                         params.put("treatment_process", treatment_process);
-//                        params.put("treatment_result",treatment_result);
-                        params.put("responsibility_classification",rc_type);
+                        params.put("treatment_result", treatment_result);
+                        params.put("responsibility_classification", rc_type);
                         params.put("rc_value", rc);           //?从何处获取
                         params.put("first_fault_name", first_fault_name);
                         params.put("fault_makers", fault_makers);
+                        subObj = params;
                         array.put(params);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    map.put("dailyStr",array.toString());
+                    map.put("dailyStr", array.toString());
                     map.put("jobCode", app.getJobCode());
                     map.put("loginName", app.getAccount());
                     dialog.showLoadingDlg();
                     OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_ADD_REPORT, map, new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object responseObj) {
-                            dialog.dismissLoadingDlg();
                             Log.i(TAG, "onSuccess: "+responseObj.toString());
-                            Toast.makeText(getActivity(),getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
+                            dialog.dismissLoadingDlg();
+                            JSONObject resultObj = (JSONObject) responseObj;
+                            try {
+                                JSONObject resultEntity = resultObj.getJSONObject("resultEntity");
+                                String code = resultEntity.getString("returnCode");
+                                file_id = resultEntity.getInt("result");
+                                if (code.equals("1")) {
+                                    Toast.makeText(getActivity(), getResources().getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
+                                }
+                                btn_save.setEnabled(false);
+                                isInfoAdd = true;
+                                ((ReportAddActivity)getActivity()).setInfoAdd(true);
+                                ((ReportAddActivity)getActivity()).setReport_id(file_id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(getActivity(), getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(Object reasonObj) {
-
+                            dialog.dismissLoadingDlg();
+                            Toast.makeText(getActivity(), getResources().getText(R.string.check_info), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         });
-        btn_save.setOnClickListener(new View.OnClickListener() {
+        btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: mile   "+edt_mile.getText().toString());
+                if (isInfoAdd) {
+                    try {
+                        Map<String, Object> params = new HashMap<>();
+                        JSONArray array = new JSONArray();
+                        subObj.put("daily_id", file_id);
+                        subObj.put("state", 1);
+                        array.put(subObj);
+                        params.put("dailyStr", array.toString());
+                        params.put("loginName", app.getAccount());
+                        dialog.showLoadingDlg();
+                        OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_SUB_REPORT, params, new DisposeDataListener() {
+                            @Override
+                            public void onSuccess(Object responseObj) {
+                                Log.i(TAG, "onSuccess: " + responseObj.toString());
+                                dialog.dismissLoadingDlg();
+                                JSONObject resultObj = (JSONObject) responseObj;
+                                try {
+                                    JSONObject resultEntity = resultObj.getJSONObject("resultEntity");
+                                    String s = resultEntity.getString("returnCode");
+                                    if(s.equals("1")){
+                                        Toast.makeText(getActivity(),getResources().getText(R.string.sub_info_success), Toast.LENGTH_SHORT).show();
+                                        btn_sub.setEnabled(false);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Object reasonObj) {
+
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getText(R.string.save_info), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         img_model.setOnClickListener(new View.OnClickListener() {
@@ -257,13 +317,13 @@ public class ReportInfoFragment extends BaseFragment {
 //                String car_no = s.toString();
                 if (s.equals("")) {
                     Toast.makeText(getActivity(), getResources().getText(R.string.choose_car_no), Toast.LENGTH_SHORT).show();
-                }else{
-                    Map<String,Object> params = new HashMap<>();
-                    params.put("car_no",s);
+                } else {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("car_no", s);
                     OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_FOUR_CAR_INFO, params, new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object responseObj) {
-                            Log.i(TAG, "onSuccess: "+responseObj.toString());
+                            Log.i(TAG, "onSuccess: " + responseObj.toString());
                             JSONObject object = (JSONObject) responseObj;
                             try {
                                 JSONObject result = object.getJSONObject("resultEntity");
@@ -277,6 +337,7 @@ public class ReportInfoFragment extends BaseFragment {
                                 e.printStackTrace();
                             }
                         }
+
                         @Override
                         public void onFailure(Object reasonObj) {
 
@@ -297,7 +358,7 @@ public class ReportInfoFragment extends BaseFragment {
                 ArrayList<PopListInfo> list_series = new ArrayList<PopListInfo>();
                 list_series.add(new PopListInfo(getResources().getText(R.string.city_car).toString()));
                 list_series.add(new PopListInfo(getResources().getText(R.string.between_city_car).toString()));
-                MmPopupWindow pop_series = new MmPopupWindow(getActivity(),edt_vehicle,list_series,5);
+                MmPopupWindow pop_series = new MmPopupWindow(getActivity(), edt_vehicle, list_series, 5);
                 pop_series.showPopup(edt_vehicle);
             }
         });
@@ -307,11 +368,11 @@ public class ReportInfoFragment extends BaseFragment {
             public void onClick(View v) {
                 ArrayList<PopListInfo> list_duty = new ArrayList<PopListInfo>();
 
-                String[] dutys = {"生产","配套","设计","商务","其他"};
-                for(int i=0;i<dutys.length;i++){
+                String[] dutys = {"生产", "配套", "设计", "商务", "其他"};
+                for (int i = 0; i < dutys.length; i++) {
                     list_duty.add(new PopListInfo(dutys[i]));
                 }
-                MmPopupWindow pop_dutys = new MmPopupWindow(getActivity(),edt_rc,list_duty,4);
+                MmPopupWindow pop_dutys = new MmPopupWindow(getActivity(), edt_rc, list_duty, 4);
                 pop_dutys.showPopup(edt_rc);
             }
         });

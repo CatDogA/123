@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
@@ -30,8 +31,14 @@ import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportInfoFragment;
 import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ReportAddActivity extends AppCompatActivity {
     private TabLayout tablayout;
@@ -49,6 +56,14 @@ public class ReportAddActivity extends AppCompatActivity {
     private ArrayList<String> uris2 = new ArrayList<>();
     private ArrayList<String> uris3 = new ArrayList<>();
     private ArrayList<String> uris4 = new ArrayList<>();
+
+    private ArrayList<String> cpPaths = new ArrayList<>();
+    private ArrayList<String> cpPaths2 = new ArrayList<>();
+    private ArrayList<String> cpPaths3 = new ArrayList<>();
+    private ArrayList<String> cpPaths4 = new ArrayList<>();
+
+    private boolean isInfoAdd = false;
+    private int report_id = -1;
     private static String TAG = "ReportAddActivity";
 
     @Override
@@ -163,24 +178,34 @@ public class ReportAddActivity extends AppCompatActivity {
                 bmOptions.inJustDecodeBounds = false;
                 bmOptions.inSampleSize = scaleFactor;
                 bmOptions.inPurgeable = true;
-
                 Bitmap bitmap = BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+                Bitmap cpBit = CpPic(SolvePicturePopupWindow.mPublicPhotoPath);
+                String cpPath = null;
+                try {
+                    cpPath = SaveCpPic(cpBit);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //压缩图片到sdcard
                 switch (requestCode) {
                     case SolvePicturePopupWindow.CAMERA1:
                         uris.add(SolvePicturePopupWindow.mPublicPhotoPath);
-                        Log.i(TAG, "onActivityResult: " + SolvePicturePopupWindow.mPublicPhotoPath);
+                        cpPaths.add(cpPath);
                         bitmaps.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA2:
                         uris2.add(SolvePicturePopupWindow.mPublicPhotoPath);
+                        cpPaths2.add(cpPath);
                         bitmaps2.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA3:
                         uris3.add(SolvePicturePopupWindow.mPublicPhotoPath);
+                        cpPaths3.add(cpPath);
                         bitmaps3.add(bitmap);
                         break;
                     case SolvePicturePopupWindow.CAMERA4:
                         uris4.add(SolvePicturePopupWindow.mPublicPhotoPath);
+                        cpPaths4.add(cpPath);
                         bitmaps4.add(bitmap);
                         break;
                 }
@@ -189,6 +214,7 @@ public class ReportAddActivity extends AppCompatActivity {
             case SolvePicturePopupWindow.ALBUM2:
             case SolvePicturePopupWindow.ALBUM3:
             case SolvePicturePopupWindow.ALBUM4:
+                //TODO-添加压缩图片
                 if (resultCode != Activity.RESULT_OK) return;
                 Uri uri = data.getData();
                 //将Uri转化为路径
@@ -223,6 +249,67 @@ public class ReportAddActivity extends AppCompatActivity {
                 ReportAttachSubFragment fragment = ReportAttachSubFragment.getInstance();
                 fragment.ChangeImage(SolvePicturePopupWindow.mPublicVideoPath);
         }
+    }
+
+    private Bitmap CpPic(String path) {
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 20;
+//        Bitmap bit = BitmapFactory.decodeFile(path);
+//        return bit;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        // Get the dimensions of the View
+        WindowManager wm1 = this.getWindowManager();
+        int width1 = wm1.getDefaultDisplay().getWidth();
+        int height1 = wm1.getDefaultDisplay().getHeight();
+        int targetW = width1 / 4;
+        int targetH = height1 / 4;
+
+        // Get the dimensions of the bitmap
+        bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        return bitmap;
+    }
+
+    private String SaveCpPic(Bitmap bit) throws IOException {
+        File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM);
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
+        String imageFileName = "CP" + timeStamp;
+        File image = File.createTempFile(
+                imageFileName,  /* 前缀 */
+                ".png",         /* 后缀 */
+                path      /* 文件夹 */
+        );
+        Log.i(TAG, "SavePic: getPath    " + image.getPath());
+        try {
+            FileOutputStream out = new FileOutputStream(image);
+            if (bit != null) {
+                if (bit.compress(Bitmap.CompressFormat.PNG, 40, out)) {
+                    out.flush();
+                    out.close();
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image.getPath();
     }
 
     public ArrayList<Bitmap> getBitmaps() {
@@ -289,4 +376,51 @@ public class ReportAddActivity extends AppCompatActivity {
         this.uris4 = uris4;
     }
 
+    public boolean isInfoAdd() {
+        return isInfoAdd;
+    }
+
+    public void setInfoAdd(boolean infoAdd) {
+        isInfoAdd = infoAdd;
+    }
+
+    public int getReport_id() {
+        return report_id;
+    }
+
+    public void setReport_id(int report_id) {
+        this.report_id = report_id;
+    }
+
+    public ArrayList<String> getCpPaths() {
+        return cpPaths;
+    }
+
+    public void setCpPaths(ArrayList<String> cpPaths) {
+        this.cpPaths = cpPaths;
+    }
+
+    public ArrayList<String> getCpPaths2() {
+        return cpPaths2;
+    }
+
+    public void setCpPaths2(ArrayList<String> cpPaths2) {
+        this.cpPaths2 = cpPaths2;
+    }
+
+    public ArrayList<String> getCpPaths3() {
+        return cpPaths3;
+    }
+
+    public void setCpPaths3(ArrayList<String> cpPaths3) {
+        this.cpPaths3 = cpPaths3;
+    }
+
+    public ArrayList<String> getCpPaths4() {
+        return cpPaths4;
+    }
+
+    public void setCpPaths4(ArrayList<String> cpPaths4) {
+        this.cpPaths4 = cpPaths4;
+    }
 }

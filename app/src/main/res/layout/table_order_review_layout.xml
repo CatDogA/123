@@ -15,6 +15,12 @@
         <include layout="@layout/include_review_table_title"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/report_sub_table_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_report_sub_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/contract_table_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

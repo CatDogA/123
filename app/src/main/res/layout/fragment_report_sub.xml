@@ -2,8 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/mainColorGD"
+    android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.fragment.as.ReportSubFragment">
-    <include layout="@layout/include_report_sub_info"/>
+
+    <include layout="@layout/include_report_sub_info" />
+    <com.shanghaigm.dms.view.widget.WrapHeightViewPager
+        android:id="@+id/report_query_table"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </com.shanghaigm.dms.view.widget.WrapHeightViewPager>
+
+    <include layout="@layout/include_below_table" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" />
 </LinearLayout>

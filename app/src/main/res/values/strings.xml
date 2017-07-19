@@ -26,6 +26,15 @@
     <string name="sub_success">提交成功</string>
     <string name="loading">正在加载</string>
     <string name="upload">正在上传</string>
+    <string name="save_file">请先保存文件</string>
+    <string name="save_info">请先保存信息</string>
+    <string name="save_info_success">保存信息成功</string>
+    <string name="save_page_one_info">请先保存第一页信息</string>
+    <string name="save_file_success">文件保存成功</string>
+    <string name="sub_file_success">文件上传成功</string>
+    <string name="check_info">请检查信息是否有误</string>
+    <string name="sub_info_success">信息提交成功</string>
+    <string name="add_file">请添加文件</string>
     <!--ck提报-->
     <string name="ck_order_sub">订单提报</string>
     <string name="ck_change_letter_sub">更改函提报</string>
