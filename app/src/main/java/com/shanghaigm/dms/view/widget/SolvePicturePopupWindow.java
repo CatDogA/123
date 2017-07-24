@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.view.activity.as.PictureSolveActivity;
@@ -58,6 +59,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
     public static String mPublicVideoPath;
     private int flag;
     private boolean IsVersion7 = false;
+    private RelativeLayout rl_back,rl_out;
 
     public SolvePicturePopupWindow(Context context, int flag) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -86,6 +88,13 @@ public class SolvePicturePopupWindow extends PopupWindow {
     }
 
     private void setUpView() {
+        rl_out.setVisibility(View.INVISIBLE);
+        rl_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +194,9 @@ public class SolvePicturePopupWindow extends PopupWindow {
         btn_camera = (Button) v.findViewById(R.id.btn_camera);
         btn_album = (Button) v.findViewById(R.id.btn_album);
         btn_video = (Button) v.findViewById(R.id.btn_video);
+        rl_back = (RelativeLayout) v.findViewById(R.id.rl_back);
+        rl_out = (RelativeLayout) v.findViewById(R.id.rl_out);
+
         if (flag == 5) {
             btn_camera.setVisibility(View.GONE);
             btn_album.setVisibility(View.GONE);
@@ -198,10 +210,10 @@ public class SolvePicturePopupWindow extends PopupWindow {
                 Environment.DIRECTORY_DCIM);
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-        String imageFileName = "PNG" + timeStamp;
+        String imageFileName = "JPG" + timeStamp;
         File image = File.createTempFile(
                 imageFileName,  /* 前缀 */
-                ".png",         /* 后缀 */
+                ".jpg",         /* 后缀 */
                 path      /* 文件夹 */
         );
         mPublicPhotoPath = image.getAbsolutePath();
@@ -223,7 +235,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
         mPublicVideoPath = video.getAbsolutePath();
         return video;
     }
-
+    //把图片存相册
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mPublicPhotoPath);
@@ -231,7 +243,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
         mediaScanIntent.setData(contentUri);
         context.sendBroadcast(mediaScanIntent);
     }
-
+    //把视频存到相册
     private void galleryAddVideo() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mPublicVideoPath);

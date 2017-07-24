@@ -58,9 +58,6 @@ public class AllocationTable extends LinearLayout {
                 if (data.get(position).getMatchLength() > 0) {
                     popupWindow = new AllocationUnDefaultChoosePopupWindow(context, position, 1, data.get(position).getList(), data, handler, 1);
                     popupWindow.showPopup(btn);
-
-
-//                    allocationHandler.sendMessage(msg);
                 }
             }
         });

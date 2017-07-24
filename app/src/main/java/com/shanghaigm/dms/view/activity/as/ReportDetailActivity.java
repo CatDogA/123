@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
@@ -32,7 +33,7 @@ public class ReportDetailActivity extends AppCompatActivity {
     private DmsApplication app;
     private static String TAG = "ReportDetailActivity";
     public static String REPORT_DETAIL_INFO = "report_detail_info_one";
-
+    public static ArrayList<PathInfo> paths;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +49,13 @@ public class ReportDetailActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
         Bundle bundle = getIntent().getExtras();
         ReportQueryDetailInfoBean reportDetailInfo = (ReportQueryDetailInfoBean) bundle.getSerializable(PaperInfo.REPORT_DETAI_INFO);
+        paths = (ArrayList<PathInfo>) bundle.getSerializable(PaperInfo.REPORT_FILE_INFO);
+
         Bundle fragmentBundle = new Bundle();
         fragmentBundle.putSerializable(ReportDetailActivity.REPORT_DETAIL_INFO, reportDetailInfo);
         ReportDetailInfoFragment fragment = ReportDetailInfoFragment.getInstance();
         fragment.setArguments(fragmentBundle);
-        ft.add(R.id.fragment_content,fragment).commit();
+        ft.add(R.id.fragment_content, fragment).commit();
     }
 
     private void initData() {

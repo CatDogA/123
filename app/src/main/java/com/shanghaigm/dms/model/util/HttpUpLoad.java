@@ -1,14 +1,20 @@
 package com.shanghaigm.dms.model.util;
 
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -143,6 +149,52 @@ public class HttpUpLoad {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String downloadFile(String fileName, Map<String, String> params, String Url) {
+//        String uploadUrl = "http://192.168.2.111:8080/HsbServlet/DownloadFile";
+        SSLContext sc = null;
+        File picFile = null;
+        try {
+            sc = SSLContext.getInstance("TLS");
+            sc.init(null, new TrustManager[]{new MyTrustManager()}, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
+
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+            File file = new File(path.getPath() + "/report_cp");
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            picFile = new File(file, fileName);
+            Log.i(TAG, "downloadFile: " + file.getPath() + "          " + picFile.getPath());
+            OutputStream os = new BufferedOutputStream(new FileOutputStream(picFile));
+            String uploadUrl = Url + mapToParam(params);
+            final URL url = new URL(uploadUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            InputStream is = new BufferedInputStream(connection.getInputStream());
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            while ((len = is.read(buffer)) != -1) {
+                os.write(buffer, 0, len);// 必须使用write(buffer, 0, len){Writes
+            }
+            os.flush();
+            os.close();
+            is.close();
+            connection.disconnect();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return picFile.getPath();
     }
 
     private static class MyHostnameVerifier implements HostnameVerifier {

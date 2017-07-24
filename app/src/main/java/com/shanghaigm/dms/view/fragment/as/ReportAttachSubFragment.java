@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataListener;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.as.PathUpLoadInfo;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
@@ -27,7 +27,6 @@ import com.shanghaigm.dms.view.activity.as.ShowPhotoActivity;
 import com.shanghaigm.dms.view.activity.as.ShowVideoActivity;
 import com.shanghaigm.dms.view.adapter.GridViewAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
-import com.shanghaigm.dms.view.widget.ShowVideoPopupWindow;
 import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
 import org.json.JSONArray;
@@ -41,13 +40,15 @@ import java.util.Map;
 
 public class ReportAttachSubFragment extends BaseFragment {
     private static ReportAttachSubFragment reportAttachSubFragment;
-    //    private Button btn_car_sign, btn_trouble, btn_repair, btn_other, btn_video;
     private ArrayList<Bitmap> bits_car_sign, bits_trouble, bits_repair, bits_other;
+    private ArrayList<PathUpLoadInfo> infos_car_sign = new ArrayList<>(), infos_trouble = new ArrayList<>(),
+            infos_repair = new ArrayList<>(), infos_other = new ArrayList<>();
     private static String TAG = "ReportAttachSub";
     public static String SHOW_PHOTO = "show_photo";
     private GridView gv_car_sign, gv_trouble, gv_repair, gv_other;
     private GridViewAdapter adapter_car_sign, adapter_trouble, adapter_repair, adapter_other;
     private ArrayList<String> paths1, paths2, paths3, paths4;
+    private ArrayList<String> cpPaths1, cpPaths2, cpPaths3, cpPaths4;
     private String videoPath = null;
     private Button btn_save, btn_sub;
     private ImageView img_video_add, img_video;
@@ -154,6 +155,24 @@ public class ReportAttachSubFragment extends BaseFragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                infos_car_sign.clear();
+                infos_trouble.clear();
+                infos_repair.clear();
+                infos_other.clear();
+                Log.i(TAG, "onClick: " +"       "+ paths1.size() +"       "+ paths2.size() +"       "+ paths3.size()  +"       "+ paths4.size());
+                Log.i(TAG, "onClick: " +"       "+ cpPaths1.size() +"       "+ cpPaths2.size() +"       "+ cpPaths3.size()  +"       "+ cpPaths4.size());
+                for (int i = 0; i < paths1.size(); i++) {
+                    infos_car_sign.add(new PathUpLoadInfo(getName(paths1.get(i)), cpPaths1.get(i), paths1.get(i)));
+                }
+                for (int i = 0; i < paths2.size(); i++) {
+                    infos_trouble.add(new PathUpLoadInfo(getName(paths2.get(i)), cpPaths2.get(i), paths2.get(i)));
+                }
+                for (int i = 0; i < paths3.size(); i++) {
+                    infos_repair.add(new PathUpLoadInfo(getName(paths3.get(i)), cpPaths3.get(i), paths3.get(i)));
+                }
+                for (int i = 0; i < paths4.size(); i++) {
+                    infos_other.add(new PathUpLoadInfo(getName(paths4.get(i)), cpPaths4.get(i), paths4.get(i)));
+                }
                 count = 0;          //判断是否完成
                 countFill = 0;  //有数值的paths个数
                 if (paths1.size() > 0) {
@@ -175,141 +194,174 @@ public class ReportAttachSubFragment extends BaseFragment {
                     Toast.makeText(getActivity(), getResources().getText(R.string.add_file), Toast.LENGTH_SHORT).show();
                 } else {
                     dialog.showLoadingDlg();
+                    btn_save.setEnabled(false);
                     Log.i(TAG, "onClick:countFill    " + countFill);
                     final ArrayList<String> results1 = new ArrayList<String>();         //存储完成的结果
                     final ArrayList<String> results2 = new ArrayList<String>();
                     final ArrayList<String> results3 = new ArrayList<String>();
                     final ArrayList<String> results4 = new ArrayList<String>();
 
-                    for (final String path : paths1) {
+                    for (int i = 0; i < paths1.size(); i++) {
+                        final int finalI = i;
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Map<String, String> params = new HashMap<>();
-                                params.size();
-                                params.put("type", "15");
-                                params.put("is_compress", "2");
-                                File file = new File(path);
-                                String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
-                                Log.i(TAG, "onClick:    " + result);
-                                if (result != null) {
-                                    results1.add(result);
-                                    try {
-                                        JSONObject resultObj = new JSONObject(result);
-                                        JSONObject resultObj2 = resultObj.getJSONObject("result");
-                                        int id = resultObj2.getInt("id");
-                                        file_ids.add(id);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                //压缩上传
+                                Map<String, String> cpParams = new HashMap<String, String>();
+                                cpParams.put("type", "15");
+                                cpParams.put("is_compress", "1");
+                                File cpFile = new File(cpPaths1.get(finalI));
+                                String cpReuslt = HttpUpLoad.uploadFile(cpFile, Constant.URL_GET_PICTURE_VIDEO_FILE, cpParams);
+                                int file_id = 0;
+                                if (cpReuslt != null) {
+                                    file_id = addFileId(file_ids, cpReuslt);
                                 }
-                                if (results1.size() == paths1.size()) {
-                                    count++;
-                                    Log.i(TAG, "run: count  " + count);
-                                    if (count == countFill) {
-                                        dialog.dismissLoadingDlg();
-                                        isPicAdd = true;
-                                        Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "run:infos_car_sign, cpReuslt    " + cpReuslt + "    file_id  " + file_id + "    infos_car_sign  " + infos_car_sign.size() + " paths1   " + paths1.size());
+                                for (int j = 0; j < infos_car_sign.size(); j++) {
+                                    if (cpFile.getName().equals(infos_car_sign.get(j).fileName)) {
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("type", "15");
+                                        params.put("is_compress", "2");
+                                        params.put("id", file_id + "");
+                                        File file = new File(paths1.get(j));
+                                        String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
+                                        Log.i(TAG, "onClick:    " + result);
+                                        if (result != null) {
+                                            results1.add(result);
+                                        }
+                                        if (results1.size() == paths1.size()) {
+                                            count++;
+                                            Log.i(TAG, "run: count  " + count);
+                                            if (count == countFill) {
+                                                dialog.dismissLoadingDlg();
+                                                isPicAdd = true;
+                                                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }).start();
                     }
-                    for (final String path : paths2) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Map<String, String> params = new HashMap<>();
-                                params.put("type", "15");
-                                params.put("is_compress", "2");
-                                File file = new File(path);
-                                String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
-                                Log.i(TAG, "onClick:    " + result);
-                                if (result != null) {
-                                    results2.add(result);
-                                    try {
-                                        JSONObject resultObj = new JSONObject(result);
-                                        JSONObject resultObj2 = resultObj.getJSONObject("result");
-                                        int id = resultObj2.getInt("id");
-                                        file_ids.add(id);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                if (results2.size() == paths2.size()) {
-                                    count++;
-                                    Log.i(TAG, "run: count  " + count);
-                                    if (count == countFill) {
-                                        dialog.dismissLoadingDlg();
-                                        isPicAdd = true;
-                                        Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }).start();
 
-                    }
-                    for (final String path : paths3) {
+                    for (int i = 0; i < paths2.size(); i++) {
+                        final int finalI = i;
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Map<String, String> params = new HashMap<>();
-                                params.put("type", "15");
-                                params.put("is_compress", "2");
-                                File file = new File(path);
-                                String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
-                                Log.i(TAG, "onClick:    " + result);
-                                if (result != null) {
-                                    results3.add(result);
-                                    try {
-                                        JSONObject resultObj = new JSONObject(result);
-                                        JSONObject resultObj2 = resultObj.getJSONObject("result");
-                                        int id = resultObj2.getInt("id");
-                                        file_ids.add(id);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                Map<String, String> cpParams = new HashMap<String, String>();
+                                cpParams.put("type", "16");
+                                cpParams.put("is_compress", "1");
+                                File cpFile = new File(cpPaths2.get(finalI));
+                                String cpReuslt = HttpUpLoad.uploadFile(cpFile, Constant.URL_GET_PICTURE_VIDEO_FILE, cpParams);
+                                int file_id = 0;
+                                if (cpReuslt != null) {
+                                    file_id = addFileId(file_ids, cpReuslt);
                                 }
-                                if (results3.size() == paths3.size()) {
-                                    count++;
-                                    Log.i(TAG, "run: count  " + count);
-                                    if (count == countFill) {
-                                        dialog.dismissLoadingDlg();
-                                        isPicAdd = true;
-                                        Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "run:infos_car_sign, cpReuslt    " + cpReuslt + "    file_id  " + file_id + "    infos_car_sign  " + infos_car_sign.size() + " paths1   " + paths1.size());
+                                for (int j = 0; j < infos_trouble.size(); j++) {
+                                    if (cpFile.getName().equals(infos_trouble.get(j).fileName)) {
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("type", "16");
+                                        params.put("is_compress", "2");
+                                        params.put("id", file_id + "");
+                                        File file = new File(paths2.get(j));
+                                        String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
+                                        Log.i(TAG, "onClick:    " + result);
+                                        if (result != null) {
+                                            results2.add(result);
+                                        }
+                                        if (results2.size() == paths2.size()) {
+                                            count++;
+                                            Log.i(TAG, "run: count  " + count);
+                                            if (count == countFill) {
+                                                dialog.dismissLoadingDlg();
+                                                isPicAdd = true;
+                                                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }).start();
                     }
-                    for (final String path : paths4) {
+                    for (int i = 0; i < paths3.size(); i++) {
+                        final int finalI = i;
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Map<String, String> params = new HashMap<>();
-                                params.put("type", "15");
-                                params.put("is_compress", "2");
-                                File file = new File(path);
-                                String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
-                                Log.i(TAG, "onClick:    " + result);
-                                if (result != null) {
-                                    results4.add(result);
-                                    try {
-                                        JSONObject resultObj = new JSONObject(result);
-                                        JSONObject resultObj2 = resultObj.getJSONObject("result");
-                                        int id = resultObj2.getInt("id");
-                                        file_ids.add(id);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                Map<String, String> cpParams = new HashMap<String, String>();
+                                cpParams.put("type", "18");
+                                cpParams.put("is_compress", "1");
+                                File cpFile = new File(cpPaths3.get(finalI));
+                                String cpReuslt = HttpUpLoad.uploadFile(cpFile, Constant.URL_GET_PICTURE_VIDEO_FILE, cpParams);
+                                int file_id = 0;
+                                if (cpReuslt != null) {
+                                    file_id = addFileId(file_ids, cpReuslt);
+                                }
+                                Log.i(TAG, "run:infos_car_sign, cpReuslt    " + cpReuslt + "    file_id  " + file_id + "    infos_car_sign  " + infos_car_sign.size() + " paths1   " + paths1.size());
+                                for (int j = 0; j < infos_repair.size(); j++) {
+                                    if (cpFile.getName().equals(infos_repair.get(j).fileName)) {
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("type", "18");
+                                        params.put("is_compress", "2");
+                                        params.put("id", file_id + "");
+                                        File file = new File(paths3.get(j));
+                                        String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
+                                        Log.i(TAG, "onClick:    " + result);
+                                        if (result != null) {
+                                            results3.add(result);
+                                        }
+                                        if (results3.size() == paths3.size()) {
+                                            count++;
+                                            Log.i(TAG, "run: count  " + count);
+                                            if (count == countFill) {
+                                                dialog.dismissLoadingDlg();
+                                                isPicAdd = true;
+                                                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
                                     }
                                 }
-                                if (results4.size() == paths4.size()) {
-                                    count++;
-                                    Log.i(TAG, "run: count  " + count);
-                                    if (count == countFill) {
-                                        dialog.dismissLoadingDlg();
-                                        isPicAdd = true;
-                                        Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                            }
+                        }).start();
+                    }
+                    for (int i = 0; i < paths4.size(); i++) {
+                        final int finalI = i;
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Map<String, String> cpParams = new HashMap<String, String>();
+                                cpParams.put("type", "19");
+                                cpParams.put("is_compress", "1");
+                                File cpFile = new File(cpPaths4.get(finalI));
+                                String cpReuslt = HttpUpLoad.uploadFile(cpFile, Constant.URL_GET_PICTURE_VIDEO_FILE, cpParams);
+                                int file_id = 0;
+                                if (cpReuslt != null) {
+                                    file_id = addFileId(file_ids, cpReuslt);
+                                }
+                                Log.i(TAG, "run:infos_car_sign, cpReuslt    " + cpReuslt + "    file_id  " + file_id + "    infos_car_sign  " + infos_car_sign.size() + " paths1   " + paths1.size());
+                                for (int j = 0; j < infos_other.size(); j++) {
+                                    if (cpFile.getName().equals(infos_other.get(j).fileName)) {
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("type", "19");
+                                        params.put("is_compress", "2");
+                                        params.put("id", file_id + "");
+                                        File file = new File(paths4.get(j));
+                                        String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
+                                        Log.i(TAG, "onClick:    " + result);
+                                        if (result != null) {
+                                            results4.add(result);
+                                        }
+                                        if (results4.size() == paths4.size()) {
+                                            count++;
+                                            Log.i(TAG, "run: count  " + count);
+                                            if (count == countFill) {
+                                                dialog.dismissLoadingDlg();
+                                                isPicAdd = true;
+                                                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -320,7 +372,7 @@ public class ReportAttachSubFragment extends BaseFragment {
                         public void run() {
                             Map<String, String> params = new HashMap<>();
                             params.put("type", "20");
-                            params.put("is_compress", "2");
+                            params.put("is_compress", "");
                             if (videoPath != null) {
                                 File file = new File(videoPath);
                                 String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
@@ -346,22 +398,20 @@ public class ReportAttachSubFragment extends BaseFragment {
                         }
                     }).start();
                 }
-                if (isPicAdd) {
-                    btn_save.setEnabled(false);
-                }
             }
         });
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "onClick:report_id    " + ((ReportAddActivity) getActivity()).getReport_id());
                 if (((ReportAddActivity) getActivity()).isInfoAdd()) {
                     if (isPicAdd) {
                         JSONArray idArray = new JSONArray();
                         for (int id : file_ids) {
                             JSONObject idObj = new JSONObject();
                             try {
-                                idObj.put("id", ((ReportAddActivity) getActivity()).getReport_id());
-                                idObj.put("file_id", id);
+                                idObj.put("id", id);
+                                idObj.put("file_id", ((ReportAddActivity) getActivity()).getReport_id());
                                 idArray.put(idObj);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -417,7 +467,6 @@ public class ReportAttachSubFragment extends BaseFragment {
         });
     }
 
-
     private void initView(View v) {
         btn_sub = (Button) v.findViewById(R.id.btn_sub);
         btn_save = (Button) v.findViewById(R.id.btn_save);
@@ -437,12 +486,12 @@ public class ReportAttachSubFragment extends BaseFragment {
         paths2 = ((ReportAddActivity) getActivity()).getUris2();
         paths3 = ((ReportAddActivity) getActivity()).getUris3();
         paths4 = ((ReportAddActivity) getActivity()).getUris4();
-//        videoPaths = ((ReportAddActivity) getActivity()).getVideoPaths();
-//        btn_car_sign = (Button) v.findViewById(R.id.btn_car_sign);
-//        btn_trouble = (Button) v.findViewById(R.id.btn_trouble);
-//        btn_repair = (Button) v.findViewById(R.id.btn_repair);
-//        btn_other = (Button) v.findViewById(R.id.btn_other);
-//        btn_video = (Button) v.findViewById(R.id.btn_video);
+
+        cpPaths1 = ((ReportAddActivity) getActivity()).getCpPaths();
+        cpPaths2 = ((ReportAddActivity) getActivity()).getCpPaths2();
+        cpPaths3 = ((ReportAddActivity) getActivity()).getCpPaths3();
+        cpPaths4 = ((ReportAddActivity) getActivity()).getCpPaths4();
+
 
         gv_car_sign = (GridView) v.findViewById(R.id.gv_car_sign);
         gv_repair = (GridView) v.findViewById(R.id.gv_repair);
@@ -459,6 +508,24 @@ public class ReportAttachSubFragment extends BaseFragment {
             reportAttachSubFragment = new ReportAttachSubFragment();
         }
         return reportAttachSubFragment;
+    }
+
+    public int addFileId(ArrayList<Integer> ids, String result) {
+        int id = 0;
+        try {
+            JSONObject resultObj = new JSONObject(result);
+            JSONObject resultObj2 = resultObj.getJSONObject("result");
+            id = resultObj2.getInt("id");
+            ids.add(id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    private String getName(String path) {
+        File file = new File(path);
+        return file.getName();
     }
 
     public static Bitmap getVideoThumb(String path) {
