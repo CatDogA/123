@@ -1,23 +1,19 @@
 package com.shanghaigm.dms.view.activity.as;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
-import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
-import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
 import java.io.File;
 
 public class ShowQueryPhotoActivity extends AppCompatActivity {
     private ImageView img;
-
+    private DmsApplication app;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +27,10 @@ public class ShowQueryPhotoActivity extends AppCompatActivity {
     }
 
     private void initBundle() {
+
         Bundle b = getIntent().getExtras();
         String s = b.getString(ShowPictureLayout.SHOW_PHOTO);
+
         File file = new File(s);
         if (file.exists()) {
             img.setImageBitmap(BitmapFactory.decodeFile(s));

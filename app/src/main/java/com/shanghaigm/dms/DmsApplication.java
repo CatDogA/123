@@ -2,6 +2,7 @@ package com.shanghaigm.dms;
 
 import android.app.Application;
 
+import com.shanghaigm.dms.model.entity.as.SaveUsedPaths;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
 import com.shanghaigm.dms.model.entity.common.MainData;
@@ -38,6 +39,7 @@ public class DmsApplication extends Application {
     private ChangeLetterSubDetailInfo changeLetterSubDetailInfo;
     private ArrayList<AllocationAddChooseUndefaultInfo> allocationAddChooseUndefaultInfos; //储存选配信息
 
+    public ArrayList<SaveUsedPaths> usedPaths = new ArrayList<>();
     @Override
     public void onCreate() {
         super.onCreate();

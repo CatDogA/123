@@ -33,7 +33,7 @@ public class ReportDetailActivity extends AppCompatActivity {
     private DmsApplication app;
     private static String TAG = "ReportDetailActivity";
     public static String REPORT_DETAIL_INFO = "report_detail_info_one";
-    public static ArrayList<ArrayList<PathInfo>> allPaths;
+    public static ArrayList<ArrayList<PathInfo>> allPaths = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,9 @@ public class ReportDetailActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
         Bundle bundle = getIntent().getExtras();
         ReportQueryDetailInfoBean reportDetailInfo = (ReportQueryDetailInfoBean) bundle.getSerializable(PaperInfo.REPORT_DETAI_INFO);
+        if (allPaths != null) {
+            allPaths.clear();
+        }
         allPaths = (ArrayList<ArrayList<PathInfo>>) bundle.getSerializable(PaperInfo.REPORT_FILE_INFO);
 
         Bundle fragmentBundle = new Bundle();
