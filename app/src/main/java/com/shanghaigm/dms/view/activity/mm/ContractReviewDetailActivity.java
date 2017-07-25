@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ContractReviewDetailActivity extends BaseActivity {
-    private static String TAG = "ContractReviewDetailActivity";
+    private static String TAG = "ContractReviewDeta";
     private ActivityContractReviewDetailBinding binding;
     private TextView title;
     private RelativeLayout rl_back, rl_end;
@@ -96,6 +96,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                     map.put("examination_result", 1);
                     map.put("loginName", app.getAccount());
                     map.put("flow_details_id", app.getFlow_detail_id());
+                    map.put("jobCode",app.getJobCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CONTRACT_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                         @Override
@@ -135,7 +136,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                         array.put(object);
 
                         map.put("conts", array.toString());
-
+                        map.put("jobCode",app.getJobCode());
                         map.put("examination_result", 2);
                         map.put("loginName", app.getAccount());
                         map.put("flow_details_id", app.getFlow_detail_id());

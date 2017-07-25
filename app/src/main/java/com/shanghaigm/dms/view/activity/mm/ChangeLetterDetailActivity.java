@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChangeLetterDetailActivity extends AppCompatActivity {
-    private static String TAG = "ChangeLetterDetailActivity";
+    private static String TAG = "ChangeLetterDetail";
     private DmsApplication app = DmsApplication.getInstance();
     private ActivityChangeLetterDetailBinding binding;
     private TextView title;
@@ -69,6 +69,7 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
                 map.put("examination_result", 1);
                 map.put("loginName", app.getAccount());
                 map.put("flow_details_id", app.getFlow_detail_id());
+                map.put("jobCode",app.getJobCode());
                 dialog.showLoadingDlg();
                 CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_LETTER_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                     @Override
@@ -97,6 +98,7 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
                     map.put("examination_result", 2);
                     map.put("loginName", app.getAccount());
                     map.put("flow_details_id", app.getFlow_detail_id());
+                    map.put("jobCode",app.getJobCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_LETTER_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                         @Override

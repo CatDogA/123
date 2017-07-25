@@ -73,8 +73,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".view.activity.as.ShowPhotoActivity" />
-        <activity android:name=".view.activity.as.ShowVideoActivity"></activity>
+        <activity android:name=".view.activity.as.ShowVideoActivity" />
+        <activity android:name=".view.activity.as.ShowQueryPhotoActivity"></activity>
     </application>
 
 </manifest>

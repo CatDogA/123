@@ -41,7 +41,7 @@ import static com.shanghaigm.dms.model.util.HTTP.mapToParam;
  */
 
 public class HttpUpLoad {
-    private static final String TAG = "uploadFile";
+    private static final String TAG = "HttpUpLoad";
     private static final int TIME_OUT = 10 * 1000;   //超时时间
     private static final String CHARSET = "utf-8"; //设置编码
 
@@ -151,7 +151,7 @@ public class HttpUpLoad {
         return result;
     }
 
-    public static String downloadFile(String fileName, Map<String, String> params, String Url) {
+    public static String downloadFile(String fileName, Map<String, String> params, String Url, String file_dir) {
 //        String uploadUrl = "http://192.168.2.111:8080/HsbServlet/DownloadFile";
         SSLContext sc = null;
         File picFile = null;
@@ -161,13 +161,13 @@ public class HttpUpLoad {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
 
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-            File file = new File(path.getPath() + "/report_cp");
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File file = new File(path.getPath() + file_dir);
             if (!file.exists()) {
                 file.mkdir();
             }
             picFile = new File(file, fileName);
-            Log.i(TAG, "downloadFile: " + file.getPath() + "          " + picFile.getPath());
+            Log.i(TAG, "downloadFile: " + file.getPath() + "          " + picFile.getPath() + "   name   " + fileName);
             OutputStream os = new BufferedOutputStream(new FileOutputStream(picFile));
             String uploadUrl = Url + mapToParam(params);
             final URL url = new URL(uploadUrl);

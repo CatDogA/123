@@ -21,6 +21,7 @@ public class ShowVideoActivity extends AppCompatActivity {
         vv = (VideoView) findViewById(R.id.video);
         Bundle bundle = getIntent().getExtras();
         bundle.getString(ReportAttachSubFragment.VIDEO_PATH);
+
         vv.setMediaController(new MediaController(this));
         vv.setVideoPath(bundle.getString(ReportAttachSubFragment.VIDEO_PATH));
         vv.start();

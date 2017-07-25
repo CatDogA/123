@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,11 @@ import com.shanghaigm.dms.model.entity.as.PathUpLoadInfo;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
-import com.shanghaigm.dms.view.activity.as.ShowPhotoActivity;
+import com.shanghaigm.dms.view.activity.as.ShowQueryPhotoActivity;
 import com.shanghaigm.dms.view.activity.as.ShowVideoActivity;
 import com.shanghaigm.dms.view.adapter.GridViewAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
+import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
 import org.json.JSONArray;
@@ -34,8 +36,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ReportAttachSubFragment extends BaseFragment {
@@ -49,7 +57,7 @@ public class ReportAttachSubFragment extends BaseFragment {
     private GridViewAdapter adapter_car_sign, adapter_trouble, adapter_repair, adapter_other;
     private ArrayList<String> paths1, paths2, paths3, paths4;
     private ArrayList<String> cpPaths1, cpPaths2, cpPaths3, cpPaths4;
-    private String videoPath = null;
+    private String videoPath = null, video_pic_path = null;
     private Button btn_save, btn_sub;
     private ImageView img_video_add, img_video;
     private LoadingDialog dialog;
@@ -69,9 +77,41 @@ public class ReportAttachSubFragment extends BaseFragment {
     }
 
     public void ChangeImage(String s) {
+        //通过视频路径获取bit
         Bitmap bit = getVideoThumb(s);
         img_video.setImageBitmap(bit);
         videoPath = s;
+        try {
+            video_pic_path = SaveCpPic(bit);
+            Log.i(TAG, "ChangeImage: video_pic_path        " + video_pic_path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //把图片存到本地
+    private String SaveCpPic(Bitmap bit) throws IOException {
+        File path = null;
+        path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());  //名字
+        // Create an image file name
+        File image = new File(path.getPath() + "/" + timeStamp + ".jpg");
+        Log.i(TAG, "SaveCpPic: " + image.getPath());
+        try {
+            FileOutputStream out = new FileOutputStream(image);
+            if (bit != null) {
+                if (bit.compress(Bitmap.CompressFormat.PNG, 40, out)) {
+                    out.flush();
+                    out.close();
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image.getPath();
     }
 
     private void setUpView() {
@@ -93,9 +133,9 @@ public class ReportAttachSubFragment extends BaseFragment {
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowPhotoActivity.class);
+                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
                     Bundle b = new Bundle();
-                    b.putString(ReportAttachSubFragment.SHOW_PHOTO, paths1.get(position - 1).toString());
+                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths1.get(position - 1).toString());
                     intent.putExtras(b);
                     getActivity().startActivity(intent);
                 }
@@ -110,9 +150,9 @@ public class ReportAttachSubFragment extends BaseFragment {
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowPhotoActivity.class);
+                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
                     Bundle b = new Bundle();
-                    b.putString(ReportAttachSubFragment.SHOW_PHOTO, paths2.get(position - 1).toString());
+                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths2.get(position - 1).toString());
                     intent.putExtras(b);
                     getActivity().startActivity(intent);
                 }
@@ -126,9 +166,9 @@ public class ReportAttachSubFragment extends BaseFragment {
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowPhotoActivity.class);
+                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
                     Bundle b = new Bundle();
-                    b.putString(ReportAttachSubFragment.SHOW_PHOTO, paths3.get(position - 1).toString());
+                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths3.get(position - 1).toString());
                     intent.putExtras(b);
                     getActivity().startActivity(intent);
                 }
@@ -143,9 +183,9 @@ public class ReportAttachSubFragment extends BaseFragment {
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowPhotoActivity.class);
+                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
                     Bundle b = new Bundle();
-                    b.putString(ReportAttachSubFragment.SHOW_PHOTO, paths4.get(position - 1).toString());
+                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths4.get(position - 1).toString());
                     intent.putExtras(b);
                     getActivity().startActivity(intent);
                 }
@@ -159,8 +199,8 @@ public class ReportAttachSubFragment extends BaseFragment {
                 infos_trouble.clear();
                 infos_repair.clear();
                 infos_other.clear();
-                Log.i(TAG, "onClick: " +"       "+ paths1.size() +"       "+ paths2.size() +"       "+ paths3.size()  +"       "+ paths4.size());
-                Log.i(TAG, "onClick: " +"       "+ cpPaths1.size() +"       "+ cpPaths2.size() +"       "+ cpPaths3.size()  +"       "+ cpPaths4.size());
+                Log.i(TAG, "onClick: " + "       " + paths1.size() + "       " + paths2.size() + "       " + paths3.size() + "       " + paths4.size());
+                Log.i(TAG, "onClick: " + "       " + cpPaths1.size() + "       " + cpPaths2.size() + "       " + cpPaths3.size() + "       " + cpPaths4.size());
                 for (int i = 0; i < paths1.size(); i++) {
                     infos_car_sign.add(new PathUpLoadInfo(getName(paths1.get(i)), cpPaths1.get(i), paths1.get(i)));
                 }
@@ -370,30 +410,43 @@ public class ReportAttachSubFragment extends BaseFragment {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Map<String, String> params = new HashMap<>();
-                            params.put("type", "20");
-                            params.put("is_compress", "");
-                            if (videoPath != null) {
-                                File file = new File(videoPath);
-                                String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
-                                if (result != null) {
-                                    try {
-                                        JSONObject resultObj = new JSONObject(result);
-                                        JSONObject resultObj2 = resultObj.getJSONObject("result");
-                                        int id = resultObj2.getInt("id");
-                                        file_ids.add(id);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    count++;
-                                    Log.i(TAG, "run: count  " + count);
-                                    if (count == countFill) {
-                                        dialog.dismissLoadingDlg();
-                                        isPicAdd = true;
-                                        Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                            Map<String, String> cpParams = new HashMap<String, String>();
+                            cpParams.put("type", "20");
+                            cpParams.put("is_compress", "1");
+                            if (video_pic_path != null) {
+                                File cpFile = new File(video_pic_path);
+                                String cpReuslt = HttpUpLoad.uploadFile(cpFile, Constant.URL_GET_PICTURE_VIDEO_FILE, cpParams);
+                                int file_id = 0;
+                                if (cpReuslt != null) {
+                                    file_id = addFileId(file_ids, cpReuslt);
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("type", "20");
+                                    params.put("is_compress", "");
+                                    params.put("id", file_id + "");
+                                    if (videoPath != null) {
+                                        File file = new File(videoPath);
+                                        String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, params);
+                                        Log.i(TAG, "run: video_result       " + result);
+                                        if (result != null) {
+//                                            try {
+//                                                JSONObject resultObj = new JSONObject(result);
+//                                                JSONObject resultObj2 = resultObj.getJSONObject("result");
+//                                                int id = resultObj2.getInt("id");
+                                            file_ids.add(file_id);
+//                                            } catch (JSONException e) {
+//                                                e.printStackTrace();
+//                                            }
+                                            count++;
+                                            Log.i(TAG, "run: count  " + count);
+                                            if (count == countFill) {
+                                                dialog.dismissLoadingDlg();
+                                                isPicAdd = true;
+                                                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        Log.i(TAG, "onClick:    " + result);
                                     }
                                 }
-                                Log.i(TAG, "onClick:    " + result);
                             }
                         }
                     }).start();
@@ -407,6 +460,7 @@ public class ReportAttachSubFragment extends BaseFragment {
                 if (((ReportAddActivity) getActivity()).isInfoAdd()) {
                     if (isPicAdd) {
                         JSONArray idArray = new JSONArray();
+                        Log.i(TAG, "onClick:    " + file_ids.size());
                         for (int id : file_ids) {
                             JSONObject idObj = new JSONObject();
                             try {

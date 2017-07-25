@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,22 +17,17 @@ import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
 import com.chumi.widget.http.okhttp.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
-import com.google.gson.JsonElement;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.BasePaperInfo;
 import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
-import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
-import com.shanghaigm.dms.model.util.CompressPicture;
 import com.shanghaigm.dms.model.util.GsonUtil;
-import com.shanghaigm.dms.model.util.HttpDownLoad;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
-import com.shanghaigm.dms.view.activity.as.ShowPhotoActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
@@ -41,19 +35,14 @@ import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
-import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.Call;
 
 /**
  * Created by Tom on 2017/5/15.
@@ -88,11 +77,12 @@ public class PaperInfo extends BasePaperInfo {
     private ContractDetailInfo contractDetailInfo;
     private ChangeBillDetailInfo changeBillDetailInfo;
     private ChangeLetterSubDetailInfo changeLetterSubDetailInfo;
+
     private ReportQueryDetailInfoBean reportQueryDetailInfoBean;
     private int reportCount = 0;
+    private ArrayList<ArrayList<PathInfo>> allPaths = new ArrayList<>();
 
     public PaperInfo() {
-
     }
 
     //合同审核
@@ -394,110 +384,24 @@ public class PaperInfo extends BasePaperInfo {
                 }
                 break;
             case 7:
+                reportCount = 0;
                 final ArrayList<PathInfo> pathInfos = new ArrayList<>();
+                final ArrayList<String> cpPaths = new ArrayList<>();
                 final Map<String, Object> params = new HashMap<>();
                 params.put("daily_id", daily_id);
                 dialog.showLoadingDlg();
-//                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
-//                    @Override
-//                    public void onSuccess(Object responseObj) {
-//                        JSONObject object = (JSONObject) responseObj;
-//                        try {
-//                            reportCount++;
-//                            JSONObject resultEntity = object.getJSONObject("resultEntity");
-//                            reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
-//                            if (reportCount == 2) {
-//                                dialog.dismissLoadingDlg();
-//                                goToReportDetail(view, pathInfos);
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Object reasonObj) {
-//
-//                    }
-//                });
-                final ArrayList<String> cpPaths = new ArrayList<>();
-                Map<String, Object> params2 = new HashMap<>();
-                params2.put("id", daily_id);
-                params2.put("type", "15");
-//                params2.put("isById",daily_id);
-                params2.put("loginRole", app.getJobCode());
-                params2.put("loginName", app.getAccount());
-                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
-                    /**
-                     * @param responseObj
-                     */
+                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
-                        Log.i(TAG, "onSuccess:file_info " + responseObj.toString());
-                        JSONObject obj = (JSONObject) responseObj;
+                        JSONObject object = (JSONObject) responseObj;
                         try {
-                            final JSONArray resultArray = obj.getJSONArray("result");
-                            if (resultArray.length() > 0) {
-                                for (int i = 0; i < resultArray.length(); i++) {
-                                    final JSONObject fileObj = resultArray.getJSONObject(i);
-                                    final String file_name = fileObj.getString("file_name");
-                                    final String cp_file_path = fileObj.getString("compress_path");
-                                    final String file_path = fileObj.getString("upload_path");
-//                                    源文件
-//                                    Log.i(TAG, "onSuccess: " + "------------------null" + new Boolean(file_path == null));
-//                                    Log.i(TAG, "onSuccess: " + "------------------双引号" + new Boolean(file_path.equals("")));
-//                                    Log.i(TAG, "onSuccess: ------------------------0" + new Boolean(file_path.length() == 0));
-//                                    Log.i(TAG, "onSuccess: ------------------------>0"+new Boolean(file_path.length()>0));
-//                                    Log.i(TAG, "onSuccess: ------------------------<5"+new Boolean(file_path.length()<5));
-//                                    Log.i(TAG, "onSuccess: -----------------------3"+new Boolean(file_path.length()==3));
-//                                    Log.i(TAG, "onSuccess: -----------------------2"+new Boolean(file_path.length()==2));
-//                                    Log.i(TAG, "onSuccess: -----------------------4"+new Boolean(file_path.length()==4));
-//                                    Log.i(TAG, "onSuccess: -----------------------1"+new Boolean(file_path.length()==1));
-                                    if (file_path.length() >= 5) {
-                                        //路径是下载路径
-                                        pathInfos.add(new PathInfo(15, 2, file_path, file_name));
-                                        Log.i(TAG, "onSuccess: path " + file_path.toString() + " pathsize " + pathInfos.size());
-                                    }
-                                    if (cp_file_path.length() >= 5) {
-                                        //作用：拼接Url
-                                        final Map<String, String> params3 = new HashMap<String, String>();
-                                        params3.put("fileNames", file_name);
-                                        params3.put("fileId", cp_file_path);
-                                        Log.i(TAG, "onSuccess: cp_file_path     " + cp_file_path);
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                String s = HttpUpLoad.downloadFile(file_name, params3, Constant.URL_DOWNLOAD_FILE);
-                                                if (!s.equals("") && s != null) {
-                                                    Intent intent = new Intent(view.getContext(), ShowPhotoActivity.class);
-                                                    Bundle b = new Bundle();
-                                                    b.putString(ReportAttachSubFragment.SHOW_PHOTO, s);
-                                                    intent.putExtras(b);
-                                                    view.getContext().startActivity(intent);
-
-//                                                    cpPaths.add(s);
-//                                                    //路径是内存路径
-//                                                    pathInfos.add(new PathInfo(15, 1, s, file_name));
-//                                                    Log.i(TAG, "run: pathInfos  " + pathInfos.size() + " cp_path  " + cp_file_path + "    s   " + s);
-//                                                    if (pathInfos.size() == resultArray.length()) {   //下载完毕
-//                                                        reportCount++;
-//                                                        if (reportCount == 2) {
-//                                                            Log.i(TAG, "run: " + ".........................................");
-//                                                            dialog.dismissLoadingDlg();
-//                                                            goToReportDetail(view, pathInfos);
-//                                                        }
-//                                                    }
-                                                }
-                                            }
-                                        }).start();
-                                    }
-                                }
-                            } else {
-                                reportCount++;
-                                if (reportCount == 2) {
-                                    dialog.dismissLoadingDlg();
-                                    goToReportDetail(view, pathInfos);
-                                }
+                            reportCount++;
+                            JSONObject resultEntity = object.getJSONObject("resultEntity");
+                            reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
+                            Log.i(TAG, "onSuccess:reportCount    " + reportCount);
+                            if (reportCount == 6) {
+                                dialog.dismissLoadingDlg();
+                                goToReportDetail(view, allPaths);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -509,17 +413,169 @@ public class PaperInfo extends BasePaperInfo {
 
                     }
                 });
+                getPaths(15, view);
+                getPaths(16, view);
+                getPaths(18, view);
+                getPaths(19, view);
+                getPaths(20, view);
+//                Map<String, Object> params2 = new HashMap<>();
+//                params2.put("id", daily_id);
+//                params2.put("type", "15");
+////                params2.put("isById",daily_id);
+//                params2.put("loginRole", app.getJobCode());
+//                params2.put("loginName", app.getAccount());
+//                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
+//                    /**
+//                     * @param responseObj
+//                     */
+//                    @Override
+//                    public void onSuccess(Object responseObj) {
+//                        Log.i(TAG, "onSuccess:file_info " + responseObj.toString());
+//                        JSONObject obj = (JSONObject) responseObj;
+//                        try {
+//                            final JSONArray resultArray = obj.getJSONArray("result");
+//                            if (resultArray.length() > 0) {
+//                                for (int i = 0; i < resultArray.length(); i++) {
+//                                    final JSONObject fileObj = resultArray.getJSONObject(i);
+//                                    final String file_name = fileObj.getString("file_name");
+//                                    final String cp_file_path = fileObj.getString("compress_path");
+//                                    final String file_path = fileObj.getString("upload_path");
+//                                    //整体信息添加
+//                                    Log.i(TAG, "onSuccess: path " + file_path.toString() + " pathsize " + pathInfos.size());
+//                                    //作用：拼接Url
+//                                    final Map<String, String> params3 = new HashMap<String, String>();
+//                                    params3.put("fileNames", file_name);
+//                                    params3.put("fileId", cp_file_path);
+//                                    Log.i(TAG, "onSuccess: cp_file_path     " + cp_file_path);
+//                                    new Thread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            //把压缩图片下载到本地并传回地址
+//                                            String s = HttpUpLoad.downloadFile(file_name, params3, Constant.URL_DOWNLOAD_FILE, "/report_cp");
+//                                            if (!s.equals("") && s != null) {
+//                                                dialog.dismissLoadingDlg();
+//                                                Log.i(TAG, "run:    " + s.toString());
+//                                                cpPaths.add(s);
+//                                                //s是处理后压缩文件在内存中的路径
+//                                                //file_path是原文件下载路径
+//                                                pathInfos.add(new PathInfo(15, file_path, s, file_name));
+//                                                //路径是内存路径
+//                                                if (pathInfos.size() == resultArray.length()) {   //下载完毕
+//                                                    reportCount++;
+//                                                    allPaths.add(pathInfos);
+//                                                    if (reportCount == 2) {
+//                                                        dialog.dismissLoadingDlg();
+//                                                        goToReportDetail(view, allPaths);
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                    }).start();
+//                                }
+//                            } else {
+//                                reportCount++;
+//                                if (reportCount == 2) {
+//                                    dialog.dismissLoadingDlg();
+//                                    goToReportDetail(view, allPaths);
+//                                }
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Object reasonObj) {
+//
+//                    }
+//                });
                 break;
         }
     }
 
-    private void goToReportDetail(View view, ArrayList<PathInfo> paths) {
+    private void goToReportDetail(View view, ArrayList<ArrayList<PathInfo>> allPaths) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(PaperInfo.REPORT_DETAI_INFO, reportQueryDetailInfoBean);
-        bundle.putSerializable(PaperInfo.REPORT_FILE_INFO, paths);
+        bundle.putSerializable(PaperInfo.REPORT_FILE_INFO, allPaths);
         Intent intent7 = new Intent(view.getContext(), ReportDetailActivity.class);
         intent7.putExtras(bundle);
         view.getContext().startActivity(intent7);
+    }
+
+    private void getPaths(final int type, final View view) {
+        Map<String, Object> params2 = new HashMap<>();
+        final ArrayList<PathInfo> pathInfos = new ArrayList<>();
+        params2.put("id", daily_id);
+        params2.put("type", type + "");
+//                params2.put("isById",daily_id);
+        params2.put("loginRole", app.getJobCode());
+        params2.put("loginName", app.getAccount());
+        OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
+            /**
+             * @param responseObj
+             */
+            @Override
+            public void onSuccess(Object responseObj) {
+                Log.i(TAG, "onSuccess:file_info " + responseObj.toString());
+                JSONObject obj = (JSONObject) responseObj;
+                try {
+                    final JSONArray resultArray = obj.getJSONArray("result");
+                    if (resultArray.length() > 0) {
+                        for (int i = 0; i < resultArray.length(); i++) {
+                            final JSONObject fileObj = resultArray.getJSONObject(i);
+                            final String file_name = fileObj.getString("file_name");
+                            final String cp_file_path = fileObj.getString("compress_path");
+                            final String file_path = fileObj.getString("upload_path");
+                            //整体信息添加
+                            Log.i(TAG, "onSuccess: path " + file_path.toString() + " pathsize " + pathInfos.size() + "    " + cp_file_path + "   " + file_name);
+                            //作用：拼接Url
+                            final Map<String, String> params3 = new HashMap<String, String>();
+                            params3.put("fileNames", file_name);
+                            params3.put("fileId", cp_file_path);
+                            Log.i(TAG, "onSuccess: cp_file_path     " + cp_file_path);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //把压缩图片下载到本地并传回地址
+                                    String s = HttpUpLoad.downloadFile(file_name, params3, Constant.URL_DOWNLOAD_FILE, "/report_cp");
+                                    if (!s.equals("") && s != null) {
+//                                        dialog.dismissLoadingDlg();
+                                        Log.i(TAG, "run:    " + s.toString());
+                                        //s是处理后压缩文件在内存中的路径
+                                        //file_path是原文件下载路径
+                                        pathInfos.add(new PathInfo(type, file_path, s, file_name));
+                                        //路径是内存路径
+                                        if (pathInfos.size() == resultArray.length()) {   //下载完毕
+                                            reportCount++;
+                                            Log.i(TAG, "onSuccess:reportCount    " + reportCount);
+                                            allPaths.add(pathInfos);
+                                            if (reportCount == 6) {
+                                                dialog.dismissLoadingDlg();
+                                                goToReportDetail(view, allPaths);
+                                            }
+                                        }
+                                    }
+                                }
+                            }).start();
+                        }
+                    } else {
+                        Log.i(TAG, "onSuccess:reportCount    " + reportCount);
+                        reportCount++;
+                        if (reportCount == 6) {
+                            dialog.dismissLoadingDlg();
+                            goToReportDetail(view, allPaths);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        });
     }
 
     //     1 未提交   默认    2 审核中 3 已通过  4 驳回  //针对业务员

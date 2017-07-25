@@ -11,15 +11,15 @@ import java.io.Serializable;
 
 public class PathInfo extends BaseObservable implements Serializable {
     public int type;     //15,16,18,19,20
-    public int kind;  //1.压缩，2.原图
     public String path;
     public String name;
+    public String cp_path;
 
-    public PathInfo(int type,int kind, String path,String name) {
+    public PathInfo(int type, String path, String cp_path, String name) {
         this.type = type;
         this.path = path;
         this.name = name;
-        this.kind = kind;
+        this.cp_path = cp_path;
     }
 
 

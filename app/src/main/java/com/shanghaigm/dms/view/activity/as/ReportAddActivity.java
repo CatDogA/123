@@ -52,7 +52,7 @@ public class ReportAddActivity extends AppCompatActivity {
     private ArrayList<Bitmap> bitmaps2 = new ArrayList<>();
     private ArrayList<Bitmap> bitmaps3 = new ArrayList<>();
     private ArrayList<Bitmap> bitmaps4 = new ArrayList<>();
-    private ArrayList<String> uris = new ArrayList<>();
+    private ArrayList<String> uris = new ArrayList<>();     //名命名错误，是文件路径
     private ArrayList<String> uris2 = new ArrayList<>();
     private ArrayList<String> uris3 = new ArrayList<>();
     private ArrayList<String> uris4 = new ArrayList<>();
@@ -239,17 +239,17 @@ public class ReportAddActivity extends AppCompatActivity {
                 Bitmap cpAlbumPic = CpPic(path, 4);
                 String cpAlbumPath = null;
                 try {
-                    //压缩后路径
+                    //压缩后路径,名字与原图相同
                     cpAlbumPath = SaveCpPic(cpAlbumPic, infos[1]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 Bitmap bit = null;
-                try {
-                    bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
                 switch (requestCode) {
                     case SolvePicturePopupWindow.ALBUM1:
                         uris.add(albumPath);
@@ -279,7 +279,7 @@ public class ReportAddActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap CpPic(String path, int divide) {
+    public Bitmap CpPic(String path, int divide) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         // Get the dimensions of the View

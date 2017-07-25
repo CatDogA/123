@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
@@ -20,6 +21,7 @@ import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.common.LoginInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.SharedPreferencesUtil;
 import com.shanghaigm.dms.view.activity.BaseActivity;
@@ -44,6 +46,7 @@ public class LoginActivity extends BaseActivity {
     private EditText edtPassWord;
     private EditText roleEdt;
     private LoadingDialog dialog;
+    private ArrayList<LoginInfo> loginInfos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,11 +168,13 @@ public class LoginActivity extends BaseActivity {
             case "quality_department_handler":
             case "test_manager":
             case "xsfzjl":
+//            case "out_service":
                 //同名冲突
                 goToActivity(com.shanghaigm.dms.view.activity.mm.HomeActivity.class);
                 finish();
                 break;
-            default:
+            case "out_service":
+            case "fwjl":
 //                Toast.makeText(this, "抱歉没有对应岗位", Toast.LENGTH_SHORT).show();
                 goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
                 break;
@@ -200,6 +205,13 @@ public class LoginActivity extends BaseActivity {
     *   获取accessToken，也就是是否可登录
     * */
     private void requestAccessToken() {
+        if(loginInfos.size()>1){
+            for(LoginInfo info:loginInfos){
+                if(roleEdt.getText().toString().equals(info.jobName)){
+                    jobCode = info.jobCode;
+                }
+            }
+        }
         Log.i(TAG, "requestAccessToken:     " + edtPassWord.getText().toString() + "   " + jobCode);
         dialog.showLoadingDlg();
         RequestParams params = new RequestParams();
@@ -223,7 +235,6 @@ public class LoginActivity extends BaseActivity {
                             } else {
                                 Toast.makeText(LoginActivity.this, "请选择职位", Toast.LENGTH_SHORT).show();
                             }
-
                         } else {
                             Toast.makeText(LoginActivity.this, "用户名密码错误", Toast.LENGTH_SHORT).show();
                         }
@@ -271,13 +282,14 @@ public class LoginActivity extends BaseActivity {
                         PopListInfo info = new PopListInfo(resutEntity.getJSONObject(i).getString("job_name"));
                         jobCodes.add(resutEntity.getJSONObject(i).getString("job_code"));
                         jobList.add(info);
+                        loginInfos.add(new LoginInfo(resutEntity.getJSONObject(i).getString("job_name"),resutEntity.getJSONObject(i).getString("job_code")));
                     }
                     if (flag == 1) {
                         if (jobList.size() == 1) {
                             roleEdt.setText(resutEntity.getJSONObject(0).getString("job_name"));
                             jobCode = jobCodes.get(0);
                         } else {
-                            initPopWindow(jobList);
+                            initPopWindow(jobList);         //判断
                         }
                     }
                     if (flag == 2) {

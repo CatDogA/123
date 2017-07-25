@@ -358,6 +358,7 @@ public class OrderSubFragment extends BaseFragment {
 
         btnQuery = (Button) v.findViewById(R.id.mm_query_button);
         addBtn = (Button) v.findViewById(R.id.mm_add_button);
+        addBtn.setVisibility(View.INVISIBLE);
 
         vpLeft = (ImageView) v.findViewById(R.id.viewpager_left);
         vpRight = (ImageView) v.findViewById(R.id.viewpager_right);

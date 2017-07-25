@@ -36,6 +36,7 @@ public class HomeFragment extends BaseFragment {
             case "ssbspy":
             case "regional_Manager":
             case "order_handler":
+            case "out_service":
                 ViewGone(orderAndChangeBillLL);
                 ViewGone(contractAndChangeBillLL);
                 break;

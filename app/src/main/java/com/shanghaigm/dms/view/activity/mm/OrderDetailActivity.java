@@ -147,6 +147,7 @@ public class OrderDetailActivity extends BaseActivity {
                     params.put("flow_details_id", app.getFlow_detail_id());
                     params.put("examination_result", 1);
                     params.put("loginName", app.getAccount());
+                    params.put("jobCode",app.getJobCode());
                     Log.i(TAG, "onClick:  flow_detail_id     " + app.getFlow_detail_id() + "    loginName   " + app.getAccount() + "    orderId     " + app.getOrderDetailInfoBean().resultEntity.order_id);
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ORDER_REVIEW, params), new DisposeDataHandle(new DisposeDataListener() {
@@ -185,6 +186,7 @@ public class OrderDetailActivity extends BaseActivity {
                         params.put("flow_details_id", app.getFlow_detail_id());
                         params.put("examination_result", 2);
                         params.put("loginName", app.getAccount());
+                        params.put("jobCode",app.getJobCode());
                         Log.i(TAG, "onClick:  flow_detail_id     " + app.getFlow_detail_id() + "    loginName   " + app.getAccount() + "    orderId     " + app.getOrderDetailInfoBean().resultEntity.order_id);
                         dialog.showLoadingDlg();
                         CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ORDER_REVIEW, params), new DisposeDataHandle(new DisposeDataListener() {

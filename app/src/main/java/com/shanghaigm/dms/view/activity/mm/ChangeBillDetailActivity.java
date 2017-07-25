@@ -68,6 +68,7 @@ public class ChangeBillDetailActivity extends BaseActivity {
                 params.put("examination_result", 1);
                 params.put("loginName", app.getAccount());
                 params.put("flow_details_id", app.getFlow_detail_id());
+                params.put("jobCode",app.getJobCode());
                 dialog.showLoadingDlg();
                 CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_BILL_REVIEW, params), new DisposeDataHandle(new DisposeDataListener() {
                     @Override
@@ -96,6 +97,7 @@ public class ChangeBillDetailActivity extends BaseActivity {
                     params.put("remarks",remarks.getText().toString());
                     params.put("loginName", app.getAccount());
                     params.put("flow_details_id", app.getFlow_detail_id());
+                    params.put("jobCode",app.getJobCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_BILL_REVIEW, params), new DisposeDataHandle(new DisposeDataListener() {
                         @Override
