@@ -16,7 +16,7 @@ public class ReportQueryDetailInfoBean extends BaseObservable implements Seriali
     public String car_no;
     public String car_sign;
     public String chassis_num;
-
+    public int daily_id;
     public String factory_date;
     public String license_date;
     public Double mileage_num;

@@ -74,7 +74,8 @@
         </provider>
 
         <activity android:name=".view.activity.as.ShowVideoActivity" />
-        <activity android:name=".view.activity.as.ShowQueryPhotoActivity"></activity>
+        <activity android:name=".view.activity.as.ShowQueryPhotoActivity" />
+        <activity android:name=".view.activity.as.ReportUpdateActivity"></activity>
     </application>
 
 </manifest>

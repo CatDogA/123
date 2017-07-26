@@ -28,6 +28,7 @@ import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
+import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
@@ -298,6 +299,42 @@ public class PaperInfo extends BasePaperInfo {
             Intent intent = new Intent(view.getContext(), ChangeLetterQueryDetailActivity.class);
             view.getContext().startActivity(intent);
         }
+        //日报修改详情
+        if (flag == 8) {
+            allPaths.clear();
+            reportCount = 0;
+            final Map<String, Object> params = new HashMap<>();
+            params.put("daily_id", daily_id);
+            dialog.showLoadingDlg();
+            OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
+                @Override
+                public void onSuccess(Object responseObj) {
+                    JSONObject object = (JSONObject) responseObj;
+                    Log.i(TAG, "onSuccess: " + responseObj.toString());
+                    try {
+                        reportCount++;
+                        JSONObject resultEntity = object.getJSONObject("resultEntity");
+                        reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
+                        if (reportCount == 6) {
+                            dialog.dismissLoadingDlg();
+                            goToReportDetail(view, allPaths);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Object reasonObj) {
+
+                }
+            });
+            getPaths(15, view);
+            getPaths(16, view);
+            getPaths(18, view);
+            getPaths(19, view);
+            getPaths(20, view);
+        }
     }
 
     //审核进入详情
@@ -384,6 +421,7 @@ public class PaperInfo extends BasePaperInfo {
                 }
                 break;
             case 7:
+                allPaths.clear();
                 reportCount = 0;
                 final ArrayList<PathInfo> pathInfos = new ArrayList<>();
                 final ArrayList<String> cpPaths = new ArrayList<>();
@@ -497,9 +535,16 @@ public class PaperInfo extends BasePaperInfo {
         Bundle bundle = new Bundle();
         bundle.putSerializable(PaperInfo.REPORT_DETAI_INFO, reportQueryDetailInfoBean);
         bundle.putSerializable(PaperInfo.REPORT_FILE_INFO, allPaths);
-        Intent intent7 = new Intent(view.getContext(), ReportDetailActivity.class);
-        intent7.putExtras(bundle);
-        view.getContext().startActivity(intent7);
+        if (flag == 7) {
+            Intent intent7 = new Intent(view.getContext(), ReportDetailActivity.class);
+            intent7.putExtras(bundle);
+            view.getContext().startActivity(intent7);
+        }
+        if (flag == 8) {
+            Intent intent8 = new Intent(view.getContext(), ReportUpdateActivity.class);
+            intent8.putExtras(bundle);
+            view.getContext().startActivity(intent8);
+        }
     }
 
     private void getPaths(final int type, final View view) {
@@ -526,6 +571,7 @@ public class PaperInfo extends BasePaperInfo {
                             final String file_name = fileObj.getString("file_name");
                             final String cp_file_path = fileObj.getString("compress_path");
                             final String file_path = fileObj.getString("upload_path");
+                            final int id = fileObj.getInt("id");
                             //整体信息添加
                             Log.i(TAG, "onSuccess: path " + file_path.toString() + " pathsize " + pathInfos.size() + "    " + cp_file_path + "   " + file_name);
                             //作用：拼接Url
@@ -543,7 +589,7 @@ public class PaperInfo extends BasePaperInfo {
                                         Log.i(TAG, "run:    " + s.toString());
                                         //s是处理后压缩文件在内存中的路径
                                         //file_path是原文件下载路径
-                                        pathInfos.add(new PathInfo(type, file_path, s, file_name));
+                                        pathInfos.add(new PathInfo(type, file_path, s, file_name,id));
                                         //路径是内存路径
                                         if (pathInfos.size() == resultArray.length()) {   //下载完毕
                                             reportCount++;
@@ -593,6 +639,14 @@ public class PaperInfo extends BasePaperInfo {
         }
     }
 
+    @BindingAdapter("set_report_text")
+    public static void setReportText(TextView text, int report_state) {
+        if (report_state == 1) {
+            text.setText("未提交");
+        } else {
+            text.setText("已提交");
+        }
+    }
 
     @BindingAdapter("set_review_img")
     public static void setReviewImage(ImageView iv, String examination_result) {
@@ -602,6 +656,18 @@ public class PaperInfo extends BasePaperInfo {
                 break;
             case "1":
             case "2":
+                iv.setImageResource(R.mipmap.order_sub);
+                break;
+        }
+    }
+
+    @BindingAdapter("set_report_img")
+    public static void setReportImage(ImageView iv, int report_state) {
+        switch (report_state) {
+            case 1:
+                iv.setImageResource(R.mipmap.order_sub_pre);
+                break;
+            default:
                 iv.setImageResource(R.mipmap.order_sub);
                 break;
         }
@@ -653,7 +719,6 @@ public class PaperInfo extends BasePaperInfo {
                 break;
         }
     }
-
     //-1：待审核    1：通过    2：驳回
 
     @BindingAdapter("set_review_text_color")
@@ -667,6 +732,16 @@ public class PaperInfo extends BasePaperInfo {
                 break;
             case "2":
                 tv.setTextColor(0XFFFF6500);            //驳回
+                break;
+        }
+    }
+
+    //未提交为红
+    @BindingAdapter("set_report_text_color")
+    public static void setReportTableColor(TextView tv, int report_state) {
+        switch (report_state) {
+            case 1:
+                tv.setTextColor(Color.RED);
                 break;
         }
     }

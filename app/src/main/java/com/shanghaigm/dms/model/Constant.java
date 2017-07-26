@@ -44,7 +44,8 @@ public class Constant {
     public static final String URL_GET_PICTURE_VIDEO_FILE = Config.URL_BASE2 + "/appFileUploadController/fileUpload";
     public static final String URL_GET_SUB_PIC_VIDEO = Config.URL_BASE2 + "/appFileUploadController/updateListFileInfo";
     public static final String URL_GET_FILE_INFO = Config.URL_BASE2 + "/appFileUploadController/getFilePathById";  //获取文件信息
-    public static final String URL_DOWNLOAD_FILE = Config.URL_BASE2+"/appFileUploadController/download";
+    public static final String URL_DOWNLOAD_FILE = Config.URL_BASE2 + "/appFileUploadController/download";
+    public static final String URL_REPORT_DELETE_FILE = Config.URL_BASE2 + "/appFileUploadController/delFilePathById";
     //POST
     public static final String URL_GET_ACCESS_TOKEN = Config.URL_BASE + "/appLogin/appLogin";
 }

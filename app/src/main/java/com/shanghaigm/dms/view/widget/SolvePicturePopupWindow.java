@@ -120,16 +120,16 @@ public class SolvePicturePopupWindow extends PopupWindow {
                         }
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         switch (flag) {
-                            case 1:
+                            case 15:
                                 ((Activity) context).startActivityForResult(takePictureIntent, CAMERA1);
                                 break;
-                            case 2:
+                            case 16:
                                 ((Activity) context).startActivityForResult(takePictureIntent, CAMERA2);
                                 break;
-                            case 3:
+                            case 18:
                                 ((Activity) context).startActivityForResult(takePictureIntent, CAMERA3);
                                 break;
-                            case 4:
+                            case 19:
                                 ((Activity) context).startActivityForResult(takePictureIntent, CAMERA4);
                                 break;
                         }
@@ -145,16 +145,16 @@ public class SolvePicturePopupWindow extends PopupWindow {
                 Intent chooseIntent = new Intent(Intent.ACTION_PICK);
                 chooseIntent.setType("image/*");
                 switch (flag) {
-                    case 1:
+                    case 15:
                         ((Activity) context).startActivityForResult(chooseIntent, ALBUM1);
                         break;
-                    case 2:
+                    case 16:
                         ((Activity) context).startActivityForResult(chooseIntent, ALBUM2);
                         break;
-                    case 3:
+                    case 18:
                         ((Activity) context).startActivityForResult(chooseIntent, ALBUM3);
                         break;
-                    case 4:
+                    case 19:
                         ((Activity) context).startActivityForResult(chooseIntent, ALBUM4);
                         break;
                 }
@@ -197,7 +197,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
         rl_back = (RelativeLayout) v.findViewById(R.id.rl_back);
         rl_out = (RelativeLayout) v.findViewById(R.id.rl_out);
 
-        if (flag == 5) {
+        if (flag == 20) {
             btn_camera.setVisibility(View.GONE);
             btn_album.setVisibility(View.GONE);
         } else {

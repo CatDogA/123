@@ -129,7 +129,7 @@ public class ReportAttachSubFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 1);
+                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 15);
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
@@ -146,7 +146,7 @@ public class ReportAttachSubFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 2);
+                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 16);
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
@@ -162,7 +162,7 @@ public class ReportAttachSubFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 3);
+                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 18);
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
@@ -179,7 +179,7 @@ public class ReportAttachSubFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 4);
+                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 19);
                     pop.showPopup(img_video);
                 } else {
                     Log.i(TAG, "onItemClick:     " + position);
@@ -505,7 +505,7 @@ public class ReportAttachSubFragment extends BaseFragment {
         img_video_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 5);
+                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 20);
                 pop.showPopup(img_video);
             }
         });

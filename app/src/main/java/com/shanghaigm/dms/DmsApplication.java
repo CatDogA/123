@@ -39,7 +39,7 @@ public class DmsApplication extends Application {
     private ChangeLetterSubDetailInfo changeLetterSubDetailInfo;
     private ArrayList<AllocationAddChooseUndefaultInfo> allocationAddChooseUndefaultInfos; //储存选配信息
 
-    public ArrayList<SaveUsedPaths> usedPaths = new ArrayList<>();
+//    public ArrayList<SaveUsedPaths> usedPaths = new ArrayList<>();
     @Override
     public void onCreate() {
         super.onCreate();

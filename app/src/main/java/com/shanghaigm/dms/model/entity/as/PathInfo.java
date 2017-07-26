@@ -14,13 +14,12 @@ public class PathInfo extends BaseObservable implements Serializable {
     public String path;
     public String name;
     public String cp_path;
-
-    public PathInfo(int type, String path, String cp_path, String name) {
+    public int file_id;
+    public PathInfo(int type, String path, String cp_path, String name,int file_id) {
         this.type = type;
         this.path = path;
         this.name = name;
         this.cp_path = cp_path;
+        this.file_id = file_id;
     }
-
-
 }

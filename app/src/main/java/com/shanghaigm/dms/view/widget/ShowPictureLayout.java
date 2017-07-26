@@ -50,13 +50,21 @@ public class ShowPictureLayout extends RelativeLayout {
     private LoadingDialog dialog;
     private DmsApplication app;
     private File root;
+    private ArrayList<Bitmap> bits;
+    private ArrayList<ArrayList<PathInfo>> allPaths;
+    private int type;
+    private Boolean isUpdate;
+    public static ArrayList<PathInfo> pathsDelete;
 
-    public ShowPictureLayout(Context context, ArrayList<PathInfo> paths, String title, Boolean isPic) {
+    public ShowPictureLayout(Context context, ArrayList<PathInfo> paths, String title, Boolean isPic, ArrayList<ArrayList<PathInfo>> allPaths, int type, Boolean isUpdate) {
         super(context);
         this.context = context;
         this.title = title;
         this.paths = paths;
         this.isPic = isPic;
+        this.allPaths = allPaths;
+        this.isUpdate = isUpdate;
+        this.type = type;
         LayoutInflater lf = LayoutInflater.from(context);
         View v = lf.inflate(R.layout.layout_show_picture, this, true);
         initView(v);
@@ -67,7 +75,6 @@ public class ShowPictureLayout extends RelativeLayout {
     private void setUpView() {
         text_title.setText(title);
         gv.setAdapter(adapter);
-
         root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 //        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 //        File file = new File(path.getPath() + file_dir);
@@ -75,26 +82,83 @@ public class ShowPictureLayout extends RelativeLayout {
 //            file.mkdir();
 //        }
 //        picFile = new File(file, fileName);
+        gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isUpdate) {
+                    bits.remove(position);
+                    adapter.notifyDataSetChanged();
+                    for (ArrayList<PathInfo> paths : allPaths) {
+                        if (paths.size() > 0) {
+                            if (pathsDelete == null) {
+                                pathsDelete = new ArrayList<PathInfo>();
+                            }
+                            switch (paths.get(0).type) {
+                                case 15:
+                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    paths.remove(position - 1);        //得到剩余的路径
+                                    break;
+                                case 16:
+                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    paths.remove(position - 1);
+                                    break;
+                                case 18:
+                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    paths.remove(position - 1);
+                                    break;
+                                case 19:
+                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    paths.remove(position - 1);
+                                    break;
+                                case 20:
+                                    break;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        });
 
-        if (paths.size() > 0 && isPic) {
+        if (isPic)
+
+        {
             //如果有文件，就不要再下载
             gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                    File file = new File(root.getPath() + "/report_pic");
-                    if (!file.exists()) {
-                        file.mkdir();
+                    if (position == 0) {
+                        Log.i(TAG, "onItemClick: type           " + type);
+                        SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
+                        pop.showPopup(gv);
+                    } else if (paths.size() > 0) {
+                        if (paths.get(position - 1).file_id == 0) {
+                            Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString(ShowPictureLayout.SHOW_PHOTO, paths.get(position - 1).path);
+                            intent.putExtras(b);
+                            context.startActivity(intent);
+                        } else {
+                            File file = new File(root.getPath() + "/report_pic");
+                            if (!file.exists()) {
+                                file.mkdir();
+                            }
+                            File file2 = new File(file, paths.get(position - 1).name);
+                            if (file2.exists()) {
+                                Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString(ShowPictureLayout.SHOW_PHOTO, file2.getPath());
+                                intent.putExtras(b);
+                                context.startActivity(intent);
+                            } else {
+                                savePic(position);
+                            }
+                        }
                     }
-                    File file2 = new File(file, paths.get(position).name);
-                    if (file2.exists()) {
-                        Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString(ShowPictureLayout.SHOW_PHOTO, file2.getPath());
-                        intent.putExtras(b);
-                        context.startActivity(intent);
-                    } else {
-                        savePic(position);
-                    }
+                }
+            });
+        }
+
 //                    if(app.usedPaths.size()>0){
 //                        int count = 0;
 //                        for(SaveUsedPaths path:app.usedPaths){
@@ -116,14 +180,15 @@ public class ShowPictureLayout extends RelativeLayout {
 //                    }else {
 //                        savePic(position);
 //                    }
-                }
-            });
-        }
 
-        if (paths.size() > 0 && !isPic) {
+
+        if (paths.size() > 0 && !isPic)
+
+        {
             gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                     //加载视频
                     File file = new File(root.getPath() + "/report_video");
                     if (!file.exists()) {
@@ -139,6 +204,9 @@ public class ShowPictureLayout extends RelativeLayout {
                     } else {
                         saveVideo();
                     }
+                }
+            });
+        }
 //                    int count = 0;
 //                    if(app.usedPaths.size()>0){
 //                        for(SaveUsedPaths info:app.usedPaths){
@@ -160,10 +228,6 @@ public class ShowPictureLayout extends RelativeLayout {
 //                    }else {
 //                        saveVideo();
 //                    }
-                }
-            });
-        }
-
     }
 
     private String saveVideo() {
@@ -217,7 +281,9 @@ public class ShowPictureLayout extends RelativeLayout {
     private void initData() {
 //        paths
         app = DmsApplication.getInstance();
-        ArrayList<Bitmap> bits = new ArrayList<>();
+        bits = new ArrayList<>();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.picture_add);
+        bits.add(bitmap);
         for (PathInfo path : paths) {
             //从压缩图片路径中获取bitmap
             Bitmap bit = BitmapFactory.decodeFile(path.cp_path);

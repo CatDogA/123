@@ -68,12 +68,13 @@ public class ReportDetailAttachFragment extends BaseFragment {
                 videoPath.add(paths.get(0));
             }
         }
-        ShowPictureLayout pictureLayout = new ShowPictureLayout(getActivity(), carPlatePaths, "整车铭牌", true);
+        //allPtahs,15,16..作用于修改，对于查询没有作用，isUpDate:判断是否为修改
+        ShowPictureLayout pictureLayout = new ShowPictureLayout(getActivity(), carPlatePaths, "整车铭牌", true, allPaths, 15, false);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        ShowPictureLayout pictureLayout2 = new ShowPictureLayout(getActivity(), troublePaths, "故障", true);
-        ShowPictureLayout pictureLayout3 = new ShowPictureLayout(getActivity(), repairPaths, "维修", true);
-        ShowPictureLayout pictureLayout4 = new ShowPictureLayout(getActivity(), otherPaths, "其他", true);
-        ShowPictureLayout videoLayout = new ShowPictureLayout(getActivity(), videoPath, "视频", false);
+        ShowPictureLayout pictureLayout2 = new ShowPictureLayout(getActivity(), troublePaths, "故障", true, allPaths, 16, false);
+        ShowPictureLayout pictureLayout3 = new ShowPictureLayout(getActivity(), repairPaths, "维修", true, allPaths, 18, false);
+        ShowPictureLayout pictureLayout4 = new ShowPictureLayout(getActivity(), otherPaths, "其他", true, allPaths, 19, false);
+        ShowPictureLayout videoLayout = new ShowPictureLayout(getActivity(), videoPath, "视频", false, allPaths, 20, false);
         pictureLayout.setLayoutParams(layoutParams);
         pictureLayout2.setLayoutParams(layoutParams);
         pictureLayout3.setLayoutParams(layoutParams);
