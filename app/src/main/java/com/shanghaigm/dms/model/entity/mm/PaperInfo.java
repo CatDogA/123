@@ -26,7 +26,10 @@ import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
+import com.shanghaigm.dms.model.util.OkHttpClient;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
+import com.shanghaigm.dms.view.activity.as.HomeActivity;
+import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
 import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
@@ -36,6 +39,7 @@ import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
+import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,10 +59,11 @@ public class PaperInfo extends BasePaperInfo {
     public static String ORDER_REVIEW_DETIAL_INFO = "query_order_review_detail";
     public static String REPORT_DETAI_INFO = "report_detail_info";
     public static String REPORT_FILE_INFO = "report_file_info";
+    public static String REPORT_DELETE = "report_delete";
     private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交
     private LoadingDialog dialog;
     private static String TAG = "PaperInfo";
-    private DmsApplication app = DmsApplication.getInstance();
+    private static DmsApplication app = DmsApplication.getInstance();
     private String number;
     private String model;
     private String state;
@@ -301,39 +306,48 @@ public class PaperInfo extends BasePaperInfo {
         }
         //日报修改详情
         if (flag == 8) {
-            allPaths.clear();
-            reportCount = 0;
-            final Map<String, Object> params = new HashMap<>();
-            params.put("daily_id", daily_id);
-            dialog.showLoadingDlg();
-            OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
-                @Override
-                public void onSuccess(Object responseObj) {
-                    JSONObject object = (JSONObject) responseObj;
-                    Log.i(TAG, "onSuccess: " + responseObj.toString());
-                    try {
-                        reportCount++;
-                        JSONObject resultEntity = object.getJSONObject("resultEntity");
-                        reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
-                        if (reportCount == 6) {
-                            dialog.dismissLoadingDlg();
-                            goToReportDetail(view, allPaths);
+            if (report_state != 2) {
+                allPaths.clear();
+                //先清空
+                if (ShowPictureLayout.pathsDelete != null) {
+                    ShowPictureLayout.pathsDelete.clear();
+                }
+                //把要删除的文件清空
+                reportCount = 0;
+                final Map<String, Object> params = new HashMap<>();
+                params.put("daily_id", daily_id);
+                dialog.showLoadingDlg();
+                OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        JSONObject object = (JSONObject) responseObj;
+                        Log.i(TAG, "onSuccess: " + responseObj.toString());
+                        try {
+                            reportCount++;
+                            JSONObject resultEntity = object.getJSONObject("resultEntity");
+                            reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
+                            if (reportCount == 6) {
+                                dialog.dismissLoadingDlg();
+                                goToReportDetail(view, allPaths);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }
 
-                @Override
-                public void onFailure(Object reasonObj) {
+                    @Override
+                    public void onFailure(Object reasonObj) {
 
-                }
-            });
-            getPaths(15, view);
-            getPaths(16, view);
-            getPaths(18, view);
-            getPaths(19, view);
-            getPaths(20, view);
+                    }
+                });
+                getPaths(15, view);
+                getPaths(16, view);
+                getPaths(18, view);
+                getPaths(19, view);
+                getPaths(20, view);
+            } else {
+                Toast.makeText(context, context.getResources().getText(R.string.no_click), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -421,41 +435,49 @@ public class PaperInfo extends BasePaperInfo {
                 }
                 break;
             case 7:
-                allPaths.clear();
-                reportCount = 0;
-                final ArrayList<PathInfo> pathInfos = new ArrayList<>();
-                final ArrayList<String> cpPaths = new ArrayList<>();
-                final Map<String, Object> params = new HashMap<>();
-                params.put("daily_id", daily_id);
-                dialog.showLoadingDlg();
-                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-                        JSONObject object = (JSONObject) responseObj;
-                        try {
-                            reportCount++;
-                            JSONObject resultEntity = object.getJSONObject("resultEntity");
-                            reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
-                            Log.i(TAG, "onSuccess:reportCount    " + reportCount);
-                            if (reportCount == 6) {
-                                dialog.dismissLoadingDlg();
-                                goToReportDetail(view, allPaths);
+                //已提交
+                if ((report_state == 1 || report_state == 3) && app.getRoleCode().equals("fwjl")) {
+                    Toast.makeText(context, context.getResources().getText(R.string.no_click), Toast.LENGTH_SHORT).show();
+                } else {
+                    allPaths.clear();      //把要展示的文件清空
+                    if (ShowPictureLayout.pathsDelete != null) {
+                        ShowPictureLayout.pathsDelete.clear();   //把要删除的文件清空
+                    }
+                    reportCount = 0;
+                    final Map<String, Object> params = new HashMap<>();
+                    params.put("daily_id", daily_id);
+                    dialog.showLoadingDlg();
+
+                    OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
+                        @Override
+                        public void onSuccess(Object responseObj) {
+                            JSONObject object = (JSONObject) responseObj;
+                            try {
+                                reportCount++;
+                                JSONObject resultEntity = object.getJSONObject("resultEntity");
+                                reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
+                                Log.i(TAG, "onSuccess:reportCount    " + reportCount);
+                                if (reportCount == 6) {
+                                    dialog.dismissLoadingDlg();
+                                    goToReportDetail(view, allPaths);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Object reasonObj) {
+                        @Override
+                        public void onFailure(Object reasonObj) {
 
-                    }
-                });
-                getPaths(15, view);
-                getPaths(16, view);
-                getPaths(18, view);
-                getPaths(19, view);
-                getPaths(20, view);
+                        }
+                    });
+                    getPaths(15, view);
+                    getPaths(16, view);
+                    getPaths(18, view);
+                    getPaths(19, view);
+                    getPaths(20, view);
+                }
+                break;
 //                Map<String, Object> params2 = new HashMap<>();
 //                params2.put("id", daily_id);
 //                params2.put("type", "15");
@@ -527,7 +549,40 @@ public class PaperInfo extends BasePaperInfo {
 //
 //                    }
 //                });
-                break;
+
+        }
+    }
+
+    public void OnDeleteClick(final View view) {
+        if (report_state != 2) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("daily_id", daily_id);
+            dialog.showLoadingDlg();
+            OkhttpRequestCenter.getCommonRequest(Constant.URL_REPORT_DELETE, params, new DisposeDataListener() {
+                @Override
+                public void onSuccess(Object responseObj) {
+                    Log.i(TAG, "onSuccess:OnDeleteClick      " + responseObj.toString());
+                    dialog.dismissLoadingDlg();
+                    JSONObject obj = (JSONObject) responseObj;
+                    try {
+                        JSONObject result = obj.getJSONObject("resultEntity");
+                        String code = result.getString("returnCode");
+                        if (code.equals("1")) {
+                            Toast.makeText(context, context.getResources().getText(R.string.delete_success), Toast.LENGTH_SHORT).show();
+                            HomeActivity.refresh();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Object reasonObj) {
+
+                }
+            });
+        } else {
+            Toast.makeText(context, context.getResources().getText(R.string.no_click), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -589,7 +644,7 @@ public class PaperInfo extends BasePaperInfo {
                                         Log.i(TAG, "run:    " + s.toString());
                                         //s是处理后压缩文件在内存中的路径
                                         //file_path是原文件下载路径
-                                        pathInfos.add(new PathInfo(type, file_path, s, file_name,id));
+                                        pathInfos.add(new PathInfo(type, file_path, s, file_name, id));
                                         //路径是内存路径
                                         if (pathInfos.size() == resultArray.length()) {   //下载完毕
                                             reportCount++;
@@ -639,15 +694,6 @@ public class PaperInfo extends BasePaperInfo {
         }
     }
 
-    @BindingAdapter("set_report_text")
-    public static void setReportText(TextView text, int report_state) {
-        if (report_state == 1) {
-            text.setText("未提交");
-        } else {
-            text.setText("已提交");
-        }
-    }
-
     @BindingAdapter("set_review_img")
     public static void setReviewImage(ImageView iv, String examination_result) {
         switch (examination_result) {
@@ -661,14 +707,47 @@ public class PaperInfo extends BasePaperInfo {
         }
     }
 
+    //审核
     @BindingAdapter("set_report_img")
     public static void setReportImage(ImageView iv, int report_state) {
+        if (app.getRoleCode().equals("out_service")) {
+            iv.setImageResource(R.mipmap.order_review_pre);
+        } else {
+            switch (report_state) {
+                case 2:
+                    iv.setImageResource(R.mipmap.order_sub_pre);
+                    break;
+                case 1:
+                case 3:
+                    iv.setImageResource(R.mipmap.order_sub);
+                    break;
+            }
+        }
+    }
+
+    //提交
+    @BindingAdapter("set_report_sub_img")
+    public static void setReportSubImage(ImageView iv, int report_state) {
         switch (report_state) {
             case 1:
-                iv.setImageResource(R.mipmap.order_sub_pre);
+            case 3:
+                iv.setImageResource(R.mipmap.modify_pre);
                 break;
-            default:
-                iv.setImageResource(R.mipmap.order_sub);
+            case 2:
+                iv.setImageResource(R.mipmap.modify_grey);
+                break;
+        }
+    }
+
+    @BindingAdapter("set_report_sub_img_delete")
+    public static void setReportSubDeleteImage(ImageView iv, int report_state) {
+        switch (report_state) {
+            case 1:
+            case 3:
+                iv.setImageResource(R.mipmap.delete_pre);
+                break;
+            case 2:
+                iv.setImageResource(R.mipmap.delete);
                 break;
         }
     }
@@ -736,12 +815,33 @@ public class PaperInfo extends BasePaperInfo {
         }
     }
 
-    //未提交为红
+    //未提交为红1,提交蓝，驳回黄
     @BindingAdapter("set_report_text_color")
     public static void setReportTableColor(TextView tv, int report_state) {
         switch (report_state) {
             case 1:
                 tv.setTextColor(Color.RED);
+                break;
+            case 2:
+                tv.setTextColor(Color.BLUE);
+                break;
+            case 3:
+                tv.setTextColor(0XFFFF6500);
+                break;
+        }
+    }
+
+    @BindingAdapter("set_report_text")
+    public static void setReportTableText(TextView tv, int report_state) {
+        switch (report_state) {
+            case 1:
+                tv.setText("未提交");
+                break;
+            case 2:
+                tv.setText("已提交");
+                break;
+            case 3:
+                tv.setText("已驳回");
                 break;
         }
     }

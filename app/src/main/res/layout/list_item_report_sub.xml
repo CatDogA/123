@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="paper"
             type="com.shanghaigm.dms.model.entity.mm.PaperInfo" />
@@ -10,8 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="1dp"
@@ -29,25 +30,8 @@
             android:lines="1"
             android:text="@{paper.daily_code}"
             android:textColor="@color/colorBlack"
-            app:set_report_text_color="@{paper.report_state}"
-            />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:lines="1"
-            android:text="@{paper.model}"
-            android:textColor="@color/colorBlack"
-            app:set_report_text_color="@{paper.report_state}"
-             />
+            android:textSize="12sp"
+            app:set_report_text_color="@{paper.report_state}" />
 
         <TextView
             android:layout_width="1dp"
@@ -61,10 +45,29 @@
             android:layout_weight="4"
             android:gravity="center"
             android:lines="1"
+            android:text="@{paper.model}"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:set_report_text_color="@{paper.report_state}" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:lines="1"
             android:text="@{paper.car_sign}"
             android:textColor="@color/colorBlack"
-            app:set_report_text_color="@{paper.report_state}"
-            />
+            android:textSize="12sp"
+            app:set_report_text_color="@{paper.report_state}" />
 
         <TextView
             android:layout_width="1dp"
@@ -75,27 +78,29 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
             <!--mvvm利用构造传入的mipmap，从xml传入info，再set_img绑定的方法，把图片导入所在的imageview中，不知
             imageview是如何导入方法的-->
             <ImageView
-                android:src="@mipmap/modify_pre"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:padding="2dp"
                 android:onClick="@{paper.onCkQueryOrderDetailClick}"
-                 />
+                android:padding="2dp"
+                android:src="@mipmap/modify_pre"
+                app:set_report_sub_img="@{paper.report_state}" />
+
             <ImageView
-                android:src="@mipmap/delete_pre"
                 android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="2dp"
                 android:layout_marginStart="2dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:onClick="@{paper.OnDeleteClick}"
                 android:padding="2dp"
-                 />
+                android:src="@mipmap/delete_pre"
+                app:set_report_sub_img_delete="@{paper.report_state}" />
         </LinearLayout>
 
         <TextView

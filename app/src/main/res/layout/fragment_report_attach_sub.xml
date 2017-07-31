@@ -185,16 +185,18 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:layout_marginLeft="20dp"
                 android:id="@+id/img_video_add"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/video_add" />
+                android:src="@mipmap/add_pic" />
 
             <ImageView
+                android:layout_marginLeft="30dp"
                 android:id="@+id/img_video"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:scaleType="fitXY" />
         </LinearLayout>
 

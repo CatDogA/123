@@ -13,16 +13,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chumi.widget.http.listener.DisposeDataListener;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailAttachFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReportDetailActivity extends AppCompatActivity {
     private ArrayList<BaseFragment> fragments;
@@ -34,6 +43,8 @@ public class ReportDetailActivity extends AppCompatActivity {
     private static String TAG = "ReportDetailActivity";
     public static String REPORT_DETAIL_INFO = "report_detail_info_one";
     public static ArrayList<ArrayList<PathInfo>> allPaths = null;
+    private Button btn_return_back;
+    private ReportQueryDetailInfoBean reportDetailInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +60,7 @@ public class ReportDetailActivity extends AppCompatActivity {
         fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Bundle bundle = getIntent().getExtras();
-        ReportQueryDetailInfoBean reportDetailInfo = (ReportQueryDetailInfoBean) bundle.getSerializable(PaperInfo.REPORT_DETAI_INFO);
+        reportDetailInfo = (ReportQueryDetailInfoBean) bundle.getSerializable(PaperInfo.REPORT_DETAI_INFO);
         if (allPaths != null) {
             allPaths.clear();
         }
@@ -70,6 +81,51 @@ public class ReportDetailActivity extends AppCompatActivity {
     }
 
     private void setUpView() {
+        if (app.getRoleCode().equals("out_service")) {
+            btn_return_back.setVisibility(View.GONE);
+        }
+        btn_return_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONArray array = new JSONArray();
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("state", 3);
+                    obj.put("daily_id", reportDetailInfo.daily_id);
+                    array.put(obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Map<String, Object> params = new HashMap<>();
+                params.put("loginName", app.getAccount());
+                params.put("dailyStr", array.toString());
+                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_SUB_REPORT, params, new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        Log.i(TAG, "onSuccess:      " + responseObj.toString());
+                        JSONObject obj = (JSONObject) responseObj;
+                        try {
+                            JSONObject result = obj.getJSONObject("resultEntity");
+                            String code = result.getString("returnCode");
+                            if (code.equals("1")) {
+                                Toast.makeText(ReportDetailActivity.this, getResources().getText(R.string.return_success), Toast.LENGTH_SHORT).show();
+                                finish();
+                                //刷新页面2
+                                HomeActivity.refresh2();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Object reasonObj) {
+
+                    }
+                });
+            }
+        });
+
         title.setText(getResources().getText(R.string.report_detail));
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,5 +180,6 @@ public class ReportDetailActivity extends AppCompatActivity {
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
+        btn_return_back = (Button) findViewById(R.id.btn_return_back);
     }
 }

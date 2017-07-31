@@ -78,7 +78,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             ft.hide(fragment);
         }
     }
-
+    //远程实现刷新操控！
+    public static void refresh() {
+        ReportSubFragment f = ReportSubFragment.getInstance();
+        f.refreshTable();
+    }
+    public static void refresh2(){
+        ReportQueryFragment f = ReportQueryFragment.getInstance();
+        f.refreshTable();
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -86,7 +94,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 showHomeTab();
                 break;
             case R.id.sub_tab:
-                showSubTab();
+                if(app.getRoleCode().equals("out_service")){
+                    showSubTab();
+                }
                 break;
             case R.id.query_tab:
                 showQueryTab();

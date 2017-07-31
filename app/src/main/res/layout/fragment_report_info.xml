@@ -37,7 +37,7 @@
                     android:gravity="center"
                     android:hint="@string/auto_out"
                     android:textColorHint="@color/colorLine"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -57,7 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14dp" />
+                        android:textSize="12dp" />
 
                     <ImageView
                         android:id="@+id/img_model"
@@ -95,7 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14dp" />
+                        android:textSize="12dp" />
 
                     <ImageView
                         android:id="@+id/img_model_series"
@@ -125,7 +125,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14dp" />
+                        android:textSize="12dp" />
 
                     <ImageView
                         android:id="@+id/img_factory_id"
@@ -160,7 +160,7 @@
                     android:gravity="center"
                     android:hint="@string/auto_out"
                     android:textColorHint="@color/colorLine"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -177,7 +177,7 @@
                     android:gravity="center"
                     android:hint="@string/auto_out"
                     android:textColorHint="@color/colorLine"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -200,10 +200,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:focusable="false"
                     android:hint="@string/auto_out"
                     android:text="2017-01-01"
                     android:textColorHint="@color/colorLine"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -217,11 +218,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:focusable="false"
                     android:gravity="center"
                     android:hint="@string/auto_out"
                     android:text="2017-01-01"
                     android:textColorHint="@color/colorLine"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -245,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -273,7 +275,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:gravity="center"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -296,7 +298,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:gravity="center"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -319,7 +321,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:gravity="center"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -347,7 +349,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14dp" />
+                        android:textSize="12dp" />
 
                     <ImageView
                         android:id="@+id/img_duty_type"
@@ -376,7 +378,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14dp" />
+                        android:textSize="12dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -405,7 +410,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14dp" />
+                        android:textSize="12dp" />
 
                 </RelativeLayout>
 

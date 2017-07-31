@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -150,9 +151,55 @@ public class HttpUpLoad {
         }
         return result;
     }
+    public static String getRequest(Map<String, String> params, String url) {
+        getHttps();
+        String result = null;
+        String urlRequest = url + mapToParam(params);
+        try {
+            URL urlGet = new URL(urlRequest);
+            HttpURLConnection conn = (HttpURLConnection) urlGet.openConnection();
+            //设置请求方法
+            conn.setRequestMethod("GET");
+            //设置字符集
+            conn.setRequestProperty("Charset", "UTF-8");
+            //文件类型
+            conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+            //请求参数
+            conn.setRequestProperty("Cookie", "AppName=" + URLEncoder.encode("DMS", "UTF-8"));
+            //设置自定义参数
+//            conn.getRequestProperty("MyProperty",");
+            if (conn.getResponseCode() == 200) {
+                InputStream is = conn.getInputStream();
+                StringBuffer out = new StringBuffer();
+                byte[] b = new byte[4096];
+                for (int n; (n = is.read(b)) != -1; ) {
+                    out.append(new String(b,0,n));
+                }
+                result = out.toString();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static void getHttps() {
+        SSLContext sc = null;
+        try {
+            sc = SSLContext.getInstance("TLS");
+            sc.init(null, new TrustManager[]{new MyTrustManager()}, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static String downloadFile(String fileName, Map<String, String> params, String Url, String file_dir) {
-//        String uploadUrl = "http://192.168.2.111:8080/HsbServlet/DownloadFile";
         SSLContext sc = null;
         File picFile = null;
         try {

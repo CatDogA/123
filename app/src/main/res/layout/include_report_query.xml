@@ -19,6 +19,8 @@
             android:text="@string/report_id" />
 
         <EditText
+            android:textSize="12sp"
+            android:id="@+id/edt_report_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
@@ -47,10 +49,14 @@
 
             <EditText
                 android:id="@+id/edt_model"
+                android:textSize="12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:theme="@style/MyText" />
+                android:theme="@style/MyText"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -74,20 +80,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="4">
 
-            <ImageView
-                android:id="@+id/img_car_id"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_car_id"
-                android:layout_alignRight="@+id/edt_car_id"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down" />
+            <!--<ImageView-->
+                <!--android:id="@+id/img_car_id"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_alignBottom="@+id/edt_car_id"-->
+                <!--android:layout_alignRight="@+id/edt_car_id"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:src="@mipmap/down" />-->
 
             <EditText
                 android:id="@+id/edt_car_id"
+                android:textSize="12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
                 android:theme="@style/MyText" />
         </RelativeLayout>
 
@@ -114,6 +120,7 @@
 
             <EditText
                 android:id="@+id/edt_state"
+                android:textSize="12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"

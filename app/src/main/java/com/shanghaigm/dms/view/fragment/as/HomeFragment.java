@@ -61,14 +61,20 @@ public class HomeFragment extends BaseFragment {
         LinearLayout rl_sub = new LinearLayout(getActivity());
         rl_sub.setLayoutParams(lp);
         rl_sub.addView(reportSubButton);
+        if (app.getRoleCode() != null) {
+            if (app.getRoleCode().equals("out_service")) {
+                button_ll.addView(rl_sub);
+            }
+        }
+        //线
+        button_ll.addView(line);
         //查询
         LinearLayout rl_query = new LinearLayout(getActivity());
         rl_query.setLayoutParams(lp);
         rl_query.addView(reportQueryButton);
-        //添加
-        button_ll.addView(rl_sub);
-        button_ll.addView(line);
         button_ll.addView(rl_query);
+
+
     }
 
     public static HomeFragment getInstance() {

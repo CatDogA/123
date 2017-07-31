@@ -1,5 +1,6 @@
 package com.shanghaigm.dms.view.fragment.as;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,6 +27,7 @@ import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
+import com.shanghaigm.dms.view.widget.PopDatePicker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +35,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +66,8 @@ public class ReportInfoFragment extends BaseFragment {
 
     private void setUpView() {
         edt_feed_back.setText(getDate());
+        pickDate(edt_factory_date);
+        pickDate(edt_license_date);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +164,7 @@ public class ReportInfoFragment extends BaseFragment {
                     OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_ADD_REPORT, map, new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object responseObj) {
-                            Log.i(TAG, "onSuccess: "+responseObj.toString());
+                            Log.i(TAG, "onSuccess: " + responseObj.toString());
                             dialog.dismissLoadingDlg();
                             JSONObject resultObj = (JSONObject) responseObj;
                             try {
@@ -170,8 +176,8 @@ public class ReportInfoFragment extends BaseFragment {
                                 }
                                 btn_save.setEnabled(false);
                                 isInfoAdd = true;
-                                ((ReportAddActivity)getActivity()).setInfoAdd(true);
-                                ((ReportAddActivity)getActivity()).setReport_id(file_id);
+                                ((ReportAddActivity) getActivity()).setInfoAdd(true);
+                                ((ReportAddActivity) getActivity()).setReport_id(file_id);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -195,7 +201,7 @@ public class ReportInfoFragment extends BaseFragment {
                         Map<String, Object> params = new HashMap<>();
                         JSONArray array = new JSONArray();
                         subObj.put("daily_id", file_id);
-                        subObj.put("state", 1);
+                        subObj.put("state", 2);
                         array.put(subObj);
                         params.put("dailyStr", array.toString());
                         params.put("loginName", app.getAccount());
@@ -209,8 +215,8 @@ public class ReportInfoFragment extends BaseFragment {
                                 try {
                                     JSONObject resultEntity = resultObj.getJSONObject("resultEntity");
                                     String s = resultEntity.getString("returnCode");
-                                    if(s.equals("1")){
-                                        Toast.makeText(getActivity(),getResources().getText(R.string.sub_info_success), Toast.LENGTH_SHORT).show();
+                                    if (s.equals("1")) {
+                                        Toast.makeText(getActivity(), getResources().getText(R.string.sub_info_success), Toast.LENGTH_SHORT).show();
                                         btn_sub.setEnabled(false);
                                     }
                                 } catch (JSONException e) {
@@ -411,6 +417,33 @@ public class ReportInfoFragment extends BaseFragment {
             reportInfoFragment = new ReportInfoFragment();
         }
         return reportInfoFragment;
+    }
+
+    //点击"日期"按钮布局 设置日期
+    private void pickDate(final EditText edt) {
+        final int[] mYear = {0};
+        final int[] mMonth = {0};
+        final int[] mDay = {0};
+        final Calendar calendar = Calendar.getInstance();
+        edt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+//                        edt.setText(year + "-" + month + "-" + day);
+                        mYear[0] = year;
+                        mMonth[0] = month;
+                        mDay[0] = day;
+                        edt.setText(new StringBuilder().append(mYear[0]).append("-")
+                                .append((mMonth[0] + 1) < 10 ? "0" + (mMonth[0] + 1) : (mMonth[0] + 1))
+                                .append("-")
+                                .append((mDay[0] < 10) ? "0" + mDay[0] : mDay[0]) );
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
     }
 
     private String getDate() {

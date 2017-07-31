@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/mainColorGD"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainColorGD"
+    android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.activity.as.ReportDetailActivity">
-    <include layout="@layout/include_title_bar"/>
+
+    <include layout="@layout/include_title_bar" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout_report"
-        app:tabPaddingStart="40dp"
-        app:tabPaddingEnd="40dp"
-        app:tabSelectedTextColor="@color/colorBlue"
-        app:tabTextColor="@color/colorBlackText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:tabPaddingEnd="40dp"
+        app:tabPaddingStart="40dp"
+        app:tabSelectedTextColor="@color/colorBlue"
+        app:tabTextColor="@color/colorBlackText">
 
     </android.support.design.widget.TabLayout>
+
     <FrameLayout
-        android:layout_weight="1"
         android:id="@+id/fragment_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
     </FrameLayout>
+
+    <Button
+        android:id="@+id/btn_return_back"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/return_back"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"/>
 </LinearLayout>

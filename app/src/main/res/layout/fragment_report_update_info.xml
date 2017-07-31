@@ -36,7 +36,7 @@
                 android:focusable="false"
                 android:gravity="center"
                 android:text="@{info.feedback_date}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -64,7 +64,7 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.models_name}"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:id="@+id/img_model"
@@ -110,7 +110,10 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.vehicle_series}"
-                    android:textSize="14dp" />
+                    android:textSize="12dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
                 <ImageView
                     android:id="@+id/img_model_series"
@@ -148,7 +151,10 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.car_no}"
-                    android:textSize="14dp" />
+                    android:textSize="12dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
                 <ImageView
                     android:id="@+id/img_factory_id"
@@ -183,7 +189,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{info.car_sign}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -199,7 +205,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{info.chassis_num}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -223,7 +229,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{info.factory_date}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -239,7 +245,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{info.license_date}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -261,9 +267,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:inputType="numberDecimal"
                 android:gravity="center"
                 android:text="@{info.mileage_num}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -292,7 +299,7 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="@{info.fault_describe}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -316,7 +323,7 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="@{info.treatment_process}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -340,7 +347,7 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="@{info.treatment_result}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -376,7 +383,7 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.rc_value}"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:id="@+id/img_duty_type"
@@ -402,7 +409,7 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="@{info.first_fault_name}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -426,20 +433,13 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{info.fault_makers}"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_sub"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:text="@string/submit" />
+        <include layout="@layout/include_save_and_sub"/>
     </LinearLayout>
 </layout>

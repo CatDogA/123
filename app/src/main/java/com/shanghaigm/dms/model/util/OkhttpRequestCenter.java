@@ -28,4 +28,13 @@ public class OkhttpRequestCenter {
     public static void getCommonRequest(String url, Map<String, Object> params, DisposeDataListener listener) {
         getRequest(url, params, listener);
     }
+
+    //有int
+    public static void getReportRequest(String url, Map<String, Object> params, DisposeDataListener listener) {
+        CommonOkHttpClient.get(CommonRequest.createGetRequestInt(url, params), new DisposeDataHandle(listener));
+    }
+
+    public static void getCommonReportRequest(String url, Map<String, Object> params, DisposeDataListener listener) {
+        getReportRequest(url, params, listener);
+    }
 }

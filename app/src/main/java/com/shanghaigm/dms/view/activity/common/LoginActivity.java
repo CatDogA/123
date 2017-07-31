@@ -175,7 +175,6 @@ public class LoginActivity extends BaseActivity {
                 break;
             case "out_service":
             case "fwjl":
-//                Toast.makeText(this, "抱歉没有对应岗位", Toast.LENGTH_SHORT).show();
                 goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
                 break;
         }

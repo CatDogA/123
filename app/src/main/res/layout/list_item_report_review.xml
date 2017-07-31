@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <variable
             name="paper"
             type="com.shanghaigm.dms.model.entity.mm.PaperInfo" />
     </data>
 
     <LinearLayout
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -20,11 +19,14 @@
             android:background="@color/colorBlack" />
 
         <TextView
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:id="@+id/textView4"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="4"
             android:gravity="center"
+            android:textSize="12sp"
             android:text="@{paper.daily_code}"
             android:textColor="@color/colorBlack"
             app:set_report_text_color="@{paper.report_state}" />
@@ -35,13 +37,16 @@
             android:background="@color/colorBlack" />
 
         <TextView
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:id="@+id/textView5"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:gravity="center"
             android:text="@{paper.model}"
             android:textColor="@color/colorBlack"
+            android:textSize="12sp"
             app:set_report_text_color="@{paper.report_state}" />
 
         <TextView
@@ -50,10 +55,13 @@
             android:background="@color/colorBlack" />
 
         <TextView
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
             android:gravity="center"
+            android:textSize="12sp"
             android:text="@{paper.car_sign}"
             android:textColor="@color/colorBlack"
             app:set_report_text_color="@{paper.report_state}" />
@@ -64,10 +72,14 @@
             android:background="@color/colorBlack" />
 
         <TextView
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:lines="1"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
+            android:textSize="12sp"
             android:textColor="@color/colorBlack"
             app:set_report_text="@{paper.report_state}"
             app:set_report_text_color="@{paper.report_state}" />
@@ -84,7 +96,7 @@
             android:gravity="center">
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="@{paper.onImageClick}"

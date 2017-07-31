@@ -76,41 +76,59 @@ public class ShowPictureLayout extends RelativeLayout {
         text_title.setText(title);
         gv.setAdapter(adapter);
         root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//        File file = new File(path.getPath() + file_dir);
-//        if (!file.exists()) {
-//            file.mkdir();
-//        }
-//        picFile = new File(file, fileName);
+
         gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (isUpdate) {
                     bits.remove(position);
                     adapter.notifyDataSetChanged();
-                    for (ArrayList<PathInfo> paths : allPaths) {
+                    for (ArrayList<PathInfo> pathInfos : allPaths) {
                         if (paths.size() > 0) {
                             if (pathsDelete == null) {
                                 pathsDelete = new ArrayList<PathInfo>();
                             }
+                            Log.i(TAG, "onItemLongClick:paths.get(0).type        " + paths.get(0).type);
                             switch (paths.get(0).type) {
                                 case 15:
                                     pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
-                                    paths.remove(position - 1);        //得到剩余的路径
+                                    if (pathInfos.size() > 0) {
+                                        if (pathInfos.get(0).type == 15) {
+                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                        }
+                                    }
                                     break;
                                 case 16:
                                     pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
-                                    paths.remove(position - 1);
+                                    if (pathInfos.size() > 0) {
+                                        if (pathInfos.get(0).type == 16) {
+                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                        }
+                                    }
                                     break;
                                 case 18:
                                     pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
-                                    paths.remove(position - 1);
+                                    if (pathInfos.size() > 0) {
+                                        if (pathInfos.get(0).type == 18) {
+                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                        }
+                                    }
                                     break;
                                 case 19:
                                     pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
-                                    paths.remove(position - 1);
+                                    if (pathInfos.size() > 0) {
+                                        if (pathInfos.get(0).type == 19) {
+                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                        }
+                                    }
                                     break;
                                 case 20:
+                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    if (pathInfos.size() > 0) {
+                                        if (pathInfos.get(0).type == 20) {
+                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                        }
+                                    }
                                     break;
                             }
                         }
@@ -120,30 +138,47 @@ public class ShowPictureLayout extends RelativeLayout {
             }
         });
 
-        if (isPic)
-
-        {
+        if (isPic) {
             //如果有文件，就不要再下载
             gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                    if (position == 0) {
-                        Log.i(TAG, "onItemClick: type           " + type);
-                        SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
-                        pop.showPopup(gv);
-                    } else if (paths.size() > 0) {
-                        if (paths.get(position - 1).file_id == 0) {
-                            Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
-                            Bundle b = new Bundle();
-                            b.putString(ShowPictureLayout.SHOW_PHOTO, paths.get(position - 1).path);
-                            intent.putExtras(b);
-                            context.startActivity(intent);
-                        } else {
+                    if (isUpdate) {
+                        if (position == 0) {
+                            Log.i(TAG, "onItemClick: type           " + type);
+                            SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
+                            pop.showPopup(gv);
+                        } else if (paths.size() > 0) {
+                            if (paths.get(position - 1).file_id == 0) {
+                                Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString(ShowPictureLayout.SHOW_PHOTO, paths.get(position - 1).path);
+                                intent.putExtras(b);
+                                context.startActivity(intent);
+                            } else {
+                                File file = new File(root.getPath() + "/report_pic");
+                                if (!file.exists()) {
+                                    file.mkdir();
+                                }
+                                File file2 = new File(file, paths.get(position - 1).name);
+                                if (file2.exists()) {
+                                    Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putString(ShowPictureLayout.SHOW_PHOTO, file2.getPath());
+                                    intent.putExtras(b);
+                                    context.startActivity(intent);
+                                } else {
+                                    savePic(position - 1);
+                                }
+                            }
+                        }
+                    } else {
+                        if (paths.size() > 0) {
                             File file = new File(root.getPath() + "/report_pic");
                             if (!file.exists()) {
                                 file.mkdir();
                             }
-                            File file2 = new File(file, paths.get(position - 1).name);
+                            File file2 = new File(file, paths.get(position).name);
                             if (file2.exists()) {
                                 Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
                                 Bundle b = new Bundle();
@@ -182,27 +217,67 @@ public class ShowPictureLayout extends RelativeLayout {
 //                    }
 
 
-        if (paths.size() > 0 && !isPic)
-
-        {
+        if (!isPic) {
             gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    //加载视频
-                    File file = new File(root.getPath() + "/report_video");
-                    if (!file.exists()) {
-                        file.mkdir();
-                    }
-                    File file2 = new File(file, paths.get(0).name);
-                    if (file2.exists()) {
-                        Intent intent = new Intent(context, ShowVideoActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString(ReportAttachSubFragment.VIDEO_PATH, file2.getPath());
-                        intent.putExtras(b);
-                        context.startActivity(intent);
+                    //修改
+                    if (isUpdate) {
+                        if (position == 0) {
+                            Log.i(TAG, "onItemClick: type           " + type);
+                            SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
+                            pop.showPopup(gv);
+                        }
+                        if (paths.size() > 0) {
+                            if (position == 1) {
+                                //0说明是修改后的,直接进入
+                                if (paths.get(0).file_id == 0) {
+                                    Log.i(TAG, "onItemClick: " + "修改");
+                                    Intent intent = new Intent(context, ShowVideoActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putString(ReportAttachSubFragment.VIDEO_PATH, paths.get(0).path);
+                                    intent.putExtras(b);
+                                    context.startActivity(intent);
+                                } else {
+                                    //加载视频
+                                    File file = new File(root.getPath() + "/report_video");
+                                    if (!file.exists()) {
+                                        file.mkdir();
+                                    }
+                                    File file2 = new File(file, paths.get(0).name);
+                                    if (file2.exists()) {
+                                        Log.i(TAG, "onItemClick: " + "已有，直接查看");
+                                        Intent intent = new Intent(context, ShowVideoActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putString(ReportAttachSubFragment.VIDEO_PATH, file2.getPath());
+                                        intent.putExtras(b);
+                                        context.startActivity(intent);
+                                    } else {
+                                        Log.i(TAG, "onItemClick: " + "保存");
+                                        saveVideo();
+                                    }
+                                }
+                            }
+                        }
+                        //查询
                     } else {
-                        saveVideo();
+                        //加载视频
+                        File file = new File(root.getPath() + "/report_video");
+                        if (!file.exists()) {
+                            file.mkdir();
+                        }
+                        File file2 = new File(file, paths.get(0).name);
+                        if (file2.exists()) {
+                            Log.i(TAG, "onItemClick: " + "已经有了");
+                            Intent intent = new Intent(context, ShowVideoActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString(ReportAttachSubFragment.VIDEO_PATH, file2.getPath());
+                            intent.putExtras(b);
+                            context.startActivity(intent);
+                        } else {
+                            Log.i(TAG, "onItemClick: " + "还没有，要加载");
+                            saveVideo();
+                        }
                     }
                 }
             });
@@ -241,6 +316,8 @@ public class ShowPictureLayout extends RelativeLayout {
                 params.put("fileNames", name);
                 params.put("fileId", paths.get(0).path);
                 vPath[0] = HttpUpLoad.downloadFile(name, params, Constant.URL_DOWNLOAD_FILE, "/report_video");
+                Log.i(TAG, "run:从后台加载视频path     " + paths.get(0).path + "   加载之后的路径    " + vPath[0]);
+
                 if (!vPath[0].equals("")) {
                     dialog.dismissLoadingDlg();
                     Intent intent = new Intent(context, ShowVideoActivity.class);
@@ -282,8 +359,10 @@ public class ShowPictureLayout extends RelativeLayout {
 //        paths
         app = DmsApplication.getInstance();
         bits = new ArrayList<>();
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.picture_add);
-        bits.add(bitmap);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.add_pic);
+        if (isUpdate) {
+            bits.add(bitmap);
+        }
         for (PathInfo path : paths) {
             //从压缩图片路径中获取bitmap
             Bitmap bit = BitmapFactory.decodeFile(path.cp_path);

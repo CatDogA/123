@@ -1,45 +1,33 @@
-package com.chumi.widget.http.okhttp;
-
-
+package com.shanghaigm.dms.model.util;
 
 import android.util.Log;
 
-import com.chumi.widget.http.cookie.SimpleCookieJar;
 import com.chumi.widget.http.https.HttpsUtils;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.response.CommonFileCallback;
 import com.chumi.widget.http.response.CommonJsonCallback;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
+
 import okhttp3.Call;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by Administrator on 2017/5/25.
+ * Created by Administrator on 2017/7/31.
  */
 
-public class CommonOkHttpClient {
+public class OkHttpClient {
     private static final int TIME_OUT = 30;
-    private static OkHttpClient mOkHttpClient;
+    private static okhttp3.OkHttpClient mOkHttpClient;
 
     static {
-        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder();
         okHttpClientBuilder.hostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
@@ -60,23 +48,10 @@ public class CommonOkHttpClient {
                 return chain.proceed(request);
             }
         });
-        okHttpClientBuilder.cookieJar(new SimpleCookieJar());
+        okHttpClientBuilder.cookieJar(new CookiesManager());
         Log.i("cookie", "static initializer: "+".....................................");
         //重写cookie方法
-        //cookie的自动管理
-//        okHttpClientBuilder.cookieJar(new CookieJar() {
-//            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<String, List<Cookie>>();
-//            @Override
-//            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-//                cookieStore.put(url.host(), cookies);
-//            }
-//
-//            @Override
-//            public List<Cookie> loadForRequest(HttpUrl url) {
-//                List<Cookie> cookies = cookieStore.get(url.host());
-//                return cookies != null ? cookies : new ArrayList<Cookie>();
-//            }
-//        });
+
         okHttpClientBuilder.connectTimeout(TIME_OUT, TimeUnit.SECONDS);
         okHttpClientBuilder.readTimeout(TIME_OUT, TimeUnit.SECONDS);
         okHttpClientBuilder.writeTimeout(TIME_OUT, TimeUnit.SECONDS);
@@ -88,7 +63,7 @@ public class CommonOkHttpClient {
         mOkHttpClient = okHttpClientBuilder.build();
     }
 
-    public static OkHttpClient getOkHttpClient() {
+    public static okhttp3.OkHttpClient getOkHttpClient() {
         return mOkHttpClient;
     }
 
@@ -124,5 +99,4 @@ public class CommonOkHttpClient {
         call.enqueue(new CommonFileCallback(handle));
         return call;
     }
-
 }

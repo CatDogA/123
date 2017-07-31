@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -32,6 +33,7 @@ import com.shanghaigm.dms.view.fragment.as.ReportDetailAttachFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportUpdateAttachFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportUpdateInfoFragment;
+import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
 import java.io.File;
@@ -77,7 +79,7 @@ public class ReportUpdateActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         ReportQueryDetailInfoBean reportDetailInfo = (ReportQueryDetailInfoBean) bundle.getSerializable(PaperInfo.REPORT_DETAI_INFO);
         daily_id = reportDetailInfo.daily_id;
-        //TODO-
+        //进来即清理
         if (allPaths != null) {
             allPaths.clear();
         }
@@ -329,10 +331,56 @@ public class ReportUpdateActivity extends AppCompatActivity {
                 ((ReportUpdateAttachFragment) fragments.get(1)).setPaths(allPaths);
                 break;
             case SolvePicturePopupWindow.VIDEO:
-                ReportAttachSubFragment fragment = ReportAttachSubFragment.getInstance();
-                fragment.ChangeImage(SolvePicturePopupWindow.mPublicVideoPath);
+                File video = new File(SolvePicturePopupWindow.mPublicVideoPath);
+                String vName = video.getName();
+//                ReportAttachSubFragment fragment = ReportAttachSubFragment.getInstance();
+//                fragment.ChangeImage(SolvePicturePopupWindow.mPublicVideoPath);
+                videoPath = SolvePicturePopupWindow.mPublicVideoPath;
+                //通过路径获得图片
+                Log.i(TAG, "onActivityResult:   " + videoPath);
+                Bitmap video_bit = getVideoThumb(videoPath);
+                String video_cp_path = "";
+                try {
+                    //保存图片到路径
+                    video_cp_path = SaveCpPic(video_bit, vName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //把视频信息存入
+                int i = -1;
+                for (int j = 0; j < allPaths.size(); j++) {
+                    if (allPaths.get(j).size() > 0) {
+                        if (allPaths.get(j).get(0).type == 20) {
+                            i = j;
+                        }
+                    }
+                }
+                //已经有
+                if (i != -1) {
+                    if (ShowPictureLayout.pathsDelete == null) {
+                        ShowPictureLayout.pathsDelete = new ArrayList<>();
+                        ShowPictureLayout.pathsDelete.add(allPaths.get(i).get(0));
+                    }
+                    allPaths.get(i).clear();
+                    ArrayList<PathInfo> videoPaths = new ArrayList<>();
+                    videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
+                    allPaths.add(videoPaths);
+                }
+                //还没有
+                if (i == -1) {
+                    ArrayList<PathInfo> videoPaths = new ArrayList<>();
+                    videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
+                    allPaths.add(videoPaths);
+                }
+                ((ReportUpdateAttachFragment) fragments.get(1)).setPaths(allPaths);
                 break;
         }
+    }
+
+    public Bitmap getVideoThumb(String path) {
+        MediaMetadataRetriever media = new MediaMetadataRetriever();
+        media.setDataSource(path);
+        return media.getFrameAtTime();
     }
 
     public Bitmap CpPic(String path, int divide) {

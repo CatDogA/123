@@ -46,6 +46,7 @@ public class Constant {
     public static final String URL_GET_FILE_INFO = Config.URL_BASE2 + "/appFileUploadController/getFilePathById";  //获取文件信息
     public static final String URL_DOWNLOAD_FILE = Config.URL_BASE2 + "/appFileUploadController/download";
     public static final String URL_REPORT_DELETE_FILE = Config.URL_BASE2 + "/appFileUploadController/delFilePathById";
+    public static final String URL_REPORT_DELETE = Config.URL_BASE +"/appDKSH/deleteDaily";     //日报删除
     //POST
     public static final String URL_GET_ACCESS_TOKEN = Config.URL_BASE + "/appLogin/appLogin";
 }

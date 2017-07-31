@@ -19,9 +19,11 @@
             android:text="@string/report_id" />
 
         <EditText
+            android:id="@+id/edt_report_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
+            android:textSize="12sp"
             android:theme="@style/MyText" />
 
         <TextView
@@ -50,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                android:textSize="12sp"
                 android:theme="@style/MyText" />
         </RelativeLayout>
 
@@ -74,20 +77,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="4">
 
-            <ImageView
-                android:id="@+id/img_car_id"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@+id/edt_car_id"
-                android:layout_alignRight="@+id/edt_car_id"
-                android:layout_marginBottom="10dp"
-                android:src="@mipmap/down" />
+            <!--<ImageView-->
+                <!--android:id="@+id/img_car_id"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_alignBottom="@+id/edt_car_id"-->
+                <!--android:layout_alignRight="@+id/edt_car_id"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:src="@mipmap/down" />-->
 
             <EditText
                 android:id="@+id/edt_car_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
+                android:textSize="12sp"
                 android:theme="@style/MyText" />
         </RelativeLayout>
 
@@ -116,7 +119,11 @@
                 android:id="@+id/edt_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:focusable="false"
+                android:textSize="12sp"
                 android:theme="@style/MyText" />
         </RelativeLayout>
     </LinearLayout>

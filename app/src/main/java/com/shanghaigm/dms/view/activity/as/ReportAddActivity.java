@@ -24,11 +24,13 @@ import android.widget.TextView;
 
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.util.ContentUriUtil;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailInfoFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportInfoFragment;
+import com.shanghaigm.dms.view.fragment.as.ReportSubFragment;
 import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
 
 import java.io.File;
@@ -70,9 +72,30 @@ public class ReportAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_add);
+        initIntent();
         initView();
         initData();
         setUpView();
+    }
+
+    private void initIntent() {
+        Bundle b = getIntent().getExtras();
+        String s = "";
+        if(b!=null){
+            s = b.getString(ReportSubFragment.FILE_DATA_CLEAR);
+        }
+        if(s.equals("clear")){
+            uris.clear();
+            uris2.clear();
+            uris3.clear();
+            uris4.clear();
+            cpPaths.clear();
+            cpPaths2.clear();
+            cpPaths3.clear();
+            cpPaths4.clear();
+            ReportAttachSubFragment f = new ReportAttachSubFragment();
+            f.clear();
+        }
     }
 
     private void initData() {
@@ -142,6 +165,8 @@ public class ReportAddActivity extends AppCompatActivity {
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
         app = DmsApplication.getInstance();
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
