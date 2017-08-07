@@ -39,6 +39,8 @@ import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
+import com.shanghaigm.dms.view.fragment.ck.ChangeLetterSubFragment;
+import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 
 import org.json.JSONArray;
@@ -77,6 +79,7 @@ public class PaperInfo extends BasePaperInfo {
     private String car_sign;
     private String daily_code;
     private int daily_id;
+    private int letter_id;
 
     private Context context;
     private ChangeLetterDetailInfo changeLetterDetailInfo;
@@ -134,13 +137,15 @@ public class PaperInfo extends BasePaperInfo {
     }
 
     //更改函提交
-    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo) {
+    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id,int orderId) {
         super(name);
         this.state = state;
         this.contract_id = contract_id;
         this.change_letter_number = change_letter_number;
         this.context = context;
         this.flag = flag;
+        this.letter_id = letter_id;
+        this.orderId = orderId;
         this.changeLetterSubDetailInfo = changeLetterSubDetailInfo;
         dialog = new LoadingDialog(this.context, "正在加载");
     }
@@ -183,7 +188,6 @@ public class PaperInfo extends BasePaperInfo {
 
     //提交进入修改界面
     public void onImageViewClick(final View view) {
-
         if (flag == 5) {
             switch (state) {
                 case "1":
@@ -193,7 +197,6 @@ public class PaperInfo extends BasePaperInfo {
                     params.put("loginName", app.getAccount());
                     params.put("jobCode", app.getJobCode());
                     params.put("order_id", orderId);
-                    Log.i(TAG, "onImgClick: " + app.getAccount() + "  " + app.getJobCode() + "  " + orderId);
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ORDER_DETAIL_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object responseObj) {
@@ -232,6 +235,9 @@ public class PaperInfo extends BasePaperInfo {
             }
         }
         if (flag == 6) {
+            Map<String,Object> params = new HashMap<>();
+
+
             app.setChangeLetterSubDetailInfo(changeLetterSubDetailInfo);
             Intent intent = new Intent(view.getContext(), ChangeLetterModifyActivity.class);
             view.getContext().startActivity(intent);
@@ -321,7 +327,6 @@ public class PaperInfo extends BasePaperInfo {
                     @Override
                     public void onSuccess(Object responseObj) {
                         JSONObject object = (JSONObject) responseObj;
-                        Log.i(TAG, "onSuccess: " + responseObj.toString());
                         try {
                             reportCount++;
                             JSONObject resultEntity = object.getJSONObject("resultEntity");
@@ -334,7 +339,6 @@ public class PaperInfo extends BasePaperInfo {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onFailure(Object reasonObj) {
 
@@ -448,7 +452,7 @@ public class PaperInfo extends BasePaperInfo {
                     params.put("daily_id", daily_id);
                     dialog.showLoadingDlg();
 
-                    OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
+                    OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object responseObj) {
                             JSONObject object = (JSONObject) responseObj;
@@ -478,81 +482,59 @@ public class PaperInfo extends BasePaperInfo {
                     getPaths(20, view);
                 }
                 break;
-//                Map<String, Object> params2 = new HashMap<>();
-//                params2.put("id", daily_id);
-//                params2.put("type", "15");
-////                params2.put("isById",daily_id);
-//                params2.put("loginRole", app.getJobCode());
-//                params2.put("loginName", app.getAccount());
-//                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
-//                    /**
-//                     * @param responseObj
-//                     */
-//                    @Override
-//                    public void onSuccess(Object responseObj) {
-//                        Log.i(TAG, "onSuccess:file_info " + responseObj.toString());
-//                        JSONObject obj = (JSONObject) responseObj;
-//                        try {
-//                            final JSONArray resultArray = obj.getJSONArray("result");
-//                            if (resultArray.length() > 0) {
-//                                for (int i = 0; i < resultArray.length(); i++) {
-//                                    final JSONObject fileObj = resultArray.getJSONObject(i);
-//                                    final String file_name = fileObj.getString("file_name");
-//                                    final String cp_file_path = fileObj.getString("compress_path");
-//                                    final String file_path = fileObj.getString("upload_path");
-//                                    //整体信息添加
-//                                    Log.i(TAG, "onSuccess: path " + file_path.toString() + " pathsize " + pathInfos.size());
-//                                    //作用：拼接Url
-//                                    final Map<String, String> params3 = new HashMap<String, String>();
-//                                    params3.put("fileNames", file_name);
-//                                    params3.put("fileId", cp_file_path);
-//                                    Log.i(TAG, "onSuccess: cp_file_path     " + cp_file_path);
-//                                    new Thread(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            //把压缩图片下载到本地并传回地址
-//                                            String s = HttpUpLoad.downloadFile(file_name, params3, Constant.URL_DOWNLOAD_FILE, "/report_cp");
-//                                            if (!s.equals("") && s != null) {
-//                                                dialog.dismissLoadingDlg();
-//                                                Log.i(TAG, "run:    " + s.toString());
-//                                                cpPaths.add(s);
-//                                                //s是处理后压缩文件在内存中的路径
-//                                                //file_path是原文件下载路径
-//                                                pathInfos.add(new PathInfo(15, file_path, s, file_name));
-//                                                //路径是内存路径
-//                                                if (pathInfos.size() == resultArray.length()) {   //下载完毕
-//                                                    reportCount++;
-//                                                    allPaths.add(pathInfos);
-//                                                    if (reportCount == 2) {
-//                                                        dialog.dismissLoadingDlg();
-//                                                        goToReportDetail(view, allPaths);
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                    }).start();
-//                                }
-//                            } else {
-//                                reportCount++;
-//                                if (reportCount == 2) {
-//                                    dialog.dismissLoadingDlg();
-//                                    goToReportDetail(view, allPaths);
-//                                }
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Object reasonObj) {
-//
-//                    }
-//                });
-
         }
     }
 
+    public void OnDeleteOrderClick(final View v) {
+        if (state.equals("1") || state.equals("4")) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("order_id", orderId + "");
+            dialog.showLoadingDlg();
+            OkhttpRequestCenter.getCommonReportRequest(Constant.URL_ORDER_DELETE, params, new DisposeDataListener() {
+                @Override
+                public void onSuccess(Object responseObj) {
+                    dialog.dismissLoadingDlg();
+                    Log.i(TAG, "onSuccess: " + responseObj.toString());
+                    OrderSubFragment fragment = OrderSubFragment.getInstance();
+                    fragment.refresh();
+                }
+
+                @Override
+                public void onFailure(Object reasonObj) {
+
+                }
+            });
+        }
+    }
+
+    /**
+     * @param v
+     */
+    //删除更改函
+    public void OnDeleteChangeLetterClick(final View v) {
+        if (state.equals("1") || state.equals("4")) {
+            Map<String, Object> params = new HashMap<>();
+            Log.i(TAG, "OnDeleteChangeLetterClick: letter_id            " + letter_id);
+            params.put("letterIds", letter_id + "");
+            dialog.showLoadingDlg();
+            OkhttpRequestCenter.getCommonReportRequest(Constant.URL_DELETE_CHANGE_LETTER, params, new DisposeDataListener() {
+                @Override
+                public void onSuccess(Object responseObj) {
+                    dialog.dismissLoadingDlg();
+                    Log.i(TAG, "onSuccess:       " + responseObj.toString());
+                    ChangeLetterSubFragment fragment = ChangeLetterSubFragment.getInstance();
+                    fragment.refresh();
+                }
+
+                @Override
+                public void onFailure(Object reasonObj) {
+                    dialog.dismissLoadingDlg();
+                }
+            });
+        }
+    }
+
+    //report删除
     public void OnDeleteClick(final View view) {
         if (report_state != 2) {
             Map<String, Object> params = new HashMap<>();
@@ -610,7 +592,7 @@ public class PaperInfo extends BasePaperInfo {
 //                params2.put("isById",daily_id);
         params2.put("loginRole", app.getJobCode());
         params2.put("loginName", app.getAccount());
-        OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
+        OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
             /**
              * @param responseObj
              */
@@ -814,7 +796,6 @@ public class PaperInfo extends BasePaperInfo {
                 break;
         }
     }
-
     //未提交为红1,提交蓝，驳回黄
     @BindingAdapter("set_report_text_color")
     public static void setReportTableColor(TextView tv, int report_state) {

@@ -147,7 +147,7 @@ public class OrderDetailActivity extends BaseActivity {
                     params.put("flow_details_id", app.getFlow_detail_id());
                     params.put("examination_result", 1);
                     params.put("loginName", app.getAccount());
-                    params.put("jobCode",app.getJobCode());
+                    params.put("jobCode", app.getJobCode());
                     Log.i(TAG, "onClick:  flow_detail_id     " + app.getFlow_detail_id() + "    loginName   " + app.getAccount() + "    orderId     " + app.getOrderDetailInfoBean().resultEntity.order_id);
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ORDER_REVIEW, params), new DisposeDataHandle(new DisposeDataListener() {
@@ -162,6 +162,9 @@ public class OrderDetailActivity extends BaseActivity {
                                     Toast.makeText(OrderDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                                     returnBack.setEnabled(false);
                                     pass.setEnabled(false);
+                                    finish();
+//                                    OrderReviewFragment fragment = OrderReviewFragment.getInstance();
+//                                    fragment.refresh();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -186,7 +189,7 @@ public class OrderDetailActivity extends BaseActivity {
                         params.put("flow_details_id", app.getFlow_detail_id());
                         params.put("examination_result", 2);
                         params.put("loginName", app.getAccount());
-                        params.put("jobCode",app.getJobCode());
+                        params.put("jobCode", app.getJobCode());
                         Log.i(TAG, "onClick:  flow_detail_id     " + app.getFlow_detail_id() + "    loginName   " + app.getAccount() + "    orderId     " + app.getOrderDetailInfoBean().resultEntity.order_id);
                         dialog.showLoadingDlg();
                         CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ORDER_REVIEW, params), new DisposeDataHandle(new DisposeDataListener() {
@@ -201,6 +204,9 @@ public class OrderDetailActivity extends BaseActivity {
                                         Toast.makeText(OrderDetailActivity.this, "驳回成功", Toast.LENGTH_SHORT).show();
                                         returnBack.setEnabled(false);
                                         pass.setEnabled(false);
+                                        finish();
+                                        OrderReviewFragment fragment = OrderReviewFragment.getInstance();
+                                        fragment.refresh();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -209,7 +215,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                             @Override
                             public void onFailure(Object reasonObj) {
-                                Toast.makeText(OrderDetailActivity.this, "通过失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OrderDetailActivity.this, "驳回失败", Toast.LENGTH_SHORT).show();
                             }
                         }));
                     } else {
@@ -223,6 +229,5 @@ public class OrderDetailActivity extends BaseActivity {
             pass.setVisibility(View.GONE);
             returnBack.setVisibility(View.GONE);
         }
-
     }
 }

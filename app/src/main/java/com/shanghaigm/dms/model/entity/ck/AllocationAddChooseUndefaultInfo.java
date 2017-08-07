@@ -12,10 +12,15 @@ import java.io.Serializable;
 public class AllocationAddChooseUndefaultInfo extends BaseObservable implements Serializable {
     private String assembly;
     private String config_information;
-    private Double price;
+    private String entry_name;
+    private int isother;
+    private String supporting_id;
+    private int matching_id;
+    private Double price;     //cost_change
     private int num;
     private String remarks;
     private int standard_id;  //唯一性
+
     public AllocationAddChooseUndefaultInfo() {
     }
 
@@ -23,13 +28,15 @@ public class AllocationAddChooseUndefaultInfo extends BaseObservable implements 
         this.config_information = config_information;
     }
 
-    public AllocationAddChooseUndefaultInfo(String assembly, String config_information, Double price, int num, String remarks,int standard_id) {
+    public AllocationAddChooseUndefaultInfo(String assembly, String config_information, String entry_name, int isother, String supporting_id, int matching_id, Double price, int num, String remarks, int standard_id) {
         this.config_information = config_information;
         this.price = price;
         this.num = num;
         this.remarks = remarks;
         this.assembly = assembly;
         this.standard_id = standard_id;
+        this.entry_name = entry_name;
+        this.supporting_id = supporting_id;
     }
 
     public String getAssembly() {
@@ -80,5 +87,37 @@ public class AllocationAddChooseUndefaultInfo extends BaseObservable implements 
 
     public void setStandard_id(int standard_id) {
         this.standard_id = standard_id;
+    }
+
+    public String getEntry_name() {
+        return entry_name;
+    }
+
+    public void setEntry_name(String entry_name) {
+        this.entry_name = entry_name;
+    }
+
+    public int getIsother() {
+        return isother;
+    }
+
+    public void setIsother(int isother) {
+        this.isother = isother;
+    }
+
+    public String getSupporting_id() {
+        return supporting_id;
+    }
+
+    public void setSupporting_id(String supporting_id) {
+        this.supporting_id = supporting_id;
+    }
+
+    public int getMatching_id() {
+        return matching_id;
+    }
+
+    public void setMatching_id(int matching_id) {
+        this.matching_id = matching_id;
     }
 }

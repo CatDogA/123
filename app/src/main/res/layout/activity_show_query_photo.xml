@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/mainColorGD"
     tools:context="com.shanghaigm.dms.view.activity.as.ShowQueryPhotoActivity">
+    <include layout="@layout/include_title_bar"/>
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"

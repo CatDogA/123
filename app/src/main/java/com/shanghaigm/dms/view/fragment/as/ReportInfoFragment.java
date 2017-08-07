@@ -431,7 +431,6 @@ public class ReportInfoFragment extends BaseFragment {
                 new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
-//                        edt.setText(year + "-" + month + "-" + day);
                         mYear[0] = year;
                         mMonth[0] = month;
                         mDay[0] = day;

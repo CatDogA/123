@@ -1,5 +1,6 @@
 package com.shanghaigm.dms.view.fragment.as;
 
+import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -35,6 +37,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +72,8 @@ public class ReportUpdateInfoFragment extends BaseFragment {
 
 
     private void setUpView() {
+        pickDate(edt_factory_date);
+        pickDate(edt_license_date);
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +82,7 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                         JSONArray a = new JSONArray();
                         subObj.put("state", 2);
                         a.put(subObj);
-                        Map<String,Object> map = new HashMap<>();
+                        Map<String, Object> map = new HashMap<>();
                         map.put("dailyStr", a.toString());
                         map.put("loginName", app.getAccount());
                         dialog.showLoadingDlg();
@@ -412,6 +417,32 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                 }
                 MmPopupWindow pop_dutys = new MmPopupWindow(getActivity(), edt_rc, list_duty, 4);
                 pop_dutys.showPopup(edt_rc);
+            }
+        });
+    }
+
+    private void pickDate(final EditText edt) {
+        final int[] mYear = {0};
+        final int[] mMonth = {0};
+        final int[] mDay = {0};
+        final Calendar calendar = Calendar.getInstance();
+        edt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+//                        edt.setText(year + "-" + month + "-" + day);
+                        mYear[0] = year;
+                        mMonth[0] = month;
+                        mDay[0] = day;
+                        edt.setText(new StringBuilder().append(mYear[0]).append("-")
+                                .append((mMonth[0] + 1) < 10 ? "0" + (mMonth[0] + 1) : (mMonth[0] + 1))
+                                .append("-")
+                                .append((mDay[0] < 10) ? "0" + mDay[0] : mDay[0]));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
     }

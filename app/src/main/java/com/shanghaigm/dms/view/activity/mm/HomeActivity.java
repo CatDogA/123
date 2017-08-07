@@ -27,6 +27,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         initView();
         showHome();
     }
+
     private void showHome() {
         text_home.setSelected(true);
         //添加默认显示的frgment
@@ -73,7 +74,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 hideFragment(mHomeFragment,fragmentTransaction);
                 hideFragment(mChangeBillReviewFragment,fragmentTransaction);
                 if(mOrderFragment == null){
-                    mOrderFragment = new OrderReviewFragment();
+                    mOrderFragment = OrderReviewFragment.getInstance();
                     //隐藏其他两个fragment
                     fragmentTransaction.add(R.id.layout_content,mOrderFragment);
                 }else{

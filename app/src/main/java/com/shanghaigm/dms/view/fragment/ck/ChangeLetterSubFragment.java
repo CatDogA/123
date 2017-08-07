@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeLetterSubFragment extends BaseFragment {
+    private static ChangeLetterSubFragment fragment;
     private EditText contractIdEdt, stateSelectEdt, changeLetterIdEdt, customerEdt;
     private TextView title;
     private RelativeLayout rl_back, rl_end;
@@ -57,7 +58,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
 
     private TablePagerAdapter pagerAdapter;
     private static String TAG = "OrderReviewFragment";
-    private LoadingDialog dialog;
+    public static LoadingDialog dialog;
     private int pages = 0;//页数
     private int page = 1;//第几页
     private DmsApplication app;
@@ -82,7 +83,6 @@ public class ChangeLetterSubFragment extends BaseFragment {
         initView(v);
         setUpView();
         return v;
-
     }
 
     private void setUpView() {
@@ -93,12 +93,10 @@ public class ChangeLetterSubFragment extends BaseFragment {
                 getActivity().finish();
             }
         });
-
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
+                app.endApp();
             }
         });
         vpLeft.setOnClickListener(new View.OnClickListener() {
@@ -196,15 +194,33 @@ public class ChangeLetterSubFragment extends BaseFragment {
         });
     }
 
+    public void refresh() {
+        IsQuery = true;
+        IsMore = true;
+        page = 1;
+        requestOrderInfo(IsQuery);
+    }
+
+    /**
+     * @param isQuery
+     */
     //查询
     private void requestOrderInfo(Boolean isQuery) {
         dialog.showLoadingDlg();
-        String stateText = stateSelectEdt.getText().toString();
-        String customerText = customerEdt.getText().toString();
-        String contractId = contractIdEdt.getText().toString();
-        String changeLetterId = changeLetterIdEdt.getText().toString();
+        String stateText = "";
+        String contractId = "";
+        String changeLetterId = "";
+        String customerText = "";
+        if (stateSelectEdt != null) {
+            stateText = stateSelectEdt.getText().toString();
+        }
+        if (customerEdt != null) {
+            stateText = customerEdt.getText().toString();
+        }
+        if (changeLetterIdEdt != null) {
+            stateText = changeLetterIdEdt.getText().toString();
+        }
         Object stateId = null;
-
         if (!stateText.equals("")) {
             stateId = getParam(stateArray, stateText, "date_value", "date_key");
         } else {
@@ -215,7 +231,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         try {
             paramObject.put("contract_id", contractId);
             paramObject.put("customer_name", customerText);
-            paramObject.put("include_change_letter_title", changeLetterId);
+//            paramObject.put("letter_id", changeLetterId);
             paramObject.put("state", stateId);
             paramArray.put(paramObject);
 
@@ -223,7 +239,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
             e.printStackTrace();
         }
         RequestParams params = new RequestParams();
-        params.put("cls", paramArray.toString());
+//        params.put("cls", paramArray.toString());
         params.put("page", page + "");
         params.put("rows", "8");
         params.put("loginName", app.getAccount());
@@ -232,32 +248,37 @@ public class ChangeLetterSubFragment extends BaseFragment {
         CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_QUREY_CHANGE_LETTER_SUB_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
+                //            //合同号
+//
                 Log.i("luo", "onSuccess: " + responseObj.toString());
                 dialog.dismissLoadingDlg();
-                ChangeLetterSubDetailBean info = GsonUtil.GsonToBean(responseObj.toString(), ChangeLetterSubDetailBean.class);
-                Log.i(TAG, "onSuccess: " + info);
-                List<ChangeLetterSubDetailBean.ResultEntity.OrderInfo> rows = info.resultEntity.rows;
-                int total = info.resultEntity.total;
-                if (total == 0) {
+                JSONObject result = (JSONObject) responseObj;
+                ArrayList<PaperInfo> paperInfos = new ArrayList<PaperInfo>();
+                try {
+                    JSONObject resultEntity = result.getJSONObject("resultEntity");
+                    JSONArray rows = resultEntity.getJSONArray("rows");
+                    int total = resultEntity.getInt("total");
                     if (total == 0) {
                         Toast.makeText(getActivity(), "没有数据", Toast.LENGTH_SHORT).show();
                     }
-                }
-                if (total % 8 == 0) {
-                    pages = total / 8;
-                } else {
-                    pages = total / 8 + 1;
-                }
-                ArrayList<PaperInfo> paperInfos = new ArrayList<>();
-                for (int i = 0; i < rows.size(); i++) {
-                    ChangeLetterSubDetailBean.ResultEntity.OrderInfo orderInfo = rows.get(i);
-                    String customerName = orderInfo.customer_name;
-                    String orderNumber = orderInfo.order_number;
-                    String state = orderInfo.state;
-                    String contract_id = orderInfo.contract_id;
-                    String change_letter_number = orderInfo.change_letter_number;
-                    ChangeLetterSubDetailInfo changeLetterSubDetailInfo = new ChangeLetterSubDetailInfo(orderInfo);
-                    paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo));
+                    if (total % 8 == 0) {
+                        pages = total / 8;
+                    } else {
+                        pages = total / 8 + 1;
+                    }
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject item = rows.getJSONObject(i);
+                        String customerName = item.getString("customer_name");
+                        String orderNumber = item.getString("order_number");
+                        String state = item.getInt("state") + "";
+                        String contract_id = item.getString("contract_id");
+                        int order_id = item.getInt("order_id");
+                        String change_letter_number = item.getString("change_letter_number");
+                        ChangeLetterSubDetailInfo changeLetterSubDetailInfo = new ChangeLetterSubDetailInfo(item);
+                        paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo, item.getInt("letter_id"),order_id));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 ReviewTable table = new ReviewTable(getActivity(), paperInfos, 6);
                 table.setLayoutParams(lp);
@@ -351,5 +372,12 @@ public class ChangeLetterSubFragment extends BaseFragment {
 
         rl_back = (RelativeLayout) v.findViewById(R.id.rl_back);
         rl_end = (RelativeLayout) v.findViewById(R.id.rl_out);
+    }
+
+    public static ChangeLetterSubFragment getInstance() {
+        if (fragment == null) {
+            fragment = new ChangeLetterSubFragment();
+        }
+        return fragment;
     }
 }

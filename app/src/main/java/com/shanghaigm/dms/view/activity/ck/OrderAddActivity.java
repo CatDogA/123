@@ -21,9 +21,11 @@ import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddBaseFragment;
@@ -34,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OrderAddActivity extends AppCompatActivity {
     private static String TAG = "OrderAddActivity";
@@ -46,15 +50,19 @@ public class OrderAddActivity extends AppCompatActivity {
     private LoadingDialog dialog;
     private DmsApplication app;
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> assemblyList;   //所有修改后的配置信息
-    private ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList;   //所有原始选配信息
-    private ArrayList<OrderDetailInfoAllocation> allUndefaultAssemblyList;           //所有选配信息
+    private ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList;   //所有原始选配信息(无用)
+    private ArrayList<OrderDetailInfoAllocation> singleAllocationList;      //仅代表目前所在的配置项
+
     private ArrayList<OrderDetailInfoAllocation> customAddList;             //自定义信息
-    private ArrayList<OrderDetailInfoAllocation> singleAllocationList;
+    public static ArrayList<OrderDetailInfoAllocation> originList;        //所有原始信息
+    public static ArrayList<AllocationAddChooseUndefaultInfo> undefaultInfos;  //所有选配信息
+    public static OrderDetailInfoTwo addPayInfo;     //第二页
+
     private ArrayList<String> assemblyNames;
     private OrderDetailInfoOne addBaseInfo = null;
-    private OrderDetailInfoTwo addPayInfo = null;
     private int modelId, customer_code;
-    private String companyName, orderNumber;
+    private String companyName, orderNumber, sex1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +102,23 @@ public class OrderAddActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (singleAllocationList != null) {
-                    Log.i(TAG, "onClick:singleAllocationList        " + singleAllocationList.size());
-                } else {
-                    Log.i(TAG, "onClick: " + "不懂");
-                }
+                ((OrderAddBaseFragment) fragments.get(0)).getInfoOne(new OrderAddBaseFragment.CallOrderInfoOne() {
+                    @Override
+                    public void getOrderInfoOne(OrderDetailInfoOne infoOne, int model_Id, String company_name, int customerCode, String sex) {
+                        addBaseInfo = infoOne;
+                        modelId = model_Id;
+                        companyName = company_name;
+                        customer_code = customerCode;
+                        sex1 = sex;
+                    }
+                });
+                ((OrderAddPayFragment) fragments.get(1)).getOrderInfoTwo(new OrderAddPayFragment.CallOrderInfoTwo() {
+                    @Override
+                    public void getInfoTwo(OrderDetailInfoTwo orderInfoTwo) {
+                        addPayInfo = orderInfoTwo;
+                    }
+                });
+
                 RequestParams params = new RequestParams();
                 params.put("loginName", app.getAccount());
                 dialog.showLoadingDlg();
@@ -106,11 +126,11 @@ public class OrderAddActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Object responseObj) {
                         dialog.dismissLoadingDlg();
-//                        Log.i(TAG, "onSuccess: " + responseObj.toString());
                         JSONObject object = (JSONObject) responseObj;
                         try {
                             JSONObject resultEntity = object.getJSONObject("resultEntity");
                             orderNumber = resultEntity.getString("order_number");
+                            addOrder();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -122,118 +142,8 @@ public class OrderAddActivity extends AppCompatActivity {
                         Log.i(TAG, "onFailure: " + reasonObj.toString());
                     }
                 }));
-                ((OrderAddBaseFragment) fragments.get(0)).getInfoOne(new OrderAddBaseFragment.CallOrderInfoOne() {
 
-                    @Override
-                    public void getOrderInfoOne(OrderDetailInfoOne infoOne, int model_Id, String company_name, int customerCode) {
-                        addBaseInfo = infoOne;
-                        modelId = model_Id;
-                        companyName = company_name;
-                        customer_code = customerCode;
-                    }
-                });
-                ((OrderAddPayFragment) fragments.get(1)).getOrderInfoTwo(new OrderAddPayFragment.CallOrderInfoTwo() {
-                    @Override
-                    public void getInfoTwo(OrderDetailInfoTwo orderInfoTwo) {
-                        Log.i(TAG, "getInfoTwo: " + orderInfoTwo.getPayment_method());
-                        addPayInfo = orderInfoTwo;
-                    }
-                });
 
-                //前两页信息   order
-                JSONObject paramObject = new JSONObject();
-                JSONArray paramArray = new JSONArray();
-                JSONArray allocations = new JSONArray();    //全部配置信息
-                try {
-                    paramObject.put("company_name", companyName);
-                    paramObject.put("order_number", orderNumber);
-                    paramObject.put("customer_name", addBaseInfo.getCustomer_name());
-                    paramObject.put("mobile_phone", addBaseInfo.getMobile_phone());
-                    paramObject.put("terminal_customer_name", addBaseInfo.getTerminal_customer_name());
-                    paramObject.put("terminal_customer_tel", addBaseInfo.getTerminal_customer_tel());
-                    paramObject.put("terminal_customer_address", addBaseInfo.getTerminal_customer_address());
-                    paramObject.put("number", addBaseInfo.getNumber());
-                    paramObject.put("freight", addPayInfo.getFreight());
-                    paramObject.put("battery_system", addBaseInfo.getBattery_system());
-                    paramObject.put("delivery_time", addPayInfo.getDelivery_time());
-                    paramObject.put("endurance_mileage", addBaseInfo.getEndurance_mileage());
-                    paramObject.put("ekg", addBaseInfo.getEkg());
-                    paramObject.put("licensing_addeess", addBaseInfo.getLicensing_addeess());
-                    paramObject.put("payment_method_remarks", addPayInfo.getPayment_method_remarks());
-                    paramObject.put("service_fee", addPayInfo.getService_fee());
-                    paramObject.put("contract_price", addPayInfo.getContract_price());
-                    paramObject.put("carriage", addPayInfo.getCarriage());
-                    paramObject.put("invoice_amount", addPayInfo.getInvoice_amount());
-                    paramObject.put("billing_requirements", addPayInfo.getBilling_requirements());
-                    paramObject.put("province", addBaseInfo.getProvince());
-                    paramObject.put("city", addBaseInfo.getCity());
-                    paramObject.put("county", addBaseInfo.getCounty());
-                    paramObject.put("models_Id", modelId);
-                    if (addBaseInfo.getColor_determine() != null) {
-                        paramObject.put("color_determine", getColorDeterMine(addBaseInfo.getColor_determine()));
-                    }
-                    if (addPayInfo.getPayment_method() != null) {
-                        paramObject.put("payment_method", getPayMethod(addPayInfo.getPayment_method()));
-                    }
-//                    paramObject.put("order_id", "");
-                    paramObject.put("customer_code", customer_code);
-                    paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
-                    paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
-                    paramArray.put(paramObject);
-
-                    //第三页信息    standardVo
-                    //1.取出整体信息
-                    ArrayList<OrderDetailInfoAllocation> listToPost = new ArrayList<>();
-                    if (originalList != null) {
-                        for (ArrayList<OrderDetailInfoAllocation> originList : originalList) {
-                            Log.i(TAG, "onClick: originList     " + originList.size());
-                            for (int i = 0; i < originList.size(); i++) {
-                                listToPost.add(originList.get(i));
-                            }
-                        }
-                    }
-                    //2.获取要添加作为matching属性的信息
-                    ArrayList<OrderDetailInfoAllocation> listForChange = new ArrayList<OrderDetailInfoAllocation>();
-                    for (OrderDetailInfoAllocation changeInfo : singleAllocationList) {
-                        if (!changeInfo.getNum().equals("")) {
-                            if (Integer.parseInt(changeInfo.getNum()) > 0) ;
-                            listForChange.add(changeInfo);
-                        }
-                    }
-
-                    for(int i=0;i<listToPost.size();i++){
-                        for(int j=0;j<listForChange.size();j++){
-                            if(listToPost.get(i).getStandard_id()==listForChange.get(j).getStandard_id()){
-//                                listToPost.get(i).setMatching
-                            }
-                        }
-                    }
-
-                    Log.i(TAG, "onClick: listForChange  " + listForChange.size() + "    listToPost  " + listToPost.size());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                //提交请求
-                RequestParams requestParams = new RequestParams();
-                requestParams.put("order", paramObject.toString());
-                if (allocations != null) {
-                    requestParams.put("standardVo", allocations.toString());
-                    requestParams.put("matching", "");
-                    requestParams.put("loginName", app.getAccount());
-//                    CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_ORDER_ADD, requestParams), new DisposeDataHandle(new DisposeDataListener() {
-//                        @Override
-//                        public void onSuccess(Object responseObj) {
-//                            Log.i(TAG, "onSuccess:          " + responseObj.toString());
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Object reasonObj) {
-//                            Log.i(TAG, "onFailure:          " + reasonObj.toString());
-//                            Toast.makeText(OrderAddActivity.this, "", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }));
-                }
             }
         });
         titleText.setText(String.format(getString(R.string.ck_order_add)));
@@ -241,7 +151,6 @@ public class OrderAddActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int index = Integer.parseInt(tab.getTag().toString());
-
                 if (!fragments.get(index).isAdded()) {
                     manager.beginTransaction().add(R.id.mm_order_add_fragment_content, fragments.get(index)).commit();
                 } else {
@@ -260,6 +169,158 @@ public class OrderAddActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addOrder() {
+        if (orderNumber != null) {
+            //前两页信息   order
+            JSONObject paramObject = new JSONObject();
+            JSONArray paramArray = new JSONArray();
+            try {
+                paramObject.put("company_name", companyName);
+                paramObject.put("order_number", orderNumber);
+                paramObject.put("customer_name", addBaseInfo.getCustomer_name());
+                paramObject.put("mobile_phone", addBaseInfo.getMobile_phone());
+                paramObject.put("terminal_customer_name", addBaseInfo.getTerminal_customer_name());
+                paramObject.put("terminal_customer_tel", addBaseInfo.getTerminal_customer_tel());
+                paramObject.put("terminal_customer_address", addBaseInfo.getTerminal_customer_address());
+                paramObject.put("number", addBaseInfo.getNumber());
+                paramObject.put("freight", addPayInfo.getFreight());
+                paramObject.put("battery_system", addBaseInfo.getBattery_system());
+                paramObject.put("battery_number", addBaseInfo.getBattery_number());
+                paramObject.put("delivery_time", addPayInfo.getDelivery_time());
+                paramObject.put("endurance_mileage", addBaseInfo.getEndurance_mileage());
+                paramObject.put("ekg", addBaseInfo.getEkg());
+                paramObject.put("licensing_addeess", addBaseInfo.getLicensing_addeess());
+                paramObject.put("payment_method_remarks", addPayInfo.getPayment_method_remarks());
+                paramObject.put("service_fee", addPayInfo.getService_fee());
+                paramObject.put("contract_price", addPayInfo.getContract_price());
+                paramObject.put("carriage", addPayInfo.getCarriage());
+                paramObject.put("invoice_amount", addPayInfo.getInvoice_amount());
+                paramObject.put("billing_requirements", addPayInfo.getBilling_requirements());
+                paramObject.put("province", OrderAddBaseFragment.provinceId);
+                paramObject.put("city", OrderAddBaseFragment.cityId);
+                paramObject.put("county", OrderAddBaseFragment.countyId);
+                paramObject.put("models_Id", modelId);
+                if (addBaseInfo.getColor_determine() != null) {
+                    paramObject.put("color_determine", getColorDeterMine(addBaseInfo.getColor_determine()));
+                } else {
+                    paramObject.put("color_determine", "");
+                }
+                if (addPayInfo.getPayment_method() != null) {
+                    paramObject.put("payment_method", getPayMethod(addPayInfo.getPayment_method()));
+                } else {
+                    paramObject.put("payment_method", "");
+                }
+                paramObject.put("order_id", "");
+                paramObject.put("customer_code", customer_code);
+                paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
+                paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
+                paramObject.put("address", OrderAddBaseFragment.address);
+                paramArray.put(paramObject);
+
+                //第三页信息    standardVo
+                //1.取出整体信息
+                //不改变，直接上传
+                JSONObject allocationObject;
+                JSONArray allocationArray = new JSONArray();
+                for (OrderDetailInfoAllocation info : originList) {
+                    allocationObject = new JSONObject();
+                    allocationObject.put("assembly", info.getAssembly());
+                    allocationObject.put("entry_name", info.getEntry_name());
+                    allocationObject.put("standard_information", info.getConfig_information());
+                    Double cost_change = 0.0;
+                    if (!info.getCost_change().equals("")) {
+                        cost_change = Double.parseDouble(info.getCost_change());
+                    }
+                    allocationObject.put("cost_change", cost_change);
+                    int supporting_id = 0;
+                    if (isNumeric(info.getSupporting_id()) && !info.getSupporting_id().equals("")) {
+                        supporting_id = Integer.parseInt(info.getSupporting_id());
+                    }
+                    allocationObject.put("supporting_id", supporting_id);
+                    JSONArray array = new JSONArray();
+                    if (undefaultInfos != null && undefaultInfos.size() > 0) {
+                        for (AllocationAddChooseUndefaultInfo info2 : undefaultInfos) {
+                            if (info2.getStandard_id() == info.getStandard_id()) {
+                                JSONObject obj = new JSONObject();
+                                obj.put("assembly", info2.getAssembly());
+                                obj.put("entry_name", info2.getEntry_name());
+                                obj.put("config_information", info2.getConfig_information());
+                                obj.put("num", info2.getNum() + "");
+                                obj.put("cost_change", info2.getPrice());
+                                obj.put("remarks", info2.getRemarks());
+                                obj.put("isother", 1);
+                                obj.put("matching_id", info2.getMatching_id() + "");
+                                int supporting_id2 = 0;
+                                if (isNumeric(info2.getSupporting_id()) && !info2.getSupporting_id().equals("")) {
+                                    supporting_id2 = Integer.parseInt(info2.getSupporting_id());
+                                }
+                                obj.put("supporting_id", supporting_id2);
+                                array.put(obj);
+                            }
+                        }
+                    }
+                    allocationObject.put("matching", array);
+                    allocationArray.put(allocationObject);
+                }
+                Log.i(TAG, "onClick:singleAllocationList     " + singleAllocationList.size());
+                //2.获取要添加作为matching属性的信息
+                ArrayList<OrderDetailInfoAllocation> listForChange = new ArrayList<OrderDetailInfoAllocation>();
+                for (OrderDetailInfoAllocation changeInfo : singleAllocationList) {
+                    if (!changeInfo.getNum().equals("")) {
+                        if (Integer.parseInt(changeInfo.getNum()) > 0) ;
+                        listForChange.add(changeInfo);
+                    }
+                }
+                Log.i(TAG, "onClick:allocationArray      " + allocationArray.toString());
+                Log.i(TAG, "onClick:        " + paramArray.toString());
+                //自定义
+                JSONArray customerArray = new JSONArray();
+                JSONObject customerObject = new JSONObject();
+                for (OrderDetailInfoAllocation info : customAddList) {
+                    customerObject.put("assembly", info.getAssembly());
+                    customerObject.put("entry_name", info.getEntry_name());
+                    customerObject.put("config_information", info.getConfig_information());
+                    customerObject.put("num", info.getNum());
+                    customerObject.put("cost_change", 100.0);
+                    customerObject.put("remarks", info.getRemarks());
+                    customerObject.put("supporting_id", 0);
+                    customerObject.put("isother", 0);
+                    customerArray.put(customerObject);
+                }
+                Log.i(TAG, "addOrder:customerArray           " + customerArray.toString());
+                //提交请求
+                final Map<String, Object> requestParams = new HashMap<>();
+                requestParams.put("order", paramArray.toString());
+//                requestParams.put("standardVo", allocationArray.toString());
+//                    requestParams.put("matching", customerArray.toString());
+                requestParams.put("loginName", app.getAccount());
+                OkhttpRequestCenter.getCommonPostRequest(Constant.URL_ORDER_ADD, requestParams, new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        Log.i(TAG, "onSuccess:responseObj        " + responseObj.toString());
+                    }
+
+                    @Override
+                    public void onFailure(Object reasonObj) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //自增信息
+        }
+    }
+
+    private boolean isNumeric(String str) {
+        for (int i = str.length(); --i >= 0; ) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private String getPayMethod(String payMethod) {
@@ -295,11 +356,18 @@ public class OrderAddActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        //进入即清空
+        assemblyNames = new ArrayList<>();
         customAddList = new ArrayList<>();
-        customAddList.add(new OrderDetailInfoAllocation());
-
+//        customAddList.add(new OrderDetailInfoAllocation("", "", "", "", "", "", "", "", 0, null, 0));
         singleAllocationList = new ArrayList<>();
-
+        addPayInfo = new OrderDetailInfoTwo("", "", "", "", "", "", "", "", "");
+        if (originList != null) {
+            originList.clear();
+        }
+        if (undefaultInfos != null) {
+            undefaultInfos.clear();
+        }
         tabLayout.setSelectedTabIndicatorColor(Color.GRAY);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
@@ -348,14 +416,6 @@ public class OrderAddActivity extends AppCompatActivity {
 
     public void setOriginalList(ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList) {
         this.originalList = originalList;
-    }
-
-    public ArrayList<OrderDetailInfoAllocation> getAllUndefaultAssemblyList() {
-        return allUndefaultAssemblyList;
-    }
-
-    public void setAllUndefaultAssemblyList(ArrayList<OrderDetailInfoAllocation> allUndefaultAssemblyList) {
-        this.allUndefaultAssemblyList = allUndefaultAssemblyList;
     }
 
     public ArrayList<OrderDetailInfoAllocation> getSingleAllocationList() {

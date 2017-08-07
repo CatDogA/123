@@ -13,13 +13,14 @@ import android.widget.Toast;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
+import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 
 import java.util.ArrayList;
 
 public class OrderAddPayFragment extends BaseFragment {
-    private OrderDetailInfoTwo orderDetailInfoTwo = new OrderDetailInfoTwo();
+    private OrderDetailInfoTwo orderDetailInfoTwo = OrderAddActivity.addPayInfo;
     private EditText payment_method, payment_method_remarks, delivery_time, freight, service_fee, contract_price, carriage, invoice_amount, billing_requirements;
     private static OrderAddPayFragment orderAddPayFragment = null;
     private ImageView imgPayMethod;
@@ -52,7 +53,6 @@ public class OrderAddPayFragment extends BaseFragment {
 
     private void initView(View v) {
         imgPayMethod = (ImageView) v.findViewById(R.id.img_pay_method);
-
         payment_method = (EditText) v.findViewById(R.id.payment_method);
         payment_method.addTextChangedListener(new TextOrderAddPaySwitcher(1));
         payment_method_remarks = (EditText) v.findViewById(R.id.payment_method_remarks);

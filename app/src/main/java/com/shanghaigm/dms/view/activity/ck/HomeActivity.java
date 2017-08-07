@@ -6,11 +6,14 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.ck.HomeFragment;
 import com.shanghaigm.dms.view.fragment.ck.ChangeLetterSubFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
+
+import io.realm.internal.TableView;
 
 /**
  * @function 创建首页所有的fragment，以及fragment
@@ -22,7 +25,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private OrderSubFragment mOrderFragment;
     private ChangeLetterSubFragment mModifyFragment;
 
-    private LinearLayout text_home,text_order,text_modify;
+    private LinearLayout text_home, text_order, text_modify;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mHomeFragment = new HomeFragment();
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.layout_content,mHomeFragment);
+        fragmentTransaction.replace(R.id.layout_content, mHomeFragment);
         fragmentTransaction.commit();
     }
 
@@ -52,25 +56,26 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         text_modify.setOnClickListener(this);
     }
 
-    private void hideFragment(Fragment fragment, FragmentTransaction ft){
-        if(fragment != null){
+    private void hideFragment(Fragment fragment, FragmentTransaction ft) {
+        if (fragment != null) {
             ft.hide(fragment);
         }
     }
+
     @Override
     public void onClick(View v) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.home_tab_text:
                 setSelected();
                 text_home.setSelected(true);
-                hideFragment(mOrderFragment,fragmentTransaction);
-                hideFragment(mModifyFragment,fragmentTransaction);
-                if(mHomeFragment == null){
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mModifyFragment, fragmentTransaction);
+                if (mHomeFragment == null) {
                     mHomeFragment = new HomeFragment();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mHomeFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mHomeFragment);
+                } else {
                     fragmentTransaction.show(mHomeFragment);
                 }
                 break;
@@ -78,69 +83,75 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.order_tab_text:
                 setSelected();
                 text_order.setSelected(true);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                hideFragment(mModifyFragment,fragmentTransaction);
-                if(mOrderFragment == null){
-                    mOrderFragment = new OrderSubFragment();
+                hideFragment(mHomeFragment, fragmentTransaction);
+                hideFragment(mModifyFragment, fragmentTransaction);
+                if (mOrderFragment == null) {
+                    mOrderFragment = OrderSubFragment.getInstance();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mOrderFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                } else {
                     fragmentTransaction.show(mOrderFragment);
                 }
                 break;
             case R.id.modify_tab_text:
                 setSelected();
                 text_modify.setSelected(true);
-                hideFragment(mOrderFragment,fragmentTransaction);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                if(mModifyFragment == null){
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mHomeFragment, fragmentTransaction);
+                if (mModifyFragment == null) {
                     mModifyFragment = new ChangeLetterSubFragment();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mModifyFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mModifyFragment);
+                } else {
                     fragmentTransaction.show(mModifyFragment);
                 }
                 break;
         }
         fragmentTransaction.commit();
     }
+
     //重置所有文本的选中状态
-    private void setSelected(){
+    private void setSelected() {
         text_home.setSelected(false);
         text_order.setSelected(false);
         text_modify.setSelected(false);
     }
 
-    public void chooseFragment(int i){
+    public void chooseFragment(int i) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        switch (i){
+        switch (i) {
             case 1:
                 setSelected();
                 text_order.setSelected(true);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                hideFragment(mModifyFragment,fragmentTransaction);
-                if(mOrderFragment == null){
-                    mOrderFragment = new OrderSubFragment();
+                hideFragment(mHomeFragment, fragmentTransaction);
+                hideFragment(mModifyFragment, fragmentTransaction);
+                if (mOrderFragment == null) {
+                    mOrderFragment = OrderSubFragment.getInstance();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mOrderFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                } else {
                     fragmentTransaction.show(mOrderFragment);
                 }
                 break;
             case 2:
                 setSelected();
                 text_modify.setSelected(true);
-                hideFragment(mOrderFragment,fragmentTransaction);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                if(mModifyFragment == null){
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mHomeFragment, fragmentTransaction);
+                if (mModifyFragment == null) {
                     mModifyFragment = new ChangeLetterSubFragment();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mModifyFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mModifyFragment);
+                } else {
                     fragmentTransaction.show(mModifyFragment);
                 }
                 break;
         }
         fragmentTransaction.commit();
+    }
+
+    public static void refresh(){
+        ChangeLetterSubFragment f = ChangeLetterSubFragment.getInstance();
+        f.refresh();
     }
 }

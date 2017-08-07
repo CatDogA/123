@@ -49,9 +49,7 @@ public class OkHttpClient {
             }
         });
         okHttpClientBuilder.cookieJar(new CookiesManager());
-        Log.i("cookie", "static initializer: "+".....................................");
         //重写cookie方法
-
         okHttpClientBuilder.connectTimeout(TIME_OUT, TimeUnit.SECONDS);
         okHttpClientBuilder.readTimeout(TIME_OUT, TimeUnit.SECONDS);
         okHttpClientBuilder.writeTimeout(TIME_OUT, TimeUnit.SECONDS);

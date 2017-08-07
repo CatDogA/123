@@ -20,7 +20,7 @@ public class ChangeLetterSubDetailBean {
             public String change_letter_number;
             public String customer_name;
             public String order_number;
-            public String state;
+            public int state;
             public String contract_id;  //记得改过来。。。
             public String company_name;
             public String models_name;

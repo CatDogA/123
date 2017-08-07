@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="paper"
             type="com.shanghaigm.dms.model.entity.mm.PaperInfo" />
@@ -21,7 +22,6 @@
             android:background="@color/colorBlack" />
         <!--调用控制text颜色的方法-->
         <TextView
-            android:onClick="@{paper.onCkQueryOrderDetailClick}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -30,9 +30,9 @@
             android:layout_weight="5"
             android:gravity="center"
             android:lines="1"
+            android:onClick="@{paper.onCkQueryOrderDetailClick}"
             android:text="@{paper.number}"
-            app:set_text_color="@{paper.state}"
-            />
+            app:set_text_color="@{paper.state}" />
 
         <TextView
             android:layout_width="1dp"
@@ -70,12 +70,12 @@
             android:background="@color/colorBlack" />
 
         <LinearLayout
-            android:onClick="@{paper.onNoAccessClick}"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:onClick="@{paper.onNoAccessClick}"
+            android:orientation="horizontal">
             <!--mvvm利用构造传入的mipmap，从xml传入info，再set_img绑定的方法，把图片导入所在的imageview中，不知
             imageview是如何导入方法的-->
             <ImageView
@@ -85,12 +85,14 @@
                 android:onClick="@{paper.onImageViewClick}"
                 android:padding="2dp"
                 app:set_img_modify="@{paper.state}" />
+
             <ImageView
                 android:layout_width="20dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginStart="2dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:onClick="@{paper.OnDeleteOrderClick}"
                 android:padding="2dp"
                 app:set_img_delete="@{paper.state}" />
         </LinearLayout>

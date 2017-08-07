@@ -1,11 +1,18 @@
 package com.shanghaigm.dms.view.activity.common;
 
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,16 +30,20 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.common.LoginInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.model.util.SharedPreferencesUtil;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.activity.ck.HomeActivity;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
+import com.shanghaigm.dms.view.widget.VersionPopupWindow;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends BaseActivity {
     private static String TAG = "LoginActivity";
@@ -47,12 +58,12 @@ public class LoginActivity extends BaseActivity {
     private EditText roleEdt;
     private LoadingDialog dialog;
     private ArrayList<LoginInfo> loginInfos = new ArrayList<>();
-
+    private TextView version;
+    private View v;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         initView();
         setUpView();
         initData();
@@ -73,7 +84,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void setUpView() {
-
+        version.setText("版本号:   " + getVersion());
         edtAccount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,12 +140,32 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 2  * 获取版本号
+     * 3  * @return 当前应用的版本号
+     * 4
+     */
+    public String getVersion() {
+        String version = "";
+        int versionCode = 0;
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            version = info.versionName;
+            versionCode = info.versionCode;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return versionCode + "." + version;
+    }
     private void initView() {
         btnLogin = (Button) findViewById(R.id.login_button);
         edtAccount = (EditText) findViewById(R.id.name_edit);
         edtPassWord = (EditText) findViewById(R.id.pass_edit);
         roleEdt = (EditText) findViewById(R.id.role_edit);
+        version = (TextView) findViewById(R.id.version);
         dialog = new LoadingDialog(context, "正在加载");
+        isUpdate();
     }
 
     private void login(String roleCode) {
@@ -181,32 +212,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     /*
-    * 请求待办事项
-    * */
-    private void requestTasks() {
-        RequestParams params = new RequestParams();
-        params.put("loginName", app.getAccount());
-        params.put("jobCode", app.getJobCode());
-        CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_GET_HOME_DATA, params), new DisposeDataHandle(new DisposeDataListener() {
-            @Override
-            public void onSuccess(Object responseObj) {
-                Log.i("luo", "onSuccess: " + "task" + responseObj.toString());
-            }
-
-            @Override
-            public void onFailure(Object reasonObj) {
-                Log.i("luo", "onFailure: " + reasonObj.toString());
-            }
-        }));
-    }
-
-    /*
     *   获取accessToken，也就是是否可登录
     * */
     private void requestAccessToken() {
-        if(loginInfos.size()>1){
-            for(LoginInfo info:loginInfos){
-                if(roleEdt.getText().toString().equals(info.jobName)){
+        if (loginInfos.size() > 1) {
+            for (LoginInfo info : loginInfos) {
+                if (roleEdt.getText().toString().equals(info.jobName)) {
                     jobCode = info.jobCode;
                 }
             }
@@ -281,7 +292,7 @@ public class LoginActivity extends BaseActivity {
                         PopListInfo info = new PopListInfo(resutEntity.getJSONObject(i).getString("job_name"));
                         jobCodes.add(resutEntity.getJSONObject(i).getString("job_code"));
                         jobList.add(info);
-                        loginInfos.add(new LoginInfo(resutEntity.getJSONObject(i).getString("job_name"),resutEntity.getJSONObject(i).getString("job_code")));
+                        loginInfos.add(new LoginInfo(resutEntity.getJSONObject(i).getString("job_name"), resutEntity.getJSONObject(i).getString("job_code")));
                     }
                     if (flag == 1) {
                         if (jobList.size() == 1) {
@@ -313,5 +324,37 @@ public class LoginActivity extends BaseActivity {
     private void initPopWindow(ArrayList<PopListInfo> list) {
         jobListPop = new MmPopupWindow(this, roleEdt, list, 5);
         jobListPop.showPopup(roleEdt);
+    }
+    //判断是否更新
+    private Boolean isUpdate() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("field", "android_version");
+        OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_VERSION, params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                Log.i(TAG, "onSuccess:android_version   " + responseObj);
+                JSONObject result = (JSONObject) responseObj;
+                try {
+                    JSONArray resultEntity = result.getJSONArray("resultEntity");
+                    String version = resultEntity.getJSONObject(0).getString("date_value");
+                    if (getVersion().equals(version)) {
+                        Toast.makeText(LoginActivity.this, getText(R.string.latest_version), Toast.LENGTH_SHORT).show();
+                    } else {
+                        VersionPopupWindow pop = new VersionPopupWindow(LoginActivity.this);
+                        pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                        View layout = LayoutInflater.from(LoginActivity.this).inflate(R.layout.activity_login,null,false);
+                        pop.showPopup(layout,pop.getContentView().getMeasuredWidth());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        });
+        return true;
     }
 }

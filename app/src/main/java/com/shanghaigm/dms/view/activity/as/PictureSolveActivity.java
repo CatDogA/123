@@ -15,8 +15,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
+import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,8 +28,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class PictureSolveActivity extends AppCompatActivity {
+public class PictureSolveActivity extends BaseActivity {
     private Button btn_camera, btn_album;
+    private RelativeLayout rl_end, rl_back;
     public static String GET_BITMAP = "get_bitmap";
     private static final int CAMERA = 1;
     private static final int ALBUM = 2;
@@ -73,6 +77,19 @@ public class PictureSolveActivity extends AppCompatActivity {
                 galleryAddPic();
             }
         });
+        rl_end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DmsApplication app = DmsApplication.getInstance();
+                app.endApp();
+            }
+        });
+        rl_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         btn_album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +103,8 @@ public class PictureSolveActivity extends AppCompatActivity {
     private void initView() {
         btn_camera = (Button) findViewById(R.id.btn_camera);
         btn_album = (Button) findViewById(R.id.btn_album);
+        rl_end = (RelativeLayout) findViewById(R.id.rl_back);
+        rl_end = (RelativeLayout) findViewById(R.id.rl_out);
     }
 
     String mPublicPhotoPath;
@@ -161,7 +180,7 @@ public class PictureSolveActivity extends AppCompatActivity {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                Intent intent1 = new Intent(this,ReportAddActivity.class);
+                Intent intent1 = new Intent(this, ReportAddActivity.class);
                 Bundle bundle1 = new Bundle();
                 bundle1.putParcelable(GET_BITMAP, bit);
 //                intent1.putExtras(bundle1);

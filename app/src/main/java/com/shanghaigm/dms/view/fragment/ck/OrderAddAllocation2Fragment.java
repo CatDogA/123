@@ -2,8 +2,6 @@ package com.shanghaigm.dms.view.fragment.ck;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,7 +21,6 @@ import com.shanghaigm.dms.view.widget.AllocationUnDefaultChoosePopupWindow;
 import com.shanghaigm.dms.view.widget.CustomAllocationTable;
 
 import java.util.ArrayList;
-
 
 //动态添加
 public class OrderAddAllocation2Fragment extends BaseFragment {
@@ -58,111 +55,6 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
 
     private void initHandler() {
 
-        //table中传回改变数据
-//        mHandler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//                Log.i(TAG, "handleMessage: " + "dadadadadadadada");
-//                ArrayList<OrderDetailInfoAllocation> info = new ArrayList<OrderDetailInfoAllocation>();
-//                info.add(new OrderDetailInfoAllocation());
-//                info.add(new OrderDetailInfoAllocation());
-//                ((OrderAddActivity)getActivity()).setAllUndefaultAssemblyList(info);
-//                for (int i = 0; i < tables.size(); i++) {
-//                    if (msg.what == i) {
-//                        tables.get(i).getAllocationInfo(new AllocationTable.CallAllocationBack() {
-//                            @Override
-//                            public void getAllocation(ArrayList<OrderDetailInfoAllocation> allocationInfos) {
-//                                ArrayList<OrderDetailInfoAllocation> undefaultInfos = new ArrayList<>();
-//                                //找出其中的选配
-//                                for (OrderDetailInfoAllocation info : allocationInfos) {
-//                                    if (!info.getNum().equals("")) {
-//                                        if (Integer.parseInt(info.getNum()) > 0) {
-//                                            undefaultInfos.add(info);
-//                                        }
-//                                    }
-//                                }
-//                                ArrayList<OrderDetailInfoAllocation> allUndefaultInfos = ((OrderAddActivity) getActivity()).getAllUndefaultAssemblyList();
-//                                //若activity储存为空，则直接添加，否则，先出去standard_id相同的，再添加
-//                                if (allUndefaultInfos == null) {
-//                                    if (undefaultInfos != null) {
-//                                        for (OrderDetailInfoAllocation info : undefaultInfos) {
-//                                            allUndefaultInfos.add(info);
-//                                        }
-//                                    }
-//                                } else {
-//                                    for (OrderDetailInfoAllocation info : allUndefaultInfos) {
-//                                        if (info.getStandard_id() == undefaultInfos.get(0).getStandard_id()) {
-//                                            allUndefaultInfos.remove(info);
-//                                        }
-//                                    }
-//                                    for (OrderDetailInfoAllocation info : undefaultInfos) {
-//                                        allUndefaultInfos.add(info);
-//                                    }
-//                                }
-//                                ((OrderAddActivity) getActivity()).setAllUndefaultAssemblyList(allUndefaultInfos);
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        };
-//        mHandler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                for (int i = 0; i < tables.size(); i++) {
-//                    if (msg.what == i) {
-//
-//                    }
-//                }
-//                if (msg.what == 1) {
-//
-//                }
-//                Bundle bundle = msg.getData();
-//                ArrayList<OrderDetailInfoAllocation> singleAllocationList = (ArrayList<OrderDetailInfoAllocation>) bundle.getSerializable(AllocationTable.GET_ALLOCATION_DATA);
-//                Log.i(TAG, "handleMessage:singleAllocationList       " + singleAllocationList.size());
-//                ArrayList<OrderDetailInfoAllocation> undefaultInfos = new ArrayList<>();
-//                for (OrderDetailInfoAllocation info : singleAllocationList) {
-//                    if (!info.getNum().equals("")) {
-//                        if (Integer.parseInt(info.getNum()) > 0) {
-//                            undefaultInfos.add(info);
-//                        }
-//                    }
-//                }
-//                ArrayList<OrderDetailInfoAllocation> allUndefaultInfos = ((OrderAddActivity) getActivity()).getAllUndefaultAssemblyList();
-//                if (allUndefaultInfos == null) {
-//                    if (undefaultInfos != null) {
-//                        for (OrderDetailInfoAllocation info : undefaultInfos) {
-//                            allUndefaultInfos.add(info);
-//                        }
-//                    }
-//                } else {
-//                    for (OrderDetailInfoAllocation info : allUndefaultInfos) {
-//                        if (info.getStandard_id() == undefaultInfos.get(0).getStandard_id()) {
-//                            allUndefaultInfos.remove(info);
-//                        }
-//                    }
-//                    for (OrderDetailInfoAllocation info : undefaultInfos) {
-//                        allUndefaultInfos.add(info);
-//                    }
-//                }
-//                ((OrderAddActivity) getActivity()).setAllUndefaultAssemblyList(allUndefaultInfos);
-//                Log.i(TAG, "handleMessage: allUndefaultInfos        " + allUndefaultInfos.size());
-//            }
-//        };
-
-//        allocationHandler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//                int i = (int) msg.getData().getSerializable(AllocationTable.GET_ALLOCATION_DATA);
-//                Log.i(TAG, "handleMessage: " + i + "已接收");
-//                ArrayList<OrderDetailInfoAllocation> info = new ArrayList<OrderDetailInfoAllocation>();
-//                info.add(new OrderDetailInfoAllocation());
-//                info.add(new OrderDetailInfoAllocation());
-//                ((OrderAddActivity) getActivity()).setAllUndefaultAssemblyList(info);
-//            }
-//        };
     }
 
     private void initView(View v) {
@@ -180,50 +72,57 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (hidden) {// 不在最前端界面显示
         } else {// 重新显示到最前端中
-            Toast.makeText(getActivity(), "123", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "显示配置", Toast.LENGTH_SHORT).show();
             initData();
         }
     }
 
     private void initData() {
         ll.removeAllViews();
-        if (((OrderAddActivity) getActivity()).getAssemblyList() != null) {
-            allAssemblyList = ((OrderAddActivity) getActivity()).getAssemblyList();
-            names = ((OrderAddActivity) getActivity()).getAssemblyNames();
-            Log.i(TAG, "initData: " + allAssemblyList.size() + "      names     " + names.size() + "       name" + names.get(0));
-            for (int i = 0; i < allAssemblyList.size(); i++) {
-                //保存lists
-                saveLists.add(allAssemblyList.get(i));
-                //建button
-                String btnText = "";
-                if (i < names.size()) {
-                    btnText = names.get(i);
-                }
-                //button名
-                Button btn = new Button(getActivity());
-                btn.setText(btnText);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
-                params.gravity = Gravity.CENTER_HORIZONTAL;
-                btn.setLayoutParams(params);
-                ll.addView(btn);
-                btns.add(btn);
-                //建linearlayout
-                LinearLayout linearLayout = new LinearLayout(getActivity());
+        names = ((OrderAddActivity) getActivity()).getAssemblyNames();
+        if (names.size() > 0) {
+            for (String name : names) {
+                if (((OrderAddActivity) getActivity()).getAssemblyList() != null) {
+                    allAssemblyList = ((OrderAddActivity) getActivity()).getAssemblyList();
+                    for (int i = 0; i < allAssemblyList.size(); i++) {
+                        if (allAssemblyList.get(i).get(0).getAssemblyName().equals(name)) {
+                            //保存lists
+                            saveLists.add(allAssemblyList.get(i));
+                            //建button
+                            String btnText = "";
+//                if (i < names.size()) {
+                            btnText = name;
+//                }/
+                            //button名
+                            Button btn = new Button(getActivity());
+                            btn.setText(btnText);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
+                            params.gravity = Gravity.CENTER_HORIZONTAL;
+                            btn.setLayoutParams(params);
+                            ll.addView(btn);
+                            btns.add(btn);
+                            //建linearlayout
+                            LinearLayout linearLayout = new LinearLayout(getActivity());
 //                linearLayout.
-                LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
-                linearLayout.setLayoutParams(llParams);
-                //建表
-                AllocationTable table = new AllocationTable(getActivity(), allAssemblyList.get(i), btn, i, ((OrderAddActivity) getActivity()).getSingleAllocationList());
-                LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                table.setLayoutParams(tableParams);
-                linearLayout.addView(table);
-                tables.add(table);
-                linearLayouts.add(linearLayout);
-                ll.addView(linearLayout);
+                            LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+                            linearLayout.setLayoutParams(llParams);
+                            //建表
+                            AllocationTable table = new AllocationTable(getActivity(), allAssemblyList.get(i), btn, i, ((OrderAddActivity) getActivity()).getSingleAllocationList());
+                            LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                            table.setLayoutParams(tableParams);
+                            linearLayout.addView(table);
+                            tables.add(table);
+                            linearLayouts.add(linearLayout);
+                            ll.addView(linearLayout);
+                        }
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "请选择车型", Toast.LENGTH_SHORT).show();
+                }
             }
-        } else {
-//            Toast.makeText(getActivity(), "请选择车型", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getActivity(),getResources().getText(R.string.choose_model), Toast.LENGTH_SHORT).show();
         }
         //新建linearlayout套button
         LinearLayout btnlinearLayout = new LinearLayout(getActivity());

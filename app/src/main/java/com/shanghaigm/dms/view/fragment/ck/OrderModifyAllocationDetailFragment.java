@@ -24,6 +24,7 @@ public class OrderModifyAllocationDetailFragment extends BaseFragment {
     private ListAdapter adapter;
     private DmsApplication app;
     private ArrayList<OrderDetailInfoAllocation> allocations;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class OrderModifyAllocationDetailFragment extends BaseFragment {
         return v;
     }
 
-    public static OrderModifyAllocationDetailFragment getInstance(){
+    public static OrderModifyAllocationDetailFragment getInstance() {
         OrderModifyAllocationDetailFragment fragment = new OrderModifyAllocationDetailFragment();
         return fragment;
     }
@@ -41,13 +42,15 @@ public class OrderModifyAllocationDetailFragment extends BaseFragment {
     private void setUpView() {
         app = DmsApplication.getInstance();
         allocations = new ArrayList<>();
-        List<MatchingBean> list =  app.getMatchingBeanArrayList();
-        for(int i=0;i<list.size();i++){
-            MatchingBean bean = list.get(i);
-            OrderDetailInfoAllocation allocation = new OrderDetailInfoAllocation(bean.assembly,bean.entry_name,bean.config_information,bean.num+"",bean.remarks,bean.isdefault);
-            allocations.add(allocation);
+        List<MatchingBean> list = app.getMatchingBeanArrayList();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                MatchingBean bean = list.get(i);
+                OrderDetailInfoAllocation allocation = new OrderDetailInfoAllocation(bean.assembly, bean.entry_name, bean.config_information, bean.num + "", bean.remarks, bean.isdefault);
+                allocations.add(allocation);
+            }
         }
-        adapter = new ListAdapter(getActivity(),R.layout.list_item_allocation, BR.info,allocations);
+        adapter = new ListAdapter(getActivity(), R.layout.list_item_allocation, BR.info, allocations);
         listview.setAdapter(adapter);
     }
 

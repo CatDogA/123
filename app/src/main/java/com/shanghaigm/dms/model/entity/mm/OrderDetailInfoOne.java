@@ -30,8 +30,11 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
     private String color_determine;
     private String ekg;
     private String licensing_addeess;
-    public OrderDetailInfoOne(){}
-    public OrderDetailInfoOne(OrderDetailInfoBean bean){
+
+    public OrderDetailInfoOne() {
+    }
+
+    public OrderDetailInfoOne(OrderDetailInfoBean bean) {
         OrderDetailInfoBean.ResultEntity resultEntity = bean.resultEntity;
         this.customer_name = resultEntity.customer_name;
         this.sex = resultEntity.sex;
@@ -52,19 +55,22 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
         this.battery_manufacturer = resultEntity.battery_manufacturer;
         this.ekg = resultEntity.ekg;
         this.licensing_addeess = resultEntity.licensing_addeess;
-        int detemine = Integer.parseInt(resultEntity.color_determine);
-        switch (detemine){
-            case 1:
-                this.color_determine = "已确认";
-                break;
-            case 2:
-                this.color_determine = "5个工作日内";
-                break;
-            case 3:
-                this.color_determine = "7个工作日内";
-                break;
+        if (!resultEntity.color_determine.equals("")) {
+            int detemine = Integer.parseInt(resultEntity.color_determine);
+            switch (detemine) {
+                case 1:
+                    this.color_determine = "已确认";
+                    break;
+                case 2:
+                    this.color_determine = "5个工作日内";
+                    break;
+                case 3:
+                    this.color_determine = "7个工作日内";
+                    break;
+            }
         }
     }
+
     public OrderDetailInfoOne(String customer_name, String sex, String fixed_telephone, String mobile_phone, String province, String city, String county, String detailed_address, String terminal_customer_name, String terminal_customer_tel, String terminal_customer_address, String models_name, String number, String battery_system, String battery_number, String endurance_mileage, String battery_manufacturer, String color_determine, String ekg, String licensing_addeess) {
         this.customer_name = customer_name;
         this.sex = sex;

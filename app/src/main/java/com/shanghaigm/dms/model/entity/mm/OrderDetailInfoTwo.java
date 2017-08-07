@@ -22,6 +22,19 @@ public class OrderDetailInfoTwo extends BaseObservable implements Serializable{
 
     public OrderDetailInfoTwo() {
     }
+
+    public OrderDetailInfoTwo(String payment_method, String payment_method_remarks, String delivery_time, String freight, String service_fee, String contract_price, String carriage, String invoice_amount, String billing_requirements) {
+        this.payment_method = payment_method;
+        this.payment_method_remarks = payment_method_remarks;
+        this.delivery_time = delivery_time;
+        this.freight = freight;
+        this.service_fee = service_fee;
+        this.contract_price = contract_price;
+        this.carriage = carriage;
+        this.invoice_amount = invoice_amount;
+        this.billing_requirements = billing_requirements;
+    }
+
     public OrderDetailInfoTwo(OrderDetailInfoBean bean) {
         OrderDetailInfoBean.ResultEntity resultEntity = bean.resultEntity;
         this.payment_method_remarks = resultEntity.payment_method_remarks;
@@ -32,17 +45,21 @@ public class OrderDetailInfoTwo extends BaseObservable implements Serializable{
         this.carriage = resultEntity.carriage;
         this.invoice_amount = resultEntity.invoice_amount;
         this.billing_requirements = resultEntity.billing_requirements;
-        int method = Integer.parseInt(resultEntity.payment_method);
-        switch (method){
-            case 1:
-                this.payment_method = "全款";
-                break;
-            case 2:
-                this.payment_method = "分期";
-                break;
-            case 3:
-                this.payment_method = "按揭";
-                break;
+        if(!resultEntity.payment_method.equals("")){
+            int method = Integer.parseInt(resultEntity.payment_method);
+            switch (method){
+                case 1:
+                    this.payment_method = "全款";
+                    break;
+                case 2:
+                    this.payment_method = "分期";
+                    break;
+                case 3:
+                    this.payment_method = "按揭";
+                    break;
+            }
+        }else {
+            this.payment_method = "";
         }
     }
     @Bindable

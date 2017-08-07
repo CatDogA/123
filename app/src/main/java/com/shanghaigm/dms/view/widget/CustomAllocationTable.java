@@ -112,8 +112,8 @@ public class CustomAllocationTable extends LinearLayout {
                     }
                 });
             }
-            holder.edtSystem.setText(saveList.get(position).getEntry_name());
-            holder.edtProName.setText(saveList.get(position).getAssembly());
+            holder.edtSystem.setText(saveList.get(position).getAssembly());
+            holder.edtProName.setText(saveList.get(position).getEntry_name());
             holder.edtConfig.setText(saveList.get(position).getConfig_information());
             holder.edtNum.setText(saveList.get(position).getNum());
             holder.edtRemarks.setText(saveList.get(position).getRemarks());

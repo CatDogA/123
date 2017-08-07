@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--用于android7.0以后的调取摄像头-->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path name="my_images" path="Android/data/com.shanghaigm.dms/files/Pictures/" />
     <external-path name="images" path="Pictures/" />

@@ -7,6 +7,7 @@ package com.shanghaigm.dms.model;
 public class Constant {
     //GET
     //订单、合同、更改函、更改单
+    public static final String URL_GET_VERSION = Config.URL_BASE + "/appLogin/getDictionaries";   //获取版本号
     public static final String URL_GET_JOB_LIST = Config.URL_BASE + "/appLogin/getJobList";
     public static final String URL_GET_HOME_DATA = Config.URL_BASE + "/appDKXS/getDetailTaskItems";//包含4项功能
     public static final String URL_QUERY_ORDER_SUB_INFO = Config.URL_BASE + "/appDKXS/getOrderInfoPageData";//提交分页查询
@@ -33,6 +34,10 @@ public class Constant {
     public static final String URL_GET_ASSEMBLY_LIST = Config.URL_BASE + "/appDKXS/getmatchingandstandard";//获取总成信息列表
     public static final String URL_GET_ADD_ORDER_NAME = Config.URL_BASE + "/appDKXS/getCustomerList";   //订单新增选择用户列表
     public static final String URL_GET_ORDER_NUMBER = Config.URL_BASE + "/appDKXS/getOrderNumber";  //获取orderNumber
+    public static final String URL_ORDER_DELETE = Config.URL_BASE + "/appDKXS/deleteOrderInfo";  //删除订单
+    public static final String URL_QUERY_CHANGE_LETTER_ID_IFNO = Config.URL_BASE + "/appDKXS/changeLetterContractList";    //获取更改函号相关信息
+    public static final String URL_ADD_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/addChangeLetter";   //新增更改函
+    public static final String URL_DELETE_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/deleteChangeLetterInfo";  //删除更改函
 
     //日报
     public static final String URL_GET_QUERY_REPORT_LIST = Config.URL_BASE + "/appDKSH/getAftersaleDailyPageData";    //查询日报列表
@@ -46,7 +51,7 @@ public class Constant {
     public static final String URL_GET_FILE_INFO = Config.URL_BASE2 + "/appFileUploadController/getFilePathById";  //获取文件信息
     public static final String URL_DOWNLOAD_FILE = Config.URL_BASE2 + "/appFileUploadController/download";
     public static final String URL_REPORT_DELETE_FILE = Config.URL_BASE2 + "/appFileUploadController/delFilePathById";
-    public static final String URL_REPORT_DELETE = Config.URL_BASE +"/appDKSH/deleteDaily";     //日报删除
+    public static final String URL_REPORT_DELETE = Config.URL_BASE + "/appDKSH/deleteDaily";     //日报删除
     //POST
     public static final String URL_GET_ACCESS_TOKEN = Config.URL_BASE + "/appLogin/appLogin";
 }

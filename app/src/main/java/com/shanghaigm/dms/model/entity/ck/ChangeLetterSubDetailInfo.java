@@ -3,6 +3,9 @@ package com.shanghaigm.dms.model.entity.ck;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -24,6 +27,22 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public ChangeLetterSubDetailInfo() {
     }
 
+    public ChangeLetterSubDetailInfo(JSONObject object) {
+        try {
+            this.contract_id = object.getString("contract_id");  //记得改过来。。。
+            this.models_name = object.getString("models_name");
+            this.company_name = object.getString("company_name");
+            this.number = object.getString("number");
+            this.contract_price = object.getString("contract_price");
+            this.change_contract_price = object.getString("contract_price");
+            this.config_change_date = object.getString("config_change_date").split(" ")[0];
+            this.config_chang_delivery_date = object.getString("config_chang_delivery_date").split(" ")[0];
+            this.contract_delivery_date = object.getString("contract_delivery_date").split(" ")[0];
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public ChangeLetterSubDetailInfo(ChangeLetterSubDetailBean.ResultEntity.OrderInfo info) {
         this.contract_id = info.contract_id;  //记得改过来。。。
         this.models_name = info.models_name;
@@ -36,6 +55,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
         this.config_chang_delivery_date = info.config_chang_delivery_date.split(" ")[0];
         this.contract_delivery_date = info.contract_delivery_date.split(" ")[0];
     }
+
     @Bindable
     public String getContract_id() {
         return contract_id;
@@ -44,6 +64,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setContract_id(String contract_id) {
         this.contract_id = contract_id;
     }
+
     @Bindable
     public String getModels_name() {
         return models_name;
@@ -52,6 +73,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setModels_name(String models_name) {
         this.models_name = models_name;
     }
+
     @Bindable
     public String getCompany_name() {
         return company_name;
@@ -60,6 +82,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setCompany_name(String company_name) {
         this.company_name = company_name;
     }
+
     @Bindable
     public String getNumber() {
         return number;
@@ -68,6 +91,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setNumber(String number) {
         this.number = number;
     }
+
     @Bindable
     public String getContract_price() {
         return contract_price;
@@ -76,6 +100,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setContract_price(String contract_price) {
         this.contract_price = contract_price;
     }
+
     @Bindable
     public String getChange_contract_price() {
         return change_contract_price;
@@ -84,6 +109,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setChange_contract_price(String change_contract_price) {
         this.change_contract_price = change_contract_price;
     }
+
     @Bindable
     public String getConfig_change_date() {
         return config_change_date;
@@ -92,6 +118,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setConfig_change_date(String config_change_date) {
         this.config_change_date = config_change_date;
     }
+
     @Bindable
     public String getConfig_chang_delivery_date() {
         return config_chang_delivery_date;
@@ -100,6 +127,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     public void setConfig_chang_delivery_date(String config_chang_delivery_date) {
         this.config_chang_delivery_date = config_chang_delivery_date;
     }
+
     @Bindable
     public String getContract_delivery_date() {
         return contract_delivery_date;

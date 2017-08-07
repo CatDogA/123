@@ -23,6 +23,7 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
+import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
     private DmsApplication app = DmsApplication.getInstance();
     private static String TAG = "AllocationUnDefault";
     //saveList用来先存着选配数据,list接收listview传来的选配数据,appInfolist用来全局储存,saveUndefaultList存储num>1的选配信息
-    private ArrayList<AllocationAddChooseUndefaultInfo> list, saveList, appInfoList;
+    private ArrayList<AllocationAddChooseUndefaultInfo> list, saveList;
     private ArrayList<OrderDetailInfoAllocation> saveUndefaultList;
     private int position;
     private GetTextAdapter adapter;
@@ -70,23 +71,45 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
 
-                appInfoList = new ArrayList<AllocationAddChooseUndefaultInfo>();
                 saveUndefaultList = new ArrayList<>();  //存储已经选配好的数据
                 Log.i(TAG, "onClick: saveList" + saveList.size() + "saveUndefaultList" + saveUndefaultList.size() + "listToChange" + listToChange.size() + "list" + list.size());
+                ArrayList<AllocationAddChooseUndefaultInfo> saveModifyInfos = new ArrayList<AllocationAddChooseUndefaultInfo>();
                 for (int i = 0; i < saveList.size(); i++) {
                     if (saveList.get(i).getNum() > 0) {
-                        appInfoList.add(saveList.get(i));
+                        //储存修改了选配信息
+                        saveModifyInfos.add(saveList.get(i));
+                        //用来作为刷新界面的信息
                         saveUndefaultList.add(new OrderDetailInfoAllocation(listToChange.get(position).getAssembly(), listToChange.get(position).getEntry_name(), saveList.get(i).getConfig_information(), saveList.get(i).getPrice(), saveList.get(i).getNum() + "", saveList.get(i).getRemarks(), list.size(), list, saveList.get(i).getStandard_id()));
                     }
+                    if (OrderAddActivity.undefaultInfos == null) {
+                        OrderAddActivity.undefaultInfos = new ArrayList<>();
+                    }
+                    ArrayList<AllocationAddChooseUndefaultInfo> toDeleteInfos = new ArrayList<AllocationAddChooseUndefaultInfo>();
+                    //如果有就找出来
+                    if (OrderAddActivity.undefaultInfos.size() > 0) {
+                        for (AllocationAddChooseUndefaultInfo info : OrderAddActivity.undefaultInfos) {
+                            for (AllocationAddChooseUndefaultInfo info2 : saveModifyInfos) {
+                                if (info.getStandard_id() == info2.getStandard_id()) {
+                                    toDeleteInfos.add(info);
+                                }
+                            }
+                        }
+                    }
+                    //删除
+                    for (AllocationAddChooseUndefaultInfo info : toDeleteInfos) {
+                        OrderAddActivity.undefaultInfos.remove(info);
+                    }
+                    //添加
+                    for (AllocationAddChooseUndefaultInfo info : saveModifyInfos) {
+                        OrderAddActivity.undefaultInfos.add(info);     //获取所有修改后的信息
+                    }
                 }
-                Log.i(TAG, "onClick: " + list.size() + "    " + saveList.size() + "   " + appInfoList.size() + "     " + saveUndefaultList.size());
+                Log.i(TAG, "onClick: " + list.size() + "    " + saveList.size() + "   " + "     " + saveUndefaultList.size());
 
                 Message msg = handler.obtainMessage();
                 msg.what = 1;
                 handler.sendMessage(msg);
-
                 hidePopup();
-
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {

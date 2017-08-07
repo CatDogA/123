@@ -42,6 +42,7 @@ import java.util.List;
 
 public class OrderReviewFragment extends BaseFragment {
     private static String TAG = "OrderReviewFragment";
+    private static OrderReviewFragment fragment;
     private EditText areaSelectEdt, modelSelecctEdt, stateSelectEdt, numberEdt, customerEdt, ckEdt;
     private Button btnQuery;
     private ImageView vpRight, vpLeft;
@@ -241,7 +242,12 @@ public class OrderReviewFragment extends BaseFragment {
             }
         });
     }
-
+    public void refresh(){
+        IsQuery = true;
+        IsMore = true;
+        page = 1;
+        requestOrderInfo(IsQuery);
+    }
     private void requestOrderInfo(Boolean isQuery) {
         dialog.showLoadingDlg();
         String areaText = areaSelectEdt.getText().toString();
@@ -405,5 +411,12 @@ public class OrderReviewFragment extends BaseFragment {
 
         rl_end = (RelativeLayout) v.findViewById(R.id.rl_out);
         rl_back = (RelativeLayout) v.findViewById(R.id.rl_back);
+    }
+
+    public static OrderReviewFragment getInstance(){
+        if(fragment==null){
+            fragment = new OrderReviewFragment();
+        }
+        return fragment;
     }
 }

@@ -47,6 +47,7 @@ public class OrderAddBaseFragment extends BaseFragment {
     private OrderDetailInfoOne orderDetailInfoOne = new OrderDetailInfoOne();
     private static String TAG = "OrderAddBaseFragment";
     private EditText edtModel, edtCustomerName, edtPhone, edtMobilePhone, edtProvince, edtCity, edtCounty, edtDetailAddress, edtSex, edtFixPhone, edt_terminal_customer_name, edt_terminal_customer_tel, edt_terminal_customer_address, edt_number, edt_battery_system, edt_battery_number, edt_licensing_address, edt_endurance_mileage, edt_ekg, edt_battery_manufacturer, edt_color_determine;
+    public static String address, provinceId, cityId, countyId;
     private ImageView imgModel;
     private ImageView imgSearch;
     private ImageView imgSex;
@@ -60,7 +61,7 @@ public class OrderAddBaseFragment extends BaseFragment {
     private String assemblyStr;   //防止总成信息为空
     private Handler handler;
     private int model_Id, customerCode;
-    private String companyName;
+    private String companyName, sex;
 
     public OrderAddBaseFragment() {
     }
@@ -70,12 +71,16 @@ public class OrderAddBaseFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_order_add_base, container, false);
         initView(v);
+        initInfoOne();
         initData();
         setUpView();
         return v;
     }
 
     private void initData() {
+        provinceId = "";
+        cityId = "";
+        countyId = "";
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -85,22 +90,48 @@ public class OrderAddBaseFragment extends BaseFragment {
                 edtMobilePhone.setText(info.getTel());
                 companyName = info.getCompany();
                 customerCode = info.getCustomerCode();
-                Log.i(TAG, "handleMessage: " + info.getDetailed_address());
-                String[] str = info.getDetailed_address().split(",");
-                if (str.length == 3) {
-                    edtProvince.setText(str[0]);
-                    edtCity.setText(str[0]);
-                    edtCounty.setText(str[1]);
-                    edtDetailAddress.setText(str[2]);
+                address = info.getAddress();
+                sex = info.getSex();
+                edtSex.setText(sex);
+                if (address != null) {
+                    if (!address.equals("")) {
+                        String[] addresses = address.split(",");
+                        if (addresses.length == 3) {
+                            provinceId = addresses[0];
+                            cityId = addresses[1];
+                            countyId = addresses[2];
+                        }
+                        if (addresses.length == 2) {
+                            provinceId = addresses[0];
+                            cityId = addresses[1];
+                            countyId = "";
+                        }
+                    }
                 }
-                if (str.length == 4) {
-                    edtProvince.setText(str[0]);
-                    edtCity.setText(str[1]);
-                    edtCounty.setText(str[2]);
-                    edtDetailAddress.setText(str[3]);
+
+                Log.i(TAG, "handleMessage: " + info.getDetailed_address());
+                if (info.getDetailed_address() != null) {
+                    String[] str = info.getDetailed_address().split(",");
+                    if (str.length == 3) {
+                        edtProvince.setText(str[0]);
+                        edtCity.setText(str[0]);
+                        edtCounty.setText(str[1]);
+                        edtDetailAddress.setText(str[2]);
+                    }
+                    if (str.length == 4) {
+                        edtProvince.setText(str[0]);
+                        edtCity.setText(str[1]);
+                        edtCounty.setText(str[2]);
+                        edtDetailAddress.setText(str[3]);
+                    }
                 }
             }
         };
+    }
+
+    //先把空值赋给info
+    private void initInfoOne() {
+        orderDetailInfoOne = new OrderDetailInfoOne("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
 
     private void setUpView() {
@@ -202,16 +233,16 @@ public class OrderAddBaseFragment extends BaseFragment {
                 pop_add_name.showPopup(edtCustomerName);
             }
         });
-        imgSex.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<PopListInfo> popSexList = new ArrayList<PopListInfo>();
-                popSexList.add(new PopListInfo("男"));
-                popSexList.add(new PopListInfo("女"));
-                MmPopupWindow popSex = new MmPopupWindow(getActivity(), edtSex, popSexList, 3);
-                popSex.showPopup(edtSex);
-            }
-        });
+//        imgSex.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ArrayList<PopListInfo> popSexList = new ArrayList<PopListInfo>();
+//                popSexList.add(new PopListInfo("男"));
+//                popSexList.add(new PopListInfo("女"));
+//                MmPopupWindow popSex = new MmPopupWindow(getActivity(), edtSex, popSexList, 3);
+//                popSex.showPopup(edtSex);
+//            }
+//        });
 
         imgColorDetermine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,20 +289,38 @@ public class OrderAddBaseFragment extends BaseFragment {
                                 matchLength = matchArray.length();
                                 if (matchLength > 0) {
                                     for (int j = 0; j < matchLength; j++) {
-                                        undefaultInfoList.add(new AllocationAddChooseUndefaultInfo(matchArray.getJSONObject(j).getString("assembly"), matchArray.getJSONObject(j).getString("config_information"), 0.0, 0, "", id));
+                                        int is_other = -1;    //TODO-等确认
+                                        if (!matchArray.getJSONObject(j).get("isother").toString().equals("")) {
+                                            is_other = matchArray.getJSONObject(j).getInt("isother");
+                                        }
+                                        String supporting_id = "";
+                                        supporting_id = matchArray.getJSONObject(j).getString("supporting_id");
+                                        int matching_id = 0;
+                                        if (!matchArray.getJSONObject(j).get("matching_id").toString().equals("")) {
+                                            matching_id = matchArray.getJSONObject(j).getInt("matching_id");
+                                        }
+                                        undefaultInfoList.add(new AllocationAddChooseUndefaultInfo(matchArray.getJSONObject(j).getString("assembly"), matchArray.getJSONObject(j).getString("config_information"), matchArray.getJSONObject(j).getString("entry_name"), is_other, supporting_id, matching_id, 0.0, 0, "", id));
                                     }
                                 }
                             }
-                            list.add(new OrderDetailInfoAllocation(info.getString("assembly"), info.getString("entry_name"), info.getString("standard_information"), info.getString("cost_change"), info.getString("supporting_id"), "", info.getString("remarks"), matchLength, undefaultInfoList, id));
+                            list.add(new OrderDetailInfoAllocation(assembly, info.getString("assembly"), info.getString("entry_name"), info.getString("standard_information"), info.getString("cost_change"), info.getString("supporting_id"), "", info.getString("remarks"), matchLength, undefaultInfoList, id));
                         }
                         allAssemblyList.add(list);
                         Log.i(TAG, "onSuccess: " + allAssemblyList.get(0).get(0).getAssembly());
                     } else {
-                        list.add(new OrderDetailInfoAllocation(assemblyStr, "", "", "", "", "", "", 0, null, 0));
+                        list.add(new OrderDetailInfoAllocation(assemblyStr, "", "", "", "", "", "", "", 0, null, 0));
                         allAssemblyList.add(list);
                     }
                     ((OrderAddActivity) getActivity()).setAssemblyList(allAssemblyList);   //用于被改变
                     ((OrderAddActivity) getActivity()).setOriginalList(allAssemblyList);
+                    if (allAssemblyList.size() > 0) {
+                        OrderAddActivity.originList = new ArrayList<OrderDetailInfoAllocation>();
+                        for (ArrayList<OrderDetailInfoAllocation> infos : allAssemblyList) {
+                            for (OrderDetailInfoAllocation info : infos) {
+                                OrderAddActivity.originList.add(info);
+                            }
+                        }
+                    }
                     Log.i(TAG, "onSuccess: " + allAssemblyList.size() + "    " + assemblyCount);
                     if (allAssemblyList.size() == assemblyCount) {
                         dialog.dismissLoadingDlg();
@@ -433,10 +482,10 @@ public class OrderAddBaseFragment extends BaseFragment {
 
     //接口回调
     public interface CallOrderInfoOne {
-        void getOrderInfoOne(OrderDetailInfoOne infoOne, int model_Id, String company_name, int customerCode);
+        void getOrderInfoOne(OrderDetailInfoOne infoOne, int model_Id, String company_name, int customerCode, String sex);
     }
 
     public void getInfoOne(CallOrderInfoOne call) {
-        call.getOrderInfoOne(orderDetailInfoOne, model_Id, companyName, customerCode);
+        call.getOrderInfoOne(orderDetailInfoOne, model_Id, companyName, customerCode, sex);
     }
 }

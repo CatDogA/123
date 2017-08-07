@@ -56,6 +56,7 @@ public class AllocationTable extends LinearLayout {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (data.get(position).getMatchLength() > 0) {
+                    //list即选配信息
                     popupWindow = new AllocationUnDefaultChoosePopupWindow(context, position, 1, data.get(position).getList(), data, handler, 1);
                     popupWindow.showPopup(btn);
                 }
@@ -73,7 +74,7 @@ public class AllocationTable extends LinearLayout {
         };
     }
 
-    private void HandlerRefresh(AllocationUnDefaultChoosePopupWindow popupWindow, final ListView listview, final ArrayList<OrderDetailInfoAllocation> infoList, final ArrayList<OrderDetailInfoAllocation> saveList) {
+    public void HandlerRefresh(AllocationUnDefaultChoosePopupWindow popupWindow, final ListView listview, final ArrayList<OrderDetailInfoAllocation> infoList, final ArrayList<OrderDetailInfoAllocation> saveList) {
         //接口回调
         popupWindow.getListViewInfo(new AllocationUnDefaultChoosePopupWindow.CallBack() {
 

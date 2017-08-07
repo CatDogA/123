@@ -27,6 +27,7 @@ import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.util.ContentUriUtil;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportDetailAttachFragment;
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class ReportUpdateActivity extends AppCompatActivity {
+public class ReportUpdateActivity extends BaseActivity {
     private ArrayList<BaseFragment> fragments;
     public static String REPORT_DETAIL_INFO = "update_info";
     private TabLayout tabLayout;
@@ -104,7 +105,7 @@ public class ReportUpdateActivity extends AppCompatActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.OutOfApp();
+                app.endApp();
             }
         });
         rl_back.setOnClickListener(new View.OnClickListener() {

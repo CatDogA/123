@@ -34,11 +34,12 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
     private int standard_id;     //判断唯一性
     private String cost_change;
     private String supporting_id;
+    private String assemblyName;
 
 
     public OrderDetailInfoAllocation() {
     }
-
+    //用来应付查询布局
     public OrderDetailInfoAllocation(String assembly, String entry_name, String config_information, String num, String remarks, int isdefault) {
         this.assembly = assembly;
         this.entry_name = entry_name;
@@ -48,7 +49,7 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
         this.isdefault = isdefault;
     }
     //最正规规的标配
-    public OrderDetailInfoAllocation(String assembly, String entry_name, String standard_information,String cost_change,String supporting_id, String num, String remarks, int matchLength, ArrayList<AllocationAddChooseUndefaultInfo> list, int standard_id) {
+    public OrderDetailInfoAllocation(String assemblyName,String assembly, String entry_name, String standard_information,String cost_change,String supporting_id, String num, String remarks, int matchLength, ArrayList<AllocationAddChooseUndefaultInfo> list, int standard_id) {
         this.assembly = assembly;
         this.entry_name = entry_name;
         this.standard_information = standard_information;
@@ -59,6 +60,7 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
         this.cost_change = cost_change;
         this.supporting_id = supporting_id;
         this.standard_id = standard_id;
+        this.assemblyName = assemblyName;
     }
     //利用选配伪造的标配
     public OrderDetailInfoAllocation(String assembly, String entry_name, String config_information, Double price, String num, String remarks, int matchLength, ArrayList<AllocationAddChooseUndefaultInfo> list, int standard_id) {
@@ -188,5 +190,35 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
         this.standard_id = standard_id;
     }
 
+    public String getStandard_information() {
+        return standard_information;
+    }
 
+    public void setStandard_information(String standard_information) {
+        this.standard_information = standard_information;
+    }
+
+    public String getCost_change() {
+        return cost_change;
+    }
+
+    public void setCost_change(String cost_change) {
+        this.cost_change = cost_change;
+    }
+
+    public String getSupporting_id() {
+        return supporting_id;
+    }
+
+    public void setSupporting_id(String supporting_id) {
+        this.supporting_id = supporting_id;
+    }
+
+    public String getAssemblyName() {
+        return assemblyName;
+    }
+
+    public void setAssemblyName(String assemblyName) {
+        this.assemblyName = assemblyName;
+    }
 }

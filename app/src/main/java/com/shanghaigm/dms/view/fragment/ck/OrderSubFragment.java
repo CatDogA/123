@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderSubFragment extends BaseFragment {
+    private static OrderSubFragment fragment;
     private EditText modelSelecctEdt, stateSelectEdt, numberEdt, customerEdt;
     private TextView title;
     private RelativeLayout rl_end, rl_back;
@@ -74,7 +75,12 @@ public class OrderSubFragment extends BaseFragment {
         setUpView();
         return v;
     }
-
+    public void refresh(){
+        IsQuery = true;
+        IsMore = true;
+        page = 1;
+        requestOrderInfo(IsQuery);
+    }
     private void setUpView() {
         initViewPager();
         rl_back.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +220,12 @@ public class OrderSubFragment extends BaseFragment {
             }
         });
     }
-
+    public static OrderSubFragment getInstance(){
+        if(fragment==null){
+            fragment = new OrderSubFragment();
+        }
+        return fragment;
+    }
     private void requestOrderInfo(Boolean isQuery) {
         dialog.showLoadingDlg();
         String modelText = modelSelecctEdt.getText().toString();
@@ -358,7 +369,7 @@ public class OrderSubFragment extends BaseFragment {
 
         btnQuery = (Button) v.findViewById(R.id.mm_query_button);
         addBtn = (Button) v.findViewById(R.id.mm_add_button);
-        addBtn.setVisibility(View.INVISIBLE);
+//        addBtn.setVisibility(View.INVISIBLE);
 
         vpLeft = (ImageView) v.findViewById(R.id.viewpager_left);
         vpRight = (ImageView) v.findViewById(R.id.viewpager_right);

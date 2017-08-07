@@ -14,16 +14,20 @@ public class OrderAddSearchInfo extends BaseObservable implements Serializable {
     private String tel;
     private String company;
     private String detailed_address;
+    private String address;
     private int customerCode;
+    private String sex;
     public OrderAddSearchInfo() {
     }
 
-    public OrderAddSearchInfo(String name, String tel, String company,String detailed_address,int customerCode) {
+    public OrderAddSearchInfo(String name, String tel, String company,String sex,String detailed_address,int customerCode,String address) {
         this.name = name;
         this.company = company;
         this.tel = tel;
         this.detailed_address = detailed_address;
         this.customerCode = customerCode;
+        this.address = address;
+        this.sex = sex;
     }
 
     @Bindable
@@ -67,5 +71,21 @@ public class OrderAddSearchInfo extends BaseObservable implements Serializable {
 
     public void setCustomerCode(int customerCode) {
         this.customerCode = customerCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    @Bindable
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

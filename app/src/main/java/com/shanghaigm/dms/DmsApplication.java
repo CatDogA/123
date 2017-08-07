@@ -1,6 +1,7 @@
 package com.shanghaigm.dms;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.shanghaigm.dms.model.entity.as.SaveUsedPaths;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
@@ -13,6 +14,7 @@ import com.shanghaigm.dms.model.entity.mm.MatchingBean;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoBean;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 
 import java.util.ArrayList;
 
@@ -37,9 +39,10 @@ public class DmsApplication extends Application {
     private ContractDetailInfo contractDetailInfo;
     private ChangeBillDetailInfo changeBillDetailInfo;
     private ChangeLetterSubDetailInfo changeLetterSubDetailInfo;
-    private ArrayList<AllocationAddChooseUndefaultInfo> allocationAddChooseUndefaultInfos; //储存选配信息
+    private ArrayList<BaseActivity> activities;
+    private final String TAG = "DmsApplication";
 
-//    public ArrayList<SaveUsedPaths> usedPaths = new ArrayList<>();
+    //    public ArrayList<SaveUsedPaths> usedPaths = new ArrayList<>();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -48,6 +51,18 @@ public class DmsApplication extends Application {
         // 而不需要设置一个app静态变量去设置，具体实现还需要等后续实际使用时验证
         mApplication = this;
         mainData = new MainData();
+    }
+    public void endApp(){
+        for(BaseActivity a:activities){
+            a.finish();
+        }
+    }
+    public void addActivity(BaseActivity activity) {
+        if (activities == null) {
+            activities = new ArrayList<>();
+        }
+        Log.i(TAG, "addActivity: "+activities.size());
+        activities.add(activity);
     }
 
     public static DmsApplication getInstance() {
@@ -128,14 +143,6 @@ public class DmsApplication extends Application {
 
     public void setChangeLetterSubDetailInfo(ChangeLetterSubDetailInfo changeLetterSubDetailInfo) {
         this.changeLetterSubDetailInfo = changeLetterSubDetailInfo;
-    }
-
-    public ArrayList<AllocationAddChooseUndefaultInfo> getAllocationAddChooseUndefaultInfos() {
-        return allocationAddChooseUndefaultInfos;
-    }
-
-    public void setAllocationAddChooseUndefaultInfos(ArrayList<AllocationAddChooseUndefaultInfo> allocationAddChooseUndefaultInfos) {
-        this.allocationAddChooseUndefaultInfos = allocationAddChooseUndefaultInfos;
     }
 
     public void OutOfApp() {

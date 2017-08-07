@@ -78,6 +78,7 @@
                         android:textSize="14sp" />
 
                     <ImageView
+                        android:visibility="gone"
                         android:id="@+id/img_sex"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -111,6 +112,7 @@
                     android:layout_weight="4"
                     android:gravity="center_horizontal"
                     android:lines="1"
+                    android:inputType="number"
                     android:textSize="14sp" />
 
                 <TextView
@@ -237,6 +239,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
+                    android:inputType="number"
                     android:layout_weight="3"
                     android:lines="1"
                     android:textSize="14sp" />
@@ -324,6 +327,7 @@
                     android:layout_marginEnd="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_weight="3"
+                    android:inputType="number"
                     android:gravity="center_horizontal"
                     android:lines="1"
                     android:textSize="14sp" />
@@ -364,6 +368,7 @@
                 <EditText
                     android:id="@+id/battery_number"
                     android:layout_width="0dp"
+                    android:inputType="numberDecimal"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
                     android:layout_marginRight="30dp"
@@ -408,6 +413,7 @@
                 <EditText
                     android:id="@+id/endurance_mileage"
                     android:layout_width="0dp"
+                    android:inputType="number"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
                     android:layout_marginRight="30dp"

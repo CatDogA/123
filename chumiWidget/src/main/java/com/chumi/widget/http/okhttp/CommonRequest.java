@@ -26,7 +26,13 @@ public class CommonRequest {
         return createPostRequest(url, params, null);
     }
 
-    /**可以带请求头的Post请求
+    public static Request createPostIntRequest(String url, Map<String, Object> params) {
+        return createPostIntRequest(url, params, null);
+    }
+
+    /**
+     * 可以带请求头的Post请求
+     *
      * @param url
      * @param params
      * @param headers
@@ -37,6 +43,30 @@ public class CommonRequest {
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
                 mFormBodyBuild.add(entry.getKey(), entry.getValue());
+            }
+        }
+        //添加请求头
+        Headers.Builder mHeaderBuild = new Headers.Builder();
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.urlParams.entrySet()) {
+                mHeaderBuild.add(entry.getKey(), entry.getValue());
+            }
+        }
+        FormBody mFormBody = mFormBodyBuild.build();
+        Headers mHeader = mHeaderBuild.build();
+        Request request = new Request.Builder().url(url).
+                post(mFormBody).
+                headers(mHeader)
+                .build();
+        return request;
+    }
+
+    //修改post请求可以使用int作为参数
+    public static Request createPostIntRequest(String url, Map<String, Object> params, RequestParams headers) {
+        FormBody.Builder mFormBodyBuild = new FormBody.Builder();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                mFormBodyBuild.add(entry.getKey(), entry.getValue().toString());
             }
         }
         //添加请求头
@@ -66,13 +96,16 @@ public class CommonRequest {
 
         return createGetRequest(url, params, null);
     }
+
     //参数中存在int类型数据
-    public static Request createGetRequestInt(String url, Map<String,Object> params) {
+    public static Request createGetRequestInt(String url, Map<String, Object> params) {
 
         return createGetRequestInt(url, params, null);
     }
+
     /**
      * 可以带请求头的Get请求
+     *
      * @param url
      * @param params
      * @param headers
@@ -99,8 +132,9 @@ public class CommonRequest {
                 .headers(mHeader)
                 .build();
     }
-   //由于原封装参数为int类型时出现问题，所以写此同名方法
-    public static Request createGetRequestInt(String url, Map<String,Object> params, RequestParams headers) {
+
+    //由于原封装参数为int类型时出现问题，所以写此同名方法
+    public static Request createGetRequestInt(String url, Map<String, Object> params, RequestParams headers) {
         StringBuilder urlBuilder = new StringBuilder(url).append("?");
         if (params != null) {
             for (Map.Entry<String, Object> entry : params.entrySet()) {

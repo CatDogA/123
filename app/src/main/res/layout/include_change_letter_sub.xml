@@ -80,7 +80,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/mm_number_edt"
                 android:layout_toRightOf="@+id/mm_model_text"
-                android:focusable="false"
                 android:gravity="center_horizontal"
                 android:textSize="14sp"
                 android:theme="@style/MyText" />
@@ -129,7 +128,7 @@
 
             <Button
                 android:id="@+id/mm_query_button"
-                android:layout_width="250dp"
+                android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
@@ -137,7 +136,6 @@
                 android:text="@string/query" />
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/mm_add_button"
                 android:layout_width="150dp"
                 android:layout_height="50dp"

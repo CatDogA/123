@@ -92,6 +92,7 @@
                 android:layout_marginStart="2dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:onClick="@{paper.OnDeleteChangeLetterClick}"
                 android:padding="2dp"
                 app:set_img_delete="@{paper.state}" />
         </LinearLayout>

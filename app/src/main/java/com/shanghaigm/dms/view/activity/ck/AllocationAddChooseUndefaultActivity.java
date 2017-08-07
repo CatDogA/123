@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class AllocationAddChooseUndefaultActivity extends BaseActivity {
     private ArrayList<AllocationAddChooseUndefaultInfo> list = new ArrayList<>();
     private ArrayList<AllocationAddChooseUndefaultInfo> addList = new ArrayList<>();
-    private static String TAG = "AllocationAddChooseUndefaultActivity";
+    private static String TAG = "AllocationAddChoose";
     private ListView listView;
     private GetTextAdapter textAdapter;
     private Button btnSave, btnBack;
@@ -61,7 +61,6 @@ public class AllocationAddChooseUndefaultActivity extends BaseActivity {
 //                    bundle.putSerializable(AllocationAddChooseUndefaultActivity.UNDEFAULT_ADD_INFO, addList);
 //                    intent.putExtras(bundle);
 //                    startActivity(intent);
-                    app.setAllocationAddChooseUndefaultInfos(addList);
                     finish();
                 } else {
                     Toast.makeText(AllocationAddChooseUndefaultActivity.this, "数量大于0才可更改", Toast.LENGTH_SHORT).show();

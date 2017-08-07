@@ -91,6 +91,7 @@ public class ReportQueryFragment extends BaseFragment {
                         try {
                             JSONArray array_model = object.getJSONArray("resultEntity");
                             ArrayList<PopListInfo> list_model_pop = new ArrayList<PopListInfo>();
+                            list_model_pop.add(new PopListInfo(""));
                             modelInfos = new ArrayList<ModelInfo>();
                             for (int i = 0; i < array_model.length(); i++) {
                                 String id = array_model.getJSONObject(i).getString("models_Id");
