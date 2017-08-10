@@ -2,6 +2,7 @@ package com.shanghaigm.dms.model.entity.ck;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +24,26 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
     private String config_change_date;
     private String config_chang_delivery_date;
     private String contract_delivery_date;
+    private int letter_id;
+    private int order_id;
+    private String change_letter_number;
 
     public ChangeLetterSubDetailInfo() {
+    }
+
+    public ChangeLetterSubDetailInfo(String contract_id, String models_name, String company_name, String number, String contract_price, String change_contract_price, String config_change_date, String config_chang_delivery_date, String contract_delivery_date, int letter_id, int order_id, String change_letter_number) {
+        this.contract_id = contract_id;
+        this.models_name = models_name;
+        this.company_name = company_name;
+        this.number = number;
+        this.contract_price = contract_price;
+        this.change_contract_price = change_contract_price;
+        this.config_change_date = config_change_date;
+        this.config_chang_delivery_date = config_chang_delivery_date;
+        this.contract_delivery_date = contract_delivery_date;
+        this.letter_id = letter_id;
+        this.order_id = order_id;
+        this.change_letter_number = change_letter_number;
     }
 
     public ChangeLetterSubDetailInfo(JSONObject object) {
@@ -34,7 +53,7 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
             this.company_name = object.getString("company_name");
             this.number = object.getString("number");
             this.contract_price = object.getString("contract_price");
-            this.change_contract_price = object.getString("contract_price");
+            this.change_contract_price = object.getString("change_contract_price");
             this.config_change_date = object.getString("config_change_date").split(" ")[0];
             this.config_chang_delivery_date = object.getString("config_chang_delivery_date").split(" ")[0];
             this.contract_delivery_date = object.getString("contract_delivery_date").split(" ")[0];
@@ -135,5 +154,29 @@ public class ChangeLetterSubDetailInfo extends BaseObservable implements Seriali
 
     public void setContract_delivery_date(String contract_delivery_date) {
         this.contract_delivery_date = contract_delivery_date;
+    }
+
+    public int getLetter_id() {
+        return letter_id;
+    }
+
+    public void setLetter_id(int letter_id) {
+        this.letter_id = letter_id;
+    }
+
+    public int getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(int order_id) {
+        this.order_id = order_id;
+    }
+
+    public String getChange_letter_number() {
+        return change_letter_number;
+    }
+
+    public void setChange_letter_number(String change_letter_number) {
+        this.change_letter_number = change_letter_number;
     }
 }

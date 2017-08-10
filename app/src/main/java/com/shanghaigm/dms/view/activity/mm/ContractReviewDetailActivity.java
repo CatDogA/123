@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +16,21 @@ import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
 import com.chumi.widget.http.okhttp.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
+import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.ActivityContractReviewDetailBinding;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.mm.MatchingBean;
+import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
+import com.shanghaigm.dms.view.adapter.ListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +42,10 @@ public class ContractReviewDetailActivity extends BaseActivity {
     private Button btn_pass, btn_return;
     private EditText remarks;
     private LoadingDialog dialog;
+    public static ArrayList<MatchingBean> matchings;
     private static String ISREFRESH = "refresh";
-
+    private ListView listview;
+    private ListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +53,28 @@ public class ContractReviewDetailActivity extends BaseActivity {
         initView();
         setUpView();
         initData();
+        initIntent();
+    }
+
+    private void initIntent() {
+        if(matchings!=null){
+            matchings.clear();
+        }
+        Bundle b = getIntent().getExtras();
+        ArrayList<MatchingBean> matchings_get = (ArrayList<MatchingBean>) b.getSerializable(PaperInfo.CONTRACT_MATCHING_INFOS);
+        if(matchings_get!=null){
+            matchings = matchings_get;
+        }
+        ArrayList<OrderDetailInfoAllocation> allocations = new ArrayList<>();
+        if (matchings != null) {
+            for (int i = 0; i < matchings.size(); i++) {
+                MatchingBean bean = matchings.get(i);
+                OrderDetailInfoAllocation allocation = new OrderDetailInfoAllocation(bean.assembly, bean.entry_name, bean.config_information, bean.num + "", bean.remarks, bean.isdefault);
+                allocations.add(allocation);
+            }
+        }
+        adapter = new ListAdapter(this, R.layout.list_item_allocation, BR.info, allocations);
+        listview.setAdapter(adapter);
     }
 
     private void initData() {
@@ -57,6 +88,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
         btn_pass = (Button) findViewById(R.id.order_pass_button);
         btn_return = (Button) findViewById(R.id.order_return_back_button);
         remarks = (EditText) findViewById(R.id.edt_review_remarks);
+        listview = (ListView) findViewById(R.id.list_allocation);
         dialog = new LoadingDialog(this, "正在加载");
     }
 
@@ -96,7 +128,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                     map.put("examination_result", 1);
                     map.put("loginName", app.getAccount());
                     map.put("flow_details_id", app.getFlow_detail_id());
-                    map.put("jobCode",app.getJobCode());
+                    map.put("jobCode", app.getJobCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CONTRACT_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                         @Override
@@ -129,14 +161,12 @@ public class ContractReviewDetailActivity extends BaseActivity {
                     Map<String, Object> map = new HashMap<>();
                     if (!remarks.getText().toString().equals("")) {
                         map.put("remarks", remarks.getText().toString());
-
                         JSONObject object = new JSONObject();
                         object.put("contract_id", app.getContract_id());
                         JSONArray array = new JSONArray();
                         array.put(object);
-
                         map.put("conts", array.toString());
-                        map.put("jobCode",app.getJobCode());
+                        map.put("jobCode", app.getJobCode());
                         map.put("examination_result", 2);
                         map.put("loginName", app.getAccount());
                         map.put("flow_details_id", app.getFlow_detail_id());

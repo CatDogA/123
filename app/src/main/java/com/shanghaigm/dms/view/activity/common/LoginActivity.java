@@ -329,10 +329,12 @@ public class LoginActivity extends BaseActivity {
     private Boolean isUpdate() {
         Map<String, Object> params = new HashMap<>();
         params.put("field", "android_version");
+        dialog.showLoadingDlg();
         OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_VERSION, params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 Log.i(TAG, "onSuccess:android_version   " + responseObj);
+                dialog.dismissLoadingDlg();
                 JSONObject result = (JSONObject) responseObj;
                 try {
                     JSONArray resultEntity = result.getJSONArray("resultEntity");

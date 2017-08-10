@@ -21,11 +21,11 @@ public class ChangeLetterDetailInfo extends BaseObservable implements Serializab
     private String config_change_date;          //配置更改日期
     private String contract_delivery_date;
     private String config_chang_delivery_date;
-
+    private int letter_id;
     public ChangeLetterDetailInfo() {
     }
 
-    public ChangeLetterDetailInfo(String contract_id, String contract_price, String number, String models_name, String company_name, String change_contract_price, String config_change_date, String contract_delivery_date, String config_chang_delivery_date) {
+    public ChangeLetterDetailInfo(String contract_id, String contract_price, String number, String models_name, String company_name, String change_contract_price, String config_change_date, String contract_delivery_date, String config_chang_delivery_date,int letter_id) {
         this.contract_id = contract_id;
         this.contract_price = contract_price;
         this.number = number;
@@ -35,6 +35,7 @@ public class ChangeLetterDetailInfo extends BaseObservable implements Serializab
         this.config_change_date = config_change_date.split(" ")[0];
         this.contract_delivery_date = contract_delivery_date.split(" ")[0];
         this.config_chang_delivery_date = config_chang_delivery_date.split(" ")[0];
+        this.letter_id = letter_id;
     }
 
     @Bindable

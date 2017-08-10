@@ -372,8 +372,8 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
                                 flow_details_id = flow_details.getJSONObject(flow_details.length() - 1).getInt("flow_details_id");
                             }
                             Log.i(TAG, "onSuccess: examination_result   " + examination_result + "     flow_details_id      " + flow_details_id);
-                            ChangeLetterDetailInfo changeLetterDetailInfo = new ChangeLetterDetailInfo(orderInfo.contract_id, orderInfo.contract_price, orderInfo.number, orderInfo.models_name, orderInfo.company_name, orderInfo.change_contract_price, orderInfo.config_change_date, orderInfo.contract_delivery_date, orderInfo.config_chang_delivery_date);
-                            paperInfos.add(new PaperInfo(customerName, orderNumber, model, true, orderId, ContractReviewOrChangeLetterReviewActivity.this, flag, changeLetterDetailInfo, examination_result, flow_details_id));
+                            ChangeLetterDetailInfo changeLetterDetailInfo = new ChangeLetterDetailInfo(orderInfo.contract_id, orderInfo.contract_price, orderInfo.number, orderInfo.models_name, orderInfo.company_name, orderInfo.change_contract_price, orderInfo.config_change_date, orderInfo.contract_delivery_date, orderInfo.config_chang_delivery_date, orderInfo.letter_id);
+                            paperInfos.add(new PaperInfo(customerName, orderNumber, model, true, orderId, ContractReviewOrChangeLetterReviewActivity.this, flag, changeLetterDetailInfo, examination_result, flow_details_id, orderInfo.letter_id));
                         }
                     }
                     ReviewTable table = null;

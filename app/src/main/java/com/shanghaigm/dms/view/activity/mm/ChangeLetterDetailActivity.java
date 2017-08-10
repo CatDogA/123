@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,11 +17,16 @@ import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
 import com.chumi.widget.http.okhttp.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
+import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.ActivityChangeLetterDetailBinding;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
+import com.shanghaigm.dms.view.adapter.ListAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +39,8 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
     private Button btn_pass, btn_return;
     private EditText remarks;
     private LoadingDialog dialog;
+    private ListView listView;
+    private ListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,16 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
         initView();
         setUpView();
         initData();
+        initIntent();
+    }
+
+    private void initIntent() {
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            ArrayList<ChangeLetterAllocationInfo> infos = (ArrayList<ChangeLetterAllocationInfo>) b.getSerializable(PaperInfo.CHANGE_LETTER_INFO);
+            adapter = new ListAdapter(this, R.layout.list_item_change_letter_allocation_query, BR.info, infos);
+            listView.setAdapter(adapter);
+        }
     }
 
     private void setUpView() {
@@ -56,8 +74,7 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
+                app.endApp();
             }
         });
 
@@ -65,11 +82,11 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("remarks",remarks.getText().toString());
+                map.put("remarks", remarks.getText().toString());
                 map.put("examination_result", 1);
                 map.put("loginName", app.getAccount());
                 map.put("flow_details_id", app.getFlow_detail_id());
-                map.put("jobCode",app.getJobCode());
+                map.put("jobCode", app.getJobCode());
                 dialog.showLoadingDlg();
                 CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_LETTER_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                     @Override
@@ -93,12 +110,12 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Map<String, Object> map = new HashMap<>();
-                if(!remarks.getText().toString().equals("")){
-                    map.put("remarks",remarks.getText().toString());
+                if (!remarks.getText().toString().equals("")) {
+                    map.put("remarks", remarks.getText().toString());
                     map.put("examination_result", 2);
                     map.put("loginName", app.getAccount());
                     map.put("flow_details_id", app.getFlow_detail_id());
-                    map.put("jobCode",app.getJobCode());
+                    map.put("jobCode", app.getJobCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_LETTER_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                         @Override
@@ -121,7 +138,6 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        Log.i(TAG, "initData: " + app.getChangeLetterDetailInfo().getCompany_name());
         binding.setInfo(app.getChangeLetterDetailInfo());
     }
 
@@ -132,6 +148,7 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
         btn_pass = (Button) findViewById(R.id.order_pass_button);
         btn_return = (Button) findViewById(R.id.order_return_back_button);
         remarks = (EditText) findViewById(R.id.edt_review_remarks);
-        dialog = new LoadingDialog(this,"正在加载");
+        listView = (ListView) findViewById(R.id.list_view);
+        dialog = new LoadingDialog(this, "正在加载");
     }
 }

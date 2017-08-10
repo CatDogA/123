@@ -19,13 +19,13 @@
             android:layout_weight="3">
 
             <EditText
-                android:id="@+id/edit_system"
+                android:id="@+id/edt_allocation_pro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
+                android:lines="1"
                 android:background="@color/colorWhite"
-                android:focusable="false"
                 android:gravity="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="13sp" />
@@ -42,11 +42,12 @@
             android:layout_weight="4">
 
             <EditText
-                android:id="@+id/edt_assembly"
+                android:id="@+id/edt_change_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
+                android:lines="1"
                 android:background="@color/colorWhite"
                 android:gravity="center"
                 android:textColor="@color/colorBlack"
@@ -65,7 +66,8 @@
             android:layout_weight="2">
 
             <EditText
-                android:id="@+id/edt_config"
+                android:id="@+id/edt_price"
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -87,7 +89,7 @@
             android:layout_weight="2">
 
             <EditText
-                android:id="@+id/edt_num"
+                android:id="@+id/edt_man_hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -104,16 +106,25 @@
             android:layout_height="match_parent"
             android:background="@color/colorBlack" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
+            android:gravity="center"
             android:layout_height="wrap_content"
-            android:layout_weight="3">
+            android:layout_weight="2">
             <ImageView
-                android:src="@mipmap/modify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:id="@+id/img_add"
+                android:layout_margin="3dp"
+                android:src="@mipmap/add"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/img_delete"
+                android:layout_margin="3dp"
+                android:src="@mipmap/delete_pre"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <TextView
             android:layout_width="1dp"

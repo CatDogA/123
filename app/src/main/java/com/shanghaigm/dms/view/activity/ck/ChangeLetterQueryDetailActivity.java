@@ -2,25 +2,43 @@ package com.shanghaigm.dms.view.activity.ck;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.R;
-import com.shanghaigm.dms.databinding.ActivityChangeLetterModifyBinding;
 import com.shanghaigm.dms.databinding.ActivityChangeLetterQueryBinding;
+import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
+import com.shanghaigm.dms.view.adapter.ListAdapter;
+
+import java.util.ArrayList;
 
 public class ChangeLetterQueryDetailActivity extends BaseActivity {
     private ActivityChangeLetterQueryBinding binding;
     private TextView title;
     private RelativeLayout rl_back, rl_end;
+    private ListView listView;
+    private ListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_change_letter_query);
         initData();
         initView();
+        initIntent();
+    }
+
+    private void initIntent() {
+        Bundle b = getIntent().getExtras();
+        ArrayList<ChangeLetterAllocationInfo> infos = (ArrayList<ChangeLetterAllocationInfo>) b.getSerializable(PaperInfo.CHANGE_LETTER_INFO);
+        Log.i(TAG, "initIntent: infos           "+infos.size());
+        adapter = new ListAdapter(this, R.layout.list_item_change_letter_allocation_query, BR.info, infos);
+        listView.setAdapter(adapter);
     }
 
     private void initView() {
@@ -35,10 +53,7 @@ public class ChangeLetterQueryDetailActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO-
-//                android.os.Process.killProcess(android.os.Process.myPid());   //获取PID，目前获取自己的也只有该API，否则从/proc中自己的枚举其他进程吧，不过要说明的是，结束其他进程不一定有权限，不然就乱套了。
-//                System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
-                app.OutOfApp();
+                app.endApp();
             }
         });
     }
@@ -48,5 +63,6 @@ public class ChangeLetterQueryDetailActivity extends BaseActivity {
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
+        listView = (ListView) findViewById(R.id.list_view);
     }
 }

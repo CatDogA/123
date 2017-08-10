@@ -157,6 +157,8 @@ public class ChangeLetterSubFragment extends BaseFragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //清除遗留数据
+                app.setChangeLetterSubDetailInfo(null);
                 goToActivity(ChangeLetterAddActivity.class);
             }
         });
@@ -249,7 +251,6 @@ public class ChangeLetterSubFragment extends BaseFragment {
             @Override
             public void onSuccess(Object responseObj) {
                 //            //合同号
-//
                 Log.i("luo", "onSuccess: " + responseObj.toString());
                 dialog.dismissLoadingDlg();
                 JSONObject result = (JSONObject) responseObj;

@@ -44,7 +44,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.activity.mm.HomeActivity" />
         <activity android:name=".view.activity.mm.ContractReviewDetailActivity" />
-        <activity android:name=".view.activity.mm.ChangeLetterDetailActivity" />
+        <activity android:name=".view.activity.mm.ChangeLetterDetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".view.activity.mm.ChangeBillDetailActivity" />
         <activity
             android:name=".view.activity.ck.OrderModifyActivity"
@@ -52,9 +53,12 @@
         <activity
             android:name=".view.activity.ck.OrderAddActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.ck.ChangeLetterAddActivity" />
-        <activity android:name=".view.activity.ck.ChangeLetterQueryDetailActivity" />
-        <activity android:name=".view.activity.ck.ChangeLetterModifyActivity" />
+        <activity android:name=".view.activity.ck.ChangeLetterAddActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".view.activity.ck.ChangeLetterQueryDetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".view.activity.ck.ChangeLetterModifyActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".view.activity.ck.AllocationAddChooseUndefaultActivity" />
         <activity android:name=".view.activity.as.HomeActivity" />
         <activity

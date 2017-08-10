@@ -2,13 +2,16 @@ package com.shanghaigm.dms.view.activity.ck;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.ActivityChangeLetterModifyBinding;
+import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
+import java.util.ArrayList;
 
 public class ChangeLetterModifyActivity extends BaseActivity {
     private ActivityChangeLetterModifyBinding binding;
@@ -20,6 +23,14 @@ public class ChangeLetterModifyActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_change_letter_modify);
         initView();
         initData();
+        initIntent();
+    }
+    private void initIntent() {
+        Bundle b = getIntent().getExtras();
+        ArrayList<ChangeLetterAllocationInfo> infos = (ArrayList<ChangeLetterAllocationInfo>) b.getSerializable(PaperInfo.CHANGE_LETTER_INFO);
+        Log.i(TAG, "initIntent: infos           "+infos.size());
+//        adapter = new ListAdapter(this, R.layout.list_item_change_letter_allocation_query, BR.info, infos);
+//        listView.setAdapter(adapter);
     }
     private void initView() {
         title = (TextView) findViewById(R.id.title_text);
@@ -40,7 +51,6 @@ public class ChangeLetterModifyActivity extends BaseActivity {
             }
         });
     }
-
     private void initData() {
         binding.setInfo(app.getChangeLetterSubDetailInfo());
     }

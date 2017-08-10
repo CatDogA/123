@@ -34,7 +34,7 @@ public class ChangeLetterInfoBean {
             public String config_change_date;
             public String contract_delivery_date;
             public String config_chang_delivery_date;
-
+            public int letter_id;
             public String examination_result;
             public String examination_resul;
         }

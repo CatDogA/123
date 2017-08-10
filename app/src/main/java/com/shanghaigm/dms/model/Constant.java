@@ -36,9 +36,10 @@ public class Constant {
     public static final String URL_GET_ORDER_NUMBER = Config.URL_BASE + "/appDKXS/getOrderNumber";  //获取orderNumber
     public static final String URL_ORDER_DELETE = Config.URL_BASE + "/appDKXS/deleteOrderInfo";  //删除订单
     public static final String URL_QUERY_CHANGE_LETTER_ID_IFNO = Config.URL_BASE + "/appDKXS/changeLetterContractList";    //获取更改函号相关信息
-    public static final String URL_ADD_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/addChangeLetter";   //新增更改函
+    public static final String URL_ADD_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/addChangeLetter";   //新增/修改更改函
+    public static final String URL_SUB_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/commitChangeLetter";  //提交更改函
     public static final String URL_DELETE_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/deleteChangeLetterInfo";  //删除更改函
-
+    public static final String URL_GET_CHANGE_LETTER_INFO = Config.URL_BASE+"/appDKXS/getchangeLetterInfo";
     //日报
     public static final String URL_GET_QUERY_REPORT_LIST = Config.URL_BASE + "/appDKSH/getAftersaleDailyPageData";    //查询日报列表
     public static final String URL_GET_REPORT_DETAIL = Config.URL_BASE + "/appDKSH/getAftersaleDailyDetail";      //日报明细

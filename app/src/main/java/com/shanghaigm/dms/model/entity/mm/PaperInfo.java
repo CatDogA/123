@@ -23,6 +23,7 @@ import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.BasePaperInfo;
 import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
+import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
@@ -32,6 +33,7 @@ import com.shanghaigm.dms.view.activity.as.HomeActivity;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
 import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
+import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
@@ -59,6 +61,8 @@ public class PaperInfo extends BasePaperInfo {
     public static String ORDER_TYPE = "order_type";
     public static String ORDER_SUB_DETAIL_INFO = "query_order_sub_detail";      //判断查询还是修改
     public static String ORDER_REVIEW_DETIAL_INFO = "query_order_review_detail";
+    public static String CONTRACT_MATCHING_INFOS = "contract_matching_infos";
+    public static String CHANGE_LETTER_INFO = "change_letter_info";
     public static String REPORT_DETAI_INFO = "report_detail_info";
     public static String REPORT_FILE_INFO = "report_file_info";
     public static String REPORT_DELETE = "report_delete";
@@ -109,7 +113,7 @@ public class PaperInfo extends BasePaperInfo {
     }
 
     //更改函审核
-    public PaperInfo(String name, String number, String model, Boolean isModify, int orderId, Context context, int flag, ChangeLetterDetailInfo changeLetterDetailInfo, String examination_result, int flow_details_id) {
+    public PaperInfo(String name, String number, String model, Boolean isModify, int orderId, Context context, int flag, ChangeLetterDetailInfo changeLetterDetailInfo, String examination_result, int flow_details_id, int letter_id) {
         super(name);
         this.number = number;
         this.model = model;
@@ -119,6 +123,7 @@ public class PaperInfo extends BasePaperInfo {
         this.flow_details_id = flow_details_id;
         this.examination_result = examination_result;
         this.changeLetterDetailInfo = changeLetterDetailInfo;
+        this.letter_id = letter_id;
         dialog = new LoadingDialog(this.context, "正在加载");
     }
 
@@ -137,7 +142,7 @@ public class PaperInfo extends BasePaperInfo {
     }
 
     //更改函提交
-    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id,int orderId) {
+    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id, int orderId) {
         super(name);
         this.state = state;
         this.contract_id = contract_id;
@@ -201,6 +206,7 @@ public class PaperInfo extends BasePaperInfo {
                         @Override
                         public void onSuccess(Object responseObj) {
                             dialog.dismissLoadingDlg();
+                            Log.i(TAG, "onSuccess:          " + responseObj.toString());
                             JSONObject object = (JSONObject) responseObj;
                             ArrayList<MatchingBean> matchings = new ArrayList<MatchingBean>();
                             try {
@@ -235,12 +241,43 @@ public class PaperInfo extends BasePaperInfo {
             }
         }
         if (flag == 6) {
-            Map<String,Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
+            params.put("letterId", letter_id);
+            OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_CHANGE_LETTER_INFO, params, new DisposeDataListener() {
+                @Override
+                public void onSuccess(Object responseObj) {
+                    Log.i(TAG, "onSuccess: responseObj      " + responseObj.toString());
+                    JSONObject obj = (JSONObject) responseObj;
+                    try {
+                        JSONObject result = obj.getJSONObject("resultEntity");
+                        JSONArray items = result.getJSONArray("items");
+                        ArrayList<ChangeLetterAllocationInfo> infos = new ArrayList<ChangeLetterAllocationInfo>();
+                        for (int i = 0; i < items.length(); i++) {
+                            JSONObject item = items.getJSONObject(i);
+                            infos.add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("change_content")));
+                        }
+                        JSONObject infoObj = result.getJSONObject("fromData");
+                        ChangeLetterSubDetailInfo info = new ChangeLetterSubDetailInfo(infoObj.getString("contract_id"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("number"), infoObj.getString("contract_price"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"), infoObj.getInt("order_id"), infoObj.getString("change_letter_number"));
+                        app.setChangeLetterSubDetailInfo(info);
+                        Intent intent = new Intent(view.getContext(), ChangeLetterAddActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable(CHANGE_LETTER_INFO, infos);
+                        intent.putExtras(b);
+                        view.getContext().startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
+                @Override
+                public void onFailure(Object reasonObj) {
 
-            app.setChangeLetterSubDetailInfo(changeLetterSubDetailInfo);
-            Intent intent = new Intent(view.getContext(), ChangeLetterModifyActivity.class);
-            view.getContext().startActivity(intent);
+                }
+            });
+//            Map<String, Object> params = new HashMap<>();
+//            app.setChangeLetterSubDetailInfo(changeLetterSubDetailInfo);
+//            Intent intent = new Intent(view.getContext(), ChangeLetterModifyActivity.class);
+//            view.getContext().startActivity(intent);
         }
     }
 
@@ -255,7 +292,7 @@ public class PaperInfo extends BasePaperInfo {
         }
     }
 
-    //订单提交查询详情
+    //订单/更改函提交查询详情
     public void onCkQueryOrderDetailClick(final View view) {
         if (flag == 5) {
             dialog.showLoadingDlg();
@@ -263,11 +300,7 @@ public class PaperInfo extends BasePaperInfo {
             params.put("loginName", app.getAccount());
             params.put("jobCode", app.getJobCode());
             params.put("order_id", orderId);
-            Log.i(TAG, "onImgClick: " + app.getAccount() + "  " + app.getJobCode() + "  " + orderId);
             CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ORDER_DETAIL_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
-                /**
-                 * @param responseObj
-                 */
                 @Override
                 public void onSuccess(Object responseObj) {
                     dialog.dismissLoadingDlg();
@@ -304,11 +337,41 @@ public class PaperInfo extends BasePaperInfo {
                 }
             }));
         }
-
         if (flag == 6) {
-            app.setChangeLetterSubDetailInfo(changeLetterSubDetailInfo);
-            Intent intent = new Intent(view.getContext(), ChangeLetterQueryDetailActivity.class);
-            view.getContext().startActivity(intent);
+            Map<String, Object> params = new HashMap<>();
+            params.put("letterId", letter_id);
+            OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_CHANGE_LETTER_INFO, params, new DisposeDataListener() {
+                @Override
+                public void onSuccess(Object responseObj) {
+                    Log.i(TAG, "onSuccess: responseObj      " + responseObj.toString());
+                    JSONObject obj = (JSONObject) responseObj;
+                    try {
+                        JSONObject result = obj.getJSONObject("resultEntity");
+                        JSONArray items = result.getJSONArray("items");
+                        ArrayList<ChangeLetterAllocationInfo> infos = new ArrayList<ChangeLetterAllocationInfo>();
+                        for (int i = 0; i < items.length(); i++) {
+                            JSONObject item = items.getJSONObject(i);
+                            infos.add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("change_content")));
+                        }
+                        JSONObject infoObj = result.getJSONObject("fromData");
+                        ChangeLetterSubDetailInfo info = new ChangeLetterSubDetailInfo(infoObj.getString("contract_id"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("number"), infoObj.getString("contract_price"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"), infoObj.getInt("order_id"), infoObj.getString("change_letter_number"));
+                        app.setChangeLetterSubDetailInfo(info);
+                        Intent intent = new Intent(view.getContext(), ChangeLetterQueryDetailActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable(CHANGE_LETTER_INFO, infos);
+                        intent.putExtras(b);
+                        view.getContext().startActivity(intent);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Object reasonObj) {
+
+                }
+            });
         }
         //日报修改详情
         if (flag == 8) {
@@ -339,6 +402,7 @@ public class PaperInfo extends BasePaperInfo {
                             e.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFailure(Object reasonObj) {
 
@@ -415,19 +479,96 @@ public class PaperInfo extends BasePaperInfo {
                 break;
             case 2:
                 if (examination_result.equals("-1")) {
-                    app.setContractDetailInfo(contractDetailInfo);
-                    app.setFlow_detail_id(flow_details_id);
-                    app.setContract_id(contractDetailInfo.getContract_id());
-                    Intent intent2 = new Intent(view.getContext(), ContractReviewDetailActivity.class);
-                    view.getContext().startActivity(intent2);
+                    dialog.showLoadingDlg();
+                    //获取选配信息
+                    Map<String, Object> params1 = new HashMap<>();
+                    params1.put("loginName", app.getAccount());
+                    params1.put("jobCode", app.getJobCode());
+                    params1.put("order_id", orderId);
+                    OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_ORDER_DETAIL_INFO, params1, new DisposeDataListener() {
+                        @Override
+                        public void onSuccess(Object responseObj) {
+                            dialog.dismissLoadingDlg();
+                            JSONObject object = (JSONObject) responseObj;
+                            ArrayList<MatchingBean> matchings = new ArrayList<MatchingBean>();
+                            try {
+                                JSONObject resultEntity = object.getJSONObject("resultEntity");
+                                Object matching = resultEntity.get("matching");
+                                if (matching.toString().equals("")) {
+                                } else {
+                                    JSONArray matches = new JSONArray(matching.toString());
+                                    for (int i = 0; i < matches.length(); i++) {
+                                        JSONObject match = matches.getJSONObject(i);
+                                        matchings.add(GsonUtil.GsonToBean(match.toString(), MatchingBean.class));
+                                    }
+                                }
+                                app.setContractDetailInfo(contractDetailInfo);
+                                app.setFlow_detail_id(flow_details_id);
+                                app.setContract_id(contractDetailInfo.getContract_id());
+                                Intent intent2 = new Intent(view.getContext(), ContractReviewDetailActivity.class);
+                                Bundle b = new Bundle();
+                                b.putSerializable(CONTRACT_MATCHING_INFOS, matchings);
+                                intent2.putExtras(b);
+                                view.getContext().startActivity(intent2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object reasonObj) {
+
+                        }
+                    });
                 }
                 break;
             case 3:
                 if (examination_result.equals("-1")) {
-                    app.setChangeLetterDetailInfo(changeLetterDetailInfo);
-                    app.setFlow_detail_id(flow_details_id);
-                    Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
-                    view.getContext().startActivity(intent3);
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("letterId", letter_id);
+                    Log.i(TAG, "onImageClick:letter_id               " + letter_id);
+                    OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_CHANGE_LETTER_INFO, params, new DisposeDataListener() {
+                        @Override
+                        public void onSuccess(Object responseObj) {
+                            Log.i(TAG, "onSuccess: responseObj      " + responseObj.toString());
+                            JSONObject obj = (JSONObject) responseObj;
+                            ArrayList<ChangeLetterAllocationInfo> infos = new ArrayList<ChangeLetterAllocationInfo>();
+                            try {
+                                JSONObject result = obj.getJSONObject("resultEntity");
+                                if (!result.toString().equals("{}")) {
+                                    JSONArray items = result.getJSONArray("items");
+                                    for (int i = 0; i < items.length(); i++) {
+                                        JSONObject item = items.getJSONObject(i);
+                                        infos.add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("change_content")));
+                                    }
+                                    JSONObject infoObj = result.getJSONObject("fromData");
+                                    ChangeLetterSubDetailInfo info = new ChangeLetterSubDetailInfo(infoObj.getString("contract_id"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("number"), infoObj.getString("contract_price"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"), infoObj.getInt("order_id"), infoObj.getString("change_letter_number"));
+                                    app.setChangeLetterSubDetailInfo(info);
+                                    app.setFlow_detail_id(flow_details_id);
+                                    Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putSerializable(CHANGE_LETTER_INFO, infos);
+                                    intent3.putExtras(b);
+                                    view.getContext().startActivity(intent3);
+                                }
+                                app.setChangeLetterDetailInfo(changeLetterDetailInfo);
+                                app.setFlow_detail_id(flow_details_id);
+                                Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
+                                Bundle b = new Bundle();
+                                b.putSerializable(CHANGE_LETTER_INFO, infos);
+                                intent3.putExtras(b);
+                                view.getContext().startActivity(intent3);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object reasonObj) {
+
+                        }
+                    });
+
                 }
                 break;
             case 4:
@@ -522,8 +663,9 @@ public class PaperInfo extends BasePaperInfo {
                 public void onSuccess(Object responseObj) {
                     dialog.dismissLoadingDlg();
                     Log.i(TAG, "onSuccess:       " + responseObj.toString());
-                    ChangeLetterSubFragment fragment = ChangeLetterSubFragment.getInstance();
-                    fragment.refresh();
+//                    ChangeLetterSubFragment fragment = ChangeLetterSubFragment.getInstance();
+//                    fragment.refresh();
+                    Toast.makeText(context, context.getResources().getText(R.string.delete_success), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -566,6 +708,40 @@ public class PaperInfo extends BasePaperInfo {
         } else {
             Toast.makeText(context, context.getResources().getText(R.string.no_click), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private ArrayList<ChangeLetterAllocationInfo> getChangeLetterAllocationInfo() {
+        final ArrayList<ChangeLetterAllocationInfo>[] infos = new ArrayList[]{null};
+        Map<String, Object> params = new HashMap<>();
+        params.put("letterId", letter_id);
+        dialog.showLoadingDlg();
+        OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_CHANGE_LETTER_INFO, params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                dialog.dismissLoadingDlg();
+                Log.i(TAG, "onSuccess: responseObj      " + responseObj.toString());
+                JSONObject obj = (JSONObject) responseObj;
+                infos[0] = new ArrayList<ChangeLetterAllocationInfo>();
+                try {
+                    JSONObject result = obj.getJSONObject("resultEntity");
+                    if (!result.toString().equals("{}")) {
+                        JSONArray items = result.getJSONArray("items");
+                        for (int i = 0; i < items.length(); i++) {
+                            JSONObject item = items.getJSONObject(i);
+                            infos[0].add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("change_content")));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        });
+        return infos[0];
     }
 
     private void goToReportDetail(View view, ArrayList<ArrayList<PathInfo>> allPaths) {
@@ -796,6 +972,7 @@ public class PaperInfo extends BasePaperInfo {
                 break;
         }
     }
+
     //未提交为红1,提交蓝，驳回黄
     @BindingAdapter("set_report_text_color")
     public static void setReportTableColor(TextView tv, int report_state) {

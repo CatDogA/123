@@ -38,12 +38,15 @@
     <string name="sub_info_success">信息提交成功</string>
     <string name="no_click">无法修改</string>
     <string name="add_file">请添加文件</string>
+    <string name="finish_info">请填写完整信息</string>
     <string name="delete_success">删除成功</string>
+    <string name="delete_success_refresh">删除成功，请刷新</string>
     <string name="modify_success">修改成功</string>
     <string name="latest_version">已是最新版本</string>
     <string name="update_version">更新</string>
     <string name="cancel">取消</string>
     <string name="version_info">出现新的版本，是否更新?</string>
+    <string name="fill_contract">请选择合同号</string>
     <!--ck提报-->
     <string name="ck_order_sub">订单提报</string>
     <string name="ck_change_letter_sub">更改函提报</string>

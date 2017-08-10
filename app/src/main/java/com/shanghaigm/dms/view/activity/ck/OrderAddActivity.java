@@ -201,11 +201,11 @@ public class OrderAddActivity extends AppCompatActivity {
                 paramObject.put("province", OrderAddBaseFragment.provinceId);
                 paramObject.put("city", OrderAddBaseFragment.cityId);
                 paramObject.put("county", OrderAddBaseFragment.countyId);
-                paramObject.put("models_Id", modelId);
+                paramObject.put("models_Id", modelId + "");
+                Log.i(TAG, "addOrder:getColor_determine      " + addBaseInfo.getColor_determine());
+                paramObject.put("color_determine", getColorDeterMine(""));
                 if (addBaseInfo.getColor_determine() != null) {
                     paramObject.put("color_determine", getColorDeterMine(addBaseInfo.getColor_determine()));
-                } else {
-                    paramObject.put("color_determine", "");
                 }
                 if (addPayInfo.getPayment_method() != null) {
                     paramObject.put("payment_method", getPayMethod(addPayInfo.getPayment_method()));
@@ -213,10 +213,13 @@ public class OrderAddActivity extends AppCompatActivity {
                     paramObject.put("payment_method", "");
                 }
                 paramObject.put("order_id", "");
-                paramObject.put("customer_code", customer_code);
+                paramObject.put("customer_code", customer_code + "");
                 paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
                 paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
                 paramObject.put("address", OrderAddBaseFragment.address);
+                paramObject.put("road_condition", "不晓得");
+                paramObject.put("normal_speed", "11");
+                paramObject.put("remark", "晓得不");
                 paramArray.put(paramObject);
 
                 //第三页信息    standardVo
@@ -293,8 +296,10 @@ public class OrderAddActivity extends AppCompatActivity {
                 //提交请求
                 final Map<String, Object> requestParams = new HashMap<>();
                 requestParams.put("order", paramArray.toString());
-//                requestParams.put("standardVo", allocationArray.toString());
-//                    requestParams.put("matching", customerArray.toString());
+//                requestParams.put("standardVo", "[]");
+//                requestParams.put("matching", "[]");
+                requestParams.put("standardVo", allocationArray.toString());
+                requestParams.put("matching", customerArray.toString());
                 requestParams.put("loginName", app.getAccount());
                 OkhttpRequestCenter.getCommonPostRequest(Constant.URL_ORDER_ADD, requestParams, new DisposeDataListener() {
                     @Override
@@ -350,6 +355,9 @@ public class OrderAddActivity extends AppCompatActivity {
                 break;
             case "7个工作日内":
                 str = "3";
+                break;
+            default:
+                str = "";
                 break;
         }
         return str;

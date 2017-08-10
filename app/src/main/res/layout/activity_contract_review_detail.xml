@@ -19,10 +19,11 @@
         <include layout="@layout/include_title_bar" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -309,6 +310,27 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="11"
                     android:gravity="right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="5dp"
+                android:orientation="vertical">
+
+                <include layout="@layout/include_allocation__table_title" />
+
+                <ListView
+                    android:id="@+id/list_allocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/colorBlack"
+                    android:dividerHeight="1dp">
+
+                </ListView>
             </LinearLayout>
         </LinearLayout>
 

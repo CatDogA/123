@@ -23,4 +23,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#ffffff</color>
     <color name="popColor">#EBFDFE</color>
+    <color name="roseColor">#FF99CB</color>
+    <color name="teaColor">#FFCB99</color>
 </resources>
