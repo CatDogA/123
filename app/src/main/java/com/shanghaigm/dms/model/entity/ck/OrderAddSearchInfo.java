@@ -17,10 +17,12 @@ public class OrderAddSearchInfo extends BaseObservable implements Serializable {
     private String address;
     private int customerCode;
     private String sex;
+    private String fixed_telephone;
+
     public OrderAddSearchInfo() {
     }
 
-    public OrderAddSearchInfo(String name, String tel, String company,String sex,String detailed_address,int customerCode,String address) {
+    public OrderAddSearchInfo(String name, String tel, String company, String sex, String detailed_address, int customerCode, String address, String fixed_telephone) {
         this.name = name;
         this.company = company;
         this.tel = tel;
@@ -28,6 +30,7 @@ public class OrderAddSearchInfo extends BaseObservable implements Serializable {
         this.customerCode = customerCode;
         this.address = address;
         this.sex = sex;
+        this.fixed_telephone = fixed_telephone;
     }
 
     @Bindable
@@ -80,6 +83,7 @@ public class OrderAddSearchInfo extends BaseObservable implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+
     @Bindable
     public String getSex() {
         return sex;
@@ -87,5 +91,13 @@ public class OrderAddSearchInfo extends BaseObservable implements Serializable {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getFixed_telephone() {
+        return fixed_telephone;
+    }
+
+    public void setFixed_telephone(String fixed_telephone) {
+        this.fixed_telephone = fixed_telephone;
     }
 }

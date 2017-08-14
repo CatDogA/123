@@ -20,6 +20,7 @@ public class AllocationAddChooseUndefaultInfo extends BaseObservable implements 
     private int num;
     private String remarks;
     private int standard_id;  //唯一性
+    private String assemblyName;
 
     public AllocationAddChooseUndefaultInfo() {
     }
@@ -28,7 +29,7 @@ public class AllocationAddChooseUndefaultInfo extends BaseObservable implements 
         this.config_information = config_information;
     }
 
-    public AllocationAddChooseUndefaultInfo(String assembly, String config_information, String entry_name, int isother, String supporting_id, int matching_id, Double price, int num, String remarks, int standard_id) {
+    public AllocationAddChooseUndefaultInfo(String assemblyName,String assembly, String config_information, String entry_name, int isother, String supporting_id, int matching_id, Double price, int num, String remarks, int standard_id) {
         this.config_information = config_information;
         this.price = price;
         this.num = num;
@@ -37,6 +38,7 @@ public class AllocationAddChooseUndefaultInfo extends BaseObservable implements 
         this.standard_id = standard_id;
         this.entry_name = entry_name;
         this.supporting_id = supporting_id;
+        this.assemblyName = assemblyName;
     }
 
     public String getAssembly() {

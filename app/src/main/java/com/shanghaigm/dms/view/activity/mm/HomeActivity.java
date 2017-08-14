@@ -11,6 +11,7 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.mm.ChangeBillReviewFragment;
 import com.shanghaigm.dms.view.fragment.mm.HomeFragment;
+import com.shanghaigm.dms.view.fragment.mm.OrderReview2Fragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderReviewFragment;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {

@@ -60,6 +60,7 @@ public class LoginActivity extends BaseActivity {
     private ArrayList<LoginInfo> loginInfos = new ArrayList<>();
     private TextView version;
     private View v;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,6 +159,7 @@ public class LoginActivity extends BaseActivity {
         }
         return versionCode + "." + version;
     }
+
     private void initView() {
         btnLogin = (Button) findViewById(R.id.login_button);
         edtAccount = (EditText) findViewById(R.id.name_edit);
@@ -224,16 +226,16 @@ public class LoginActivity extends BaseActivity {
         }
         Log.i(TAG, "requestAccessToken:     " + edtPassWord.getText().toString() + "   " + jobCode);
         dialog.showLoadingDlg();
-        RequestParams params = new RequestParams();
+        Map<String, Object> params = new HashMap<>();
         if (edtAccount.getText().toString() != null && jobCode != null && edtPassWord.getText().toString() != null && roleEdt.getText().toString() != null && !roleEdt.getText().toString().equals("null")) {
             params.put("loginName", edtAccount.getText().toString());
             params.put("jobCode", jobCode);
             params.put("password", edtPassWord.getText().toString());
-            CommonOkHttpClient.post(new CommonRequest().createPostRequest(Constant.URL_GET_ACCESS_TOKEN, params), new DisposeDataHandle(new DisposeDataListener() {
+            OkhttpRequestCenter.getCommonPostRequest(Constant.URL_GET_ACCESS_TOKEN, params, new DisposeDataListener() {
                 @Override
                 public void onSuccess(Object responseObj) {
+                    Log.i(TAG, "onSuccess:responseObj       " + responseObj.toString());
                     dialog.dismissLoadingDlg();
-                    Log.i("luo", "onSuccess: requestAccessToken" + responseObj.toString());
                     try {
                         JSONObject object = new JSONObject(responseObj.toString());
                         String resultCode = object.getString("resultCode");
@@ -258,7 +260,7 @@ public class LoginActivity extends BaseActivity {
                 public void onFailure(Object reasonObj) {
                     Toast.makeText(LoginActivity.this, "密码或用户名错误", Toast.LENGTH_SHORT).show();
                 }
-            }));
+            });
         } else {
             Toast.makeText(this, "请填完整信息", Toast.LENGTH_SHORT).show();
         }
@@ -325,6 +327,7 @@ public class LoginActivity extends BaseActivity {
         jobListPop = new MmPopupWindow(this, roleEdt, list, 5);
         jobListPop.showPopup(roleEdt);
     }
+
     //判断是否更新
     private Boolean isUpdate() {
         Map<String, Object> params = new HashMap<>();
@@ -344,8 +347,8 @@ public class LoginActivity extends BaseActivity {
                     } else {
                         VersionPopupWindow pop = new VersionPopupWindow(LoginActivity.this);
                         pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                        View layout = LayoutInflater.from(LoginActivity.this).inflate(R.layout.activity_login,null,false);
-                        pop.showPopup(layout,pop.getContentView().getMeasuredWidth());
+                        View layout = LayoutInflater.from(LoginActivity.this).inflate(R.layout.activity_login, null, false);
+                        pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

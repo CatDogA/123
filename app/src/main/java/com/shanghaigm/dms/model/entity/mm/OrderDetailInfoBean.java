@@ -26,6 +26,7 @@ public class OrderDetailInfoBean implements Serializable {
         public String terminal_customer_tel;
         public String terminal_customer_address;
         public String models_name;
+        public int models_Id;
         public String number;
         public String battery_system;
         public String battery_number;
@@ -34,7 +35,6 @@ public class OrderDetailInfoBean implements Serializable {
         public String color_determine;
         public String ekg;
         public String licensing_addeess;
-
         public String payment_method;
         public String payment_method_remarks;
         public String delivery_time;
@@ -44,9 +44,9 @@ public class OrderDetailInfoBean implements Serializable {
         public String carriage;
         public String invoice_amount;
         public String billing_requirements;
-
         public int order_id;
-
+        public String order_number;
+        public String address;
 //        public List<MatchingBean> matching;
 //        public class MatchingBean{
 //            public String assembly;

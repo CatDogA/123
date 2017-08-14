@@ -232,7 +232,7 @@ public class OrderAddNamePopWindow extends PopupWindow {
                     ArrayList<OrderAddSearchInfo> searchInfos = new ArrayList<>();
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject searchInfo = rows.getJSONObject(i);
-                        searchInfos.add(new OrderAddSearchInfo(searchInfo.getString("customer_name"), searchInfo.getString("mobile_phone"), searchInfo.getString("company_name"), searchInfo.getString("sex"),searchInfo.getString("detailed_address"), searchInfo.getInt("customer_code"), searchInfo.getString("address")));
+                        searchInfos.add(new OrderAddSearchInfo(searchInfo.getString("customer_name"), searchInfo.getString("mobile_phone"), searchInfo.getString("company_name"), searchInfo.getString("sex"),searchInfo.getString("detailed_address"), searchInfo.getInt("customer_code"), searchInfo.getString("address"),searchInfo.getString("fixed_telephone")));
                     }
 
                     SearchTable table = new SearchTable(context, searchInfos, mHandler);

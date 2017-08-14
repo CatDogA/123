@@ -14,9 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.shanghaigm.dms.BR;
+import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
+import com.shanghaigm.dms.model.entity.ck.AllocationModifyInfo;
+import com.shanghaigm.dms.model.entity.mm.MatchingBean;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
+import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
+import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
+import com.shanghaigm.dms.view.fragment.ck.OrderAddBaseFragment;
 
 import java.util.ArrayList;
 
@@ -36,21 +43,36 @@ public class AllocationTable extends LinearLayout {
     private ArrayList<OrderDetailInfoAllocation> saveList = new ArrayList<>();
     private ArrayList<OrderDetailInfoAllocation> listToSend;
     private int type;
+    private DmsApplication app;
+    private String assemblyName;
 
-    public AllocationTable(final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, ArrayList<OrderDetailInfoAllocation> singleList) {
+    public AllocationTable(String assemblyName, final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, ArrayList<OrderDetailInfoAllocation> singleList) {
         super(context);
         this.data = data;
         this.context = context;
         this.type = type;
+        this.assemblyName = assemblyName;
         this.listToSend = singleList;
+        app = DmsApplication.getInstance();
         LayoutInflater lf = LayoutInflater.from(context);
         View view = lf.inflate(R.layout.table_allocation, this, true);
+        list = (ListView) view.findViewById(R.id.listview);
         initHandler();
-        adapter = new ListAdapter(context, R.layout.list_item_allocation_add, BR.info, data);
+        setUpView();
+
+    }
+
+    //data是从车型获取到的标配信息，saveList是从其中抽取出来的内容相同但不耦合的信息
+    private void setUpView() {
+        //第一次进入的时候，存最原始的信息
         for (OrderDetailInfoAllocation info : data) {
             saveList.add(info);
         }
-        list = (ListView) view.findViewById(R.id.listview);
+        //没有点击model
+        if (!OrderAddBaseFragment.isModelClick && OrderAddActivity.flag == 1) {
+            modifySetUpView();
+        }
+        adapter = new ListAdapter(context, R.layout.list_item_allocation_add, BR.info, data);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,10 +80,89 @@ public class AllocationTable extends LinearLayout {
                 if (data.get(position).getMatchLength() > 0) {
                     //list即选配信息
                     popupWindow = new AllocationUnDefaultChoosePopupWindow(context, position, 1, data.get(position).getList(), data, handler, 1);
-                    popupWindow.showPopup(btn);
+                    popupWindow.showPopup(list);
                 }
             }
         });
+    }
+
+    //修改
+    private void modifySetUpView() {
+        //把data还原
+        data.clear();
+        for (OrderDetailInfoAllocation info : saveList) {
+            data.add(info);
+        }
+//        Log.i(TAG, "modifySetUpView:data                 " + data.size());
+        ArrayList<AllocationModifyInfo> allocationModifyInfos = new ArrayList<>();
+        //存入以备修改，但凡和原信息不同的数据都提取出来
+        if (OrderAddActivity.flag == 1 && app.getMatchingBeanArrayList() != null) {
+//            Log.i(TAG, "modifySetUpView:getMatchingBeanArrayList         " + app.getMatchingBeanArrayList().size());
+            for (MatchingBean bean : app.getMatchingBeanArrayList()) {
+                if (bean.assembly.equals(assemblyName)) {
+                    for (OrderDetailInfoAllocation allocation : data) {
+                        if (bean.entry_name.equals(allocation.getEntry_name())) {
+                            //如果和原始数据不同就存入
+                            if ((!bean.cost_change.equals(allocation.getCost_change()) || (!bean.remarks.equals(allocation.getRemarks()) || (!bean.config_information.equals(allocation.getConfig_information()))))) {
+                                int count = 0;
+                                //如果已经有了，就直接添加
+                                for (AllocationModifyInfo allocationModifyInfo : allocationModifyInfos) {
+                                    if (allocationModifyInfo.entry_name.equals(bean.entry_name)) {
+                                        count++;
+                                        //判断是否已存在此条数据
+                                        OrderDetailInfoAllocation allocation1 = new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change, allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id());
+                                        Boolean isAdd = true;
+                                        for (OrderDetailInfoAllocation alreadyAllocation : allocationModifyInfo.infos) {
+                                            if (allocation1.getCost_change().equals(alreadyAllocation.getCost_change()) && allocation1.getNum().equals(alreadyAllocation.getNum()) && allocation1.getRemarks().equals(alreadyAllocation.getRemarks())) {
+                                                //存在,不添加
+                                                isAdd = false;
+                                            }
+                                        }
+                                        if (isAdd) {
+                                            allocationModifyInfo.infos.add(new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change, allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id()));
+                                        }
+                                    }
+                                }
+                                if (count == 0) {
+                                    ArrayList<OrderDetailInfoAllocation> infos = new ArrayList<>();
+                                    infos.add(new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change, allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id()));
+                                    allocationModifyInfos.add(new AllocationModifyInfo(bean.entry_name, infos));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //删除原来的
+        Log.i(TAG, "modifySetUpView:allocationModifyInfos            " + allocationModifyInfos.size());
+        ArrayList<OrderDetailInfoAllocation> listToDelete = new ArrayList<>();
+        for (AllocationModifyInfo info : allocationModifyInfos) {
+            Log.i(TAG, "modifySetUpView:info.entry_name          " + info.entry_name + "      info.infos.size       " + info.infos.size());
+            for (OrderDetailInfoAllocation infoAllocation : data) {
+                Log.i(TAG, "modifySetUpView:             " + infoAllocation.getEntry_name());
+                if (info.entry_name.equals(infoAllocation.getEntry_name())) {
+                    //但凡entry_name有相同的，就加入删除列表
+                    listToDelete.add(infoAllocation);
+                }
+            }
+        }
+        Log.i(TAG, "modifySetUpView:listToDelete            " + listToDelete.size());
+        for (OrderDetailInfoAllocation info : listToDelete) {
+            data.remove(info);
+        }
+        //添加修改了的
+        for (AllocationModifyInfo info : allocationModifyInfos) {
+            for (OrderDetailInfoAllocation infoAllocation : info.infos) {
+                data.add(infoAllocation);
+                if (OrderAddActivity.undefaultInfos == null) {
+                    OrderAddActivity.undefaultInfos = new ArrayList<>();
+                } else {
+                    OrderAddActivity.undefaultInfos.add(new AllocationAddChooseUndefaultInfo(infoAllocation.getAssemblyName(), infoAllocation.getAssembly(), infoAllocation.getConfig_information(), infoAllocation.getEntry_name(), 1, infoAllocation.getSupporting_id(), 0, infoAllocation.getPrice(), Integer.parseInt(infoAllocation.getNum()), infoAllocation.getRemarks(), infoAllocation.getStandard_id()));
+                }
+            }
+        }
+//        Log.i(TAG, "modifySetUpView:data.size                " + data.size());
     }
 
     private void initHandler() {
@@ -74,6 +175,7 @@ public class AllocationTable extends LinearLayout {
         };
     }
 
+    //删掉原来信息，添加修改信息
     public void HandlerRefresh(AllocationUnDefaultChoosePopupWindow popupWindow, final ListView listview, final ArrayList<OrderDetailInfoAllocation> infoList, final ArrayList<OrderDetailInfoAllocation> saveList) {
         //接口回调
         popupWindow.getListViewInfo(new AllocationUnDefaultChoosePopupWindow.CallBack() {
@@ -141,22 +243,7 @@ public class AllocationTable extends LinearLayout {
                 for (OrderDetailInfoAllocation info : infoList) {
                     listToSend.add(info);
                 }
-//                Message msg = allocationHandler.obtainMessage();
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable(AllocationTable.GET_ALLOCATION_DATA, 1);
-//                msg.setData(bundle);
-//                msg.sendToTarget();
-//                Log.i(TAG, "onItemClick: " + "消息已发");
             }
         });
     }
-
-    //接口回调
-//    public interface CallAllocationBack {
-//        void getAllocation(ArrayList<OrderDetailInfoAllocation> allocationInfos);
-//    }
-//
-//    public void getAllocationInfo(CallAllocationBack call) {
-//        call.getAllocation(listToSend);
-//    }
 }

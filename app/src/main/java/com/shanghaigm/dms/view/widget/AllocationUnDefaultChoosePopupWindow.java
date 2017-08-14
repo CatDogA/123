@@ -35,7 +35,7 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
     private DmsApplication app = DmsApplication.getInstance();
     private static String TAG = "AllocationUnDefault";
     //saveList用来先存着选配数据,list接收listview传来的选配数据,appInfolist用来全局储存,saveUndefaultList存储num>1的选配信息
-    private ArrayList<AllocationAddChooseUndefaultInfo> list, saveList;
+    private ArrayList<AllocationAddChooseUndefaultInfo> saveList;
     private ArrayList<OrderDetailInfoAllocation> saveUndefaultList;
     private int position;
     private GetTextAdapter adapter;
@@ -57,7 +57,6 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
         this.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         this.update();
         this.position = position;
-        this.list = list;
         this.handler = handler;
         this.type = type;
         saveList = new ArrayList<>();
@@ -70,7 +69,6 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
         btnEnSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 saveUndefaultList = new ArrayList<>();  //存储已经选配好的数据
                 Log.i(TAG, "onClick: saveList" + saveList.size() + "saveUndefaultList" + saveUndefaultList.size() + "listToChange" + listToChange.size() + "list" + list.size());
                 ArrayList<AllocationAddChooseUndefaultInfo> saveModifyInfos = new ArrayList<AllocationAddChooseUndefaultInfo>();
@@ -105,7 +103,6 @@ public class AllocationUnDefaultChoosePopupWindow extends PopupWindow {
                     }
                 }
                 Log.i(TAG, "onClick: " + list.size() + "    " + saveList.size() + "   " + "     " + saveUndefaultList.size());
-
                 Message msg = handler.obtainMessage();
                 msg.what = 1;
                 handler.sendMessage(msg);

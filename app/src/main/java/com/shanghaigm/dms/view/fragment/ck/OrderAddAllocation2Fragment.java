@@ -28,7 +28,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
     private ArrayList<Button> btns = new ArrayList<>();
     private ArrayList<AllocationUnDefaultChoosePopupWindow> popWindows = new ArrayList<>();
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
-    private ArrayList<ArrayList<OrderDetailInfoAllocation>> allAssemblyList = new ArrayList<>();
+    private ArrayList<ArrayList<OrderDetailInfoAllocation>> allAssemblyList;
     //储存实时改变的list和原始的list
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> saveLists = new ArrayList<>();
     private ArrayList<AllocationTable> tables = new ArrayList<>();
@@ -84,45 +84,48 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
             for (String name : names) {
                 if (((OrderAddActivity) getActivity()).getAssemblyList() != null) {
                     allAssemblyList = ((OrderAddActivity) getActivity()).getAssemblyList();
-                    for (int i = 0; i < allAssemblyList.size(); i++) {
-                        if (allAssemblyList.get(i).get(0).getAssemblyName().equals(name)) {
-                            //保存lists
-                            saveLists.add(allAssemblyList.get(i));
-                            //建button
-                            String btnText = "";
+                    if (allAssemblyList.size() > 0) {
+                        for (int i = 0; i < allAssemblyList.size(); i++) {
+                            if (allAssemblyList.get(i).get(0).getAssemblyName().equals(name)) {
+                                //保存lists
+                                saveLists.add(allAssemblyList.get(i));
+                                //建button
+                                String btnText = "";
 //                if (i < names.size()) {
-                            btnText = name;
+                                btnText = name;
 //                }/
-                            //button名
-                            Button btn = new Button(getActivity());
-                            btn.setText(btnText);
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
-                            params.gravity = Gravity.CENTER_HORIZONTAL;
-                            btn.setLayoutParams(params);
-                            ll.addView(btn);
-                            btns.add(btn);
-                            //建linearlayout
-                            LinearLayout linearLayout = new LinearLayout(getActivity());
+                                //button名
+                                Button btn = new Button(getActivity());
+                                btn.setText(btnText);
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                params.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
+                                params.gravity = Gravity.CENTER_HORIZONTAL;
+                                btn.setLayoutParams(params);
+                                ll.addView(btn);
+                                btns.add(btn);
+                                //建linearlayout
+                                LinearLayout linearLayout = new LinearLayout(getActivity());
 //                linearLayout.
-                            LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
-                            linearLayout.setLayoutParams(llParams);
-                            //建表
-                            AllocationTable table = new AllocationTable(getActivity(), allAssemblyList.get(i), btn, i, ((OrderAddActivity) getActivity()).getSingleAllocationList());
-                            LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                            table.setLayoutParams(tableParams);
-                            linearLayout.addView(table);
-                            tables.add(table);
-                            linearLayouts.add(linearLayout);
-                            ll.addView(linearLayout);
+                                LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+                                linearLayout.setLayoutParams(llParams);
+                                //建表
+                                AllocationTable table = new AllocationTable(name, getActivity(), allAssemblyList.get(i), btn, i, ((OrderAddActivity) getActivity()).getSingleAllocationList());
+                                LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                                table.setLayoutParams(tableParams);
+                                linearLayout.addView(table);
+                                tables.add(table);
+                                linearLayouts.add(linearLayout);
+                                ll.addView(linearLayout);
+                            }
                         }
                     }
+
                 } else {
                     Toast.makeText(getActivity(), "请选择车型", Toast.LENGTH_SHORT).show();
                 }
             }
-        }else{
-            Toast.makeText(getActivity(),getResources().getText(R.string.choose_model), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), getResources().getText(R.string.choose_model), Toast.LENGTH_SHORT).show();
         }
         //新建linearlayout套button
         LinearLayout btnlinearLayout = new LinearLayout(getActivity());

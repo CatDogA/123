@@ -168,7 +168,7 @@ public class CustomAllocationTable extends LinearLayout {
                 switch (type) {
                     case 1:
                         position = (int) holder.edtSystem.getTag();
-                        saveEdtInfo(1, s.toString(), position);
+                        saveEdtInfo(1,"自定义", position);
                         break;
                     case 2:
                         position = (int) holder.edtProName.getTag();
@@ -199,10 +199,10 @@ public class CustomAllocationTable extends LinearLayout {
     private void saveEdtInfo(int type, String str, int position) {
         switch (type) {
             case 1:
-                saveList.get(position).setEntry_name(str);
+                saveList.get(position).setAssembly(str);
                 break;
             case 2:
-                saveList.get(position).setAssembly(str);
+                saveList.get(position).setEntry_name(str);
                 break;
             case 3:
                 saveList.get(position).setConfig_information(str);

@@ -232,8 +232,8 @@ public class OrderAddAllocationFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (newEnergyList.get(position).getMatchLength() > 0) {
-                    popNewEnergy = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, newEnergyList.get(position).getList(), newEnergyList, mHandler, 1);
-                    popNewEnergy.showPopup(btnNewEnergy);
+//                    popNewEnergy = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, newEnergyList.get(position).getList(), newEnergyList, mHandler, 1);
+//                    popNewEnergy.showPopup(btnNewEnergy);
                 }
             }
         });
@@ -241,8 +241,8 @@ public class OrderAddAllocationFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (carBodyList.get(position).getMatchLength() > 0) {
-                    popCarBody = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, carBodyList.get(position).getList(), carBodyList, mHandler, 2);
-                    popCarBody.showPopup(btnCarBody);
+//                    popCarBody = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, carBodyList.get(position).getList(), carBodyList, mHandler, 2);
+//                    popCarBody.showPopup(btnCarBody);
                 }
             }
         });
@@ -250,8 +250,8 @@ public class OrderAddAllocationFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (underPanList.get(position).getMatchLength() > 0) {
-                    popUnderPan = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, underPanList.get(position).getList(), underPanList, mHandler, 3);
-                    popUnderPan.showPopup(btnUnderPan);
+//                    popUnderPan = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, underPanList.get(position).getList(), underPanList, mHandler, 3);
+//                    popUnderPan.showPopup(btnUnderPan);
                 }
             }
         });
@@ -259,8 +259,8 @@ public class OrderAddAllocationFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (electricList.get(position).getMatchLength() > 0) {
-                    popElectric = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, electricList.get(position).getList(), electricList, mHandler, 4);
-                    popElectric.showPopup(btnElectric);
+//                    popElectric = new AllocationUnDefaultChoosePopupWindow(getActivity(), position, 3, electricList.get(position).getList(), electricList, mHandler, 4);
+//                    popElectric.showPopup(btnElectric);
                 }
             }
         });

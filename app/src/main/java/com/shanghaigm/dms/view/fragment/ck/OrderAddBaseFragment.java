@@ -1,9 +1,9 @@
 package com.shanghaigm.dms.view.fragment.ck;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,27 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
 import com.chumi.widget.http.okhttp.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
-import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.databinding.FragmentOrderAddBaseBinding;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
 import com.shanghaigm.dms.model.entity.ck.OrderAddSearchInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
-import com.shanghaigm.dms.view.activity.ck.AllocationAddChooseUndefaultActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 import com.shanghaigm.dms.view.widget.OrderAddNamePopWindow;
-import com.shanghaigm.dms.view.widget.SearchTable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +38,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class OrderAddBaseFragment extends BaseFragment {
     private OrderDetailInfoOne orderDetailInfoOne = new OrderDetailInfoOne();
@@ -62,6 +58,9 @@ public class OrderAddBaseFragment extends BaseFragment {
     private Handler handler;
     private int model_Id, customerCode;
     private String companyName, sex;
+    private FragmentOrderAddBaseBinding binding;
+    public OrderDetailInfoOne info;
+    public static Boolean isModelClick;
 
     public OrderAddBaseFragment() {
     }
@@ -70,14 +69,17 @@ public class OrderAddBaseFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_order_add_base, container, false);
+        binding = DataBindingUtil.bind(v);
         initView(v);
         initInfoOne();
         initData();
         setUpView();
+        setData();
         return v;
     }
 
     private void initData() {
+        isModelClick = false;
         provinceId = "";
         cityId = "";
         countyId = "";
@@ -93,6 +95,7 @@ public class OrderAddBaseFragment extends BaseFragment {
                 address = info.getAddress();
                 sex = info.getSex();
                 edtSex.setText(sex);
+                edtPhone.setText(info.getFixed_telephone());
                 if (address != null) {
                     if (!address.equals("")) {
                         String[] addresses = address.split(",");
@@ -134,6 +137,18 @@ public class OrderAddBaseFragment extends BaseFragment {
         orderDetailInfoOne = new OrderDetailInfoOne("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
 
+    private void setData() {
+        if (OrderAddActivity.flag == 1) {
+            info = new OrderDetailInfoOne(app.getOrderDetailInfoBean());
+            model_Id = app.getOrderDetailInfoBean().resultEntity.models_Id;
+            getAllocations();
+            binding.setInfo(info);
+        }
+        if (OrderAddActivity.flag == 0) {
+            binding.setInfo(new OrderDetailInfoOne());
+        }
+    }
+
     private void setUpView() {
         //检测选择的车型,并获取总成整体数据
         edtModel.addTextChangedListener(new TextWatcher() {
@@ -144,52 +159,22 @@ public class OrderAddBaseFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, final int count) {
-                String model = edtModel.getText().toString();
-                try {
-                    if (!model.equals("") && modelArray != null) {
-                        for (int i = 0; i < modelArray.length(); i++) {
-                            if (model.equals(modelArray.getJSONObject(i).getString("models_name"))) {
-                                final int modelId = modelArray.getJSONObject(i).getInt("models_Id");
-                                model_Id = modelId;
-                                Map<String, Object> params = new HashMap<>();
-                                params.put("models_Id", modelId);
-                                dialog.showLoadingDlg();
-                                CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ASSEMBLY_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
-                                    @Override
-                                    public void onSuccess(Object responseObj) {
-                                        dialog.dismissLoadingDlg();
-                                        JSONObject assembly = (JSONObject) responseObj;
-                                        try {
-                                            JSONArray arrayAssembly = assembly.getJSONArray("resultEntity");
-                                            assemblyStr = arrayAssembly.get(0).toString();
-                                            Log.i(TAG, "onSuccess: " + responseObj.toString());
-                                            //貌似不能够同意请求，只能获取总成的名称
-                                            ArrayList<String> assemblyList = new ArrayList<String>();
-                                            allAssemblyList = new ArrayList<ArrayList<OrderDetailInfoAllocation>>();
-                                            assemblyCount = arrayAssembly.length();
-                                            ArrayList<String> names = new ArrayList<String>();
-                                            for (int i = 0; i < arrayAssembly.length(); i++) {
-                                                assemblyList.add(arrayAssembly.get(i).toString());
-                                                getAssemblyListInfo(modelId, arrayAssembly.get(i).toString());
-                                                names.add(arrayAssembly.get(i).toString());
-                                            }
-                                            ((OrderAddActivity) getActivity()).setAssemblyNames(names);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Object reasonObj) {
-
-                                    }
-                                }));
+                if (isModelClick) {
+                    String model = edtModel.getText().toString();
+                    try {
+                        if (!model.equals("") && modelArray != null) {
+                            for (int i = 0; i < modelArray.length(); i++) {
+                                if (model.equals(modelArray.getJSONObject(i).getString("models_name"))) {
+                                    final int modelId = modelArray.getJSONObject(i).getInt("models_Id");
+                                    model_Id = modelId;
+                                    getAllocations();
+                                }
                             }
-                        }
 
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -205,6 +190,7 @@ public class OrderAddBaseFragment extends BaseFragment {
                     @Override
                     public void onSuccess(Object responseObj) {
                         try {
+                            isModelClick = true;
                             ArrayList<PopListInfo> models = new ArrayList<>();
                             JSONObject object = new JSONObject(responseObj.toString());
                             modelArray = object.getJSONArray("resultEntity");
@@ -233,16 +219,6 @@ public class OrderAddBaseFragment extends BaseFragment {
                 pop_add_name.showPopup(edtCustomerName);
             }
         });
-//        imgSex.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ArrayList<PopListInfo> popSexList = new ArrayList<PopListInfo>();
-//                popSexList.add(new PopListInfo("男"));
-//                popSexList.add(new PopListInfo("女"));
-//                MmPopupWindow popSex = new MmPopupWindow(getActivity(), edtSex, popSexList, 3);
-//                popSex.showPopup(edtSex);
-//            }
-//        });
 
         imgColorDetermine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,6 +232,42 @@ public class OrderAddBaseFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private void getAllocations() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("models_Id", model_Id);
+        dialog.showLoadingDlg();
+        CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_ASSEMBLY_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                dialog.dismissLoadingDlg();
+                JSONObject assembly = (JSONObject) responseObj;
+                try {
+                    JSONArray arrayAssembly = assembly.getJSONArray("resultEntity");
+                    assemblyStr = arrayAssembly.get(0).toString();
+                    Log.i(TAG, "onSuccess: " + responseObj.toString());
+                    //貌似不能够同意请求，只能获取总成的名称
+                    ArrayList<String> assemblyList = new ArrayList<String>();
+                    allAssemblyList = new ArrayList<ArrayList<OrderDetailInfoAllocation>>();
+                    assemblyCount = arrayAssembly.length();
+                    ArrayList<String> names = new ArrayList<String>();
+                    for (int i = 0; i < arrayAssembly.length(); i++) {
+                        assemblyList.add(arrayAssembly.get(i).toString());
+                        getAssemblyListInfo(model_Id, arrayAssembly.get(i).toString());
+                        names.add(arrayAssembly.get(i).toString());
+                    }
+                    ((OrderAddActivity) getActivity()).setAssemblyNames(names);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        }));
     }
 
     private void getAssemblyListInfo(int modelId, final String assembly) {
@@ -299,7 +311,7 @@ public class OrderAddBaseFragment extends BaseFragment {
                                         if (!matchArray.getJSONObject(j).get("matching_id").toString().equals("")) {
                                             matching_id = matchArray.getJSONObject(j).getInt("matching_id");
                                         }
-                                        undefaultInfoList.add(new AllocationAddChooseUndefaultInfo(matchArray.getJSONObject(j).getString("assembly"), matchArray.getJSONObject(j).getString("config_information"), matchArray.getJSONObject(j).getString("entry_name"), is_other, supporting_id, matching_id, 0.0, 0, "", id));
+                                        undefaultInfoList.add(new AllocationAddChooseUndefaultInfo(assembly, matchArray.getJSONObject(j).getString("assembly"), matchArray.getJSONObject(j).getString("config_information"), info.getString("entry_name"), is_other, supporting_id, matching_id, 0.0, 0, "", id));
                                     }
                                 }
                             }
@@ -312,7 +324,6 @@ public class OrderAddBaseFragment extends BaseFragment {
                         allAssemblyList.add(list);
                     }
                     ((OrderAddActivity) getActivity()).setAssemblyList(allAssemblyList);   //用于被改变
-                    ((OrderAddActivity) getActivity()).setOriginalList(allAssemblyList);
                     if (allAssemblyList.size() > 0) {
                         OrderAddActivity.originList = new ArrayList<OrderDetailInfoAllocation>();
                         for (ArrayList<OrderDetailInfoAllocation> infos : allAssemblyList) {
@@ -321,7 +332,7 @@ public class OrderAddBaseFragment extends BaseFragment {
                             }
                         }
                     }
-                    Log.i(TAG, "onSuccess: " + allAssemblyList.size() + "    " + assemblyCount);
+//                    Log.i(TAG, "onSuccess: " + allAssemblyList.size() + "    " + assemblyCount);
                     if (allAssemblyList.size() == assemblyCount) {
                         dialog.dismissLoadingDlg();
                     }

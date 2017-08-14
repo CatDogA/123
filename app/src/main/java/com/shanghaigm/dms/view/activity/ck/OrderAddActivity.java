@@ -22,9 +22,12 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
+import com.shanghaigm.dms.model.entity.mm.MatchingBean;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
+import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoBean;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
@@ -50,7 +53,6 @@ public class OrderAddActivity extends AppCompatActivity {
     private LoadingDialog dialog;
     private DmsApplication app;
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> assemblyList;   //所有修改后的配置信息
-    private ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList;   //所有原始选配信息(无用)
     private ArrayList<OrderDetailInfoAllocation> singleAllocationList;      //仅代表目前所在的配置项
 
     private ArrayList<OrderDetailInfoAllocation> customAddList;             //自定义信息
@@ -62,15 +64,30 @@ public class OrderAddActivity extends AppCompatActivity {
     private OrderDetailInfoOne addBaseInfo = null;
     private int modelId, customer_code;
     private String companyName, orderNumber, sex1;
-
+    public static int flag = 0;   //判断是否为新增,0新增，1修改
+    private JSONArray allocationArray, customerArray;
+    private JSONObject paramObject;
+    private int orderId;     //储存保存成功后的order_id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_add2);
+        initIntent();
         initView();
         initData();
         setUpView();
+    }
+
+    private void initIntent() {
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            if (b.getInt(PaperInfo.ORDER_MODIFY) == 1) {
+                flag = 1;
+            }
+        } else {
+            flag = 0;
+        }
     }
 
     private void initView() {
@@ -78,6 +95,9 @@ public class OrderAddActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.mm_order_detail_tab);
         saveBtn = (Button) findViewById(R.id.order_pass_button);
         submitBtn = (Button) findViewById(R.id.order_return_back_button);
+        if (flag == 0) {
+            submitBtn.setEnabled(false);
+        }
         dialog = new LoadingDialog(this, "正在加载");
         app = DmsApplication.getInstance();
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
@@ -118,32 +138,63 @@ public class OrderAddActivity extends AppCompatActivity {
                         addPayInfo = orderInfoTwo;
                     }
                 });
+                if (flag == 0) {
+                    RequestParams params = new RequestParams();
+                    params.put("loginName", app.getAccount());
+                    dialog.showLoadingDlg();
+                    CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_GET_ORDER_NUMBER, params), new DisposeDataHandle(new DisposeDataListener() {
+                        @Override
+                        public void onSuccess(Object responseObj) {
+                            dialog.dismissLoadingDlg();
+                            JSONObject object = (JSONObject) responseObj;
+                            try {
+                                JSONObject resultEntity = object.getJSONObject("resultEntity");
+                                orderNumber = resultEntity.getString("order_number");
+                                String url = Constant.URL_ORDER_ADD;
+                                addOrder(url);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                RequestParams params = new RequestParams();
+                        @Override
+                        public void onFailure(Object reasonObj) {
+                            dialog.dismissLoadingDlg();
+                            Log.i(TAG, "onFailure: " + reasonObj.toString());
+                        }
+                    }));
+                }
+                if (flag == 1) {
+                    orderNumber = app.getOrderDetailInfoBean().resultEntity.order_number;
+                    String url = Constant.URL_ORDER_MODIFY;
+                    addOrder(url);
+                }
+            }
+        });
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Object> params = new HashMap<>();
+                if (flag == 0) {
+                    params.put("id", orderId);
+                }
+                if (flag == 1) {
+                    params.put("id", app.getOrderDetailInfoBean().resultEntity.order_id);
+                }
                 params.put("loginName", app.getAccount());
                 dialog.showLoadingDlg();
-                CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_GET_ORDER_NUMBER, params), new DisposeDataHandle(new DisposeDataListener() {
+                OkhttpRequestCenter.getCommonReportRequest(Constant.URL_COMMIT_ORDER, params, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
+                        Log.i(TAG, "onSuccess:      " + responseObj);
                         dialog.dismissLoadingDlg();
-                        JSONObject object = (JSONObject) responseObj;
-                        try {
-                            JSONObject resultEntity = object.getJSONObject("resultEntity");
-                            orderNumber = resultEntity.getString("order_number");
-                            addOrder();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     }
 
                     @Override
                     public void onFailure(Object reasonObj) {
-                        dialog.dismissLoadingDlg();
-                        Log.i(TAG, "onFailure: " + reasonObj.toString());
+
                     }
-                }));
-
-
+                });
             }
         });
         titleText.setText(String.format(getString(R.string.ck_order_add)));
@@ -171,14 +222,17 @@ public class OrderAddActivity extends AppCompatActivity {
         });
     }
 
-    private void addOrder() {
+    //1.保存、修改
+    private void addOrder(String url) {
         if (orderNumber != null) {
             //前两页信息   order
-            JSONObject paramObject = new JSONObject();
+            paramObject = new JSONObject();
             JSONArray paramArray = new JSONArray();
             try {
+                if (flag == 0) {
+                    paramObject.put("order_number", orderNumber);
+                }
                 paramObject.put("company_name", companyName);
-                paramObject.put("order_number", orderNumber);
                 paramObject.put("customer_name", addBaseInfo.getCustomer_name());
                 paramObject.put("mobile_phone", addBaseInfo.getMobile_phone());
                 paramObject.put("terminal_customer_name", addBaseInfo.getTerminal_customer_name());
@@ -220,23 +274,32 @@ public class OrderAddActivity extends AppCompatActivity {
                 paramObject.put("road_condition", "不晓得");
                 paramObject.put("normal_speed", "11");
                 paramObject.put("remark", "晓得不");
+                if (flag == 1) {
+                    OrderDetailInfoBean.ResultEntity entity = app.getOrderDetailInfoBean().resultEntity;
+                    paramObject.put("order_id", entity.order_id + "");
+//                    paramObject.put("company_name", app.getOrderDetailInfoBean().resultEntity.company_name);
+                    if (OrderAddBaseFragment.address == null) {
+                        paramObject.put("address", app.getOrderDetailInfoBean().resultEntity.address);
+                    }
+//                    paramObject.put("payment_method", app.getOrderDetailInfoBean().resultEntity.payment_method);
+                }
                 paramArray.put(paramObject);
 
                 //第三页信息    standardVo
                 //1.取出整体信息
                 //不改变，直接上传
                 JSONObject allocationObject;
-                JSONArray allocationArray = new JSONArray();
+                allocationArray = new JSONArray();
                 for (OrderDetailInfoAllocation info : originList) {
                     allocationObject = new JSONObject();
-                    allocationObject.put("assembly", info.getAssembly());
+                    allocationObject.put("assembly", info.getAssemblyName());
                     allocationObject.put("entry_name", info.getEntry_name());
                     allocationObject.put("standard_information", info.getConfig_information());
                     Double cost_change = 0.0;
-                    if (!info.getCost_change().equals("")) {
-                        cost_change = Double.parseDouble(info.getCost_change());
-                    }
-                    allocationObject.put("cost_change", cost_change);
+//                    if (!info.getCost_change().equals("")) {
+//                        cost_change = Double.parseDouble(info.getCost_change());
+//                    }
+                    allocationObject.put("cost_change", "");
                     int supporting_id = 0;
                     if (isNumeric(info.getSupporting_id()) && !info.getSupporting_id().equals("")) {
                         supporting_id = Integer.parseInt(info.getSupporting_id());
@@ -251,7 +314,7 @@ public class OrderAddActivity extends AppCompatActivity {
                                 obj.put("entry_name", info2.getEntry_name());
                                 obj.put("config_information", info2.getConfig_information());
                                 obj.put("num", info2.getNum() + "");
-                                obj.put("cost_change", info2.getPrice());
+                                obj.put("cost_change", info2.getPrice() + "");
                                 obj.put("remarks", info2.getRemarks());
                                 obj.put("isother", 1);
                                 obj.put("matching_id", info2.getMatching_id() + "");
@@ -279,14 +342,14 @@ public class OrderAddActivity extends AppCompatActivity {
                 Log.i(TAG, "onClick:allocationArray      " + allocationArray.toString());
                 Log.i(TAG, "onClick:        " + paramArray.toString());
                 //自定义
-                JSONArray customerArray = new JSONArray();
+                customerArray = new JSONArray();
                 JSONObject customerObject = new JSONObject();
                 for (OrderDetailInfoAllocation info : customAddList) {
                     customerObject.put("assembly", info.getAssembly());
                     customerObject.put("entry_name", info.getEntry_name());
                     customerObject.put("config_information", info.getConfig_information());
                     customerObject.put("num", info.getNum());
-                    customerObject.put("cost_change", 100.0);
+                    customerObject.put("cost_change", "");
                     customerObject.put("remarks", info.getRemarks());
                     customerObject.put("supporting_id", 0);
                     customerObject.put("isother", 0);
@@ -295,16 +358,32 @@ public class OrderAddActivity extends AppCompatActivity {
                 Log.i(TAG, "addOrder:customerArray           " + customerArray.toString());
                 //提交请求
                 final Map<String, Object> requestParams = new HashMap<>();
-                requestParams.put("order", paramArray.toString());
-//                requestParams.put("standardVo", "[]");
-//                requestParams.put("matching", "[]");
+                if (flag == 0) {
+                    requestParams.put("order", paramArray.toString());
+                }
+                if (flag == 1) {
+                    requestParams.put("orders", paramArray.toString());
+                }
                 requestParams.put("standardVo", allocationArray.toString());
                 requestParams.put("matching", customerArray.toString());
                 requestParams.put("loginName", app.getAccount());
-                OkhttpRequestCenter.getCommonPostRequest(Constant.URL_ORDER_ADD, requestParams, new DisposeDataListener() {
+                dialog.showLoadingDlg();
+                OkhttpRequestCenter.getCommonPostRequest(url, requestParams, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
+                        dialog.dismissLoadingDlg();
                         Log.i(TAG, "onSuccess:responseObj        " + responseObj.toString());
+                        JSONObject result = (JSONObject) responseObj;
+                        try {
+                            orderId = result.getInt("resultEntity");
+                            if (orderId != -1) {
+                                Toast.makeText(OrderAddActivity.this, getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
+                                saveBtn.setEnabled(false);
+                                submitBtn.setEnabled(true);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -367,7 +446,20 @@ public class OrderAddActivity extends AppCompatActivity {
         //进入即清空
         assemblyNames = new ArrayList<>();
         customAddList = new ArrayList<>();
-//        customAddList.add(new OrderDetailInfoAllocation("", "", "", "", "", "", "", "", 0, null, 0));
+        if (app.getMatchingBeanArrayList().size() > 0) {
+            for (MatchingBean bean : app.getMatchingBeanArrayList()) {
+                if (bean.isother == 0) {
+                    OrderDetailInfoAllocation allocation = new OrderDetailInfoAllocation(bean.assembly, bean.entry_name, bean.config_information, bean.num + "", bean.remarks, bean.isdefault);
+                    customAddList.add(allocation);
+                }
+            }
+        }
+        Log.i(TAG, "initData: customAddList         " + customAddList.size());
+        if (assemblyList == null) {
+            assemblyList = new ArrayList<>();
+        } else {
+            assemblyList.clear();
+        }
         singleAllocationList = new ArrayList<>();
         addPayInfo = new OrderDetailInfoTwo("", "", "", "", "", "", "", "", "");
         if (originList != null) {
@@ -416,14 +508,6 @@ public class OrderAddActivity extends AppCompatActivity {
 
     public void setCustomAddList(ArrayList<OrderDetailInfoAllocation> customAddList) {
         this.customAddList = customAddList;
-    }
-
-    public ArrayList<ArrayList<OrderDetailInfoAllocation>> getOriginalList() {
-        return originalList;
-    }
-
-    public void setOriginalList(ArrayList<ArrayList<OrderDetailInfoAllocation>> originalList) {
-        this.originalList = originalList;
     }
 
     public ArrayList<OrderDetailInfoAllocation> getSingleAllocationList() {

@@ -36,12 +36,15 @@ import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
+import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
 import com.shanghaigm.dms.view.fragment.ck.ChangeLetterSubFragment;
+import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
+import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocationFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 
@@ -66,6 +69,7 @@ public class PaperInfo extends BasePaperInfo {
     public static String REPORT_DETAI_INFO = "report_detail_info";
     public static String REPORT_FILE_INFO = "report_file_info";
     public static String REPORT_DELETE = "report_delete";
+    public static String ORDER_MODIFY = "oder_modify";
     private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交
     private LoadingDialog dialog;
     private static String TAG = "PaperInfo";
@@ -216,9 +220,17 @@ public class PaperInfo extends BasePaperInfo {
                                     Log.i(TAG, "onSuccess: " + "没有配置数据");
                                 } else {
                                     JSONArray matches = new JSONArray(matching.toString());
+                                    Log.i(TAG, "onSuccess:matching       " + matching.toString());
                                     for (int i = 0; i < matches.length(); i++) {
                                         JSONObject match = matches.getJSONObject(i);
-                                        matchings.add(GsonUtil.GsonToBean(match.toString(), MatchingBean.class));
+                                        int num = 0;
+                                        if(!match.get("num").equals("")){
+                                            num = Integer.parseInt(match.get("num").toString());
+                                            matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),num,match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                        }else {
+                                            matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                        }
+//                                        matchings.add(GsonUtil.GsonToBean(match.toString(), MatchingBean.class));
                                     }
                                     app.setMatchingBeanArrayList(matchings);
                                 }
@@ -227,7 +239,10 @@ public class PaperInfo extends BasePaperInfo {
                             }
                             OrderDetailInfoBean orderDetailInfoBean = GsonUtil.GsonToBean(responseObj.toString(), OrderDetailInfoBean.class);
                             app.setOrderDetailInfoBean(orderDetailInfoBean);
-                            Intent intent1 = new Intent(view.getContext(), OrderModifyActivity.class);
+                            Intent intent1 = new Intent(view.getContext(), OrderAddActivity.class);
+                            Bundle b = new Bundle();
+                            b.putInt(ORDER_MODIFY, 1);
+                            intent1.putExtras(b);
                             view.getContext().startActivity(intent1);
                         }
 
@@ -315,7 +330,13 @@ public class PaperInfo extends BasePaperInfo {
                             JSONArray matches = new JSONArray(matching.toString());
                             for (int i = 0; i < matches.length(); i++) {
                                 JSONObject match = matches.getJSONObject(i);
-                                matchings.add(GsonUtil.GsonToBean(match.toString(), MatchingBean.class));
+                                int num = 0;
+                                if(!match.get("num").equals("")){
+                                    num = Integer.parseInt(match.get("num").toString());
+                                    matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),num,match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                }else {
+                                    matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                }
                             }
                             app.setMatchingBeanArrayList(matchings);
                         }

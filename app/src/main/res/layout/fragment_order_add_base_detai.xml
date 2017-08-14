@@ -1,7 +1,5 @@
 <layout>
-
     <data>
-
         <variable
             name="info"
             type="com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne" />

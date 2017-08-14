@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shanghaigm.dms.view.fragment.mm.OrderReview2Fragment">
+
+    <Button
+        android:id="@+id/btn_query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/query" />
+
+    <com.shanghaigm.dms.view.widget.WrapHeightViewPager
+        android:id="@+id/order_review_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </com.shanghaigm.dms.view.widget.WrapHeightViewPager>
+
+    <include layout="@layout/include_below_table" />
+</LinearLayout>

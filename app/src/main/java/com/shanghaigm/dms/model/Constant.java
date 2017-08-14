@@ -20,7 +20,6 @@ public class Constant {
     public static final String URL_GET_REGION = Config.URL_BASE + "/appDKXS/getRegionList";//
     public static final String URL_ORDER_ADD = Config.URL_BASE + "/appDKXS/addOrderInfo";//新增
     public static final String URL_ORDER_MODIFY = Config.URL_BASE + "/appDKXS/updateOrder";//修改
-    public static final String URL_ORDER_COMMIT = Config.URL_BASE + "/appDKXS/commitOrder";//提交
     public static final String URL_GET_PROVINCE_CITY = Config.URL_BASE + "/appDKXS/selectProvincialCity";//省市
     public static final String URL_GET_CHECK_ITEMS_LIST = Config.URL_BASE + "/appDKXS/getCheckItemsList";
     public static final String URL_GET_STATE = Config.URL_BASE + "/appDKXS/getDicByFiled";  //状态
@@ -40,6 +39,7 @@ public class Constant {
     public static final String URL_SUB_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/commitChangeLetter";  //提交更改函
     public static final String URL_DELETE_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/deleteChangeLetterInfo";  //删除更改函
     public static final String URL_GET_CHANGE_LETTER_INFO = Config.URL_BASE+"/appDKXS/getchangeLetterInfo";
+    public static final String URL_COMMIT_ORDER = Config.URL_BASE +"/appDKXS/commitOrder";   //订单提交
     //日报
     public static final String URL_GET_QUERY_REPORT_LIST = Config.URL_BASE + "/appDKSH/getAftersaleDailyPageData";    //查询日报列表
     public static final String URL_GET_REPORT_DETAIL = Config.URL_BASE + "/appDKSH/getAftersaleDailyDetail";      //日报明细
