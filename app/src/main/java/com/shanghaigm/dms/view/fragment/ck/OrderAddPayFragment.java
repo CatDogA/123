@@ -64,6 +64,7 @@ public class OrderAddPayFragment extends BaseFragment {
     }
 
     private void initView(View v) {
+        OrderAddActivity.isPayShow = true;
         imgPayMethod = (ImageView) v.findViewById(R.id.img_pay_method);
         payment_method = (EditText) v.findViewById(R.id.payment_method);
         payment_method.addTextChangedListener(new TextOrderAddPaySwitcher(1));
@@ -83,6 +84,22 @@ public class OrderAddPayFragment extends BaseFragment {
         invoice_amount.addTextChangedListener(new TextOrderAddPaySwitcher(8));
         billing_requirements = (EditText) v.findViewById(R.id.billing_requirements);
         billing_requirements.addTextChangedListener(new TextOrderAddPaySwitcher(9));
+    }
+
+    public void setInfo() {
+        if (OrderAddActivity.addPayInfo == null) {
+            OrderAddActivity.addPayInfo = new OrderDetailInfoTwo("","","","","","","","","");
+        }
+        OrderAddActivity.addPayInfo.setPayment_method(payment_method.getText().toString());
+        OrderAddActivity.addPayInfo.setPayment_method_remarks(payment_method_remarks.getText().toString());
+        OrderAddActivity.addPayInfo.setDelivery_time(delivery_time.getText().toString());
+        OrderAddActivity.addPayInfo.setFreight(freight.getText().toString());
+        OrderAddActivity.addPayInfo.setService_fee(service_fee.getText().toString());
+        OrderAddActivity.addPayInfo.setContract_price(contract_price.getText().toString());
+        OrderAddActivity.addPayInfo.setCarriage(carriage.getText().toString());
+        OrderAddActivity.addPayInfo.setInvoice_amount(invoice_amount.getText().toString());
+        OrderAddActivity.addPayInfo.setBilling_requirements(billing_requirements.getText().toString());
+
     }
 
     //点击"日期"按钮布局 设置日期
@@ -164,7 +181,7 @@ public class OrderAddPayFragment extends BaseFragment {
                         break;
                     case 9:
                         Log.i("str", "onTextChanged:str            " + str);
-//                            orderDetailInfoTwo.setBilling_requirements(str);
+                        orderDetailInfoTwo.setBilling_requirements(str);
                         break;
                 }
             }

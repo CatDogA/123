@@ -36,6 +36,9 @@ import java.util.Map;
  *
  */
 public class OrderReview2Fragment extends BaseFragment {
+    private static String TAG = "OrderReview2Fragment";
+    private LoadingDialog dialog;
+
     private ArrayList<TableInfo> tableInfos;
     private Button btn_query;
     private ImageView img_first, img_last, img_left, img_right;
@@ -47,8 +50,6 @@ public class OrderReview2Fragment extends BaseFragment {
     private Boolean isQuery = false;        //是否已经查询
     private int page, pages;       //显示页数,总页数
     private DmsApplication app;
-    private LoadingDialog dialog;
-    private static String TAG = "OrderReview2Fragment";
     private ArrayList<ReviewTable> tables;
     public static OrderReview2Fragment fragment;
 
@@ -80,9 +81,6 @@ public class OrderReview2Fragment extends BaseFragment {
             }
         });
         img_right.setOnClickListener(new View.OnClickListener() {
-            /**
-             * @param v
-             */
             @Override
             public void onClick(View v) {
                 if (page < pages-1 && isQuery) {
@@ -123,7 +121,6 @@ public class OrderReview2Fragment extends BaseFragment {
                 }
                 adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
                 vp.setAdapter(adapter);
-                Log.i(TAG, "requestTable: "+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 vp.setCurrentItem(page);
                 return;
             }

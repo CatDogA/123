@@ -15,4 +15,6 @@ public class Config {
     //测试
     public static final String URL_BASE = "https://192.168.1.168:8443/skywelldms/services";
     public static final String URL_BASE2 = "https://192.168.1.168:8443/skywelldms";
+
+//    public static final String URL_BASE = "https://192.168.1.72:8443/skywelldms/services";
 }

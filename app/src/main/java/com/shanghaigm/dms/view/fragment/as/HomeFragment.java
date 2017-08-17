@@ -73,8 +73,6 @@ public class HomeFragment extends BaseFragment {
         rl_query.setLayoutParams(lp);
         rl_query.addView(reportQueryButton);
         button_ll.addView(rl_query);
-
-
     }
 
     public static HomeFragment getInstance() {

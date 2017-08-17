@@ -220,33 +220,40 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         stateSelectEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.showLoadingDlg();
-                RequestParams params = new RequestParams();
-                params.put("filed", "parts_bill_state");
-                CommonOkHttpClient.get(CommonRequest.createGetRequest(Constant.URL_GET_STATE, params), new DisposeDataHandle(new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-                        dialog.dismissLoadingDlg();
-                        Log.i(TAG, "onSuccess: state" + responseObj.toString());
-                        ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
-                        JSONObject object = (JSONObject) responseObj;
-                        try {
-                            stateArray = object.getJSONArray("resultEntity");
-                            for (int i = 0; i < stateArray.length(); i++) {
-                                states.add(new PopListInfo(stateArray.getJSONObject(i).getString("date_value")));
-                            }
-                            statePopup = new MmPopupWindow(ContractReviewOrChangeLetterReviewActivity.this, stateSelectEdt, states, 3);
-                            statePopup.showPopup(stateSelectEdt);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Object reasonObj) {
-
-                    }
-                }));
+                String[] strings = {"待审核", "已审核", "驳回"};
+                ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
+                for (int i = 0; i < strings.length; i++) {
+                    states.add(new PopListInfo(strings[i]));
+                }
+                statePopup = new MmPopupWindow(ContractReviewOrChangeLetterReviewActivity.this, stateSelectEdt, states, 3);
+                statePopup.showPopup(stateSelectEdt);
+//                dialog.showLoadingDlg();
+//                RequestParams params = new RequestParams();
+//                params.put("filed", "parts_bill_state");
+//                CommonOkHttpClient.get(CommonRequest.createGetRequest(Constant.URL_GET_STATE, params), new DisposeDataHandle(new DisposeDataListener() {
+//                    @Override
+//                    public void onSuccess(Object responseObj) {
+//                        dialog.dismissLoadingDlg();
+//                        Log.i(TAG, "onSuccess: state" + responseObj.toString());
+//                        ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
+//                        JSONObject object = (JSONObject) responseObj;
+//                        try {
+//                            stateArray = object.getJSONArray("resultEntity");
+//                            for (int i = 0; i < stateArray.length(); i++) {
+//                                states.add(new PopListInfo(stateArray.getJSONObject(i).getString("date_value")));
+//                            }
+//                            statePopup = new MmPopupWindow(ContractReviewOrChangeLetterReviewActivity.this, stateSelectEdt, states, 3);
+//                            statePopup.showPopup(stateSelectEdt);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Object reasonObj) {
+//
+//                    }
+//                }));
             }
         });
     }
@@ -272,11 +279,11 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         } else {
             modelId = null;
         }
-        if (!stateText.equals("")) {
-            stateId = getParam(stateArray, stateText, "date_value", "date_key");
-        } else {
-            stateId = null;
-        }
+//        if (!stateText.equals("")) {
+//            stateId = getParam(stateArray, stateText, "date_value", "date_key");
+//        } else {
+//            stateId = null;
+//        }
         JSONObject paramObject = new JSONObject();
         JSONArray paramArray = new JSONArray();
         try {
@@ -285,7 +292,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
             paramObject.put("models_Id", modelId);
             paramObject.put("org_code", orgCode);
             paramObject.put("user_name", ckText);
-            paramObject.put("state", stateId);
+            paramObject.put("audit_status", getState(stateText) + "");
             paramArray.put(paramObject);
 
         } catch (JSONException e) {
@@ -299,7 +306,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         }
         if (flag == 3) {
             url = Constant.URL_QUERY_CHANGE_LETTER_INFO;
-            params.put("cls", paramArray.toString());
+            params.put("cle", paramArray.toString());
         }
         params.put("page", page + "");
         params.put("rows", "7");
@@ -414,6 +421,20 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
                 Log.i("luo", "onFailure: " + reasonObj.toString());
             }
         }));
+    }
+
+    private int getState(String state) {
+        int audit_status = 0;
+        if (state.equals("待审核")) {
+            audit_status = -1;
+        }
+        if (state.equals("已审核")) {
+            audit_status = 1;
+        }
+        if (state.equals("驳回")) {
+            audit_status = 2;
+        }
+        return audit_status;
     }
 
     private Object getParam(JSONArray array, String text, String name, String code) {

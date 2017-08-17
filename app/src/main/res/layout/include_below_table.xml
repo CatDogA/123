@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <TextView
@@ -22,36 +21,34 @@
 
         <ImageView
             android:id="@+id/viewpager_first"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/first"
-            android:visibility="invisible" />
+            android:src="@mipmap/first1" />
 
         <ImageView
             android:id="@+id/viewpager_left"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
-            android:src="@mipmap/left_switch" />
+            android:src="@mipmap/left1" />
 
         <ImageView
             android:id="@+id/viewpager_right"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/right_switch_pre" />
+            android:src="@mipmap/right1" />
 
         <ImageView
             android:id="@+id/viewpager_last"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
-            android:src="@mipmap/last"
-            android:visibility="invisible" />
+            android:src="@mipmap/last1" />
     </LinearLayout>
 </LinearLayout>

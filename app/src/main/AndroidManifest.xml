@@ -25,7 +25,7 @@
             android:name=".view.activity.common.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,8 +44,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.activity.mm.HomeActivity" />
         <activity android:name=".view.activity.mm.ContractReviewDetailActivity" />
-        <activity android:name=".view.activity.mm.ChangeLetterDetailActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".view.activity.mm.ChangeLetterDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.activity.mm.ChangeBillDetailActivity" />
         <activity
             android:name=".view.activity.ck.OrderModifyActivity"
@@ -53,12 +54,15 @@
         <activity
             android:name=".view.activity.ck.OrderAddActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.ck.ChangeLetterAddActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.ck.ChangeLetterQueryDetailActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.ck.ChangeLetterModifyActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".view.activity.ck.ChangeLetterAddActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.ck.ChangeLetterQueryDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.ck.ChangeLetterModifyActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.activity.ck.AllocationAddChooseUndefaultActivity" />
         <activity android:name=".view.activity.as.HomeActivity" />
         <activity
@@ -79,7 +83,7 @@
 
         <activity android:name=".view.activity.as.ShowVideoActivity" />
         <activity android:name=".view.activity.as.ShowQueryPhotoActivity" />
-        <activity android:name=".view.activity.as.ReportUpdateActivity"></activity>
+        <activity android:name=".view.activity.as.ReportUpdateActivity" />
     </application>
 
 </manifest>

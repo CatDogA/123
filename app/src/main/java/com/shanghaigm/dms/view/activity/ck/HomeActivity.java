@@ -9,11 +9,9 @@ import android.widget.LinearLayout;
 
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.view.activity.BaseActivity;
-import com.shanghaigm.dms.view.fragment.ck.HomeFragment;
 import com.shanghaigm.dms.view.fragment.ck.ChangeLetterSubFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
-
-import io.realm.internal.TableView;
+import com.shanghaigm.dms.view.fragment.common.HomeFragment;
 
 /**
  * @function 创建首页所有的fragment，以及fragment

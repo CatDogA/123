@@ -12,9 +12,9 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
-import com.shanghaigm.dms.view.fragment.as.HomeFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportQueryFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportSubFragment;
+import com.shanghaigm.dms.view.fragment.common.HomeFragment;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fm;

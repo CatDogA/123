@@ -148,16 +148,16 @@ public class LoginActivity extends BaseActivity {
      */
     public String getVersion() {
         String version = "";
-        int versionCode = 0;
+//        int versionCode = 0;
         try {
             PackageManager manager = this.getPackageManager();
             PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
             version = info.versionName;
-            versionCode = info.versionCode;
+//            versionCode = info.versionCode;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return versionCode + "." + version;
+        return version;
     }
 
     private void initView() {

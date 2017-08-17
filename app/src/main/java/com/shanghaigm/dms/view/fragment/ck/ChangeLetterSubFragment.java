@@ -208,20 +208,21 @@ public class ChangeLetterSubFragment extends BaseFragment {
      */
     //查询
     private void requestOrderInfo(Boolean isQuery) {
+        //todo-条件查询有问题
         dialog.showLoadingDlg();
-        String stateText = "";
-        String contractId = "";
-        String changeLetterId = "";
-        String customerText = "";
-        if (stateSelectEdt != null) {
-            stateText = stateSelectEdt.getText().toString();
-        }
-        if (customerEdt != null) {
-            stateText = customerEdt.getText().toString();
-        }
-        if (changeLetterIdEdt != null) {
-            stateText = changeLetterIdEdt.getText().toString();
-        }
+        String stateText = stateSelectEdt.getText().toString();
+        String contractId = contractIdEdt.getText().toString();
+        String changeLetterId = changeLetterIdEdt.getText().toString();
+        String customerText = customerEdt.getText().toString();
+//        if (stateSelectEdt != null) {
+//            stateText = stateSelectEdt.getText().toString();
+//        }
+//        if (customerEdt != null) {
+//            stateText = customerEdt.getText().toString();
+//        }
+//        if (changeLetterIdEdt != null) {
+//            stateText = changeLetterIdEdt.getText().toString();
+//        }
         Object stateId = null;
         if (!stateText.equals("")) {
             stateId = getParam(stateArray, stateText, "date_value", "date_key");
@@ -233,7 +234,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         try {
             paramObject.put("contract_id", contractId);
             paramObject.put("customer_name", customerText);
-//            paramObject.put("letter_id", changeLetterId);
+            paramObject.put("letter_id", changeLetterId);
             paramObject.put("state", stateId);
             paramArray.put(paramObject);
 
@@ -241,7 +242,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
             e.printStackTrace();
         }
         RequestParams params = new RequestParams();
-//        params.put("cls", paramArray.toString());
+        params.put("cls", paramArray.toString());
         params.put("page", page + "");
         params.put("rows", "8");
         params.put("loginName", app.getAccount());
@@ -276,7 +277,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
                         int order_id = item.getInt("order_id");
                         String change_letter_number = item.getString("change_letter_number");
                         ChangeLetterSubDetailInfo changeLetterSubDetailInfo = new ChangeLetterSubDetailInfo(item);
-                        paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo, item.getInt("letter_id"),order_id));
+                        paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo, item.getInt("letter_id"), order_id));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

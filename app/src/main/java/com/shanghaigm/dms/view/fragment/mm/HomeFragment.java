@@ -41,10 +41,10 @@ public class HomeFragment extends BaseFragment {
                 ViewGone(contractAndChangeBillLL);
                 break;
             case "logistics_handler":
-                ViewGone(orderAndChangeLetterLL);
-                ViewGone(orderAndChangeBillLL);
-                ViewGone(changeBillReview);
-                break;
+//                ViewGone(orderAndChangeLetterLL);
+//                ViewGone(orderAndChangeBillLL);
+//                ViewGone(changeBillReview);
+//                break;
             case "test_manager":
                 ViewGone(orderAndChangeBillLL);
                 ViewGone(orderAndChangeLetterLL);

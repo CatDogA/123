@@ -11,6 +11,7 @@
     </data>
 
     <LinearLayout
+        android:background="@color/tableBack"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -19,7 +20,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
         <!--调用控制text颜色的方法-->
         <TextView
             android:layout_width="0dp"
@@ -37,7 +38,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <TextView
             android:layout_width="0dp"
@@ -52,7 +53,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <TextView
             android:layout_width="0dp"
@@ -67,7 +68,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -100,6 +101,6 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
     </LinearLayout>
 </layout>

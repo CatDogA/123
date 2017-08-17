@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -68,6 +69,7 @@ public class OrderAddActivity extends AppCompatActivity {
     private JSONArray allocationArray, customerArray;
     private JSONObject paramObject;
     private int orderId;     //储存保存成功后的order_id
+    public static Boolean isPayShow = false;    //判断第二页是否显示过
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,12 +134,14 @@ public class OrderAddActivity extends AppCompatActivity {
                         sex1 = sex;
                     }
                 });
-                ((OrderAddPayFragment) fragments.get(1)).getOrderInfoTwo(new OrderAddPayFragment.CallOrderInfoTwo() {
-                    @Override
-                    public void getInfoTwo(OrderDetailInfoTwo orderInfoTwo) {
-                        addPayInfo = orderInfoTwo;
+                if (isPayShow) {
+                    OrderAddPayFragment payFragment = OrderAddPayFragment.getInstance();
+                    payFragment.setInfo();
+                } else {
+                    if (app.getOrderDetailInfoBean() != null && flag == 1) {
+                        addPayInfo = new OrderDetailInfoTwo(app.getOrderDetailInfoBean());
                     }
-                });
+                }
                 if (flag == 0) {
                     RequestParams params = new RequestParams();
                     params.put("loginName", app.getAccount());
@@ -239,22 +243,25 @@ public class OrderAddActivity extends AppCompatActivity {
                 paramObject.put("terminal_customer_tel", addBaseInfo.getTerminal_customer_tel());
                 paramObject.put("terminal_customer_address", addBaseInfo.getTerminal_customer_address());
                 paramObject.put("number", addBaseInfo.getNumber());
-                paramObject.put("freight", addPayInfo.getFreight());
+
                 paramObject.put("battery_system", addBaseInfo.getBattery_system());
                 paramObject.put("battery_number", addBaseInfo.getBattery_number());
-                paramObject.put("delivery_time", addPayInfo.getDelivery_time());
                 paramObject.put("endurance_mileage", addBaseInfo.getEndurance_mileage());
                 paramObject.put("ekg", addBaseInfo.getEkg());
                 paramObject.put("licensing_addeess", addBaseInfo.getLicensing_addeess());
+                paramObject.put("province", OrderAddBaseFragment.provinceId);
+                paramObject.put("city", OrderAddBaseFragment.cityId);
+                paramObject.put("county", OrderAddBaseFragment.countyId);
+
+                paramObject.put("freight", addPayInfo.getFreight());
+                paramObject.put("delivery_time", addPayInfo.getDelivery_time());
                 paramObject.put("payment_method_remarks", addPayInfo.getPayment_method_remarks());
                 paramObject.put("service_fee", addPayInfo.getService_fee());
                 paramObject.put("contract_price", addPayInfo.getContract_price());
                 paramObject.put("carriage", addPayInfo.getCarriage());
                 paramObject.put("invoice_amount", addPayInfo.getInvoice_amount());
                 paramObject.put("billing_requirements", addPayInfo.getBilling_requirements());
-                paramObject.put("province", OrderAddBaseFragment.provinceId);
-                paramObject.put("city", OrderAddBaseFragment.cityId);
-                paramObject.put("county", OrderAddBaseFragment.countyId);
+
                 paramObject.put("models_Id", modelId + "");
                 Log.i(TAG, "addOrder:getColor_determine      " + addBaseInfo.getColor_determine());
                 paramObject.put("color_determine", getColorDeterMine(""));
@@ -339,8 +346,7 @@ public class OrderAddActivity extends AppCompatActivity {
                         listForChange.add(changeInfo);
                     }
                 }
-                Log.i(TAG, "onClick:allocationArray      " + allocationArray.toString());
-                Log.i(TAG, "onClick:        " + paramArray.toString());
+
                 //自定义
                 customerArray = new JSONArray();
                 JSONObject customerObject = new JSONObject();
@@ -355,7 +361,6 @@ public class OrderAddActivity extends AppCompatActivity {
                     customerObject.put("isother", 0);
                     customerArray.put(customerObject);
                 }
-                Log.i(TAG, "addOrder:customerArray           " + customerArray.toString());
                 //提交请求
                 final Map<String, Object> requestParams = new HashMap<>();
                 if (flag == 0) {
@@ -364,6 +369,11 @@ public class OrderAddActivity extends AppCompatActivity {
                 if (flag == 1) {
                     requestParams.put("orders", paramArray.toString());
                 }
+                Log.i(TAG, "addOrder:originList.size()        "+originList.size());
+                Log.i(TAG, "onClick:        " + paramArray.toString());
+                Log.i(TAG, "onClick:allocationArray      " + allocationArray.toString());
+                Log.i(TAG, "addOrder:customerArray           " + customerArray.toString());
+
                 requestParams.put("standardVo", allocationArray.toString());
                 requestParams.put("matching", customerArray.toString());
                 requestParams.put("loginName", app.getAccount());
@@ -444,9 +454,10 @@ public class OrderAddActivity extends AppCompatActivity {
 
     private void initData() {
         //进入即清空
+        isPayShow = false;
         assemblyNames = new ArrayList<>();
         customAddList = new ArrayList<>();
-        if (app.getMatchingBeanArrayList().size() > 0) {
+        if (app.getMatchingBeanArrayList() != null) {
             for (MatchingBean bean : app.getMatchingBeanArrayList()) {
                 if (bean.isother == 0) {
                     OrderDetailInfoAllocation allocation = new OrderDetailInfoAllocation(bean.assembly, bean.entry_name, bean.config_information, bean.num + "", bean.remarks, bean.isdefault);

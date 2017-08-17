@@ -1,70 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:background="@color/colorBlack"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
+    android:layout_height="35dp"
+    android:background="@color/titleBackColor"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/colorBlack" />-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <!--<TextView-->
+        <!--android:background="@color/colorBlack"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent" />-->
         <TextView
-            android:background="@color/colorBlack"
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-        <TextView
-            android:text="@string/mm_contract_id"
-            android:textColor="@color/colorBlack"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_weight="5"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:background="@color/colorBlack"
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-        <TextView
-            android:text="@string/customer"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="5"
             android:gravity="center"
-            android:textColor="@color/colorBlack"
+            android:text="@string/mm_contract_id"
+            android:textColor="@color/colorWhite" />
+        <!--<TextView-->
+        <!--android:background="@color/colorBlack"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent" />-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:background="@color/colorBlack"
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-        <TextView
-            android:text="@string/ck_change_letter_id"
             android:gravity="center"
-            android:textColor="@color/colorBlack"
+            android:text="@string/customer"
+            android:textColor="@color/colorWhite" />
+        <!--<TextView-->
+        <!--android:background="@color/colorBlack"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent" />-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:background="@color/colorBlack"
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-        <TextView
-            android:text="@string/operation"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@color/colorBlack"
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:text="@string/ck_change_letter_id"
+            android:textColor="@color/colorWhite" />
+        <!--<TextView-->
+        <!--android:background="@color/colorBlack"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent" />-->
         <TextView
-            android:background="@color/colorBlack"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/operation"
+            android:textColor="@color/colorWhite" />
+        <!--<TextView-->
+        <!--android:background="@color/colorBlack"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="wrap_content" />-->
     </LinearLayout>
-    <TextView
-        android:background="@color/colorBlack"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
+    <!--<TextView-->
+    <!--android:background="@color/colorBlack"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp" />-->
 </LinearLayout>

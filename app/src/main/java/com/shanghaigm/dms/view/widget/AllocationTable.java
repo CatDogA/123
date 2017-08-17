@@ -110,22 +110,22 @@ public class AllocationTable extends LinearLayout {
                                     if (allocationModifyInfo.entry_name.equals(bean.entry_name)) {
                                         count++;
                                         //判断是否已存在此条数据
-                                        OrderDetailInfoAllocation allocation1 = new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change, allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id());
+                                        OrderDetailInfoAllocation allocation1 = new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change + "", allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id());
                                         Boolean isAdd = true;
                                         for (OrderDetailInfoAllocation alreadyAllocation : allocationModifyInfo.infos) {
-                                            if (allocation1.getCost_change().equals(alreadyAllocation.getCost_change()) && allocation1.getNum().equals(alreadyAllocation.getNum()) && allocation1.getRemarks().equals(alreadyAllocation.getRemarks())) {
+                                            if (allocation1.getCost_change().equals(alreadyAllocation.getCost_change()) && allocation1.getNum().equals(alreadyAllocation.getNum()) && allocation1.getRemarks().equals(alreadyAllocation.getRemarks()) && allocation1.getConfig_information().equals(alreadyAllocation.getConfig_information())) {
                                                 //存在,不添加
                                                 isAdd = false;
                                             }
                                         }
                                         if (isAdd) {
-                                            allocationModifyInfo.infos.add(new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change, allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id()));
+                                            allocationModifyInfo.infos.add(new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change + "", allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id()));
                                         }
                                     }
                                 }
                                 if (count == 0) {
                                     ArrayList<OrderDetailInfoAllocation> infos = new ArrayList<>();
-                                    infos.add(new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change, allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id()));
+                                    infos.add(new OrderDetailInfoAllocation(allocation.getAssemblyName(), allocation.getAssembly(), bean.entry_name, allocation.getStandard_information(), bean.cost_change + "", allocation.getSupporting_id(), bean.num + "", bean.remarks, allocation.getMatchLength(), allocation.getList(), allocation.getStandard_id()));
                                     allocationModifyInfos.add(new AllocationModifyInfo(bean.entry_name, infos));
                                 }
                             }
@@ -135,19 +135,15 @@ public class AllocationTable extends LinearLayout {
             }
         }
         //删除原来的
-        Log.i(TAG, "modifySetUpView:allocationModifyInfos            " + allocationModifyInfos.size());
         ArrayList<OrderDetailInfoAllocation> listToDelete = new ArrayList<>();
         for (AllocationModifyInfo info : allocationModifyInfos) {
-            Log.i(TAG, "modifySetUpView:info.entry_name          " + info.entry_name + "      info.infos.size       " + info.infos.size());
             for (OrderDetailInfoAllocation infoAllocation : data) {
-                Log.i(TAG, "modifySetUpView:             " + infoAllocation.getEntry_name());
                 if (info.entry_name.equals(infoAllocation.getEntry_name())) {
                     //但凡entry_name有相同的，就加入删除列表
                     listToDelete.add(infoAllocation);
                 }
             }
         }
-        Log.i(TAG, "modifySetUpView:listToDelete            " + listToDelete.size());
         for (OrderDetailInfoAllocation info : listToDelete) {
             data.remove(info);
         }
@@ -158,11 +154,14 @@ public class AllocationTable extends LinearLayout {
                 if (OrderAddActivity.undefaultInfos == null) {
                     OrderAddActivity.undefaultInfos = new ArrayList<>();
                 } else {
-                    OrderAddActivity.undefaultInfos.add(new AllocationAddChooseUndefaultInfo(infoAllocation.getAssemblyName(), infoAllocation.getAssembly(), infoAllocation.getConfig_information(), infoAllocation.getEntry_name(), 1, infoAllocation.getSupporting_id(), 0, infoAllocation.getPrice(), Integer.parseInt(infoAllocation.getNum()), infoAllocation.getRemarks(), infoAllocation.getStandard_id()));
+                    Double cost_change = 0.0;
+                    if (!infoAllocation.getCost_change().equals("")) {
+                        cost_change = Double.parseDouble(infoAllocation.getCost_change());
+                    }
+                    OrderAddActivity.undefaultInfos.add(new AllocationAddChooseUndefaultInfo(infoAllocation.getAssemblyName(),infoAllocation.getAssemblyName(), infoAllocation.getConfig_information(), infoAllocation.getEntry_name(), 1, infoAllocation.getSupporting_id(), 0, cost_change, Integer.parseInt(infoAllocation.getNum()), infoAllocation.getRemarks(), infoAllocation.getStandard_id()));
                 }
             }
         }
-//        Log.i(TAG, "modifySetUpView:data.size                " + data.size());
     }
 
     private void initHandler() {

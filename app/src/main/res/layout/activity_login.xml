@@ -2,124 +2,175 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
-    android:orientation="vertical"
-    >
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
     <ImageView
-        android:layout_marginTop="40dp"
-        android:layout_gravity="center_horizontal"
         android:id="@+id/imageView"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/logo" />
-    <LinearLayout
-        android:gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="65dp"
+        android:src="@mipmap/logo2" />
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/login"
-            />
-        <!--imeOptions设置软键盘有下脚-->
-        <EditText
-            android:id="@+id/name_edit"
-            android:hint="@string/username"
-            android:layout_width="200dp"
-            android:imeOptions="actionNext"
-            android:lines="1"
-            android:paddingLeft="10dp"
-            android:layout_height="wrap_content"
-            android:theme="@style/MyText"
-            />
-    </LinearLayout>
+        android:layout_height="72dp"
+        android:layout_marginTop="27dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/cover1" />
+
     <LinearLayout
-        android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/pass"
-            />
-        <EditText
-            android:id="@+id/pass_edit"
-            android:imeOptions="actionNext"
-            android:lines="1"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="200dp"
-            android:paddingLeft="10dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/pass"
-            android:theme="@style/MyText"
-            android:inputType="textPassword"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/role"
-            />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/backColor"
+        android:orientation="vertical">
+
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
             <EditText
-                android:id="@+id/role_edit"
-                android:paddingLeft="10dp"
-                android:layout_gravity="center_horizontal"
+                android:id="@+id/name_edit"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/role"
-                android:focusable="false"
-                android:theme="@style/MyText"
-                />
+                android:layout_marginLeft="23dp"
+                android:background="@null"
+                android:drawableLeft="@mipmap/customer"
+                android:drawablePadding="25dp"
+                android:hint="@string/username"
+                android:imeOptions="actionNext"
+                android:lines="1"
+                android:paddingBottom="20dp"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorWhite"
+                android:theme="@style/MyText" />
+
             <ImageView
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_alignRight="@+id/role_edit"
-                android:src="@mipmap/down"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="240dp"
+                android:layout_height="10dp"
+                android:layout_alignBottom="@id/name_edit"
+                android:layout_below="@+id/name_edit"
+                android:layout_marginTop="-20dp"
+                android:src="@mipmap/edt_line" />
+
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/pass_edit"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:drawableLeft="@mipmap/password1"
+                android:drawablePadding="25dp"
+                android:hint="@string/pass"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:paddingBottom="20dp"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorWhite"
+                android:theme="@style/MyText" />
+
+            <ImageView
+                android:layout_width="240dp"
+                android:layout_height="10dp"
+                android:layout_alignBottom="@id/pass_edit"
+                android:layout_below="@+id/pass_edit"
+                android:layout_marginTop="-20dp"
+                android:src="@mipmap/edt_line" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/role_edit"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:drawableLeft="@mipmap/role1"
+                    android:drawablePadding="20dp"
+                    android:focusable="false"
+                    android:hint="@string/role"
+                    android:paddingBottom="20dp"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorWhite"
+                    android:theme="@style/MyText" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignRight="@+id/role_line"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@mipmap/role_select" />
+
+                <ImageView
+                    android:id="@+id/role_line"
+                    android:layout_width="240dp"
+                    android:layout_height="10dp"
+                    android:layout_alignBottom="@id/role_edit"
+                    android:layout_below="@+id/role_edit"
+                    android:layout_marginTop="-20dp"
+                    android:src="@mipmap/edt_line" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/btn_bg"
+            android:text="登   录"
+            android:textSize="@dimen/text_size_button" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <TextView
+                android:id="@+id/version"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:background="@drawable/cic_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:text="登   录"
-        android:textSize="@dimen/text_size_button" />
-    <LinearLayout
-        android:layout_marginTop="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/version"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 </LinearLayout>

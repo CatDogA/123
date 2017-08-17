@@ -226,7 +226,11 @@ public class PaperInfo extends BasePaperInfo {
                                         int num = 0;
                                         if(!match.get("num").equals("")){
                                             num = Integer.parseInt(match.get("num").toString());
-                                            matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),num,match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                            String cost_change = "";
+                                            if(match.getString("cost_change")!=null){
+                                                cost_change = match.getString("cost_change");
+                                            }
+                                            matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),num,match.getString("remarks"),match.getInt("isdefault"),cost_change,match.getInt("isother")));
                                         }else {
                                             matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
                                         }
