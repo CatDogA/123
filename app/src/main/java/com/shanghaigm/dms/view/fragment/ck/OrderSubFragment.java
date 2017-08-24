@@ -1,6 +1,9 @@
 package com.shanghaigm.dms.view.fragment.ck;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -50,27 +53,15 @@ public class OrderSubFragment extends BaseFragment {
     private RelativeLayout rl_end, rl_back;
     private Button btnQuery, addBtn;
     private ImageView vpRight, vpLeft;
-    //    private WrapHeightViewPager vp;
     private TextView pageNumText;
     private MmPopupWindow modelPopup, statePopup;
     private JSONArray modelArray, stateArray = new JSONArray();
-    //    private TablePagerAdapter pagerAdapter;
     private static String TAG = "OrderSubFragment";
     private LoadingDialog dialog;
-//    private int pages = 0;//页数
-//    private int page = 1;//第几页
-//    private DmsApplication app;
-//    private RelativeLayout.LayoutParams lp = new RelativeLayout.
-//            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-//            RelativeLayout.LayoutParams.WRAP_CONTENT);
-//    private Boolean IsQuery = true;//判断是查询还是更多
-//    private Boolean IsMore = false;//判断可否请求更多
-//    private ArrayList<PaperInfo> papers;//每页数据
-//    private ArrayList<ReviewTable> tables = new ArrayList<>();//表集合
 
     private ArrayList<TableInfo> tableInfos;
-    private ImageView img_first, img_last, img_left, img_right;
-    private WrapHeightViewPager vp;
+    private ImageView img_first, img_last;
+    private ViewPager vp;
     private TablePagerAdapter adapter;
     private RelativeLayout.LayoutParams lp = new RelativeLayout.
             LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -109,9 +100,7 @@ public class OrderSubFragment extends BaseFragment {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                android.os.Process.killProcess(android.os.Process.myPid());
-//                System.exit(0);
-                app.OutOfApp();
+                app.endApp();
             }
         });
         vpLeft.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +221,10 @@ public class OrderSubFragment extends BaseFragment {
                 }));
             }
         });
+        reQuery(customerEdt);
+        reQuery(numberEdt);
+        reQuery(modelSelecctEdt);
+        reQuery(stateSelectEdt);
     }
 
     public static OrderSubFragment getInstance() {
@@ -241,21 +234,23 @@ public class OrderSubFragment extends BaseFragment {
         return fragment;
     }
 
+    /**
+     * @param type
+     * 判断是否有数据，没有，则请求数据并刷新
+     */
     private void requestOrderInfo(final int type) {
-        tables.clear();
-        //如果有，直接显示
+//        如果有，直接显示
         if (type != 1) {       //已经查询过
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+            tables.clear();    //先把tables刷新
+            if (tableInfos.get(page).isAdded) {    //满足已有即立即取出显示返回
                 for (TableInfo tableInfo : tableInfos) {
                     tables.add((ReviewTable) tableInfo.table);
                 }
                 adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setAdapter(adapter);
                 vp.setCurrentItem(page);
                 return;
             }
         }
-
         dialog.showLoadingDlg();
         String modelText = modelSelecctEdt.getText().toString();
         String stateText = stateSelectEdt.getText().toString();
@@ -295,64 +290,70 @@ public class OrderSubFragment extends BaseFragment {
         CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_QUERY_ORDER_SUB_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
+                Log.i(TAG, "onSuccess:responseObj      " + responseObj.toString());
                 dialog.dismissLoadingDlg();
                 OrderQueryInfoBean info = GsonUtil.GsonToBean(responseObj.toString(), OrderQueryInfoBean.class);
-//                Log.i(TAG, "onSuccess: " + info);
                 List<OrderQueryInfoBean.ResultEntity.OrderInfo> rows = info.resultEntity.rows;
                 int total = info.resultEntity.total;
-                if (total == 0) {
-                    if (total == 0) {
-                        Toast.makeText(getActivity(), "没有数据", Toast.LENGTH_SHORT).show();
-                    }
-                }
+
                 if (total % 8 == 0) {
                     pages = total / 8;
                 } else {
                     pages = total / 8 + 1;
                 }
-
-                //加入空的tables占位
-                if (type == 1) {
-                    for (int i = 0; i < pages; i++) {
-                        tableInfos.add(new TableInfo(pages, new ReviewTable(getActivity(), new ArrayList<PaperInfo>(), 1), false));
-                    }
-                    isQuery = true;
+                if (total == 0) {
+                    Toast.makeText(getActivity(), "没有数据", Toast.LENGTH_SHORT).show();
+                    tables.clear();
+                    tableInfos.clear();
+                    ReviewTable table = new ReviewTable(getActivity(), new ArrayList<PaperInfo>(), 5);
+                    tables.add(table);
                 }
-
-                ArrayList<PaperInfo> paperInfos = new ArrayList<>();
-                for (int i = 0; i < rows.size(); i++) {
-                    OrderQueryInfoBean.ResultEntity.OrderInfo orderInfo = rows.get(i);
-                    String customerName = orderInfo.customer_name;
-                    String model = orderInfo.models_name;
-                    String orderNumber = orderInfo.order_number;
-                    String state = orderInfo.state;
-                    int orderId = orderInfo.order_id;
+                if (total != 0) {
+                    ArrayList<PaperInfo> paperInfos = new ArrayList<>();
+                    for (int i = 0; i < rows.size(); i++) {
+                        OrderQueryInfoBean.ResultEntity.OrderInfo orderInfo = rows.get(i);
+                        String customerName = orderInfo.customer_name;
+                        String model = orderInfo.models_name;
+                        String orderNumber = orderInfo.order_number;
+                        String state = orderInfo.state;
+                        int orderId = orderInfo.order_id;
 //                    Log.i(TAG, "onSuccess: " + state + "," + model + "," + orderNumber + "," + customerName);
-                    paperInfos.add(new PaperInfo(customerName, orderNumber, model, state, true, orderId, getActivity(), 5));
+                        paperInfos.add(new PaperInfo(customerName, orderNumber, model, state, true, orderId, getActivity(), 5));
+                    }
+                    //得到table
+                    ReviewTable table = new ReviewTable(getActivity(), paperInfos, 5);
+                    table.setLayoutParams(lp);
+                    //加入infos,更新数据
+                    //加入空的tables占位
+                    tables.clear();       //清空
+                    if (type == 1) {
+                        tableInfos.clear();
+                        for (int i = 0; i < pages; i++) {
+                            tableInfos.add(new TableInfo(pages, new ReviewTable(getActivity(), new ArrayList<PaperInfo>(), 5), false));
+                        }
+                        isQuery = true;
+                    }
+                    tableInfos.remove(page);      //除去空的
+                    tableInfos.add(page, new TableInfo(page, table, true));   //添加新的
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);     //整体更新
+                    }
                 }
-                //得到table
-                ReviewTable table = new ReviewTable(getActivity(), paperInfos, 5);
-                table.setLayoutParams(lp);
-                //加入infos,更新数据
-                tableInfos.remove(page);
-                tableInfos.add(page, new TableInfo(page, table, true));
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
-                }
-                Log.i(TAG, "onSuccess:size          " + tables.size() + "     tableinfos       " + tableInfos.size());
+                Log.i(TAG, "onSuccess:table.size          " + tables.size() + "     tableinfos       " + tableInfos.size());
                 adapter.notifyDataSetChanged();
-                vp.setAdapter(adapter);
                 Log.i(TAG, "onSuccess:page          " + page);
                 vp.setCurrentItem(page);
-
                 //查询时，设置页数
-                if (type == 1) {
+                if (type == 1 && total != 0) {
                     setPages(page + 1, pages);
                 }
+                if (total == 0) {
+                    setPages(0, 0);
+                }
             }
-
             @Override
             public void onFailure(Object reasonObj) {
+                Log.i(TAG, "onFailure:       " + reasonObj.toString());
                 dialog.dismissLoadingDlg();
             }
         }));
@@ -369,7 +370,6 @@ public class OrderSubFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
         return id;
     }
@@ -383,20 +383,12 @@ public class OrderSubFragment extends BaseFragment {
         tables.add(table);
         adapter = new TablePagerAdapter(getActivity(), tables);
         vp.setAdapter(adapter);
-
-//        papers = new ArrayList<>();
-//        ReviewTable table = new ReviewTable(getActivity(), papers, 5);
-//        table.setLayoutParams(lp);
-//        tables.add(table);
-//        pagerAdapter = new TablePagerAdapter(getActivity(), tables);
         vp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;//禁止滑动
             }
         });
-//        vp.setOnClickListener(null);
-//        vp.setAdapter(pagerAdapter);
     }
 
     private void setPages(int page, int pages) {
@@ -418,7 +410,7 @@ public class OrderSubFragment extends BaseFragment {
         img_first = (ImageView) v.findViewById(R.id.viewpager_first);
         img_last = (ImageView) v.findViewById(R.id.viewpager_last);
 
-        vp = (WrapHeightViewPager) v.findViewById(R.id.order_review_viewpager);
+        vp = (ViewPager) v.findViewById(R.id.order_review_viewpager);
         dialog = new LoadingDialog(getActivity(), "正在加载");
         app = DmsApplication.getInstance();
 
@@ -428,5 +420,24 @@ public class OrderSubFragment extends BaseFragment {
 
         rl_end = (RelativeLayout) v.findViewById(R.id.rl_out);
         rl_back = (RelativeLayout) v.findViewById(R.id.rl_back);
+    }
+
+    private void reQuery(EditText edt) {
+        edt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isQuery = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }

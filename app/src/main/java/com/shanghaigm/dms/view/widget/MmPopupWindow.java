@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.entity.mm.ProvincialCitysInfo;
+import com.shanghaigm.dms.model.util.ScreenUtil;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
 
 import org.json.JSONArray;
@@ -43,6 +45,9 @@ public class MmPopupWindow extends PopupWindow{
     private EditText editText;
     private ListAdapter adapter;
     private String choice1,choice2,choice3,choice4,choice5,choice6;
+    private Context context;
+    //todo-动态控制pop位置
+    private int x,y;
 
     public MmPopupWindow(Context context, final EditText editText, final ArrayList<PopListInfo> list,int divideNum){
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -54,6 +59,7 @@ public class MmPopupWindow extends PopupWindow{
         this.setHeight(h/divideNum);
         this.setFocusable(true);
         this.setOutsideTouchable(true);
+        this.context = context;
         this.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         this.update();
         this.list = list;

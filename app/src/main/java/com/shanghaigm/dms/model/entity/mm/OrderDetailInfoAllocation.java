@@ -35,7 +35,7 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
     private String cost_change;
     private String supporting_id;
     private String assemblyName;
-
+    private int position;    //第几条
 
     public OrderDetailInfoAllocation() {
     }
@@ -90,16 +90,6 @@ public class OrderDetailInfoAllocation extends BaseObservable implements Seriali
             tv.setTextColor(Color.RED);
         } else {
             tv.setTextColor(Color.BLACK);
-        }
-    }
-
-    public void onQueryUndefaultClick(final View v) {
-        if (matchLength > 0) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OrderDetailInfoAllocation.UNDEFALT_ALLOCATION_INFO, matching);
-            Intent intent = new Intent(v.getContext(), AllocationAddChooseUndefaultActivity.class);
-            intent.putExtras(bundle);
-            v.getContext().startActivity(intent);
         }
     }
 

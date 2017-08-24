@@ -12,18 +12,18 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/cic_edt_back"
             android:gravity="center"
-            android:padding="10dp">
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/mm_number_text"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_height="wrap_content"
                 android:text="@string/mm_order_number"
                 android:textColor="@color/colorBlackText"
                 android:textSize="14sp" />
@@ -31,8 +31,8 @@
             <EditText
                 android:id="@+id/mm_number_edt"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:background="@null"
                 android:gravity="center_horizontal"
                 android:lines="1"
@@ -43,26 +43,26 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/cic_edt_back"
             android:gravity="center_horizontal"
-            android:padding="10dp">
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/mm_client_text"
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/mm_order_client"
                 android:textColor="@color/colorBlackText"
                 android:textSize="14sp" />
 
             <EditText
-                android:layout_weight="2"
                 android:id="@+id/mm_client_edt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:background="@null"
                 android:gravity="center_horizontal"
                 android:lines="1"
@@ -79,27 +79,27 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/cic_edt_back"
             android:gravity="center_horizontal"
-            android:padding="10dp">
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/mm_model_text"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_height="wrap_content"
                 android:text="车   型:"
                 android:textColor="@color/colorBlackText"
                 android:textSize="14sp" />
 
             <RelativeLayout
-                android:layout_weight="2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
 
                 <EditText
                     android:id="@+id/mm_model_edt"
@@ -123,27 +123,27 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/cic_edt_back"
             android:gravity="center_horizontal"
-            android:padding="10dp">
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/mm_state_text"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="bottom"
                 android:text="@string/mm_order_state"
                 android:textColor="@color/colorBlackText"
                 android:textSize="14sp" />
 
             <RelativeLayout
-                android:layout_weight="2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
 
                 <EditText
                     android:id="@+id/mm_state_edt"
@@ -165,10 +165,11 @@
 
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 

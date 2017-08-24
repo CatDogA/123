@@ -51,6 +51,7 @@ public class OrderDetailActivity extends BaseActivity {
     private DmsApplication app;
     private RelativeLayout rl_back, rl_end;
     private EditText remarks;
+    private RelativeLayout rl_remarks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         pass = (Button) findViewById(R.id.order_pass_button);
         returnBack = (Button) findViewById(R.id.order_return_back_button);
-
+        rl_remarks = (RelativeLayout) findViewById(R.id.rl_remarks);
         dialog = new LoadingDialog(this, "正在加载");
         app = DmsApplication.getInstance();
 
@@ -226,8 +227,7 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         if (type.equals(PaperInfo.ORDER_SUB_DETAIL_INFO)) {
-            pass.setVisibility(View.GONE);
-            returnBack.setVisibility(View.GONE);
+            rl_remarks.setVisibility(View.GONE);
         }
     }
 }

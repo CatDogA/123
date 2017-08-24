@@ -48,7 +48,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="3dp"
-                android:src="@drawable/tab_icon_sub" />
+                android:src="@drawable/tab_report_sub" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="3dp"
-                android:src="@drawable/tab_icon_query" />
+                android:src="@drawable/tab_report_review" />
 
             <TextView
                 android:layout_width="match_parent"

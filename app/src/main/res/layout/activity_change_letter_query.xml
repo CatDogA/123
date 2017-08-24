@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/mainColorGD"
+            android:background="@color/colorWhite"
             android:orientation="vertical">
 
             <include layout="@layout/include_title_bar" />
@@ -25,23 +25,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_contract_id" />
+                        android:text="@string/contract_id" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="8"
@@ -54,16 +57,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_unit_name" />
+                        android:text="@string/unit_name" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="8"
@@ -78,52 +86,83 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/model" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:enabled="false"
-                        android:lines="1"
-                        android:text="@{info.models_name}"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/model_d" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/num" />
+                        <EditText
+                            android:background="@null"
+                            android:gravity="center"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:enabled="false"
+                            android:lines="1"
+                            android:text="@{info.models_name}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                    <EditText
+                    <LinearLayout
+                        android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:enabled="false"
-                        android:lines="1"
-                        android:text="@{info.number}"
-                        android:textSize="14sp" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/textView26"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
+                            android:text="@string/num_d" />
+
+                        <EditText
+                            android:background="@null"
+                            android:gravity="center"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:enabled="false"
+                            android:lines="1"
+                            android:text="@{info.number}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="@string/mm_primary_price" />
+                        android:text="@string/primary_price" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -136,16 +175,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="@string/mm_after_price" />
+                        android:text="@string/after_price" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -158,19 +202,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_allocation_change_date" />
+                        android:text="@string/allocation_change_date" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:layout_weight="5"
                         android:enabled="false"
                         android:lines="1"
                         android:text="@{info.config_change_date}"
@@ -181,19 +230,24 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_contract_commit_date" />
+                        android:text="@string/contract_commit_date" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:layout_weight="5"
                         android:enabled="false"
                         android:lines="1"
                         android:text="@{info.contract_delivery_date}"
@@ -203,17 +257,22 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:background="@drawable/cic_edt_back"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
                         android:id="@+id/textView10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_after_allocation_date" />
+                        android:text="@string/after_allocation_date" />
 
                     <EditText
+                        android:background="@null"
+                        android:gravity="center"
                         android:id="@+id/editText15"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -228,18 +287,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp">
+                android:orientation="vertical">
 
                 <include layout="@layout/include_change_letter_allocation_query" />
 
                 <ListView
                     android:id="@+id/list_view"
-                    android:dividerHeight="1dp"
-                    android:divider="@color/colorBlack"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="200dp"
+                    android:background="@color/tableBack"
+                    android:divider="@color/colorWhite"
+                    android:dividerHeight="1dp">
 
                 </ListView>
             </LinearLayout>

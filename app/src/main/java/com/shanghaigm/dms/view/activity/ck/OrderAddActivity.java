@@ -278,9 +278,9 @@ public class OrderAddActivity extends AppCompatActivity {
                 paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
                 paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
                 paramObject.put("address", OrderAddBaseFragment.address);
-                paramObject.put("road_condition", "不晓得");
-                paramObject.put("normal_speed", "11");
-                paramObject.put("remark", "晓得不");
+                paramObject.put("road_condition", "");
+                paramObject.put("normal_speed", "");
+                paramObject.put("remark", "");
                 if (flag == 1) {
                     OrderDetailInfoBean.ResultEntity entity = app.getOrderDetailInfoBean().resultEntity;
                     paramObject.put("order_id", entity.order_id + "");

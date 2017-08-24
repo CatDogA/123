@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
-import com.shanghaigm.dms.databinding.FragmentOrderDetailInfoOneBinding;
 import com.shanghaigm.dms.databinding.FragmentOrderDetailInfoTwoBinding;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
 import com.shanghaigm.dms.view.fragment.BaseFragment;

@@ -3,12 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
+    android:background="@color/colorWhite"
     tools:context="com.shanghaigm.dms.view.fragment.ck.ChangeLetterSubFragment">
     <include layout="@layout/include_title_bar"/>
-
     <include layout="@layout/include_change_letter_sub" />
-
     <LinearLayout
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
@@ -51,34 +49,5 @@
         android:layout_weight="1">
 
     </com.shanghaigm.dms.view.widget.WrapHeightViewPager>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginBottom="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/pages_num"
-            android:text=""
-            android:textColor="@color/colorBlueText"
-            android:layout_weight="1"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/viewpager_left"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:src="@mipmap/left_switch"
-            />
-        <ImageView
-            android:id="@+id/viewpager_right"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginRight="40dp"
-            android:src="@mipmap/right_switch_pre"/>
-    </LinearLayout>
+    <include layout="@layout/include_below_table"/>
 </LinearLayout>

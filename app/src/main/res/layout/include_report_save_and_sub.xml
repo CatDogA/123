@@ -4,33 +4,30 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="40dp"
     android:orientation="horizontal">
-
-    <TextView
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_margin="30dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:text="@string/save" />
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/cic_btn"
+            android:text="@string/save" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btn_sub"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:text="@string/submit" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        <Button
+            android:id="@+id/btn_sub"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/cic_btn_back_yellow"
+            android:text="@string/submit" />
+    </LinearLayout>
 </LinearLayout>

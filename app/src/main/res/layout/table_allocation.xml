@@ -2,19 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginStart="5dp"
     android:background="@color/mainColorGD"
     android:orientation="vertical">
     <include layout="@layout/include_allocation_title"/>
     <ListView
         android:id="@+id/listview"
         android:dividerHeight="1dp"
-        android:divider="@color/colorBlackText"
+        android:background="@color/tableBack"
+        android:divider="@color/colorWhite"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="200dp">
 
     </ListView>
 </LinearLayout>

@@ -1,7 +1,11 @@
 package com.shanghaigm.dms;
 
 import android.app.Application;
+import android.content.Context;
+import android.graphics.Rect;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.shanghaigm.dms.model.entity.as.SaveUsedPaths;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
@@ -52,16 +56,25 @@ public class DmsApplication extends Application {
         mApplication = this;
         mainData = new MainData();
     }
-    public void endApp(){
-        for(BaseActivity a:activities){
+
+    public void endApp() {
+        for (BaseActivity a : activities) {
             a.finish();
         }
     }
+
+    public Boolean isSoftKeyBoardOpen() {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        return imm.isActive();
+
+    }
+
     public void addActivity(BaseActivity activity) {
         if (activities == null) {
             activities = new ArrayList<>();
         }
-        Log.i(TAG, "addActivity: "+activities.size());
+        Log.i(TAG, "addActivity: " + activities.size());
         activities.add(activity);
     }
 

@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.shanghaigm.dms.R;
@@ -34,16 +36,25 @@ public class ChangeLetterAllocationTable extends LinearLayout {
     private final String TAG = "ChangeLetterAllocation";
     private ArrayList<ChangeLetterAllocationInfo> saveList;//存储输入信息
     private AddAllocationAdapter adapter;
+    private ScrollView scrollView;
 
-    public ChangeLetterAllocationTable(Context context, final ArrayList<ChangeLetterAllocationInfo> saveList) {
+    public ChangeLetterAllocationTable(Context context, final ArrayList<ChangeLetterAllocationInfo> saveList, final ScrollView scrollView) {
         super(context);
         this.context = context;
         this.saveList = saveList;
+        this.scrollView = scrollView;
         LayoutInflater lf = LayoutInflater.from(context);
         View v = lf.inflate(R.layout.table_change_letter_allocation, this, true);
         listView = (ListView) v.findViewById(R.id.list_change_letter_allocation);
         adapter = new AddAllocationAdapter(context, this.saveList);
         listView.setAdapter(adapter);
+        listView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 
     private class AddAllocationAdapter extends BaseAdapter {
@@ -109,6 +120,11 @@ public class ChangeLetterAllocationTable extends LinearLayout {
                 edtPrice.setTag(position);
                 edtManHour.setTag(position);
 
+                outOfScroll(edtAllocationPro);
+                outOfScroll(edtChangeContent);
+                outOfScroll(edtPrice);
+                outOfScroll(edtManHour);
+
                 edtAllocationPro.addTextChangedListener(new AllocationTextListener(1, this));
                 edtChangeContent.addTextChangedListener(new AllocationTextListener(2, this));
                 edtPrice.addTextChangedListener(new AllocationTextListener(3, this));
@@ -132,7 +148,15 @@ public class ChangeLetterAllocationTable extends LinearLayout {
                 });
             }
         }
-
+        private void outOfScroll(EditText editText){
+            editText.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            });
+        }
         class AllocationTextListener implements TextWatcher {
             private int type;   //判断edt
             private ViewHolder holder;
@@ -188,9 +212,7 @@ public class ChangeLetterAllocationTable extends LinearLayout {
                     saveList.get(position).setChange_content(str);
                     break;
                 case 3:
-
                     saveList.get(position).setPrice(str);
-
                     break;
                 case 4:
                     saveList.get(position).setMan_hour(str);

@@ -11,7 +11,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -24,17 +24,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
-                android:lines="1"
                 android:background="@color/colorWhite"
                 android:gravity="center"
-                android:textColor="@color/colorBlack"
+                android:lines="1"
+                android:textColor="@color/colorBlackText"
                 android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -47,10 +47,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
-                android:lines="1"
                 android:background="@color/colorWhite"
                 android:gravity="center"
-                android:textColor="@color/colorBlack"
+                android:lines="1"
+                android:textColor="@color/colorBlackText"
                 android:textSize="13sp" />
         </RelativeLayout>
 
@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -67,21 +67,21 @@
 
             <EditText
                 android:id="@+id/edt_price"
-                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
                 android:background="@color/colorWhite"
                 android:gravity="center"
-                android:textColor="@color/colorBlack"
+                android:inputType="numberDecimal"
+                android:textColor="@color/colorBlackText"
                 android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -97,43 +97,45 @@
                 android:background="@color/colorWhite"
                 android:gravity="center"
                 android:inputType="number"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorBlackText"
                 android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:gravity="center"
             android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_weight="2"
+            android:gravity="center">
+
             <ImageView
                 android:id="@+id/img_add"
-                android:layout_margin="3dp"
-                android:src="@mipmap/add"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:layout_margin="3dp"
+                android:src="@mipmap/add" />
+
             <ImageView
                 android:id="@+id/img_delete"
-                android:layout_margin="3dp"
-                android:src="@mipmap/delete_pre"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:layout_margin="3dp"
+                android:src="@mipmap/delete_pre" />
 
         </LinearLayout>
 
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
+            android:background="@color/colorWhite" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBlack" />
+        android:background="@color/colorWhite" />
 </LinearLayout>

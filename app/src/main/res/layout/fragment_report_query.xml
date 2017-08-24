@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.fragment.as.ReportQueryFragment">
 
-    <include layout="@layout/include_report_query" />
-
+    <include layout="@layout/include_report_sub_info" />
+    <include layout="@layout/layout_sub_states"/>
     <com.shanghaigm.dms.view.widget.WrapHeightViewPager
         android:id="@+id/report_query_table"
         android:layout_width="match_parent"

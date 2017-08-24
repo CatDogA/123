@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
 
         <variable
@@ -32,7 +31,7 @@
             android:layout_weight="5"
             android:gravity="center"
             android:lines="1"
-            android:text="@{paper.contract_id}"
+            android:text="@{paper.change_letter_number}"
             app:set_text_color="@{paper.state}"
             />
 
@@ -63,7 +62,7 @@
             android:layout_weight="4"
             android:gravity="center"
             android:lines="1"
-            android:text="@{paper.change_letter_number}"
+            android:text="@{paper.model}"
             app:set_text_color="@{paper.state}" />
 
         <TextView

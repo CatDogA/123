@@ -2,11 +2,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.fragment.as.ReportSubFragment">
 
     <include layout="@layout/include_report_sub_info" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mm_for_review_text"
+            android:textColor="@color/colorRedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/mm_turn_down_text"
+            android:textColor="@color/colorOrange" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/mm_reviewing_text"
+            android:textColor="@color/colorBlue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/mm_passed_text"
+            android:textColor="@color/colorGreen" />
+    </LinearLayout>
+
     <com.shanghaigm.dms.view.widget.WrapHeightViewPager
         android:id="@+id/report_query_table"
         android:layout_width="match_parent"

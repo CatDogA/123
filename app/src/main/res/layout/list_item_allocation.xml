@@ -10,6 +10,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -17,7 +18,7 @@
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack" />
+                android:background="@color/colorWhite" />
 
             <TextView
                 android:layout_width="0dp"
@@ -31,7 +32,7 @@
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack" />
+                android:background="@color/colorWhite" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -46,7 +47,7 @@
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack" />
+                android:background="@color/colorWhite" />
 
             <TextView
                 android:layout_width="0dp"
@@ -60,7 +61,7 @@
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack" />
+                android:background="@color/colorWhite" />
 
             <TextView
                 android:layout_width="0dp"
@@ -69,13 +70,13 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:text="@{info.num}"
-                app:set_text_color="@{info.isdefault}"
-                android:textColor="@color/colorBlack" />
+                android:textColor="@color/colorBlack"
+                app:set_text_color="@{info.isdefault}" />
 
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack" />
+                android:background="@color/colorWhite" />
 
             <TextView
                 android:layout_width="0dp"
@@ -84,13 +85,13 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="@{info.remarks}"
-                app:set_text_color="@{info.isdefault}"
-                android:textColor="@color/colorBlack" />
+                android:textColor="@color/colorBlack"
+                app:set_text_color="@{info.isdefault}" />
 
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack" />
+                android:background="@color/colorWhite" />
         </LinearLayout>
     </LinearLayout>
 </layout>

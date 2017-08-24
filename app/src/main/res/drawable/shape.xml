@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    //阴影
+    <item
+        android:gravity="top">
+        <shape>
+            <size android:height="5dp"/>
+            <!--<padding android:top="10dp"/>-->
+            <gradient android:angle="-90"
+                android:endColor="@color/colorLine"
+                android:startColor="#00ffffff"/>
+        </shape>
+    </item>
+    //底边
+    <!--<item android:gravity="top">-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<padding android:top="1dp"/>-->
+            <!--<size android:height="1dp"/>-->
+            <!--<solid android:color="#ccc"/>-->
+        <!--</shape>-->
+    <!--</item>-->
+</layer-list>

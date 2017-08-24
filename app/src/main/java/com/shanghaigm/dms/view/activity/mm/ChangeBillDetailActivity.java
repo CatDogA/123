@@ -55,8 +55,7 @@ public class ChangeBillDetailActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
+                app.endApp();
             }
         });
 

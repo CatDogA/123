@@ -7,11 +7,13 @@ import android.os.Message;
 import android.renderscript.Allocation;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.DmsApplication;
@@ -46,7 +48,7 @@ public class AllocationTable extends LinearLayout {
     private DmsApplication app;
     private String assemblyName;
 
-    public AllocationTable(String assemblyName, final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, ArrayList<OrderDetailInfoAllocation> singleList) {
+    public AllocationTable(String assemblyName, final Context context, final ArrayList<OrderDetailInfoAllocation> data, final Button btn, final int type, ArrayList<OrderDetailInfoAllocation> singleList, final ScrollView scrollView) {
         super(context);
         this.data = data;
         this.context = context;
@@ -57,6 +59,13 @@ public class AllocationTable extends LinearLayout {
         LayoutInflater lf = LayoutInflater.from(context);
         View view = lf.inflate(R.layout.table_allocation, this, true);
         list = (ListView) view.findViewById(R.id.listview);
+        list.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         initHandler();
         setUpView();
 
@@ -158,7 +167,7 @@ public class AllocationTable extends LinearLayout {
                     if (!infoAllocation.getCost_change().equals("")) {
                         cost_change = Double.parseDouble(infoAllocation.getCost_change());
                     }
-                    OrderAddActivity.undefaultInfos.add(new AllocationAddChooseUndefaultInfo(infoAllocation.getAssemblyName(),infoAllocation.getAssemblyName(), infoAllocation.getConfig_information(), infoAllocation.getEntry_name(), 1, infoAllocation.getSupporting_id(), 0, cost_change, Integer.parseInt(infoAllocation.getNum()), infoAllocation.getRemarks(), infoAllocation.getStandard_id()));
+                    OrderAddActivity.undefaultInfos.add(new AllocationAddChooseUndefaultInfo(infoAllocation.getAssemblyName(), infoAllocation.getAssemblyName(), infoAllocation.getConfig_information(), infoAllocation.getEntry_name(), 1, infoAllocation.getSupporting_id(), 0, cost_change, Integer.parseInt(infoAllocation.getNum()), infoAllocation.getRemarks(), infoAllocation.getStandard_id()));
                 }
             }
         }

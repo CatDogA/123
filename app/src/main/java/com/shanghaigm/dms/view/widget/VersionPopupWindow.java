@@ -18,7 +18,7 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.util.ScreenUtil;
 
 /**
- * Created by Administrator on 2017/8/7.
+ * Created by Tom on 2017/8/7.
  */
 
 public class VersionPopupWindow extends PopupWindow {
@@ -62,7 +62,6 @@ public class VersionPopupWindow extends PopupWindow {
 
     public void showPopup(View parent,int w) {
         if (!this.isShowing()) {
-//            this.showAsDropDown(parent, 0, 0);
             int H = ScreenUtil.getScreenHeight(context);
             int W = ScreenUtil.getScreenWidth(context);
             int h = this.getHeight();

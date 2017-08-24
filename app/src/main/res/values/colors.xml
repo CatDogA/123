@@ -18,6 +18,7 @@
     <color name="colorButton">#D6D7D7</color>
     <color name="colorBlueText">#1296db</color>
     <color name="colorLine">#CCCCCC</color>
+    <color name="shape">#e0CCCCCC</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#ffffff</color>
     <color name="popColor">#EBFDFE</color>

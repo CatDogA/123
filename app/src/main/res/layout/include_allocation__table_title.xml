@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBlack" />
+    android:layout_height="30dp"
+    android:background="@color/titleBackColor"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -23,13 +15,7 @@
             android:layout_weight="3"
             android:gravity="center"
             android:text="@string/allocation_table_title_sysytem"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
+            android:textColor="@color/colorWhite" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,13 +23,7 @@
             android:layout_weight="4"
             android:gravity="center"
             android:text="@string/allocation_table_title_project_name"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
+            android:textColor="@color/colorWhite" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,13 +31,7 @@
             android:layout_weight="3"
             android:gravity="center"
             android:text="@string/allocation"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
+            android:textColor="@color/colorWhite" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,13 +39,7 @@
             android:layout_weight="2"
             android:gravity="center"
             android:text="@string/allocation_table_title_num"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack" />
-
+            android:textColor="@color/colorWhite" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -79,16 +47,6 @@
             android:layout_weight="3"
             android:gravity="center"
             android:text="@string/allocation_table_title_remark"
-            android:textColor="@color/colorBlack" />
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBlack" />
+            android:textColor="@color/colorWhite" />
     </LinearLayout>
-
-    <TextView
-        android:background="@color/colorBlack"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
 </LinearLayout>

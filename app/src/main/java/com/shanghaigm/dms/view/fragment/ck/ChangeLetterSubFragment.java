@@ -1,6 +1,8 @@
 package com.shanghaigm.dms.view.fragment.ck;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +26,7 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
+import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.ChangeLetterDetailInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
@@ -51,24 +54,24 @@ public class ChangeLetterSubFragment extends BaseFragment {
     private RelativeLayout rl_back, rl_end;
     private Button btnQuery, addBtn;
     private ImageView vpRight, vpLeft;
-    private WrapHeightViewPager vp;
+    //    private WrapHeightViewPager vp;
     private TextView pageNumText;
-    private MmPopupWindow modelPopup, statePopup;
-    private JSONArray modelArray, stateArray = new JSONArray();
-
-    private TablePagerAdapter pagerAdapter;
-    private static String TAG = "OrderReviewFragment";
+    private MmPopupWindow statePopup;
+    private JSONArray stateArray = new JSONArray();
+    private static String TAG = "ChangeLetterSubFragment";
     public static LoadingDialog dialog;
-    private int pages = 0;//页数
-    private int page = 1;//第几页
-    private DmsApplication app;
+
+    private ArrayList<TableInfo> tableInfos;
+    private ImageView img_first, img_last;
+    private WrapHeightViewPager vp;
+    private TablePagerAdapter adapter;
     private RelativeLayout.LayoutParams lp = new RelativeLayout.
             LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT);
-    private Boolean IsQuery = true;//判断是查询还是更多
-    private Boolean IsMore = false;//判断可否请求更多
-    private ArrayList<PaperInfo> papers;//每页数据
-    private ArrayList<ReviewTable> tables = new ArrayList<>();//表集合
+    private Boolean isQuery = false;        //是否已经查询
+    private int page, pages;       //显示页数,总页数
+    private DmsApplication app;
+    private ArrayList<ReviewTable> tables;
 
     /**
      * @param inflater
@@ -102,56 +105,51 @@ public class ChangeLetterSubFragment extends BaseFragment {
         vpLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (IsMore) {
-                    int currentItem = vp.getCurrentItem();
-                    if (currentItem + 1 == pages) {
-                        vpRight.setImageResource(R.mipmap.right_switch_pre);
-                    }
-                    if (currentItem > 0) {
-                        vp.setCurrentItem(--currentItem);
-                    }
-                    if (currentItem == 0) {
-                        vpLeft.setImageResource(R.mipmap.left_switch);
-                    }
-                    setPages(currentItem + 1, pages);
+                if (page > 0 && isQuery) {   //已查询，且不为第一页
+                    page--;
+                    requestOrderInfo(4);
+                    setPages(page + 1, pages);
                 }
             }
         });
         vpRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IsQuery = false;
-                if (IsMore) {
-                    int currentItem = vp.getCurrentItem();
-                    if (currentItem == 0) {
-                        vpLeft.setImageResource(R.mipmap.left_switch_pre);
-                    }
-                    if (currentItem + 2 == pages) {
-                        vpRight.setImageResource(R.mipmap.right_switch);
-                    }
-                    Log.i(TAG, "onClick: " + "currentItem" + currentItem + "     page" + page);
-
-                    if (currentItem + 2 == page) {
-                        if (page > pages) {
-                            Toast.makeText(getActivity(), "已是最后一页", Toast.LENGTH_SHORT).show();
-                            vpRight.setImageResource(R.mipmap.right_switch);
-                            return;
-                        }
-                        requestOrderInfo(IsQuery);
-                    } else {
-                        vp.setCurrentItem(++currentItem);
-                        setPages(currentItem + 1, pages);
-                    }
+                if (page < pages - 1 && isQuery) {
+                    page++;
+                    requestOrderInfo(5);
+                    setPages(page + 1, pages);
+                }
+            }
+        });
+        img_first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuery) {
+                    page = 0;
+                    requestOrderInfo(2);
+                    setPages(page + 1, pages);
+                }
+            }
+        });
+        img_last.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuery) {
+                    page = pages - 1;
+                    requestOrderInfo(3);
+                    setPages(page + 1, pages);
                 }
             }
         });
         btnQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IsQuery = true;
-                IsMore = true;
-                page = 1;
-                requestOrderInfo(IsQuery);
+                page = 0;
+                if (tableInfos != null) {
+                    tableInfos.clear();
+                }
+                requestOrderInfo(1);
             }
         });
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -194,35 +192,41 @@ public class ChangeLetterSubFragment extends BaseFragment {
                 }));
             }
         });
+        reQuery(customerEdt);
+        reQuery(contractIdEdt);
+        reQuery(changeLetterIdEdt);
+        reQuery(stateSelectEdt);
     }
 
     public void refresh() {
-        IsQuery = true;
-        IsMore = true;
-        page = 1;
-        requestOrderInfo(IsQuery);
+        page = 0;
+        if (tableInfos != null) {
+            tableInfos.clear();
+        }
+        requestOrderInfo(1);
     }
 
-    /**
-     * @param isQuery
-     */
     //查询
-    private void requestOrderInfo(Boolean isQuery) {
-        //todo-条件查询有问题
+    private void requestOrderInfo(final int type) {
+
+        //如果有，直接显示
+        if (type != 1) {       //已经查询过
+            tables.clear();
+            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                for (TableInfo tableInfo : tableInfos) {
+                    tables.add((ReviewTable) tableInfo.table);
+                }
+                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                vp.setAdapter(adapter);
+                vp.setCurrentItem(page);
+                return;
+            }
+        }
         dialog.showLoadingDlg();
         String stateText = stateSelectEdt.getText().toString();
         String contractId = contractIdEdt.getText().toString();
         String changeLetterId = changeLetterIdEdt.getText().toString();
         String customerText = customerEdt.getText().toString();
-//        if (stateSelectEdt != null) {
-//            stateText = stateSelectEdt.getText().toString();
-//        }
-//        if (customerEdt != null) {
-//            stateText = customerEdt.getText().toString();
-//        }
-//        if (changeLetterIdEdt != null) {
-//            stateText = changeLetterIdEdt.getText().toString();
-//        }
         Object stateId = null;
         if (!stateText.equals("")) {
             stateId = getParam(stateArray, stateText, "date_value", "date_key");
@@ -243,7 +247,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         }
         RequestParams params = new RequestParams();
         params.put("cls", paramArray.toString());
-        params.put("page", page + "");
+        params.put("page", page + 1 + "");
         params.put("rows", "8");
         params.put("loginName", app.getAccount());
         params.put("jobCode", app.getJobCode());
@@ -262,6 +266,10 @@ public class ChangeLetterSubFragment extends BaseFragment {
                     int total = resultEntity.getInt("total");
                     if (total == 0) {
                         Toast.makeText(getActivity(), "没有数据", Toast.LENGTH_SHORT).show();
+                        tables.clear();
+                        tableInfos.clear();
+                        ReviewTable table = new ReviewTable(getActivity(), new ArrayList<PaperInfo>(), 6);
+                        tables.add(table);
                     }
                     if (total % 8 == 0) {
                         pages = total / 8;
@@ -274,37 +282,44 @@ public class ChangeLetterSubFragment extends BaseFragment {
                         String orderNumber = item.getString("order_number");
                         String state = item.getInt("state") + "";
                         String contract_id = item.getString("contract_id");
-                        int order_id = item.getInt("order_id");
                         String change_letter_number = item.getString("change_letter_number");
                         ChangeLetterSubDetailInfo changeLetterSubDetailInfo = new ChangeLetterSubDetailInfo(item);
-                        paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo, item.getInt("letter_id"), order_id));
+                        paperInfos.add(new PaperInfo(customerName, state, contract_id, change_letter_number, getActivity(), 6, changeLetterSubDetailInfo, item.getInt("letter_id"), item.getString("models_name")));//order_id没用
+                    }
+                    //得到table
+                    ReviewTable table = new ReviewTable(getActivity(), paperInfos, 6);
+                    table.setLayoutParams(lp);
+                    if (total != 0) {
+                        tables.clear();
+                        //加入空的tables占位
+                        if (type == 1) {
+                            tableInfos.clear();
+                            for (int i = 0; i < pages; i++) {
+                                tableInfos.add(new TableInfo(pages, new ReviewTable(getActivity(), new ArrayList<PaperInfo>(), 6), false));
+                            }
+                            isQuery = true;
+                        }
+                        tableInfos.remove(page);
+                        tableInfos.add(page, new TableInfo(page, table, true));
+                        for (TableInfo tableInfo : tableInfos) {
+                            tables.add((ReviewTable) tableInfo.table);
+                        }
+                    }
+                    Log.i(TAG, "onSuccess:size          " + tables.size() + "     tableinfos       " + tableInfos.size());
+                    adapter.notifyDataSetChanged();
+                    vp.setAdapter(adapter);
+                    Log.i(TAG, "onSuccess:page          " + page);
+                    vp.setCurrentItem(page);
+                    //查询时，设置页数
+                    if (type == 1 && total != 0) {
+                        setPages(page + 1, pages);
+                    }
+                    if (total == 0) {
+                        setPages(0, 0);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                ReviewTable table = new ReviewTable(getActivity(), paperInfos, 6);
-                table.setLayoutParams(lp);
-                if (IsQuery) {
-                    tables.clear();
-                    tables.add(table);
-                    setPages(1, pages);
-                    page++;
-                } else if (IsMore && !IsQuery) {
-                    if (vp.getCurrentItem() + 1 >= pages) {
-                        Toast.makeText(getActivity(), "已是最后一页", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    tables.add(table);
-                    setPages(tables.size(), pages);
-                    page++;
-                } else {
-                    Toast.makeText(getActivity(), "请先查询", Toast.LENGTH_SHORT).show();
-                }
-                Log.i(TAG, "onSuccess:page " + page);
-                Log.i(TAG, "onSuccess:tables " + tables.size());
-                pagerAdapter.notifyDataSetChanged();
-                vp.setAdapter(pagerAdapter);
-                vp.setCurrentItem(page);
             }
 
             @Override
@@ -332,23 +347,43 @@ public class ChangeLetterSubFragment extends BaseFragment {
     }
 
     private void initViewPager() {
-        papers = new ArrayList<>();
-        ReviewTable table = new ReviewTable(getActivity(), papers, 6);
+        tableInfos = new ArrayList<>();
+        //添加空的table
+        ReviewTable table = new ReviewTable(getActivity(), new ArrayList<PaperInfo>(), 6);
         table.setLayoutParams(lp);
+        tables = new ArrayList<>();
         tables.add(table);
-        pagerAdapter = new TablePagerAdapter(getActivity(), tables);
+        adapter = new TablePagerAdapter(getActivity(), tables);
+        vp.setAdapter(adapter);
         vp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;//禁止滑动
             }
         });
-        vp.setOnClickListener(null);
-        vp.setAdapter(pagerAdapter);
     }
 
     private void setPages(int page, int pages) {
         pageNumText.setText("页数:" + page + "/" + pages);
+    }
+
+    private void reQuery(EditText edt) {
+        edt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isQuery = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void initView(View v) {
@@ -363,6 +398,8 @@ public class ChangeLetterSubFragment extends BaseFragment {
 
         vpLeft = (ImageView) v.findViewById(R.id.viewpager_left);
         vpRight = (ImageView) v.findViewById(R.id.viewpager_right);
+        img_first = (ImageView) v.findViewById(R.id.viewpager_first);
+        img_last = (ImageView) v.findViewById(R.id.viewpager_last);
 
         vp = (WrapHeightViewPager) v.findViewById(R.id.order_review_viewpager);
         dialog = new LoadingDialog(getActivity(), "正在加载");

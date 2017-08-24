@@ -17,7 +17,6 @@ public class OrderDetailInfoBean implements Serializable {
         public String customer_name;
         public String sex;
         public String fixed_telephone;
-        public String mobile_phone;
         public String province;
         public String city;
         public String county;
@@ -47,6 +46,7 @@ public class OrderDetailInfoBean implements Serializable {
         public int order_id;
         public String order_number;
         public String address;
+        public String mobile_phone;
 //        public List<MatchingBean> matching;
 //        public class MatchingBean{
 //            public String assembly;

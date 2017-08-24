@@ -1,21 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    android:orientation="vertical"
-    tools:context="com.shanghaigm.dms.view.fragment.ck.OrderSubFragment">
-
-    <include layout="@layout/include_title_bar" />
-
-    <include layout="@layout/include_order_sub" />
-
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -48,13 +40,4 @@
             android:text="@string/mm_passed_text"
             android:textColor="@color/colorGreen" />
     </LinearLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/order_review_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-    </android.support.v4.view.ViewPager>
-    <include layout="@layout/include_below_table" />
 </LinearLayout>

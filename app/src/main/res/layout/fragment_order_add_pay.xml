@@ -16,42 +16,46 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="付款方式" />
+                    android:layout_weight="2"
+                    android:text="付款方式:" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4">
                     <EditText
+                        android:gravity="center_horizontal"
                         android:id="@+id/payment_method"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@null"
                         android:focusable="false"
                         android:lines="1"
                         android:text="@{info.payment_method}"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <ImageView
                         android:id="@+id/img_pay_method"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignBottom="@+id/payment_method"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_alignRight="@id/payment_method"
-                        android:layout_marginBottom="10dp"
                         android:src="@mipmap/down" />
                 </RelativeLayout>
 
@@ -60,182 +64,231 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="付款备注" />
+                    android:layout_weight="2"
+                    android:text="付款备注:" />
 
                 <EditText
+                    android:gravity="center_horizontal"
                     android:id="@+id/payment_method_remarks"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:background="@null"
+                    android:lines="1"
                     android:text="@{info.payment_method_remarks}"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:lines="1"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/textView17"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="交付日期" />
-
-                <EditText
-                    android:id="@+id/delivery_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="交付日期:" />
+                <RelativeLayout
                     android:layout_weight="4"
-                    android:text="@{info.delivery_time}"
-                    android:focusable="false"
-                    android:lines="1"
-                    android:textSize="14sp" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/delivery_time"
+                        android:layout_width="match_parent"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:lines="1"
+                        android:text="@{info.delivery_time}"
+                        android:textSize="14sp" />
+                    <ImageView
+                        android:layout_alignRight="@id/delivery_time"
+                        android:src="@mipmap/date"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp" />
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="合同价(万元/台)" />
+                    android:layout_weight="2"
+                    android:text="合同价(万元/台):" />
 
                 <EditText
                     android:id="@+id/freight"
                     android:layout_width="0dp"
-                    android:text="@{info.freight}"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    android:background="@null"
                     android:inputType="numberDecimal"
                     android:lines="1"
+                    android:text="@{info.freight}"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="劳务费(万元/台)" />
+                    android:layout_weight="2"
+                    android:text="劳务费(万元/台):" />
 
                 <EditText
                     android:id="@+id/service_fee"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    android:background="@null"
+                    android:inputType="numberDecimal"
+                    android:lines="1"
                     android:text="@{info.service_fee}"
-                    android:inputType="numberDecimal"
-                    android:lines="1"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:gravity="right"
-                    android:text="扣除劳务费后合同价(万元/台)" />
-
-                <EditText
-
-                    android:id="@+id/contract_price"
-                    android:layout_width="0dp"
-                    android:text="@{info.contract_price}"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:inputType="numberDecimal"
-                    android:lines="1"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="运费(万元/台)" />
+                    android:text="扣除劳务费后合同价(万元/台):" />
+
+                <EditText
+                    android:id="@+id/contract_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:inputType="numberDecimal"
+                    android:lines="1"
+                    android:text="@{info.contract_price}"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="运费(万元/台):" />
 
                 <EditText
                     android:id="@+id/carriage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="@{info.carriage}"
+                    android:gravity="center_horizontal"
+                    android:background="@null"
                     android:inputType="numberDecimal"
                     android:lines="1"
+                    android:text="@{info.carriage}"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="开票金额(万元/台)" />
+                    android:text="开票金额(万元/台):" />
 
                 <EditText
                     android:id="@+id/invoice_amount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="@{info.invoice_amount}"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
                     android:inputType="numberDecimal"
                     android:lines="1"
+                    android:text="@{info.invoice_amount}"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="5dp"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right"
-                    android:text="开票要求" />
+                    android:layout_weight="2"
+                    android:text="开票要求:" />
 
                 <EditText
                     android:id="@+id/billing_requirements"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
+                    android:background="@null"
                     android:lines="1"
+                    android:gravity="center_horizontal"
                     android:text="@{info.billing_requirements}"
                     android:textSize="14sp" />
             </LinearLayout>

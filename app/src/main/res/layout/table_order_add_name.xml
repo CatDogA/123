@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginLeft="10dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginEnd="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <include layout="@layout/include_order_add_name" />
 
     <ListView
+        android:background="@color/tableBack"
         android:id="@+id/pop_search_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:listSelector="@color/colorWhite"
-        android:divider="@color/colorBlack"
+        android:listSelector="@color/line"
+        android:divider="@color/colorWhite"
         android:dividerHeight="1dp">
     </ListView>
 </LinearLayout>

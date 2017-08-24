@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class TablePagerAdapter extends PagerAdapter{
     private ArrayList<ReviewTable> tables;
-    private int mChildCount = 0;
     private Context context;
     public TablePagerAdapter(Context context,ArrayList<ReviewTable> tables){
         this.context = context;
@@ -24,11 +23,7 @@ public class TablePagerAdapter extends PagerAdapter{
     }
     @Override
     public int getCount() {
-        if(tables!=null && tables.size()>0){
-            return tables.size();
-        }else{
-            return 0;
-        }
+        return tables.size();
     }
 
     @Override
@@ -36,6 +31,11 @@ public class TablePagerAdapter extends PagerAdapter{
         return view==object;
     }
 
+    /**
+     * @param container viewpager容器
+     * @param position
+     * @return
+     */
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         container.addView(tables.get(position));

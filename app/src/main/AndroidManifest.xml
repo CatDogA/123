@@ -42,12 +42,18 @@
         <activity
             android:name=".view.activity.mm.ContractReviewOrChangeLetterReviewActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.mm.HomeActivity" />
-        <activity android:name=".view.activity.mm.ContractReviewDetailActivity" />
+        <activity
+            android:name=".view.activity.mm.HomeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.mm.ContractReviewDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.mm.ChangeLetterDetailActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.mm.ChangeBillDetailActivity" />
+        <activity
+            android:name=".view.activity.mm.ChangeBillDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.ck.OrderModifyActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -60,11 +66,10 @@
         <activity
             android:name=".view.activity.ck.ChangeLetterQueryDetailActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".view.activity.ck.ChangeLetterModifyActivity"
-            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.activity.ck.AllocationAddChooseUndefaultActivity" />
-        <activity android:name=".view.activity.as.HomeActivity" />
+        <activity
+            android:name=".view.activity.as.HomeActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.as.ReportAddActivity"
             android:windowSoftInputMode="adjustPan" />

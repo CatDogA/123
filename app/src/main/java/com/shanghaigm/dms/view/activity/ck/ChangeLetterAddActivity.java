@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ public class ChangeLetterAddActivity extends BaseActivity {
     private int type = 0;   //判断是否再次选择contract_id
     private ActivityChangeLetterAddBinding binding;
     private DmsApplication app;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +80,12 @@ public class ChangeLetterAddActivity extends BaseActivity {
         if (b != null) {
             allocationInfos = (ArrayList<ChangeLetterAllocationInfo>) b.getSerializable(PaperInfo.CHANGE_LETTER_INFO);
             flag = 1;
-            ChangeLetterAllocationTable table = new ChangeLetterAllocationTable(ChangeLetterAddActivity.this, allocationInfos);
+            ChangeLetterAllocationTable table = new ChangeLetterAllocationTable(ChangeLetterAddActivity.this, allocationInfos, scrollView);
             table.setLayoutParams(tableParams);
             llChangeLetter.addView(table);
         } else {
             allocationInfos.add(new ChangeLetterAllocationInfo("", "", "", ""));
-            ChangeLetterAllocationTable table = new ChangeLetterAllocationTable(ChangeLetterAddActivity.this, allocationInfos);
+            ChangeLetterAllocationTable table = new ChangeLetterAllocationTable(ChangeLetterAddActivity.this, allocationInfos, scrollView);
             table.setLayoutParams(tableParams);
             llChangeLetter.addView(table);
         }
@@ -152,7 +154,7 @@ public class ChangeLetterAddActivity extends BaseActivity {
                                 infoObj.put("man_hour", info.getMan_hour());
                                 dataList.put(infoObj);
                             }
-                            if (flag == 0 || type==1) {
+                            if (flag == 0 || type == 1) {
                                 letterObj.put("contract_id", changeLetterAddInfo.getContract_id());
                                 letterObj.put("order_id", changeLetterAddInfo.getOrder_id());
                                 letterObj.put("letter_id", "");
@@ -317,5 +319,6 @@ public class ChangeLetterAddActivity extends BaseActivity {
         edt_config_chang_delivery_date = (EditText) findViewById(R.id.edt_config_chang_delivery_date);
         llChangeLetter = (LinearLayout) findViewById(R.id.ll_change_letter);
         app = DmsApplication.getInstance();
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
     }
 }

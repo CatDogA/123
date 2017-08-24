@@ -16,7 +16,6 @@ import com.shanghaigm.dms.view.fragment.BaseFragment;
 public class OrderDetailInfoOneFragment extends BaseFragment {
     private DmsApplication app;
     private static String TAG = "OrderDetailInfoOneFragment";
-    private EditText customName;
     private FragmentOrderDetailInfoOneBinding bind;
 
     @Override

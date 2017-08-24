@@ -1,15 +1,19 @@
 package com.shanghaigm.dms.view.fragment.ck;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.shanghaigm.dms.R;
@@ -38,6 +42,8 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
     private CustomAllocationTable customAllocationTable;
     public static OrderAddAllocation2Fragment fragment = null;
     private ArrayList<OrderDetailInfoAllocation> customerAllocationList;
+    private ScrollView scrollView;
+    private ImageView img_add;
     private Handler allocationHandler = new Handler();
 
     public OrderAddAllocation2Fragment() {
@@ -59,6 +65,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
 
     private void initView(View v) {
         ll = (LinearLayout) v.findViewById(R.id.fragment_ll);
+        scrollView = (ScrollView) v.findViewById(R.id.scroll_view);
     }
 
     public static OrderAddAllocation2Fragment getInstance() {
@@ -91,27 +98,33 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
                                 saveLists.add(allAssemblyList.get(i));
                                 //建button
                                 String btnText = "";
-//                if (i < names.size()) {
                                 btnText = name;
-//                }/
                                 //button名
                                 Button btn = new Button(getActivity());
+                                btn.setBackgroundColor(Color.WHITE);
+                                btn.setTextColor(getResources().getColor(R.color.titleBackColor));
                                 btn.setText(btnText);
                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                params.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
+                                params.setMargins(0, getPixelsFromDp(1), 0, getPixelsFromDp(1));
                                 params.gravity = Gravity.CENTER_HORIZONTAL;
                                 btn.setLayoutParams(params);
                                 ll.addView(btn);
                                 btns.add(btn);
                                 //建linearlayout
                                 LinearLayout linearLayout = new LinearLayout(getActivity());
-//                linearLayout.
                                 LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
                                 linearLayout.setLayoutParams(llParams);
                                 //建表
-                                AllocationTable table = new AllocationTable(name, getActivity(), allAssemblyList.get(i), btn, i, ((OrderAddActivity) getActivity()).getSingleAllocationList());
+                                AllocationTable table = new AllocationTable(name, getActivity(), allAssemblyList.get(i), btn, i, ((OrderAddActivity) getActivity()).getSingleAllocationList(), scrollView);
                                 LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                                 table.setLayoutParams(tableParams);
+                                table.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        scrollView.requestDisallowInterceptTouchEvent(true);
+                                        return false;
+                                    }
+                                });
                                 linearLayout.addView(table);
                                 tables.add(table);
                                 linearLayouts.add(linearLayout);
@@ -130,28 +143,35 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         //新建linearlayout套button
         LinearLayout btnlinearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams llParams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        llParams1.setMargins(0, getPixelsFromDp(-5), 0, getPixelsFromDp(-5));
+        llParams1.setMargins(0, getPixelsFromDp(1), 0, getPixelsFromDp(1));
         btnlinearLayout.setLayoutParams(llParams1);
         btnlinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         Button btn = new Button(getActivity());
-        btn.setText("自定");
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-        params.setMargins(0, 0, getPixelsFromDp(-20), 0);
+        btn.setText("自定义");
+        btn.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        btn.setTextColor(getResources().getColor(R.color.titleBackColor));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5);
         params.gravity = Gravity.CENTER_HORIZONTAL;
         btn.setLayoutParams(params);
 //        ll.addView(btn);
         btns.add(btn);
         btnlinearLayout.addView(btn);
 
-        btnAdd = new Button(getActivity());
-        btnAdd.setText("+");
-        LinearLayout.LayoutParams paramsAdd = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(getPixelsFromDp(-5), 0, 0, 0);
-        paramsAdd.gravity = Gravity.CENTER_HORIZONTAL;
-        btnAdd.setLayoutParams(paramsAdd);
-
-        btnlinearLayout.addView(btnAdd);
+        LinearLayout ll_add = new LinearLayout(getActivity());
+        img_add = new ImageView(getActivity());
+        img_add.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        img_add.setImageResource(R.mipmap.add2);
+        LinearLayout.LayoutParams paramsAdd = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        LinearLayout.LayoutParams paramsAdd1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        paramsAdd.gravity = Gravity.CENTER;
+        paramsAdd1.gravity = Gravity.CENTER_HORIZONTAL;
+        ll_add.setLayoutParams(paramsAdd);
+        ll_add.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        ll_add.setPadding(20,20,20,20);
+        img_add.setLayoutParams(paramsAdd1);
+        ll_add.addView(img_add);
+        btnlinearLayout.addView(ll_add);
         ll.addView(btnlinearLayout);
 
         //建linearlayout
@@ -165,6 +185,13 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         customAllocationTable = new CustomAllocationTable(getActivity(), customerAllocationList, ((OrderAddActivity) getActivity()).getAssemblyNames());
         LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         customAllocationTable.setLayoutParams(tableParams);
+        customAllocationTable.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         linearLayout.addView(customAllocationTable);
         linearLayouts.add(linearLayout);
         ll.addView(linearLayout);
@@ -195,7 +222,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
             });
 
         }
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        img_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customAllocationTable.AddItem();

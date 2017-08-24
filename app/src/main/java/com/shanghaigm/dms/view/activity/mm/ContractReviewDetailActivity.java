@@ -3,11 +3,13 @@ package com.shanghaigm.dms.view.activity.mm;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
     private static String ISREFRESH = "refresh";
     private ListView listview;
     private ListAdapter adapter;
+    private ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +78,19 @@ public class ContractReviewDetailActivity extends BaseActivity {
         }
         adapter = new ListAdapter(this, R.layout.list_item_allocation, BR.info, allocations);
         listview.setAdapter(adapter);
-    }
+        listview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+//                scrollView.requestDisallowInterceptTouchEvent(true); 
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
+    }
     private void initData() {
         binding.setInfo(app.getContractDetailInfo());
     }
-
     private void initView() {
         title = (TextView) findViewById(R.id.title_text);
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
@@ -90,6 +100,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
         remarks = (EditText) findViewById(R.id.edt_review_remarks);
         listview = (ListView) findViewById(R.id.list_allocation);
         dialog = new LoadingDialog(this, "正在加载");
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
     }
 
     private void setUpView() {

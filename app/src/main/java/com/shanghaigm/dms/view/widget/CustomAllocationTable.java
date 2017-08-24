@@ -93,25 +93,25 @@ public class CustomAllocationTable extends LinearLayout {
                 holder = (ViewHolder) convertView.getTag();
             }
             final ArrayList<PopListInfo> names = new ArrayList<>();
-            if (systems != null) {
-                for (String name : systems) {
-                    names.add(new PopListInfo(name));
-                }
-                holder.edtSystem.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MmPopupWindow pop = new MmPopupWindow(context, holder.edtSystem, names, 4);
-                        pop.showPopup(holder.edtSystem);
-                    }
-                });
-            } else {
-                holder.edtSystem.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "请选择车型", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+//            if (systems != null) {
+//                for (String name : systems) {
+//                    names.add(new PopListInfo(name));
+//                }
+//                holder.edtSystem.setOnClickListener(new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        MmPopupWindow pop = new MmPopupWindow(context, holder.edtSystem, names, 4);
+//                        pop.showPopup(holder.edtSystem);
+//                    }
+//                });
+//            } else {
+//                holder.edtSystem.setOnClickListener(new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(context, "请选择车型", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
             holder.edtSystem.setText(saveList.get(position).getAssembly());
             holder.edtProName.setText(saveList.get(position).getEntry_name());
             holder.edtConfig.setText(saveList.get(position).getConfig_information());
@@ -168,7 +168,7 @@ public class CustomAllocationTable extends LinearLayout {
                 switch (type) {
                     case 1:
                         position = (int) holder.edtSystem.getTag();
-                        saveEdtInfo(1,"自定义", position);
+                        saveEdtInfo(1,s.toString(), position);
                         break;
                     case 2:
                         position = (int) holder.edtProName.getTag();

@@ -27,24 +27,17 @@ import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.HttpUpLoad;
-import com.shanghaigm.dms.model.util.OkHttpClient;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.HomeActivity;
-import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
 import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
-import com.shanghaigm.dms.view.activity.ck.ChangeLetterModifyActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
-import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
-import com.shanghaigm.dms.view.fragment.ck.ChangeLetterSubFragment;
-import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
-import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocationFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 
@@ -146,7 +139,7 @@ public class PaperInfo extends BasePaperInfo {
     }
 
     //更改函提交
-    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id, int orderId) {
+    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id,String model) {
         super(name);
         this.state = state;
         this.contract_id = contract_id;
@@ -154,7 +147,7 @@ public class PaperInfo extends BasePaperInfo {
         this.context = context;
         this.flag = flag;
         this.letter_id = letter_id;
-        this.orderId = orderId;
+        this.model = model;
         this.changeLetterSubDetailInfo = changeLetterSubDetailInfo;
         dialog = new LoadingDialog(this.context, "正在加载");
     }
@@ -567,8 +560,16 @@ public class PaperInfo extends BasePaperInfo {
                                         infos.add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("change_content")));
                                     }
                                     JSONObject infoObj = result.getJSONObject("fromData");
-                                    ChangeLetterSubDetailInfo info = new ChangeLetterSubDetailInfo(infoObj.getString("contract_id"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("number"), infoObj.getString("contract_price"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"), infoObj.getInt("order_id"), infoObj.getString("change_letter_number"));
-                                    app.setChangeLetterSubDetailInfo(info);
+                                    ChangeLetterDetailInfo info = new ChangeLetterDetailInfo(infoObj.getString("contract_id"), infoObj.getString("contract_price"), infoObj.getString("number"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"));
+                                    app.setChangeLetterDetailInfo(info);
+                                    app.setFlow_detail_id(flow_details_id);
+                                    Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putSerializable(CHANGE_LETTER_INFO, infos);
+                                    intent3.putExtras(b);
+                                    view.getContext().startActivity(intent3);
+                                }else {
+                                    app.setChangeLetterDetailInfo(changeLetterDetailInfo);
                                     app.setFlow_detail_id(flow_details_id);
                                     Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
                                     Bundle b = new Bundle();
@@ -576,13 +577,6 @@ public class PaperInfo extends BasePaperInfo {
                                     intent3.putExtras(b);
                                     view.getContext().startActivity(intent3);
                                 }
-                                app.setChangeLetterDetailInfo(changeLetterDetailInfo);
-                                app.setFlow_detail_id(flow_details_id);
-                                Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
-                                Bundle b = new Bundle();
-                                b.putSerializable(CHANGE_LETTER_INFO, infos);
-                                intent3.putExtras(b);
-                                view.getContext().startActivity(intent3);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

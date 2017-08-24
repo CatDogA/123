@@ -50,7 +50,6 @@ public class OrderAddBaseFragment extends BaseFragment {
     private ImageView imgColorDetermine;
     private LoadingDialog dialog;
     private JSONArray modelArray;
-    private static int resultCount = 0;
     private int assemblyCount;    //计总成数量
     private static OrderAddBaseFragment orderAddBaseFragment = null;
     private ArrayList<ArrayList<OrderDetailInfoAllocation>> allAssemblyList;
@@ -227,7 +226,7 @@ public class OrderAddBaseFragment extends BaseFragment {
                 popColorList.add(new PopListInfo("5个工作日内"));    //2
                 popColorList.add(new PopListInfo("7个工作日内"));    //3
                 popColorList.add(new PopListInfo("已确认"));           //1
-                MmPopupWindow popColorDetermine = new MmPopupWindow(getActivity(), edt_color_determine, popColorList, 3);
+                MmPopupWindow popColorDetermine = new MmPopupWindow(getActivity(), edt_color_determine, popColorList, 6);
                 popColorDetermine.showPopup(edt_color_determine);
             }
         });
@@ -354,7 +353,6 @@ public class OrderAddBaseFragment extends BaseFragment {
         imgModel = (ImageView) v.findViewById(R.id.img_model);
         dialog = new LoadingDialog(getActivity(), "正在加载");
         imgSearch = (ImageView) v.findViewById(R.id.img_custom_name);
-        imgSex = (ImageView) v.findViewById(R.id.img_sex);
         imgColorDetermine = (ImageView) v.findViewById(R.id.img_color_determine);
 
         edtCustomerName = (EditText) v.findViewById(R.id.edt_custom_name);

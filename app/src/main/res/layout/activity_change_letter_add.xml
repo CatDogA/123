@@ -1,278 +1,415 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
-
         <variable
             name="info"
             type="com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo" />
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mainColorGD">
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        tools:context="com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <include layout="@layout/include_title_bar" />
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/mainColorGD"
-            android:orientation="vertical"
-            tools:context="com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity">
-
-            <include layout="@layout/include_title_bar" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorWhite">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_contract_id" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="8">
-
-                        <EditText
-                            android:id="@+id/edt_contract_id"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:text="@{info.contract_id}"
-                            android:textSize="12dp" />
+                            android:layout_weight="2"
+                            android:text="@string/contract_id" />
 
-                        <ImageView
-                            android:id="@+id/img_contract_id"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignBottom="@+id/edt_contract_id"
-                            android:layout_alignRight="@+id/edt_contract_id"
-                            android:layout_marginBottom="10dp"
-                            android:src="@mipmap/search" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_unit_name" />
-
-                    <EditText
-                        android:id="@+id/edt_company_name"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="8"
-                        android:focusable="false"
-                        android:lines="1"
-                        android:text="@{info.company_name}"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/model" />
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3">
-
-                        <EditText
-                            android:id="@+id/edt_model"
-                            android:layout_width="match_parent"
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
+                            android:layout_weight="8">
+
+                            <EditText
+                                android:id="@+id/edt_contract_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:text="@{info.contract_id}"
+                                android:textSize="12dp" />
+
+                            <ImageView
+                                android:id="@+id/img_contract_id"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_alignRight="@+id/edt_contract_id"
+                                android:src="@mipmap/search" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
                             android:gravity="center"
-                            android:text="@{info.models_name}"
-                            android:textSize="12dp" />
+                            android:orientation="horizontal"
+                            android:padding="5dp">
 
-                        <ImageView
-                            android:id="@+id/img_model_series"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignBottom="@+id/edt_model"
-                            android:layout_alignRight="@+id/edt_model"
-                            android:layout_marginBottom="10dp"
-                            android:src="@mipmap/down_grey"
-                            android:visibility="gone" />
-                    </RelativeLayout>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/unit_name" />
 
-                    <TextView
-                        android:layout_width="0dp"
+                            <EditText
+                                android:id="@+id/edt_company_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:background="@null"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:lines="1"
+                                android:text="@{info.company_name}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/num" />
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/edt_num"
-                        android:layout_width="0dp"
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/textView23"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/model_d" />
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="4">
+
+                                <EditText
+                                    android:id="@+id/edt_model"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:focusable="false"
+                                    android:gravity="center"
+                                    android:text="@{info.models_name}"
+                                    android:textSize="12dp" />
+
+                                <ImageView
+                                    android:id="@+id/img_model_series"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_alignBottom="@+id/edt_model"
+                                    android:layout_alignRight="@+id/edt_model"
+                                    android:layout_marginBottom="10dp"
+                                    android:src="@mipmap/down_grey"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/num_d" />
+
+                            <EditText
+                                android:id="@+id/edt_num"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="4"
+                                android:background="@null"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:lines="1"
+                                android:text="@{info.number}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:focusable="false"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:text="@{info.number}"
-                        android:textSize="14sp" />
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/primary_price" />
+
+                            <EditText
+                                android:id="@+id/edt_contract_price"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:lines="1"
+                                android:text="@{info.contract_price}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/after_price" />
+
+                            <EditText
+                                android:id="@+id/edt_change_contract_price"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:lines="1"
+                                android:text="@{info.change_contract_price}"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/allocation_change_date" />
+                            <RelativeLayout
+                                android:layout_weight="4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content">
+                                <EditText
+                                    android:id="@+id/edt_config_change_date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:focusable="false"
+                                    android:gravity="center"
+                                    android:lines="1"
+                                    android:text="@{info.config_change_date}"
+                                    android:textSize="14sp" />
+                                <ImageView
+                                    android:layout_alignRight="@id/edt_config_change_date"
+                                    android:src="@mipmap/date"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/contract_commit_date" />
+                            <RelativeLayout
+                                android:layout_weight="4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content">
+                                <EditText
+                                    android:id="@+id/edt_contract_delivery_date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:focusable="false"
+                                    android:gravity="center"
+                                    android:lines="1"
+                                    android:text="@{info.contract_delivery_date}"
+                                    android:textSize="14sp" />
+                                <ImageView
+                                    android:layout_alignRight="@id/edt_contract_delivery_date"
+                                    android:src="@mipmap/date"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cic_edt_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/textView25"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/after_allocation_date" />
+                            <RelativeLayout
+                                android:layout_weight="3"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content">
+                                <EditText
+                                    android:id="@+id/edt_config_chang_delivery_date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:focusable="false"
+                                    android:gravity="center"
+                                    android:lines="1"
+                                    android:text="@{info.config_chang_delivery_date}"
+                                    android:textSize="14sp" />
+                                <ImageView
+                                    android:src="@mipmap/date"
+                                    android:layout_alignRight="@+id/edt_config_chang_delivery_date"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_change_letter"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="200dp"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="@string/mm_primary_price" />
-
-                    <EditText
-                        android:id="@+id/edt_contract_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:focusable="false"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:text="@{info.contract_price}"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="@string/mm_after_price" />
-
-                    <EditText
-                        android:id="@+id/edt_change_contract_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:text="@{info.change_contract_price}"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_allocation_change_date" />
-
-                    <EditText
-                        android:id="@+id/edt_config_change_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:focusable="false"
-                        android:lines="1"
-                        android:text="@{info.config_change_date}"
-                        android:textSize="14sp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_contract_commit_date" />
-
-                    <EditText
-                        android:id="@+id/edt_contract_delivery_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:focusable="false"
-                        android:lines="1"
-                        android:text="@{info.contract_delivery_date}"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="@string/mm_after_allocation_date" />
-
-                    <EditText
-                        android:id="@+id/edt_config_chang_delivery_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:focusable="false"
-                        android:lines="1"
-                        android:text="@{info.config_chang_delivery_date}"
-                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
+        </ScrollView>
 
-            <LinearLayout
-                android:id="@+id/ll_change_letter"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:orientation="vertical"></LinearLayout>
-
-            <include layout="@layout/include_save_and_sub" />
-        </LinearLayout>
-    </ScrollView>
+        <include layout="@layout/include_save_and_sub" />
+    </LinearLayout>
 </layout>

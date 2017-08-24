@@ -4,11 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +26,14 @@ import com.shanghaigm.dms.databinding.ActivityChangeLetterDetailBinding;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChangeLetterDetailActivity extends AppCompatActivity {
+public class ChangeLetterDetailActivity extends BaseActivity {
     private static String TAG = "ChangeLetterDetail";
     private DmsApplication app = DmsApplication.getInstance();
     private ActivityChangeLetterDetailBinding binding;
@@ -41,6 +44,7 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
     private LoadingDialog dialog;
     private ListView listView;
     private ListAdapter adapter;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,17 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
 
     private void initIntent() {
         Bundle b = getIntent().getExtras();
-        if(b!=null){
+        if (b != null) {
             ArrayList<ChangeLetterAllocationInfo> infos = (ArrayList<ChangeLetterAllocationInfo>) b.getSerializable(PaperInfo.CHANGE_LETTER_INFO);
             adapter = new ListAdapter(this, R.layout.list_item_change_letter_allocation_query, BR.info, infos);
             listView.setAdapter(adapter);
+            listView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            });
         }
     }
 
@@ -150,5 +161,6 @@ public class ChangeLetterDetailActivity extends AppCompatActivity {
         remarks = (EditText) findViewById(R.id.edt_review_remarks);
         listView = (ListView) findViewById(R.id.list_view);
         dialog = new LoadingDialog(this, "正在加载");
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
     }
 }

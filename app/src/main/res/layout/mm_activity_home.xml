@@ -51,7 +51,7 @@
             android:layout_height="match_parent">
             <ImageView
                 android:layout_marginTop="3dp"
-                android:src="?attr/tabBarIconOrder"
+                android:src="@drawable/tab_order_review"
                 android:layout_width="30dp"
                 android:layout_height="30dp" />
             <TextView
@@ -71,7 +71,7 @@
             android:layout_height="match_parent">
             <ImageView
                 android:layout_marginTop="3dp"
-                android:src="?attr/tabBarIconModify"
+                android:src="@drawable/tab_bill_review"
                 android:layout_width="30dp"
                 android:layout_height="30dp" />
             <TextView

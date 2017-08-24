@@ -13,8 +13,8 @@
         <item name="tabBarTextColor">@drawable/tab_text_color</item>
         <!--底部Tab图标-->
         <item name="tabBarIconHome">@drawable/tab_icon_home</item>
-        <item name="tabBarIconOrder">@drawable/tab_icon_order</item>
-        <item name="tabBarIconModify">@drawable/tab_icon_modify</item>
+        <item name="tabBarIconOrder">@drawable/tab_order_sub</item>
+        <item name="tabBarIconModify">@drawable/tab_letter_sub</item>
     </style>
 
     <!--自定义editText下划线-->

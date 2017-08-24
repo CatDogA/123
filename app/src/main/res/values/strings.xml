@@ -15,8 +15,10 @@
     <string name="add">新增</string>
     <string name="order_number">订单号</string>
     <string name="customer">客户</string>
+    <string name="custom">客户:</string>
     <string name="customer_name">客户名称</string>
     <string name="model">车型</string>
+    <string name="model_d">车型:</string>
     <string name="operation">操作</string>
     <string name="pass_btn">通过</string>
     <string name="submit">提交</string>
@@ -52,6 +54,7 @@
     <string name="ck_change_letter_sub">更改函提报</string>
     <string name="ck_order_add">订单填写</string>
     <string name="ck_change_letter_id">变更函号</string>
+    <string name="change_letter_id">变更函号:</string>
     <string name="ck_allocation_new_energy">新能源</string>
     <string name="ck_under_pan">底盘</string>
     <string name="ck_car_body">车身</string>
@@ -63,6 +66,7 @@
     <string name="report_sub">日报提报</string>
     <string name="after_report_sub">售后日报提报</string>
     <string name="report_id">日报编号</string>
+    <string name="report_num">日报编号:</string>
     <string name="report_info">日报信息</string>
     <string name="attach_sub">附件上传</string>
     <string name="attacn_preview">附件预览</string>
@@ -98,6 +102,7 @@
     <string name="report_query">质量日报查询</string>
     <string name="after_report_query">售后日报查询</string>
     <string name="car_id">车牌号</string>
+    <string name="car_num">车牌号:</string>
 
     <!--mm订单审核-->
     <string name="review_number">合同号</string>
@@ -109,7 +114,9 @@
     <string name="mm_change_bill_review">更改单审批</string>
     <string name="mm_allocation_change_bill_review">配置更改单审批</string>
     <string name="mm_order_area">区域</string>
+    <string name="area">区域:</string>
     <string name="mm_order_ck">业务员</string>
+    <string name="order_ck">业务员:</string>
     <string name="mm_order_number">订单号:</string>
     <string name="mm_order_client">客户:</string>
     <string name="mm_order_model">车型:</string>
@@ -130,42 +137,62 @@
     <string name="man_hour">工时费</string>
     <!--mm合同审核明细-->
     <string name="mm_contract_id">合同号</string>
+    <string name="contract_id">合同号:</string>
     <string name="contract_price">合同价格</string>
     <string name="price">价格</string>
     <string name="mm_contract_num">合同号码</string>
+    <string name="contract_num">合同号码:</string>
     <string name="mm_buy_unit">购车单位</string>
+    <string name="buy_unit">购车单位:</string>
     <string name="mm_ck">业务员</string>
     <string name="mm_deliver_date">交车日期</string>
+    <string name="deliver_date">交车日期:</string>
     <string name="mm_deposit">订金</string>
+    <string name="deposit">订金:</string>
     <string name="mm_model">车辆型号</string>
     <string name="mm_battery_producer">电池生产商</string>
+    <string name="battery_producer">电池生产商:</string>
     <string name="mm_system">系统</string>
+    <string name="system">系统:</string>
     <string name="mm_car_num">车辆编号</string>
+    <string name="car_num_d">车辆编号:</string>
     <string name="num">数量</string>
+    <string name="num_d">数量:</string>
     <string name="mm_deliver_method">交车方式</string>
+    <string name="deliver_method">交车方式:</string>
     <string name="mm_car_use">购车用途</string>
+    <string name="car_use">购车用途:</string>
     <string name="mm_namepalte_seat_num">铭牌座位数</string>
+    <string name="seat_num">铭牌座位数:</string>
 
     <!--mm变更函-->
     <string name="change_letter_number">变更函号</string>
     <string name="mm_unit_name">单位名称</string>
+    <string name="unit_name">单位名称:</string>
     <string name="mm_car_model">车型</string>
     <string name="mm_primary_price">原合同价格(万元/台)</string>
+    <string name="primary_price">原合同价格(万元/台):</string>
     <string name="mm_after_price">更改后合同价格(万元/台)</string>
+    <string name="after_price">更改后合同价格(万元/台):</string>
     <string name="mm_allocation_change_date">配置更改日</string>
+    <string name="allocation_change_date">配置更改日:</string>
     <string name="mm_contract_commit_date">合同交货期</string>
+    <string name="contract_commit_date">合同交货期:</string>
     <string name="mm_after_allocation_date">配置更改后交货期</string>
-
+    <string name="after_allocation_date">配置更改后交货期:</string>
     <!--mm更改单-->
     <string name="change_bill_number">变更单号</string>
     <string name="sex">性别</string>
+    <string name="sex_d">性别:</string>
     <string name="mm_car_state">车辆状态</string>
+    <string name="car_state">车辆状态:</string>
     <string name="mm_deliver_palace">交车地点</string>
+    <string name="deliver_place">交车地点:</string>
     <string name="mm_change">更改如下</string>
+    <string name="change">更改如下:</string>
     <string name="address">地址</string>
+    <string name="address_d">地址:</string>
     <string name="change_date">更改日期</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_date_d">更改日期:</string>
 
 </resources>

@@ -48,20 +48,10 @@ public class HomeFragment extends BaseFragment {
             case "order_handler":
                 ll_btn.addView(btn_order_review);
                 ll_btn.addView(btn_letter_review);
-//                for (int i = 0; i < 2; i++) {
-//                    TextView tv = new TextView(getActivity());
-//                    tv.setLayoutParams(lp);
-//                    ll_btn.addView(tv);
-//                }
                 break;
             case "test_manager":
             case "logistics_handler":
                 ll_btn.addView(btn_contract_review);
-//                for (int i = 0; i < 3; i++) {
-//                    TextView tv = new TextView(getActivity());
-//                    tv.setLayoutParams(lp);
-//                    ll_btn.addView(tv);
-//                }
                 break;
             case "technology_handler_one":
             case "technology_handler_two":
@@ -70,11 +60,6 @@ public class HomeFragment extends BaseFragment {
             case "sales_department_handler":
                 ll_btn.addView(btn_contract_review);
                 ll_btn.addView(btn_bill_review);
-//                for (int i = 0; i < 2; i++) {
-//                    TextView tv = new TextView(getActivity());
-//                    tv.setLayoutParams(lp);
-//                    ll_btn.addView(tv);
-//                }
                 break;
             case "financial_examiner":
             case "general_manager":

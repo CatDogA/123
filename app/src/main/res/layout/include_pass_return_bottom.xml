@@ -3,8 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
+    <TextView
+        android:background="@drawable/shape"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
     <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:background="@drawable/cic_edt_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,19 +27,17 @@
             android:id="@+id/edt_review_remarks"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="35dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="35dp"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="@color/colorWhite"
             android:lines="3"
             android:minLines="3"
-            android:textColor="@color/colorBlackText"
             android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -39,20 +45,18 @@
         <Button
             android:id="@+id/order_pass_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp"
+            android:background="@drawable/cic_btn"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:text="通过" />
-
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content" />
         <Button
+            android:background="@drawable/cic_btn_back_yellow"
             android:id="@+id/order_return_back_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="35dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="35dp"
-            android:layout_marginStart="40dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:text="驳回" />
     </LinearLayout>

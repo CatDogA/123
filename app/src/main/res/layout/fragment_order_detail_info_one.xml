@@ -1,18 +1,22 @@
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context="com.shanghaigm.dms.view.fragment.mm.OrderDetailInfoOneFragment"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.shanghaigm.dms.view.fragment.mm.OrderDetailInfoOneFragment">
+
     <data>
+
         <variable
             name="info"
-            type="com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne"/>
+            type="com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne" />
     </data>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -23,94 +27,65 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:gravity="right"
-                        android:text="客户名称"
-                        android:textSize="14sp" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:id="@+id/customName"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.customer_name}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:gravity="center_horizontal" />
-
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="性别"
-                        android:textSize="14sp" />
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.sex}"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="客户名称:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/customName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.customer_name}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="4"
-                        android:gravity="center_horizontal" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:gravity="right"
-                        android:text="电话"
-                        android:textSize="14sp" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.fixed_telephone}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:gravity="center_horizontal" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="手机"
-                        android:textSize="14sp" />
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:layout_width="0dp"
-                        android:text="@{info.mobile_phone}"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="4"
-                        android:gravity="center_horizontal" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="性别:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.sex}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -118,188 +93,65 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:gravity="right"
-                        android:text="地址" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:layout_width="0dp"
-                        android:text="@{info.province}"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:layout_width="0dp"
-                        android:text="@{info.city}"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:layout_width="0dp"
-                        android:text="@{info.county}"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.detailed_address}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="8" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:text="终端客户名称" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.terminal_customer_name}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:text="终端客户电话" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.terminal_customer_tel}"
-                        android:layout_width="0dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:text="终端客户地址" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.terminal_customer_address}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="车型"
-                        android:textSize="14sp" />
-
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="10sp"
-                        android:text="@{info.models_name}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="数量"
-                        android:textSize="14sp" />
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.number}"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="电话:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.fixed_telephone}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/textView16"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="手机:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/editText17"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.mobile_phone}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -307,46 +159,85 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="系统"
-                        android:textSize="14sp" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_horizontal"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:id="@+id/editText2"
-                        android:layout_width="0dp"
-                        android:text="@{info.battery_system}"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="省:" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="right"
-                        android:text="电池度数"
-                        android:textSize="14sp" />
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:lines="1"
+                            android:text="@{info.province}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.battery_number}"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="市:" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.city}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="区:" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.county}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -354,45 +245,34 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="上牌地点"
-                        android:textSize="14sp" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.licensing_addeess}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="地区:" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="right"
-                        android:text="续航里程"
-                        android:textSize="14sp" />
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.detailed_address}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.endurance_mileage}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -400,45 +280,34 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:text="EKG值"
-                        android:textSize="14sp" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.ekg}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="终端客户名称:" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="right"
-                        android:text="电池生产商"
-                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/editText18"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.terminal_customer_name}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.battery_manufacturer}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="3"
-                        android:gravity="center_horizontal" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -446,23 +315,357 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="5"
-                        android:text="图案颜色及确定颜色" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
 
-                    <EditText
-                        android:enabled="false"
-                        android:lines="1"
-                        android:textSize="14sp"
-                        android:text="@{info.color_determine}"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="终端客户电话:" />
+
+                        <EditText
+                            android:id="@+id/editText16"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.terminal_customer_tel}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="6" />
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="终端客户地址:" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.terminal_customer_address}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="车型:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.models_name}"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="数量:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.number}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="系统:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/editText2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.battery_system}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="电池度数:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.battery_number}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="上牌地点:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.licensing_addeess}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="续航里程:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.endurance_mileage}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="EKG值:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/editText19"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.ekg}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="电池生产商:"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/editText21"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="@{info.battery_manufacturer}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/cic_edt_back"
+                        android:gravity="center_vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="图案颜色及确定颜色:" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:lines="1"
+                            android:text="@{info.color_determine}"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>

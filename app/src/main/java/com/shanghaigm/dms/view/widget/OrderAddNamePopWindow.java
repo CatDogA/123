@@ -1,5 +1,6 @@
 package com.shanghaigm.dms.view.widget;
 
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,6 +33,10 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.OrderAddSearchInfo;
+import com.shanghaigm.dms.model.entity.common.TableInfo;
+import com.shanghaigm.dms.model.entity.mm.PaperInfo;
+import com.shanghaigm.dms.view.activity.mm.ContractReviewOrChangeLetterReviewActivity;
+import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,26 +59,38 @@ public class OrderAddNamePopWindow extends PopupWindow {
     private OrderAddSearchInfo selectedInfo = new OrderAddSearchInfo();
     private static String TAG = "OrderAddNamePopWindow";
     private TextView txt_page_num;
-    private ArrayList<OrderAddSearchInfo> searchInfos;//每页数据
-    private int pages = 0;//页数
-    private int page = 1;//第几页
-    private ArrayList<SearchTable> tables = new ArrayList<>();//表集合
+    //    private ArrayList<OrderAddSearchInfo> searchInfos;//每页数据
+//    private int pages = 0;//页数
+//    private int page = 1;//第几页
+//    private ArrayList<SearchTable> tables = new ArrayList<>();//表集合
     private TablePagerAdapter pagerAdapter;
-    private DmsApplication app = DmsApplication.getInstance();
-    private RelativeLayout.LayoutParams lp = new RelativeLayout.
-            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT);
-    private Boolean IsQuery = true;//判断是查询还是更多
-    private Boolean IsMore = false;//判断可否请求更多
+    //    private DmsApplication app = DmsApplication.getInstance();
+//    private RelativeLayout.LayoutParams lp = new RelativeLayout.
+//            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+//            RelativeLayout.LayoutParams.WRAP_CONTENT);
+//    private Boolean IsQuery = true;//判断是查询还是更多
+//    private Boolean IsMore = false;//判断可否请求更多
     private LoadingDialog dialog;
     private EditText edt_name, edt_tel;
 
     private Context context;
-    private WrapHeightViewPager vp;
+    //    private WrapHeightViewPager vp;
     private Button btnSearch, btnSure;
     private ImageView vp_right, vp_left;
     private Handler mHandler;
     private Handler handler;
+
+    private ArrayList<TableInfo> tableInfos;
+    private ImageView img_first, img_last;
+    private WrapHeightViewPager vp;
+    private TablePagerAdapter adapter;
+    private RelativeLayout.LayoutParams lp = new RelativeLayout.
+            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT);
+    private Boolean isQuery = false;        //是否已经查询
+    private int page, pages;       //显示页数,总页数
+    private DmsApplication app;
+    private ArrayList<SearchTable> tables;
 
     public OrderAddNamePopWindow(Context context, Handler handler) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -108,58 +127,54 @@ public class OrderAddNamePopWindow extends PopupWindow {
         vp_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (IsMore) {
-                    int currentItem = vp.getCurrentItem();
-                    if (currentItem + 1 == pages) {
-                        vp_right.setImageResource(R.mipmap.right_switch_pre);
-                    }
-                    if (currentItem > 0) {
-                        vp.setCurrentItem(--currentItem);
-                    }
-                    if (currentItem == 0) {
-                        vp_left.setImageResource(R.mipmap.left_switch);
-                    }
-                    setPages(currentItem + 1, pages);
+                if (page > 0 && isQuery) {   //已查询，且不为第一页
+                    page--;
+                    requestOrderInfo(4);
+                    setPages(page + 1, pages);
                 }
             }
         });
         vp_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IsQuery = false;
-                if (IsMore) {
-                    int currentItem = vp.getCurrentItem();
-                    if (currentItem == 0) {
-                        vp_left.setImageResource(R.mipmap.left_switch_pre);
-                    }
-                    if (currentItem + 2 == pages) {
-                        vp_right.setImageResource(R.mipmap.right_switch);
-                    }
-                    Log.i(TAG, "onClick: " + "currentItem" + currentItem + "     page" + page);
-
-                    if (currentItem + 2 == page) {
-                        if (page > pages) {
-                            Toast.makeText(context, "已是最后一页", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        requestOrderInfo(IsQuery);
-                    } else {
-                        vp.setCurrentItem(++currentItem);
-                        setPages(currentItem + 1, pages);
-                    }
-                    Log.i(TAG, "onClick: " + "currentItem" + currentItem + "     page" + page);
+                if (page < pages - 1 && isQuery) {
+                    page++;
+                    requestOrderInfo(5);
+                    setPages(page + 1, pages);
+                }
+            }
+        });
+        img_first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuery) {
+                    page = 0;
+                    requestOrderInfo(2);
+                    setPages(page + 1, pages);
+                }
+            }
+        });
+        img_last.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuery) {
+                    page = pages - 1;
+                    requestOrderInfo(3);
+                    setPages(page + 1, pages);
                 }
             }
         });
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IsQuery = true;
-                IsMore = true;
-                page = 1;
-                requestOrderInfo(IsQuery);
+                page = 0;
+                if (tableInfos != null) {
+                    tableInfos.clear();
+                }
+                requestOrderInfo(1);
             }
         });
+
         btnSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +190,8 @@ public class OrderAddNamePopWindow extends PopupWindow {
                 hidePopup();
             }
         });
+        reQuery(edt_name);
+        reQuery(edt_tel);
     }
 
     private void initView(View v) {
@@ -187,9 +204,26 @@ public class OrderAddNamePopWindow extends PopupWindow {
         dialog = new LoadingDialog(context, "正在加载");
         edt_name = (EditText) v.findViewById(R.id.edt_name);
         edt_tel = (EditText) v.findViewById(R.id.edt_tel);
+        img_first = (ImageView) v.findViewById(R.id.viewpager_first);
+        img_last = (ImageView) v.findViewById(R.id.viewpager_last);
+        app = DmsApplication.getInstance();
     }
 
-    private void requestOrderInfo(Boolean isQuery) {
+    private void requestOrderInfo(final int type) {
+        tables.clear();
+        //如果有，直接显示
+        if (type != 1) {       //已经查询过
+            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                for (TableInfo tableInfo : tableInfos) {
+                    tables.add((SearchTable) tableInfo.table);
+                }
+                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                vp.setAdapter(adapter);
+                vp.setCurrentItem(page);
+                return;
+            }
+        }
+
         dialog.showLoadingDlg();
         String name = edt_name.getText().toString();
         String tel = edt_tel.getText().toString();
@@ -207,7 +241,7 @@ public class OrderAddNamePopWindow extends PopupWindow {
         Map<String, Object> params = new HashMap<>();
         params.put("customer", paramArray.toString());
         Log.i(TAG, "requestOrderInfo: " + paramArray.toString());
-        params.put("page", page);
+        params.put("page", page + 1);
         params.put("rows", 10);
         params.put("loginName", app.getAccount());
         Log.i(TAG, "requestOrderInfo: " + app.getJobCode() + "        " + page);
@@ -223,41 +257,48 @@ public class OrderAddNamePopWindow extends PopupWindow {
                     JSONArray rows = resultEntity.getJSONArray("rows");
                     if (total == 0) {
                         Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
+                        tables.clear();
+                        tableInfos.clear();
+                        SearchTable table = new SearchTable(context, new ArrayList<OrderAddSearchInfo>(), mHandler);
+                        tables.add(table);
                     }
                     if (total % 10 == 0) {
                         pages = total / 10;
                     } else {
                         pages = total / 10 + 1;
                     }
+                    //加入空的tables占位
+                    if (type == 1) {
+                        for (int i = 0; i < pages; i++) {
+                            tableInfos.add(new TableInfo(pages, new SearchTable(context, new ArrayList<OrderAddSearchInfo>(), mHandler), false));
+                        }
+                        isQuery = true;
+                    }
                     ArrayList<OrderAddSearchInfo> searchInfos = new ArrayList<>();
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject searchInfo = rows.getJSONObject(i);
-                        searchInfos.add(new OrderAddSearchInfo(searchInfo.getString("customer_name"), searchInfo.getString("mobile_phone"), searchInfo.getString("company_name"), searchInfo.getString("sex"),searchInfo.getString("detailed_address"), searchInfo.getInt("customer_code"), searchInfo.getString("address"),searchInfo.getString("fixed_telephone")));
+                        searchInfos.add(new OrderAddSearchInfo(searchInfo.getString("customer_name"), searchInfo.getString("mobile_phone"), searchInfo.getString("company_name"), searchInfo.getString("sex"), searchInfo.getString("detailed_address"), searchInfo.getInt("customer_code"), searchInfo.getString("address"), searchInfo.getString("fixed_telephone")));
                     }
 
                     SearchTable table = new SearchTable(context, searchInfos, mHandler);
                     table.setLayoutParams(lp);
-                    if (IsQuery) {
-                        tables.clear();
-                        tables.add(table);
-                        setPages(1, pages);
-                        page++;
-                    } else if (IsMore && !IsQuery) {
-                        if (vp.getCurrentItem() + 1 >= pages) {
-                            Toast.makeText(context, "已是最后一页", Toast.LENGTH_SHORT).show();
-                            return;
+
+                    //加入infos,更新数据
+                    if(total!=0){
+                        tableInfos.remove(page);
+                        tableInfos.add(page, new TableInfo(page, table, true));
+                        for (TableInfo tableInfo : tableInfos) {
+                            tables.add((SearchTable) tableInfo.table);
                         }
-                        tables.add(table);
-                        setPages(tables.size(), pages);
-                        page++;
-                    } else {
-                        Toast.makeText(context, "请先查询", Toast.LENGTH_SHORT).show();
                     }
-                    Log.i(TAG, "onSuccess:page " + page);
-                    Log.i(TAG, "onSuccess:tables " + tables.size());
-                    pagerAdapter.notifyDataSetChanged();
-                    vp.setAdapter(pagerAdapter);
+                    adapter.notifyDataSetChanged();
+                    vp.setAdapter(adapter);
                     vp.setCurrentItem(page);
+
+                    //查询时，设置页数
+                    if (type == 1) {
+                        setPages(page + 1, pages);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -272,19 +313,34 @@ public class OrderAddNamePopWindow extends PopupWindow {
     }
 
     private void initViewPager() {
-        searchInfos = new ArrayList<>();
-        SearchTable table = new SearchTable(context, searchInfos, mHandler);
+//        searchInfos = new ArrayList<>();
+//        SearchTable table = new SearchTable(context, searchInfos, mHandler);
+//        table.setLayoutParams(lp);
+//        tables.add(table);
+//        pagerAdapter = new TablePagerAdapter(context, tables);
+//        vp.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return true;//禁止滑动
+//            }
+//        });
+//        vp.setOnClickListener(null);
+//        vp.setAdapter(pagerAdapter);
+
+        tableInfos = new ArrayList<>();
+        //添加空的table
+        SearchTable table = new SearchTable(context, new ArrayList<OrderAddSearchInfo>(), mHandler);
         table.setLayoutParams(lp);
+        tables = new ArrayList<>();
         tables.add(table);
-        pagerAdapter = new TablePagerAdapter(context, tables);
+        adapter = new TablePagerAdapter(context, tables);
+        vp.setAdapter(adapter);
         vp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;//禁止滑动
             }
         });
-        vp.setOnClickListener(null);
-        vp.setAdapter(pagerAdapter);
     }
 
     private void setPages(int page, int pages) {
@@ -351,5 +407,23 @@ public class OrderAddNamePopWindow extends PopupWindow {
             return POSITION_NONE;
         }
 
+    }
+    private void reQuery(EditText edt){
+        edt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isQuery = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }
