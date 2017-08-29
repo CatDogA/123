@@ -43,7 +43,7 @@ public class OrderDetailInfoTwo extends BaseObservable implements Serializable {
             this.payment_method_remarks = "";
         }
         if (resultEntity.delivery_time != null) {
-            this.delivery_time = resultEntity.delivery_time;
+            this.delivery_time = resultEntity.delivery_time.split(" ")[0];
         } else {
             this.delivery_time = "";
         }
