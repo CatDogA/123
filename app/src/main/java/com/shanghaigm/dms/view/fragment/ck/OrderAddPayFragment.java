@@ -28,7 +28,7 @@ import java.util.Calendar;
 
 public class OrderAddPayFragment extends BaseFragment {
     private OrderDetailInfoTwo orderDetailInfoTwo = OrderAddActivity.addPayInfo;
-    private EditText payment_method, payment_method_remarks, delivery_time, freight, service_fee, contract_price, carriage, invoice_amount, billing_requirements;
+    public EditText payment_method, payment_method_remarks, delivery_time, freight, service_fee, contract_price, carriage, invoice_amount, billing_requirements;
     private static OrderAddPayFragment orderAddPayFragment = null;
     private ImageView imgPayMethod;
     private FragmentOrderAddPayBinding binding;

@@ -30,7 +30,6 @@
             android:gravity="center"
             android:lines="1"
             android:text="@{paper.daily_code}"
-            android:textColor="@color/colorBlack"
             android:textSize="12sp"
             app:set_report_text_color="@{paper.report_state}" />
 
@@ -47,7 +46,6 @@
             android:gravity="center"
             android:lines="1"
             android:text="@{paper.model}"
-            android:textColor="@color/colorBlack"
             android:textSize="12sp"
             app:set_report_text_color="@{paper.report_state}" />
 
@@ -66,7 +64,6 @@
             android:gravity="center"
             android:lines="1"
             android:text="@{paper.car_sign}"
-            android:textColor="@color/colorBlack"
             android:textSize="12sp"
             app:set_report_text_color="@{paper.report_state}" />
 

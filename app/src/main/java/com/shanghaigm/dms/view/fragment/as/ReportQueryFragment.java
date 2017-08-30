@@ -48,7 +48,8 @@ import java.util.Map;
 
 public class ReportQueryFragment extends BaseFragment {
     private static ReportQueryFragment fragment;
-    private Button btn_query;
+    private Button btn_query,btn_add;
+    private View mid;
     private static String TAG = "OrderReviewFragment";
     private ImageView vpRight, vpLeft;
     private EditText edt_model, edt_car_sign, edt_state, edt_id;
@@ -67,6 +68,7 @@ public class ReportQueryFragment extends BaseFragment {
     private int page, pages;       //显示页数,总页数
     private DmsApplication app;
     private ArrayList<ReviewTable> tables;
+    private TextView txt_reviewing,text_reviewed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +80,8 @@ public class ReportQueryFragment extends BaseFragment {
     }
 
     private void setUpView() {
+        btn_add.setVisibility(View.GONE);
+        mid.setVisibility(View.GONE);
         vpLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +171,7 @@ public class ReportQueryFragment extends BaseFragment {
             public void onClick(View v) {
                 String[] s = new String[]{"已提交", "未提交", "已驳回"};
                 ArrayList<PopListInfo> infos = new ArrayList<PopListInfo>();
+                infos.add(new PopListInfo(""));
                 for (int i = 0; i < s.length; i++) {
                     infos.add(new PopListInfo(s[i]));
                 }
@@ -186,13 +191,15 @@ public class ReportQueryFragment extends BaseFragment {
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
+            if(tableInfos.size()>0){
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setCurrentItem(page);
-                return;
             }
         }
         dialog.showLoadingDlg();
@@ -381,6 +388,8 @@ public class ReportQueryFragment extends BaseFragment {
 
     private void initView(View v) {
         btn_query = (Button) v.findViewById(R.id.btn_query);
+        btn_add = (Button) v.findViewById(R.id.btn_add);
+        mid = v.findViewById(R.id.view_mid);
 
         pageNumText = (TextView) v.findViewById(R.id.pages_num);
         vp = (WrapHeightViewPager) v.findViewById(R.id.report_query_table);
@@ -395,6 +404,11 @@ public class ReportQueryFragment extends BaseFragment {
         app = DmsApplication.getInstance();
         img_first = (ImageView) v.findViewById(R.id.viewpager_first);
         img_last = (ImageView) v.findViewById(R.id.viewpager_last);
+
+        txt_reviewing = (TextView) v.findViewById(R.id.txt_reviewing);
+        txt_reviewing.setVisibility(View.GONE);
+        text_reviewed = (TextView) v.findViewById(R.id.txt_reviewed);
+        text_reviewed.setVisibility(View.GONE);
     }
 
     public static ReportQueryFragment getInstance() {

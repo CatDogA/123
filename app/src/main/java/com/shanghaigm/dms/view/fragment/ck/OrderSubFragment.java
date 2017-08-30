@@ -170,6 +170,7 @@ public class OrderSubFragment extends BaseFragment {
                         try {
                             dialog.dismissLoadingDlg();
                             ArrayList<PopListInfo> models = new ArrayList<>();
+                            models.add(new PopListInfo(""));
                             JSONObject object = new JSONObject(responseObj.toString());
                             modelArray = object.getJSONArray("resultEntity");
                             for (int i = 0; i < modelArray.length(); i++) {
@@ -201,6 +202,7 @@ public class OrderSubFragment extends BaseFragment {
                         dialog.dismissLoadingDlg();
                         Log.i(TAG, "onSuccess: state" + responseObj.toString());
                         ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
+                        states.add(new PopListInfo(""));
                         JSONObject object = (JSONObject) responseObj;
                         try {
                             stateArray = object.getJSONArray("resultEntity");
@@ -242,13 +244,15 @@ public class OrderSubFragment extends BaseFragment {
 //        如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();    //先把tables刷新
-            if (tableInfos.get(page).isAdded) {    //满足已有即立即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
+            if(tableInfos.size()>0){
+                if (tableInfos.get(page).isAdded) {    //满足已有即立即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setCurrentItem(page);
-                return;
             }
         }
         dialog.showLoadingDlg();

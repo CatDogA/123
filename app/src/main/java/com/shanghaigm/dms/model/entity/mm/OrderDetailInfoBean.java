@@ -15,6 +15,7 @@ public class OrderDetailInfoBean implements Serializable {
     public class ResultEntity extends BaseObservable implements Serializable{
         //订单审核明细
         public String customer_name;
+        public int customer_code;
         public String sex;
         public String fixed_telephone;
         public String province;
@@ -47,6 +48,7 @@ public class OrderDetailInfoBean implements Serializable {
         public String order_number;
         public String address;
         public String mobile_phone;
+        public String addressName;
 //        public List<MatchingBean> matching;
 //        public class MatchingBean{
 //            public String assembly;

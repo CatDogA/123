@@ -163,9 +163,10 @@ public class OrderDetailActivity extends BaseActivity {
                                     Toast.makeText(OrderDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                                     returnBack.setEnabled(false);
                                     pass.setEnabled(false);
+                                    Bundle b = new Bundle();
+                                    b.putInt(HomeActivity.ORDER_BILL_REFRESH,1);
+                                    goToActivity(HomeActivity.class,b);
                                     finish();
-//                                    OrderReviewFragment fragment = OrderReviewFragment.getInstance();
-//                                    fragment.refresh();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -205,9 +206,10 @@ public class OrderDetailActivity extends BaseActivity {
                                         Toast.makeText(OrderDetailActivity.this, "驳回成功", Toast.LENGTH_SHORT).show();
                                         returnBack.setEnabled(false);
                                         pass.setEnabled(false);
+                                        Bundle b = new Bundle();
+                                        b.putInt(HomeActivity.ORDER_BILL_REFRESH,1);
+                                        goToActivity(HomeActivity.class,b);
                                         finish();
-                                        OrderReviewFragment fragment = OrderReviewFragment.getInstance();
-                                        fragment.refresh();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

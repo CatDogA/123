@@ -27,6 +27,7 @@ import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
+import com.shanghaigm.dms.view.fragment.mm.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +50,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
     private ListView listview;
     private ListAdapter adapter;
     private ScrollView scrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +62,12 @@ public class ContractReviewDetailActivity extends BaseActivity {
     }
 
     private void initIntent() {
-        if(matchings!=null){
+        if (matchings != null) {
             matchings.clear();
         }
         Bundle b = getIntent().getExtras();
         ArrayList<MatchingBean> matchings_get = (ArrayList<MatchingBean>) b.getSerializable(PaperInfo.CONTRACT_MATCHING_INFOS);
-        if(matchings_get!=null){
+        if (matchings_get != null) {
             matchings = matchings_get;
         }
         ArrayList<OrderDetailInfoAllocation> allocations = new ArrayList<>();
@@ -88,9 +90,11 @@ public class ContractReviewDetailActivity extends BaseActivity {
         });
 
     }
+
     private void initData() {
         binding.setInfo(app.getContractDetailInfo());
     }
+
     private void initView() {
         title = (TextView) findViewById(R.id.title_text);
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
@@ -149,6 +153,9 @@ public class ContractReviewDetailActivity extends BaseActivity {
                             Toast.makeText(ContractReviewDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                             btn_return.setEnabled(false);
                             btn_pass.setEnabled(false);
+
+                            goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                            finish();
                         }
 
                         @Override
@@ -190,6 +197,9 @@ public class ContractReviewDetailActivity extends BaseActivity {
                                 Toast.makeText(ContractReviewDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                                 btn_return.setEnabled(false);
                                 btn_pass.setEnabled(false);
+
+                                goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                                finish();
                             }
 
                             @Override

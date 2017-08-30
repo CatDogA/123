@@ -1,6 +1,7 @@
 package com.shanghaigm.dms.view.activity.mm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -47,18 +48,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
 public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
     private int flag = 0;
     private String url;
+    public static String CONTRACT_REFRESH = "contract_refresh";
     private static String TAG = "ContractReview";
     private EditText areaSelectEdt, modelSelecctEdt, stateSelectEdt, numberEdt, customerEdt, ckEdt;
     private Button btnQuery;
     private ImageView vpRight, vpLeft;
     private MmPopupWindow areaPopup, modelPopup, statePopup;
-    private JSONArray areaArray, modelArray = new JSONArray();
+    private JSONArray areaArray, modelArray;
     private RelativeLayout rl_back, rl_end;
     private TextView pageNumText;
     private TextView titleText;
@@ -68,9 +67,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
     private ImageView img_first, img_last;
     private WrapHeightViewPager vp;
     private TablePagerAdapter adapter;
-    private RelativeLayout.LayoutParams lp = new RelativeLayout.
-            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT);
+    private RelativeLayout.LayoutParams lp;
     private Boolean isQuery = false;        //是否已经查询
     private int page, pages;       //显示页数,总页数
     private DmsApplication app;
@@ -84,7 +81,18 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         setUpView();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        refresh();
+    }
+
     private void setUpView() {
+        areaArray = new JSONArray();
+        modelArray = new JSONArray();
+        lp = new RelativeLayout.
+                LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
         pageNumText.setText("页数:" + "0" + "/" + pages);
         if (flag == 2) {
             titleText.setText(String.format(ContractReviewOrChangeLetterReviewActivity.this.getString(R.string.mm_contract_sheet_review)));
@@ -221,7 +229,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         stateSelectEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] strings = {"", "待审核", "已通过", "驳回"};
+                String[] strings = {"", "待审核", "已审核", "驳回"};
                 ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
                 for (int i = 0; i < strings.length; i++) {
                     states.add(new PopListInfo(strings[i]));
@@ -238,20 +246,29 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         reQuery(stateSelectEdt);
     }
 
+    private void refresh() {
+        page = 0;
+        if (tableInfos != null) {
+            tableInfos.clear();
+        }
+        requestOrderInfo(1);
+    }
+
     private void requestOrderInfo(final int type) {
         Log.i(TAG, "requestOrderInfo:        " + isSoftShowing());
-
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
+            if (tableInfos.size() > 0) {
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setAdapter(adapter);
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setAdapter(adapter);
-                vp.setCurrentItem(page);
-                return;
             }
         }
         dialog.showLoadingDlg();
@@ -442,7 +459,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         if (state.equals("待审核")) {
             audit_status = -1;
         }
-        if (state.equals("已通过")) {
+        if (state.equals("已审核")) {
             audit_status = 1;
         }
         if (state.equals("驳回")) {
@@ -474,6 +491,7 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
     private void initViewPager() {
         tableInfos = new ArrayList<>();
         ReviewTable table = null;
+        Log.i(TAG, "initViewPager:flag           " + flag);
         //添加空的table
         if (flag == 2) {
             table = new ReviewTable(ContractReviewOrChangeLetterReviewActivity.this, new ArrayList<PaperInfo>(), 2);
@@ -481,7 +499,10 @@ public class ContractReviewOrChangeLetterReviewActivity extends BaseActivity {
         if (flag == 3) {
             table = new ReviewTable(ContractReviewOrChangeLetterReviewActivity.this, new ArrayList<PaperInfo>(), 3);
         }
-        table.setLayoutParams(lp);
+        RelativeLayout.LayoutParams lp1 = new RelativeLayout.
+                LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        table.setLayoutParams(lp1);
         tables = new ArrayList<>();
         tables.add(table);
         adapter = new TablePagerAdapter(ContractReviewOrChangeLetterReviewActivity.this, tables);

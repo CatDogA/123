@@ -3,7 +3,9 @@ package com.shanghaigm.dms.view.activity.ck;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -17,7 +19,7 @@ import com.shanghaigm.dms.view.fragment.common.HomeFragment;
  * @function 创建首页所有的fragment，以及fragment
  */
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
-
+    public static String ORDER_LETTER_SUB = "order_letter_sub";
     private FragmentManager fm;
     private HomeFragment mHomeFragment;
     private OrderSubFragment mOrderFragment;
@@ -32,7 +34,21 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         //初始化控件
         initView();
         showHome();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Bundle b = intent.getExtras();
+        if(b!=null){
+            if(b.getInt(HomeActivity.ORDER_LETTER_SUB)==1){
+                mOrderFragment.refresh();
+            }
+            if(b.getInt(HomeActivity.ORDER_LETTER_SUB)==2){
+                mModifyFragment.refresh();
+            }
+        }
     }
 
     private void showHome() {
@@ -146,10 +162,5 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
         }
         fragmentTransaction.commit();
-    }
-
-    public static void refresh(){
-        ChangeLetterSubFragment f = ChangeLetterSubFragment.getInstance();
-        f.refresh();
     }
 }

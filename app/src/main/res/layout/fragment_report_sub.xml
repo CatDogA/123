@@ -29,22 +29,6 @@
             android:layout_marginStart="10dp"
             android:text="@string/mm_turn_down_text"
             android:textColor="@color/colorOrange" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/mm_reviewing_text"
-            android:textColor="@color/colorBlue" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/mm_passed_text"
-            android:textColor="@color/colorGreen" />
     </LinearLayout>
 
     <com.shanghaigm.dms.view.widget.WrapHeightViewPager

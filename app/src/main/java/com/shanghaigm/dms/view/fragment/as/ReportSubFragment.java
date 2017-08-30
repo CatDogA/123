@@ -28,7 +28,6 @@ import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
-import com.shanghaigm.dms.view.activity.mm.ContractReviewOrChangeLetterReviewActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -126,6 +125,7 @@ public class ReportSubFragment extends BaseFragment {
             public void onClick(View v) {
                 String[] s = new String[]{"已提交", "未提交", "已驳回"};
                 ArrayList<PopListInfo> infos = new ArrayList<PopListInfo>();
+                infos.add(new PopListInfo(""));
                 for (int i = 0; i < s.length; i++) {
                     infos.add(new PopListInfo(s[i]));
                 }
@@ -195,14 +195,16 @@ public class ReportSubFragment extends BaseFragment {
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
+            if(tableInfos.size()>0){
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setAdapter(adapter);
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setAdapter(adapter);
-                vp.setCurrentItem(page);
-                return;
             }
         }
 

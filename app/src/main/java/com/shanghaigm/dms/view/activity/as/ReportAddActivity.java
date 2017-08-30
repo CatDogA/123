@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -68,7 +69,8 @@ public class ReportAddActivity extends BaseActivity {
     private boolean isInfoAdd = false;
     private int report_id = -1;
     private static String TAG = "ReportAddActivity";
-
+    private Button btn_save,btn_sub;
+    public static Boolean isAtttachShow;    //判断第二页是否出现
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,9 +102,22 @@ public class ReportAddActivity extends BaseActivity {
     }
 
     private void initData() {
+        isAtttachShow = false;
         fragments = new ArrayList<>();
         fragments.add(ReportInfoFragment.getInstance());
         fragments.add(ReportAttachSubFragment.getInstance());
+    }
+    //保存信息
+    private void saveInfo(){
+        ((ReportInfoFragment)fragments.get(0)).saveBaseInfo();
+    }
+    //提交信息
+    private void subInfo(){
+        ((ReportInfoFragment)fragments.get(0)).subInfo();
+    }
+    //灰掉按钮
+    public void setButton(){
+        btn_save.setEnabled(false);
     }
 
     private void setUpView() {
@@ -158,6 +173,18 @@ public class ReportAddActivity extends BaseActivity {
 
             }
         });
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveInfo();
+            }
+        });
+        btn_sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subInfo();
+            }
+        });
     }
 
     private void initView() {
@@ -166,8 +193,8 @@ public class ReportAddActivity extends BaseActivity {
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
         app = DmsApplication.getInstance();
-
-
+        btn_save = (Button) findViewById(R.id.btn_save);
+        btn_sub = (Button) findViewById(R.id.btn_sub);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

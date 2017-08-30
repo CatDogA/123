@@ -77,6 +77,10 @@ public class ChangeBillDetailActivity extends BaseActivity {
                         Toast.makeText(ChangeBillDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                         btn_return.setEnabled(false);
                         btn_pass.setEnabled(false);
+                        Bundle b = new Bundle();
+                        b.putInt(HomeActivity.ORDER_BILL_REFRESH,2);
+                        goToActivity(HomeActivity.class,b);
+                        finish();
                     }
 
                     @Override
@@ -106,6 +110,10 @@ public class ChangeBillDetailActivity extends BaseActivity {
                             Toast.makeText(ChangeBillDetailActivity.this, "驳回成功", Toast.LENGTH_SHORT).show();
                             btn_return.setEnabled(false);
                             btn_pass.setEnabled(false);
+                            Bundle b = new Bundle();
+                            b.putInt(HomeActivity.ORDER_BILL_REFRESH,2);
+                            goToActivity(HomeActivity.class,b);
+                            finish();
                         }
 
                         @Override

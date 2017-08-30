@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -63,7 +64,8 @@ public class ReportUpdateActivity extends BaseActivity {
     public static ArrayList<String> names1 = new ArrayList<>(), names2 = new ArrayList<>(), names3 = new ArrayList<>(), names4 = new ArrayList<>();
     public String videoPath;
     public static ArrayList<Bitmap> bitmaps = new ArrayList<>(), bitmaps2 = new ArrayList<>(), bitmaps3 = new ArrayList<>(), bitmaps4 = new ArrayList<>();
-
+    public static Boolean isAttachShow;
+    private Button btn_save,btn_sub;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,15 +87,20 @@ public class ReportUpdateActivity extends BaseActivity {
             allPaths.clear();
         }
         allPaths = (ArrayList<ArrayList<PathInfo>>) bundle.getSerializable(PaperInfo.REPORT_FILE_INFO);
-        Log.i(TAG, "initIntent: allPaths        " + allPaths.size());
         Bundle fragmentBundle = new Bundle();
         fragmentBundle.putSerializable(ReportUpdateActivity.REPORT_DETAIL_INFO, reportDetailInfo);
         ReportUpdateInfoFragment fragment = ReportUpdateInfoFragment.getInstance();
         fragment.setArguments(fragmentBundle);
         ft.add(R.id.fragment_content, fragment).commit();
     }
-
+    private void saveInfo(){
+        ((ReportUpdateInfoFragment)fragments.get(0)).saveInfo(1);
+    }
+    private void subInfo(){
+        ((ReportUpdateInfoFragment)fragments.get(0)).subInfo();
+    }
     private void initData() {
+        isAttachShow = false;
         fragments = new ArrayList<>();
         fragments.add(ReportUpdateInfoFragment.getInstance());
         fragments.add(ReportUpdateAttachFragment.getInstance());
@@ -148,6 +155,22 @@ public class ReportUpdateActivity extends BaseActivity {
 
             }
         });
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveInfo();
+            }
+        });
+        btn_sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subInfo();
+            }
+        });
+    }
+
+    public void setButton(){
+        btn_save.setEnabled(false);
     }
 
     private void initView() {
@@ -155,6 +178,8 @@ public class ReportUpdateActivity extends BaseActivity {
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
+        btn_save = (Button) findViewById(R.id.btn_save);
+        btn_sub = (Button) findViewById(R.id.btn_sub);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

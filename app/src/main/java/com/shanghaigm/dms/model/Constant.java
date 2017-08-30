@@ -40,6 +40,7 @@ public class Constant {
     public static final String URL_DELETE_CHANGE_LETTER = Config.URL_BASE + "/appDKXS/deleteChangeLetterInfo";  //删除更改函
     public static final String URL_GET_CHANGE_LETTER_INFO = Config.URL_BASE+"/appDKXS/getchangeLetterInfo";
     public static final String URL_COMMIT_ORDER = Config.URL_BASE +"/appDKXS/commitOrder";   //订单提交
+    public static final String URL_GET_BATTERY_INFO = Config.URL_BASE +"/appDKXS/selectBattery";   //订单提交
     //日报
     public static final String URL_GET_QUERY_REPORT_LIST = Config.URL_BASE + "/appDKSH/getAftersaleDailyPageData";    //查询日报列表
     public static final String URL_GET_REPORT_DETAIL = Config.URL_BASE + "/appDKSH/getAftersaleDailyDetail";      //日报明细

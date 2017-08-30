@@ -35,15 +35,18 @@
         <activity android:name=".view.activity.BaseActivity" />
         <activity
             android:name=".view.activity.ck.HomeActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".view.activity.mm.OrderDetailActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.mm.ContractReviewOrChangeLetterReviewActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.mm.HomeActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.mm.ContractReviewDetailActivity"
@@ -69,6 +72,7 @@
         <activity android:name=".view.activity.ck.AllocationAddChooseUndefaultActivity" />
         <activity
             android:name=".view.activity.as.HomeActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.as.ReportAddActivity"
@@ -88,7 +92,9 @@
 
         <activity android:name=".view.activity.as.ShowVideoActivity" />
         <activity android:name=".view.activity.as.ShowQueryPhotoActivity" />
-        <activity android:name=".view.activity.as.ReportUpdateActivity" />
+        <activity
+            android:name=".view.activity.as.ReportUpdateActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

@@ -171,6 +171,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="8"
+            android:textColor="@color/colorWhite"
             android:background="@drawable/cic_btn"
             android:text="@string/query" />
 
@@ -185,6 +186,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="8"
+            android:textColor="@color/colorWhite"
             android:background="@drawable/cic_btn"
             android:text="@string/add" />
 

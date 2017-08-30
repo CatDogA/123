@@ -157,6 +157,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
             public void onClick(View v) {
                 //清除遗留数据
                 app.setChangeLetterSubDetailInfo(null);
+                ChangeLetterAddActivity.isAdded = true;
                 goToActivity(ChangeLetterAddActivity.class);
             }
         });
@@ -175,6 +176,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
                         JSONObject object = (JSONObject) responseObj;
                         try {
                             stateArray = object.getJSONArray("resultEntity");
+                            states.add(new PopListInfo(""));
                             for (int i = 0; i < stateArray.length(); i++) {
                                 states.add(new PopListInfo(stateArray.getJSONObject(i).getString("date_value")));
                             }
@@ -208,21 +210,25 @@ public class ChangeLetterSubFragment extends BaseFragment {
 
     //查询
     private void requestOrderInfo(final int type) {
-
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
+            if (tableInfos.size() > 0) {
+
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setAdapter(adapter);
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setAdapter(adapter);
-                vp.setCurrentItem(page);
-                return;
             }
         }
         dialog.showLoadingDlg();
+        JSONObject paramObject = new JSONObject();
+        JSONArray paramArray = new JSONArray();
         String stateText = stateSelectEdt.getText().toString();
         String contractId = contractIdEdt.getText().toString();
         String changeLetterId = changeLetterIdEdt.getText().toString();
@@ -233,8 +239,6 @@ public class ChangeLetterSubFragment extends BaseFragment {
         } else {
             stateId = null;
         }
-        JSONObject paramObject = new JSONObject();
-        JSONArray paramArray = new JSONArray();
         try {
             paramObject.put("contract_id", contractId);
             paramObject.put("customer_name", customerText);
@@ -246,17 +250,18 @@ public class ChangeLetterSubFragment extends BaseFragment {
             e.printStackTrace();
         }
         RequestParams params = new RequestParams();
+
         params.put("cls", paramArray.toString());
         params.put("page", page + 1 + "");
         params.put("rows", "8");
         params.put("loginName", app.getAccount());
         params.put("jobCode", app.getJobCode());
-        Log.i(TAG, "requestOrderInfo: " + app.getJobCode());
+        Log.i(TAG, "requestOrderInfo: " + app.getJobCode() + app.getAccount());
         CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_QUREY_CHANGE_LETTER_SUB_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 //            //合同号
-                Log.i("luo", "onSuccess: " + responseObj.toString());
+                Log.i(TAG, "onSuccess: " + responseObj.toString());
                 dialog.dismissLoadingDlg();
                 JSONObject result = (JSONObject) responseObj;
                 ArrayList<PaperInfo> paperInfos = new ArrayList<PaperInfo>();
@@ -325,7 +330,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
             @Override
             public void onFailure(Object reasonObj) {
                 dialog.dismissLoadingDlg();
-                Log.i("luo", "onFailure: " + reasonObj.toString());
+                Log.i(TAG, "onFailure: " + reasonObj.toString());
             }
         }));
     }

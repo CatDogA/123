@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/cic_edt_back"
+                android:background="@drawable/cic_edt_pink_back"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="5dp">
@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/cic_edt_back"
+                android:background="@drawable/cic_edt_pink_back"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="5dp">

@@ -29,7 +29,6 @@
             android:gravity="center"
             android:textSize="12sp"
             android:text="@{paper.daily_code}"
-            android:textColor="@color/colorBlack"
             app:set_report_text_color="@{paper.report_state}" />
 
         <TextView
@@ -46,7 +45,6 @@
             android:layout_weight="4"
             android:gravity="center"
             android:text="@{paper.model}"
-            android:textColor="@color/colorBlack"
             android:textSize="12sp"
             app:set_report_text_color="@{paper.report_state}" />
 
@@ -64,7 +62,6 @@
             android:gravity="center"
             android:textSize="12sp"
             android:text="@{paper.car_sign}"
-            android:textColor="@color/colorBlack"
             app:set_report_text_color="@{paper.report_state}" />
 
         <TextView
@@ -81,7 +78,6 @@
             android:layout_weight="2"
             android:gravity="center"
             android:textSize="12sp"
-            android:textColor="@color/colorBlack"
             app:set_report_text="@{paper.report_state}"
             app:set_report_text_color="@{paper.report_state}" />
 

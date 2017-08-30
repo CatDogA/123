@@ -139,7 +139,7 @@ public class PaperInfo extends BasePaperInfo {
     }
 
     //更改函提交
-    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id,String model) {
+    public PaperInfo(String name, String state, String contract_id, String change_letter_number, Context context, int flag, ChangeLetterSubDetailInfo changeLetterSubDetailInfo, int letter_id, String model) {
         super(name);
         this.state = state;
         this.contract_id = contract_id;
@@ -217,15 +217,15 @@ public class PaperInfo extends BasePaperInfo {
                                     for (int i = 0; i < matches.length(); i++) {
                                         JSONObject match = matches.getJSONObject(i);
                                         int num = 0;
-                                        if(!match.get("num").equals("")){
+                                        if (!match.get("num").equals("")) {
                                             num = Integer.parseInt(match.get("num").toString());
                                             String cost_change = "";
-                                            if(match.getString("cost_change")!=null){
+                                            if (match.getString("cost_change") != null) {
                                                 cost_change = match.getString("cost_change");
                                             }
-                                            matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),num,match.getString("remarks"),match.getInt("isdefault"),cost_change,match.getInt("isother")));
-                                        }else {
-                                            matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                            matchings.add(new MatchingBean(match.getString("assembly"), match.getString("entry_name"), match.getString("config_information"), num, match.getString("remarks"), match.getInt("isdefault"), cost_change, match.getInt("isother")));
+                                        } else {
+                                            matchings.add(new MatchingBean(match.getString("assembly"), match.getString("entry_name"), match.getString("config_information"), match.getString("remarks"), match.getInt("isdefault"), match.getString("cost_change"), match.getInt("isother")));
                                         }
 //                                        matchings.add(GsonUtil.GsonToBean(match.toString(), MatchingBean.class));
                                     }
@@ -271,6 +271,7 @@ public class PaperInfo extends BasePaperInfo {
                         JSONObject infoObj = result.getJSONObject("fromData");
                         ChangeLetterSubDetailInfo info = new ChangeLetterSubDetailInfo(infoObj.getString("contract_id"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("number"), infoObj.getString("contract_price"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"), infoObj.getInt("order_id"), infoObj.getString("change_letter_number"));
                         app.setChangeLetterSubDetailInfo(info);
+                        ChangeLetterAddActivity.isAdded = false;
                         Intent intent = new Intent(view.getContext(), ChangeLetterAddActivity.class);
                         Bundle b = new Bundle();
                         b.putSerializable(CHANGE_LETTER_INFO, infos);
@@ -328,11 +329,11 @@ public class PaperInfo extends BasePaperInfo {
                             for (int i = 0; i < matches.length(); i++) {
                                 JSONObject match = matches.getJSONObject(i);
                                 int num = 0;
-                                if(!match.get("num").equals("")){
+                                if (!match.get("num").equals("")) {
                                     num = Integer.parseInt(match.get("num").toString());
-                                    matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),num,match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
-                                }else {
-                                    matchings.add(new MatchingBean(match.getString("assembly"),match.getString("entry_name"),match.getString("config_information"),match.getString("remarks"),match.getInt("isdefault"),match.getString("cost_change"),match.getInt("isother")));
+                                    matchings.add(new MatchingBean(match.getString("assembly"), match.getString("entry_name"), match.getString("config_information"), num, match.getString("remarks"), match.getInt("isdefault"), match.getString("cost_change"), match.getInt("isother")));
+                                } else {
+                                    matchings.add(new MatchingBean(match.getString("assembly"), match.getString("entry_name"), match.getString("config_information"), match.getString("remarks"), match.getInt("isdefault"), match.getString("cost_change"), match.getInt("isother")));
                                 }
                             }
                             app.setMatchingBeanArrayList(matchings);
@@ -461,9 +462,16 @@ public class PaperInfo extends BasePaperInfo {
                                     Log.i(TAG, "onSuccess: " + "没有match");
                                 } else {
                                     JSONArray matches = new JSONArray(matching.toString());
+                                    Log.i(TAG, "onSuccess:matching                  " + matching.toString());
                                     for (int i = 0; i < matches.length(); i++) {
                                         JSONObject match = matches.getJSONObject(i);
-                                        matchings.add(GsonUtil.GsonToBean(match.toString(), MatchingBean.class));
+                                        int num = 0;
+                                        if (!match.get("num").toString().equals("")) {
+                                            num = Integer.parseInt(match.get("num").toString());
+                                        }
+                                        //后台不靠谱，再不用Gson！谨记。
+                                        MatchingBean matchBean = new MatchingBean(match.getString("assembly"), match.getString("entry_name"), match.getString("config_information"), num, match.getString("remarks"), match.getInt("isdefault"), match.getString("cost_change"), match.getInt("isother"));
+                                        matchings.add(matchBean);
                                     }
                                     Log.i(TAG, "onSuccess: " + matchings.size());
                                     app.setMatchingBeanArrayList(matchings);
@@ -568,7 +576,7 @@ public class PaperInfo extends BasePaperInfo {
                                     b.putSerializable(CHANGE_LETTER_INFO, infos);
                                     intent3.putExtras(b);
                                     view.getContext().startActivity(intent3);
-                                }else {
+                                } else {
                                     app.setChangeLetterDetailInfo(changeLetterDetailInfo);
                                     app.setFlow_detail_id(flow_details_id);
                                     Intent intent3 = new Intent(view.getContext(), ChangeLetterDetailActivity.class);
@@ -682,8 +690,13 @@ public class PaperInfo extends BasePaperInfo {
                 public void onSuccess(Object responseObj) {
                     dialog.dismissLoadingDlg();
                     Log.i(TAG, "onSuccess:       " + responseObj.toString());
-//                    ChangeLetterSubFragment fragment = ChangeLetterSubFragment.getInstance();
-//                    fragment.refresh();
+
+                    Bundle b = new Bundle();
+                    b.putInt(com.shanghaigm.dms.view.activity.ck.HomeActivity.ORDER_LETTER_SUB, 2);
+                    Intent intent = new Intent(v.getContext(), com.shanghaigm.dms.view.activity.ck.HomeActivity.class);
+                    intent.putExtras(b);
+                    v.getContext().startActivity(intent);
+//                    context.startActivity(intent);
                     Toast.makeText(context, context.getResources().getText(R.string.delete_success), Toast.LENGTH_SHORT).show();
                 }
 
@@ -998,9 +1011,6 @@ public class PaperInfo extends BasePaperInfo {
         switch (report_state) {
             case 1:
                 tv.setTextColor(Color.RED);
-                break;
-            case 2:
-                tv.setTextColor(Color.BLUE);
                 break;
             case 3:
                 tv.setTextColor(0XFFFF6500);

@@ -22,14 +22,18 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.FragmentOrderAddBaseBinding;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
+import com.shanghaigm.dms.model.entity.ck.BatteryBean;
 import com.shanghaigm.dms.model.entity.ck.OrderAddSearchInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
+import com.shanghaigm.dms.model.util.GsonUtil;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 import com.shanghaigm.dms.view.widget.OrderAddNamePopWindow;
+import com.shanghaigm.dms.view.widget.SearchTable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +46,7 @@ import java.util.Map;
 public class OrderAddBaseFragment extends BaseFragment {
     private OrderDetailInfoOne orderDetailInfoOne = new OrderDetailInfoOne();
     private static String TAG = "OrderAddBaseFragment";
-    private EditText edtModel, edtCustomerName, edtPhone, edtMobilePhone, edtProvince, edtCity, edtCounty, edtDetailAddress, edtSex, edtFixPhone, edt_terminal_customer_name, edt_terminal_customer_tel, edt_terminal_customer_address, edt_number, edt_battery_system, edt_battery_number, edt_licensing_address, edt_endurance_mileage, edt_ekg, edt_battery_manufacturer, edt_color_determine;
+    public EditText edtModel, edtCustomerName, edtPhone, edtMobilePhone, edtProvince, edtCity, edtCounty, edtDetailAddress, edtSex, edtFixPhone, edt_terminal_customer_name, edt_terminal_customer_tel, edt_terminal_customer_address, edt_number, edt_battery_system, edt_battery_number, edt_licensing_address, edt_endurance_mileage, edt_ekg, edt_battery_manufacturer, edt_color_determine;
     public static String address, provinceId, cityId, countyId;
     private ImageView imgModel;
     private ImageView imgSearch;
@@ -87,44 +91,46 @@ public class OrderAddBaseFragment extends BaseFragment {
             public void handleMessage(Message msg) {
                 Bundle bundle = msg.getData();
                 OrderAddSearchInfo info = (OrderAddSearchInfo) bundle.getSerializable(OrderAddNamePopWindow.GET_INFO);
-                edtCustomerName.setText(info.getName());
-                edtMobilePhone.setText(info.getTel());
-                companyName = info.getCompany();
-                customerCode = info.getCustomerCode();
-                address = info.getAddress();
-                sex = info.getSex();
-                edtSex.setText(sex);
-                edtPhone.setText(info.getFixed_telephone());
-                if (address != null) {
-                    if (!address.equals("")) {
-                        String[] addresses = address.split(",");
-                        if (addresses.length == 3) {
-                            provinceId = addresses[0];
-                            cityId = addresses[1];
-                            countyId = addresses[2];
-                        }
-                        if (addresses.length == 2) {
-                            provinceId = addresses[0];
-                            cityId = addresses[1];
-                            countyId = "";
+                if(!info.getCompany().equals("")){
+                    edtCustomerName.setText(info.getCompany());
+                    edtMobilePhone.setText(info.getTel());
+                    companyName = info.getCompany();
+                    customerCode = info.getCustomerCode();
+                    address = info.getAddress();
+                    sex = info.getSex();
+                    edtSex.setText(sex);
+                    edtPhone.setText(info.getFixed_telephone());
+                    if (address != null) {
+                        if (!address.equals("")) {
+                            String[] addresses = address.split(",");
+                            if (addresses.length == 3) {
+                                provinceId = addresses[0];
+                                cityId = addresses[1];
+                                countyId = addresses[2];
+                            }
+                            if (addresses.length == 2) {
+                                provinceId = addresses[0];
+                                cityId = addresses[1];
+                                countyId = "";
+                            }
                         }
                     }
-                }
 
-                Log.i(TAG, "handleMessage: " + info.getDetailed_address());
-                if (info.getDetailed_address() != null) {
-                    String[] str = info.getDetailed_address().split(",");
-                    if (str.length == 3) {
-                        edtProvince.setText(str[0]);
-                        edtCity.setText(str[0]);
-                        edtCounty.setText(str[1]);
-                        edtDetailAddress.setText(str[2]);
-                    }
-                    if (str.length == 4) {
-                        edtProvince.setText(str[0]);
-                        edtCity.setText(str[1]);
-                        edtCounty.setText(str[2]);
-                        edtDetailAddress.setText(str[3]);
+                    Log.i(TAG, "handleMessage: " + info.getDetailed_address());
+                    if (info.getDetailed_address() != null) {
+                        String[] str = info.getDetailed_address().split(",");
+                        if (str.length == 3) {
+                            edtProvince.setText(str[0]);
+                            edtCity.setText(str[0]);
+                            edtCounty.setText(str[1]);
+                            edtDetailAddress.setText(str[2]);
+                        }
+                        if (str.length == 4) {
+                            edtProvince.setText(str[0]);
+                            edtCity.setText(str[1]);
+                            edtCounty.setText(str[2]);
+                            edtDetailAddress.setText(str[3]);
+                        }
                     }
                 }
             }
@@ -161,11 +167,13 @@ public class OrderAddBaseFragment extends BaseFragment {
                 if (isModelClick) {
                     String model = edtModel.getText().toString();
                     try {
+                        //根据车型请求选配信息
                         if (!model.equals("") && modelArray != null) {
                             for (int i = 0; i < modelArray.length(); i++) {
                                 if (model.equals(modelArray.getJSONObject(i).getString("models_name"))) {
                                     final int modelId = modelArray.getJSONObject(i).getInt("models_Id");
                                     model_Id = modelId;
+                                    getBatteryInfo(modelId);
                                     getAllocations();
                                 }
                             }
@@ -188,6 +196,7 @@ public class OrderAddBaseFragment extends BaseFragment {
                 CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_GET_MODELS, null), new DisposeDataHandle(new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
+                        Log.i(TAG, "onSuccess:responseObj        " + responseObj.toString());
                         try {
                             isModelClick = true;
                             ArrayList<PopListInfo> models = new ArrayList<>();
@@ -231,6 +240,38 @@ public class OrderAddBaseFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private void getBatteryInfo(int model_Id) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("models_Id", model_Id);
+        OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_BATTERY_INFO, params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                Log.i(TAG, "onSuccess:battery_info " + responseObj);
+                JSONObject result = (JSONObject) responseObj;
+                try {
+                    JSONObject resultEntity = result.getJSONObject("resultEntity");
+                    BatteryBean bean = GsonUtil.GsonToBean(resultEntity.toString(), BatteryBean.class);
+                    setBatteryInfo(bean);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        });
+    }
+
+    private void setBatteryInfo(BatteryBean bean) {
+        edt_battery_system.setText(bean.battery_system);
+        edt_battery_number.setText(bean.battery_number);
+        edt_endurance_mileage.setText(bean.endurance_mileage);
+        edt_ekg.setText(bean.ekg);
+        edt_battery_manufacturer.setText(bean.battery_manufacturer);
     }
 
     private void getAllocations() {

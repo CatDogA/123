@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/8/3.
  */
 
-public class ChangeLetterSearchTable extends RelativeLayout {
+public class ChangeLetterSearchTable extends LinearLayout {
     private ListView lv;
     private Context context;
     private ArrayList<ChangeLetterAddInfo> infos;

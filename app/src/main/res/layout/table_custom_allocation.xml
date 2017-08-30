@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <include layout="@layout/include_allocation__table_title"/>
-    <ListView
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:background="@color/tableBack"
         android:id="@+id/list_custom_allocation"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-    </ListView>
+    </com.baoyz.swipemenulistview.SwipeMenuListView>
 </LinearLayout>

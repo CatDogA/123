@@ -175,6 +175,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void login(String roleCode) {
+        if (roleEdt.getText().toString().equals("")) {
+            Toast.makeText(this, "信息错误", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String account = edtAccount.getText().toString();
         String password = edtPassWord.getText().toString();
         this.roleCode = roleCode;

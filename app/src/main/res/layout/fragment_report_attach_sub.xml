@@ -13,30 +13,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:background="@color/colorWhite"
+                android:drawableEnd="@mipmap/add1"
+                android:drawableLeft="@mipmap/all_car"
+                android:drawablePadding="10dp"
+                android:drawableRight="@mipmap/add1"
+                android:drawableStart="@mipmap/all_car"
+                android:gravity="center_vertical|start"
+                android:padding="5dp"
                 android:text="@string/car_name_plate" />
 
-            <!--<Button-->
-            <!--android:id="@+id/btn_car_sign"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/scan"-->
-            <!--android:textSize="10sp"-->
-            <!--android:visibility="gone" />-->
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
         </LinearLayout>
 
         <com.shanghaigm.dms.view.widget.MyGridView
@@ -50,30 +45,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:gravity="left"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:background="@color/colorWhite"
+                android:drawableEnd="@mipmap/add1"
+                android:drawableLeft="@mipmap/trouble"
+                android:drawablePadding="10dp"
+                android:drawableRight="@mipmap/add1"
+                android:drawableStart="@mipmap/trouble"
+                android:gravity="center_vertical|start"
+                android:padding="5dp"
                 android:text="@string/trouble_thing_picture" />
 
-            <!--<Button-->
-            <!--android:id="@+id/btn_trouble"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/scan"-->
-            <!--android:textSize="10sp"-->
-            <!--android:visibility="gone" />-->
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
         </LinearLayout>
 
         <com.shanghaigm.dms.view.widget.MyGridView
@@ -87,30 +77,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
+                android:id="@+id/textView32"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:background="@color/colorWhite"
+                android:drawableEnd="@mipmap/add1"
+                android:drawableLeft="@mipmap/repair"
+                android:drawablePadding="10dp"
+                android:drawableRight="@mipmap/add1"
+                android:drawableStart="@mipmap/repair"
+                android:gravity="center_vertical|start"
+                android:padding="5dp"
                 android:text="@string/after_repair_pic" />
 
-            <!--<Button-->
-            <!--android:id="@+id/btn_repair"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/scan"-->
-            <!--android:textSize="10sp"-->
-            <!--android:visibility="gone" />-->
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
         </LinearLayout>
 
         <com.shanghaigm.dms.view.widget.MyGridView
@@ -124,30 +110,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:background="@color/colorWhite"
+                android:drawableEnd="@mipmap/add1"
+                android:drawableLeft="@mipmap/other"
+                android:drawablePadding="10dp"
+                android:drawableRight="@mipmap/add1"
+                android:drawableStart="@mipmap/other"
+                android:gravity="center_vertical|start"
+                android:padding="5dp"
                 android:text="@string/else_pic" />
 
-            <!--<Button-->
-            <!--android:id="@+id/btn_other"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_weight="0.95"-->
-            <!--android:text="@string/scan"-->
-            <!--android:textSize="10sp"-->
-            <!--android:visibility="gone" />-->
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
         </LinearLayout>
 
         <com.shanghaigm.dms.view.widget.MyGridView
@@ -161,22 +142,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:id="@+id/textView3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:background="@color/colorWhite"
+                android:drawableEnd="@mipmap/add2"
+                android:drawableLeft="@mipmap/video"
+                android:drawablePadding="10dp"
+                android:drawableRight="@mipmap/add2"
+                android:drawableStart="@mipmap/video"
+                android:gravity="center_vertical|start"
+                android:padding="5dp"
                 android:text="@string/video" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
         </LinearLayout>
 
         <LinearLayout
@@ -185,21 +170,19 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_marginLeft="20dp"
                 android:id="@+id/img_video_add"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/add_pic" />
 
             <ImageView
-                android:layout_marginLeft="30dp"
                 android:id="@+id/img_video"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
                 android:scaleType="fitXY" />
         </LinearLayout>
-
-        <include layout="@layout/include_report_save_and_sub" />
     </LinearLayout>
 </ScrollView>

@@ -31,6 +31,7 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterAddInfo;
 import com.shanghaigm.dms.model.entity.ck.OrderAddSearchInfo;
+import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.ChangeLetterInfoBean;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
@@ -44,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/8/3.
+ * Created by Tom on 2017/8/3.
  */
 
 public class ChangeletterAddPopWindow extends PopupWindow {
@@ -52,17 +53,7 @@ public class ChangeletterAddPopWindow extends PopupWindow {
     private OrderAddSearchInfo selectedInfo = new OrderAddSearchInfo();
     private static String TAG = "ChangeletterAddPop";
     private TextView txt_page_num;
-    private ArrayList<ChangeLetterAddInfo> searchInfos;//每页数据
-    private int pages = 0;//页数
-    private int page = 1;//第几页
-    private ArrayList<ChangeLetterSearchTable> tables = new ArrayList<>();//表集合
-    private TablePagerAdapter pagerAdapter;
     private DmsApplication app = DmsApplication.getInstance();
-    private RelativeLayout.LayoutParams lp = new RelativeLayout.
-            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT);
-    private Boolean IsQuery = true;//判断是查询还是更多
-    private Boolean IsMore = false;//判断可否请求更多
     private LoadingDialog dialog;
     private EditText edt_name, edt_tel;
 
@@ -70,6 +61,16 @@ public class ChangeletterAddPopWindow extends PopupWindow {
     private WrapHeightViewPager vp;
     private Button btnSearch, btnSure;
     private ImageView vp_right, vp_left;
+    private ArrayList<TableInfo> tableInfos;
+    private ImageView img_first, img_last;
+    private TablePagerAdapter adapter;
+    private RelativeLayout.LayoutParams lp = new RelativeLayout.
+            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT);
+    private Boolean isQuery = false;        //是否已经查询
+    private int page, pages;       //显示页数,总页数
+    private ArrayList<ChangeLetterSearchTable> tables;
+    private EditText edt_contract;
 
     public ChangeletterAddPopWindow(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -91,70 +92,62 @@ public class ChangeletterAddPopWindow extends PopupWindow {
     private void setUpView() {
         txt_page_num.setText("页数:" + "0" + "/" + pages);
         initViewPager();
-        btnSure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ChangeLetterAddActivity.changeLetterAddInfo != null) {
-                    ChangeLetterAddActivity.setView();
-                    dismiss();
-                } else {
-                    dismiss();
-                }
-            }
-        });
         vp_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (IsMore) {
-                    int currentItem = vp.getCurrentItem();
-                    if (currentItem + 1 == pages) {
-                        vp_right.setImageResource(R.mipmap.right_switch_pre);
-                    }
-                    if (currentItem > 0) {
-                        vp.setCurrentItem(--currentItem);
-                    }
-                    if (currentItem == 0) {
-                        vp_left.setImageResource(R.mipmap.left_switch);
-                    }
-                    setPages(currentItem + 1, pages);
+                if (page > 0 && isQuery) {   //已查询，且不为第一页
+                    page--;
+                    requestOrderInfo(4);
+                    setPages(page + 1, pages);
                 }
             }
         });
         vp_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IsQuery = false;
-                if (IsMore) {
-                    int currentItem = vp.getCurrentItem();
-                    if (currentItem == 0) {
-                        vp_left.setImageResource(R.mipmap.left_switch_pre);
-                    }
-                    if (currentItem + 2 == pages) {
-                        vp_right.setImageResource(R.mipmap.right_switch);
-                    }
-                    Log.i(TAG, "onClick: " + "currentItem" + currentItem + "     page" + page);
-
-                    if (currentItem + 2 == page) {
-                        if (page > pages) {
-                            Toast.makeText(context, "已是最后一页", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        requestOrderInfo(IsQuery);
-                    } else {
-                        vp.setCurrentItem(++currentItem);
-                        setPages(currentItem + 1, pages);
-                    }
-                    Log.i(TAG, "onClick: " + "currentItem" + currentItem + "     page" + page);
+                if (page < pages - 1 && isQuery) {
+                    page++;
+                    requestOrderInfo(5);
+                    setPages(page + 1, pages);
+                }
+            }
+        });
+        img_first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuery) {
+                    page = 0;
+                    requestOrderInfo(2);
+                    setPages(page + 1, pages);
+                }
+            }
+        });
+        img_last.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuery) {
+                    page = pages - 1;
+                    requestOrderInfo(3);
+                    setPages(page + 1, pages);
                 }
             }
         });
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IsQuery = true;
-                IsMore = true;
-                page = 1;
-                requestOrderInfo(IsQuery);
+                page = 0;
+                if (tableInfos != null) {
+                    tableInfos.clear();
+                }
+                requestOrderInfo(1);
+            }
+        });
+
+        btnSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               ChangeLetterAddActivity.setView();
+                hidePopup();
             }
         });
     }
@@ -171,12 +164,43 @@ public class ChangeletterAddPopWindow extends PopupWindow {
         edt_name.setVisibility(View.GONE);
         edt_tel = (EditText) v.findViewById(R.id.edt_tel);
         edt_tel.setVisibility(View.GONE);
+        img_first = (ImageView) v.findViewById(R.id.viewpager_first);
+        img_last = (ImageView) v.findViewById(R.id.viewpager_last);
+        edt_contract = (EditText) v.findViewById(R.id.edt_contract_id);
+        edt_contract.setVisibility(View.VISIBLE);
     }
 
-    private void requestOrderInfo(Boolean isQuery) {
+    private void requestOrderInfo(final int type) {
+        String contract_id = "";
+        if(!edt_contract.getText().toString().equals("")){
+            contract_id = edt_contract.getText().toString();
+        }
+        JSONObject contractObj = new JSONObject();
+        JSONArray contractArray = new JSONArray();
+        try {
+            contractObj.put("contract_id",contract_id);
+            contractArray.put(contractObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //如果有，直接显示
+        if (type != 1) {       //已经查询过
+            if(tableInfos.size()>0){
+                tables.clear();
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ChangeLetterSearchTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setCurrentItem(page);
+                    return;
+                }
+            }
+        }
         dialog.showLoadingDlg();
         Map<String, Object> params = new HashMap<>();
-        params.put("page", page);
+        params.put("contract",contractArray.toString());
+        params.put("page", page + 1 + "");
         params.put("rows", 10);
         params.put("loginName", app.getAccount());
         params.put("jobCode", app.getJobCode());
@@ -192,6 +216,10 @@ public class ChangeletterAddPopWindow extends PopupWindow {
                     JSONArray rows = resultEntity.getJSONArray("rows");
                     if (total == 0) {
                         Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
+                        tables.clear();
+                        tableInfos.clear();
+                        ChangeLetterSearchTable table = new ChangeLetterSearchTable(context, new ArrayList<ChangeLetterAddInfo>());
+                        tables.add(table);
                     }
                     if (total % 10 == 0) {
                         pages = total / 10;
@@ -205,27 +233,33 @@ public class ChangeletterAddPopWindow extends PopupWindow {
                     }
                     ChangeLetterSearchTable table = new ChangeLetterSearchTable(context, searchInfos);
                     table.setLayoutParams(lp);
-                    if (IsQuery) {
+//加入infos,更新数据
+                    if (total != 0) {
                         tables.clear();
-                        tables.add(table);
-                        setPages(1, pages);
-                        page++;
-                    } else if (IsMore && !IsQuery) {
-                        if (vp.getCurrentItem() + 1 >= pages) {
-                            Toast.makeText(context, "已是最后一页", Toast.LENGTH_SHORT).show();
-                            return;
+                        //加入空的tables占位
+                        if (type == 1) {
+                            tableInfos.clear();
+                            for (int i = 0; i < pages; i++) {
+                                tableInfos.add(new TableInfo(pages, new ChangeLetterSearchTable(context, new ArrayList<ChangeLetterAddInfo>()), false));
+                            }
+                            isQuery = true;
                         }
-                        tables.add(table);
-                        setPages(tables.size(), pages);
-                        page++;
-                    } else {
-                        Toast.makeText(context, "请先查询", Toast.LENGTH_SHORT).show();
+                        tableInfos.remove(page);
+                        tableInfos.add(page, new TableInfo(page, table, true));
+                        for (TableInfo tableInfo : tableInfos) {
+                            tables.add((ChangeLetterSearchTable) tableInfo.table);
+                        }
                     }
-                    Log.i(TAG, "onSuccess:page " + page);
-                    Log.i(TAG, "onSuccess:tables " + tables.size());
-                    pagerAdapter.notifyDataSetChanged();
-                    vp.setAdapter(pagerAdapter);
+                    adapter.notifyDataSetChanged();
+                    vp.setAdapter(adapter);
                     vp.setCurrentItem(page);
+                    //查询时，设置页数
+                    if (type == 1 && total != 0) {
+                        setPages(page + 1, pages);
+                    }
+                    if (total == 0) {
+                        setPages(0, 0);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -240,19 +274,20 @@ public class ChangeletterAddPopWindow extends PopupWindow {
     }
 
     private void initViewPager() {
-        searchInfos = new ArrayList<>();
-        ChangeLetterSearchTable table = new ChangeLetterSearchTable(context, searchInfos);
+        tableInfos = new ArrayList<>();
+        //添加空的table
+        ChangeLetterSearchTable table = new ChangeLetterSearchTable(context, new ArrayList<ChangeLetterAddInfo>());
         table.setLayoutParams(lp);
+        tables = new ArrayList<>();
         tables.add(table);
-        pagerAdapter = new TablePagerAdapter(context, tables);
+        adapter = new TablePagerAdapter(context, tables);
+        vp.setAdapter(adapter);
         vp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;//禁止滑动
             }
         });
-        vp.setOnClickListener(null);
-        vp.setAdapter(pagerAdapter);
     }
 
     private void setPages(int page, int pages) {

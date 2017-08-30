@@ -52,7 +52,7 @@
                             android:enabled="false"
                             android:gravity="center_horizontal"
                             android:lines="1"
-                            android:text="@{info.customer_name}"
+                            android:text="@{info.company_name}"
                             android:textSize="14sp" />
                     </LinearLayout>
 

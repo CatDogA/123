@@ -15,7 +15,6 @@ public class MatchingBean implements Serializable {
     public int isdefault;
     public String cost_change;
     public int isother;
-
     public MatchingBean(String assembly, String entry_name, String config_information, int num, String remarks, int isdefault, String cost_change, int isother) {
         this.assembly = assembly;
         this.entry_name = entry_name;

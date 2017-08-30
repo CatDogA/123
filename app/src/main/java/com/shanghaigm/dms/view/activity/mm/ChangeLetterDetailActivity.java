@@ -28,6 +28,7 @@ import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
+import com.shanghaigm.dms.view.fragment.mm.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,6 +108,8 @@ public class ChangeLetterDetailActivity extends BaseActivity {
                         Toast.makeText(ChangeLetterDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                         btn_return.setEnabled(false);
                         btn_pass.setEnabled(false);
+                        goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                        finish();
                     }
 
                     @Override
@@ -136,6 +139,10 @@ public class ChangeLetterDetailActivity extends BaseActivity {
                             Toast.makeText(ChangeLetterDetailActivity.this, "驳回成功", Toast.LENGTH_SHORT).show();
                             btn_return.setEnabled(false);
                             btn_pass.setEnabled(false);
+
+                            goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+
+                            finish();
                         }
 
                         @Override

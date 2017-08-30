@@ -25,6 +25,7 @@
             android:textColor="@color/colorOrange" />
 
         <TextView
+            android:id="@+id/txt_reviewing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -33,6 +34,7 @@
             android:textColor="@color/colorBlue" />
 
         <TextView
+            android:id="@+id/txt_reviewed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

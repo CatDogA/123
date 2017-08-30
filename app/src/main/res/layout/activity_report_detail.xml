@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.activity.as.ReportDetailActivity">
 
@@ -30,6 +30,7 @@
     </FrameLayout>
 
     <Button
+        android:background="@drawable/cic_btn"
         android:id="@+id/btn_return_back"
         android:layout_width="200dp"
         android:layout_height="wrap_content"

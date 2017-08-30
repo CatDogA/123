@@ -2,7 +2,6 @@ package com.shanghaigm.dms.view.activity.ck;
 
 import android.app.DatePickerDialog;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,22 +21,17 @@ import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.ActivityChangeLetterAddBinding;
 import com.shanghaigm.dms.model.Constant;
-import com.shanghaigm.dms.model.entity.as.ModelInfo;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterAddInfo;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
-import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.widget.ChangeLetterAllocationTable;
 import com.shanghaigm.dms.view.widget.ChangeletterAddPopWindow;
-import com.shanghaigm.dms.view.widget.MmPopupWindow;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +40,7 @@ import java.util.Map;
 
 public class ChangeLetterAddActivity extends BaseActivity {
     private final String TAG = "ChangeLetterAddActivity";
+    public static Boolean isAdded;   //判断是否是新增
     private TextView title;
     private RelativeLayout rl_back, rl_end;
     private Button btn_save, btn_sub;
@@ -89,6 +84,8 @@ public class ChangeLetterAddActivity extends BaseActivity {
             table.setLayoutParams(tableParams);
             llChangeLetter.addView(table);
         }
+        scrollView.smoothScrollTo(0, 0);
+        scrollView.setFocusable(true);
     }
 
     private void setUpView() {
@@ -120,7 +117,9 @@ public class ChangeLetterAddActivity extends BaseActivity {
                 pop.showPopup(img_contract_id);
             }
         });
-        btn_sub.setEnabled(false);
+        if (isAdded) {
+            btn_sub.setEnabled(false);
+        }
         //保存
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,6 +235,10 @@ public class ChangeLetterAddActivity extends BaseActivity {
                         Log.i(TAG, "onSuccess:      " + responseObj.toString());
                         Toast.makeText(ChangeLetterAddActivity.this, getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
                         btn_sub.setEnabled(false);
+                        Bundle b = new Bundle();
+                        b.putInt(HomeActivity.ORDER_LETTER_SUB,2);
+                        goToActivity(HomeActivity.class,b);
+                        finish();
                     }
 
                     @Override
@@ -249,12 +252,14 @@ public class ChangeLetterAddActivity extends BaseActivity {
     }
 
     public static void setView() {
-        edt_contract_id.setText(changeLetterAddInfo.getContract_id());
-        edt_company_name.setText(changeLetterAddInfo.getCompany_name());
-        edt_model.setText(changeLetterAddInfo.getModels_name());
-        edt_num.setText(changeLetterAddInfo.getNumber());
-        edt_contract_price.setText(changeLetterAddInfo.getContract_price());
-        edt_change_contract_price.setText(changeLetterAddInfo.getContract_price());
+        if (changeLetterAddInfo != null) {
+            edt_contract_id.setText(changeLetterAddInfo.getContract_id());
+            edt_company_name.setText(changeLetterAddInfo.getCompany_name());
+            edt_model.setText(changeLetterAddInfo.getModels_name());
+            edt_num.setText(changeLetterAddInfo.getNumber());
+            edt_contract_price.setText(changeLetterAddInfo.getContract_price());
+            edt_change_contract_price.setText(changeLetterAddInfo.getContract_price());
+        }
     }
 
     //获取系统时间

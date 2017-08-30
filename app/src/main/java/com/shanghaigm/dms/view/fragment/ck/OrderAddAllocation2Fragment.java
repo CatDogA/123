@@ -106,8 +106,10 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
                                 btn.setText(btnText);
                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 params.setMargins(0, getPixelsFromDp(1), 0, getPixelsFromDp(1));
-                                params.gravity = Gravity.CENTER_HORIZONTAL;
+                                params.gravity = Gravity.CENTER;
                                 btn.setLayoutParams(params);
+                                btn.setGravity(Gravity.CENTER_VERTICAL);
+                                btn.setPadding(40, 0, 0, 0);
                                 ll.addView(btn);
                                 btns.add(btn);
                                 //建linearlayout
@@ -152,10 +154,11 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         btn.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         btn.setTextColor(getResources().getColor(R.color.titleBackColor));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
         btn.setLayoutParams(params);
+        btn.setPadding(40, 0, 0, 0);
+        btn.setGravity(Gravity.CENTER_VERTICAL);
 //        ll.addView(btn);
-        btns.add(btn);
+//        btns.add(btn);
         btnlinearLayout.addView(btn);
 
         LinearLayout ll_add = new LinearLayout(getActivity());
@@ -168,12 +171,11 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
         paramsAdd1.gravity = Gravity.CENTER_HORIZONTAL;
         ll_add.setLayoutParams(paramsAdd);
         ll_add.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-        ll_add.setPadding(20,20,20,20);
+        ll_add.setPadding(20, 20, 20, 20);
         img_add.setLayoutParams(paramsAdd1);
         ll_add.addView(img_add);
         btnlinearLayout.addView(ll_add);
         ll.addView(btnlinearLayout);
-
         //建linearlayout
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
@@ -193,7 +195,7 @@ public class OrderAddAllocation2Fragment extends BaseFragment {
             }
         });
         linearLayout.addView(customAllocationTable);
-        linearLayouts.add(linearLayout);
+//        linearLayouts.add(linearLayout);
         ll.addView(linearLayout);
         for (LinearLayout l : linearLayouts) {
             l.setVisibility(View.GONE);

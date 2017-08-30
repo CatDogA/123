@@ -3,6 +3,7 @@ package com.shanghaigm.dms.view.activity.mm;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,11 +15,13 @@ import com.shanghaigm.dms.view.fragment.mm.ChangeBillReviewFragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderReviewFragment;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
+    public static String ORDER_BILL_REFRESH = "order_bill_refresh";
     private FragmentManager fm;
     private HomeFragment mHomeFragment;
     private OrderReviewFragment mOrderFragment;
     private ChangeBillReviewFragment mChangeBillReviewFragment;
-    private LinearLayout text_home,text_order,text_modify;
+    private LinearLayout text_home, text_order, text_modify;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,16 +31,33 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         showHome();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Bundle b = intent.getExtras();
+        if(b!=null){
+            if(b.getInt(HomeActivity.ORDER_BILL_REFRESH)==1){
+                mOrderFragment.refresh();
+            }
+            if(b.getInt(HomeActivity.ORDER_BILL_REFRESH)==2){
+                mChangeBillReviewFragment.refresh();
+            }
+        }
+
+    }
+
     private void showHome() {
         text_home.setSelected(true);
         //添加默认显示的frgment
         mHomeFragment = new HomeFragment();
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.layout_content,mHomeFragment);
+        fragmentTransaction.replace(R.id.layout_content, mHomeFragment);
         fragmentTransaction.commit();
     }
-    public void initView(){
+
+    public void initView() {
         text_home = (LinearLayout) findViewById(R.id.home_tab_text);
         text_home.setOnClickListener(this);
         text_order = (LinearLayout) findViewById(R.id.order_tab_text);
@@ -45,25 +65,27 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         text_modify = (LinearLayout) findViewById(R.id.modify_tab_text);
         text_modify.setOnClickListener(this);
     }
-    private void hideFragment(Fragment fragment, FragmentTransaction ft){
-        if(fragment != null){
+
+    private void hideFragment(Fragment fragment, FragmentTransaction ft) {
+        if (fragment != null) {
             ft.hide(fragment);
         }
     }
+
     @Override
     public void onClick(View v) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.home_tab_text:
                 setSelected();
                 text_home.setSelected(true);
-                hideFragment(mOrderFragment,fragmentTransaction);
-                hideFragment(mChangeBillReviewFragment,fragmentTransaction);
-                if(mHomeFragment == null){
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mChangeBillReviewFragment, fragmentTransaction);
+                if (mHomeFragment == null) {
                     mHomeFragment = new HomeFragment();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mHomeFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mHomeFragment);
+                } else {
                     fragmentTransaction.show(mHomeFragment);
                 }
                 break;
@@ -71,65 +93,66 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.order_tab_text:
                 setSelected();
                 text_order.setSelected(true);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                hideFragment(mChangeBillReviewFragment,fragmentTransaction);
-                if(mOrderFragment == null){
+                hideFragment(mHomeFragment, fragmentTransaction);
+                hideFragment(mChangeBillReviewFragment, fragmentTransaction);
+                if (mOrderFragment == null) {
                     mOrderFragment = OrderReviewFragment.getInstance();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mOrderFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                } else {
                     fragmentTransaction.show(mOrderFragment);
                 }
                 break;
             case R.id.modify_tab_text:
                 setSelected();
                 text_modify.setSelected(true);
-                hideFragment(mOrderFragment,fragmentTransaction);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                if(mChangeBillReviewFragment == null){
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mHomeFragment, fragmentTransaction);
+                if (mChangeBillReviewFragment == null) {
                     mChangeBillReviewFragment = new ChangeBillReviewFragment();
                     //隐藏其他两个fragment
                     fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
-                }else{
+                } else {
                     fragmentTransaction.show(mChangeBillReviewFragment);
                 }
                 break;
         }
         fragmentTransaction.commit();
     }
+
     //重置所有文本的选中状态
-    private void setSelected(){
+    private void setSelected() {
         text_home.setSelected(false);
         text_order.setSelected(false);
         text_modify.setSelected(false);
     }
 
-    public void chooseFragment(int i){
+    public void chooseFragment(int i) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        switch (i){
+        switch (i) {
             case 1:
                 setSelected();
                 text_order.setSelected(true);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                hideFragment(mChangeBillReviewFragment,fragmentTransaction);
-                if(mOrderFragment == null){
+                hideFragment(mHomeFragment, fragmentTransaction);
+                hideFragment(mChangeBillReviewFragment, fragmentTransaction);
+                if (mOrderFragment == null) {
                     mOrderFragment = new OrderReviewFragment();
                     //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content,mOrderFragment);
-                }else{
+                    fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                } else {
                     fragmentTransaction.show(mOrderFragment);
                 }
                 break;
             case 2:
                 setSelected();
                 text_modify.setSelected(true);
-                hideFragment(mOrderFragment,fragmentTransaction);
-                hideFragment(mHomeFragment,fragmentTransaction);
-                if(mChangeBillReviewFragment == null){
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mHomeFragment, fragmentTransaction);
+                if (mChangeBillReviewFragment == null) {
                     mChangeBillReviewFragment = new ChangeBillReviewFragment();
                     //隐藏其他两个fragment
                     fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
-                }else{
+                } else {
                     fragmentTransaction.show(mChangeBillReviewFragment);
                 }
                 break;

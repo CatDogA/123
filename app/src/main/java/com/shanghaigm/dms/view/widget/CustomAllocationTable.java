@@ -1,13 +1,17 @@
 package com.shanghaigm.dms.view.widget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -17,6 +21,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
@@ -32,7 +40,7 @@ public class CustomAllocationTable extends LinearLayout {
     private static String TAG = "CustomAllocation";
     public static String GET_CUSTOM_ALLOCATIN_INFO = "get_custom_allocation_info";
     private Context context;
-    private ListView listView;
+    private SwipeMenuListView listView;
     private ArrayList<OrderDetailInfoAllocation> saveList;//存储输入信息
     private AddAllocationAdapter adapter;
     private ArrayList<String> systems;
@@ -44,9 +52,50 @@ public class CustomAllocationTable extends LinearLayout {
         this.systems = systems;
         LayoutInflater lf = LayoutInflater.from(context);
         View v = lf.inflate(R.layout.table_custom_allocation, this, true);
-        listView = (ListView) v.findViewById(R.id.list_custom_allocation);
+        initView(v);
+    }
+
+    private void initView(View v) {
+        listView = (SwipeMenuListView) v.findViewById(R.id.list_custom_allocation);
         adapter = new AddAllocationAdapter(context, saveList);
         listView.setAdapter(adapter);
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem((context).getApplicationContext());
+                // set item background
+                openItem.setBackground(R.color.colorRedText);
+                // set item width
+                openItem.setWidth(dp2px(40));
+                openItem.setTitle("删除");
+                openItem.setTitleColor(R.color.colorWhite);
+                openItem.setTitleSize(14);
+                // add to menu
+                menu.addMenuItem(openItem);
+            }
+        };
+        listView.setMenuCreator(creator);
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Log.i(TAG, "onMenuItemClick: position       "+position);
+                saveList.remove(position);
+                adapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+    }
+
+    /**
+     * 将dp转化为px，666
+     * @param dp
+     * @return
+     */
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
     }
 
     public void AddItem() {
@@ -68,7 +117,6 @@ public class CustomAllocationTable extends LinearLayout {
 
         @Override
         public int getCount() {
-//            Log.i(TAG, "getCount: " + dataList.size());
             return dataList.size();
         }
 
@@ -93,25 +141,7 @@ public class CustomAllocationTable extends LinearLayout {
                 holder = (ViewHolder) convertView.getTag();
             }
             final ArrayList<PopListInfo> names = new ArrayList<>();
-//            if (systems != null) {
-//                for (String name : systems) {
-//                    names.add(new PopListInfo(name));
-//                }
-//                holder.edtSystem.setOnClickListener(new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        MmPopupWindow pop = new MmPopupWindow(context, holder.edtSystem, names, 4);
-//                        pop.showPopup(holder.edtSystem);
-//                    }
-//                });
-//            } else {
-//                holder.edtSystem.setOnClickListener(new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(context, "请选择车型", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
+
             holder.edtSystem.setText(saveList.get(position).getAssembly());
             holder.edtProName.setText(saveList.get(position).getEntry_name());
             holder.edtConfig.setText(saveList.get(position).getConfig_information());
@@ -168,7 +198,7 @@ public class CustomAllocationTable extends LinearLayout {
                 switch (type) {
                     case 1:
                         position = (int) holder.edtSystem.getTag();
-                        saveEdtInfo(1,s.toString(), position);
+                        saveEdtInfo(1, s.toString(), position);
                         break;
                     case 2:
                         position = (int) holder.edtProName.getTag();
@@ -199,6 +229,7 @@ public class CustomAllocationTable extends LinearLayout {
     private void saveEdtInfo(int type, String str, int position) {
         switch (type) {
             case 1:
+                Log.i(TAG, "saveEdtInfo:            " + position);
                 saveList.get(position).setAssembly(str);
                 break;
             case 2:

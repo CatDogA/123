@@ -210,8 +210,9 @@ public class OrderReviewFragment extends BaseFragment {
         stateSelectEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] strings = {"", "待审核", "已通过", "驳回"};
+                String[] strings = {"", "待审核", "已审核", "驳回"};
                 ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
+                states.add(new PopListInfo(""));
                 for (int i = 0; i < strings.length; i++) {
                     states.add(new PopListInfo(strings[i]));
                 }
@@ -241,14 +242,16 @@ public class OrderReviewFragment extends BaseFragment {
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((ReviewTable) tableInfo.table);
+            if(tableInfos.size()>0){
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((ReviewTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setAdapter(adapter);
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setAdapter(adapter);
-                vp.setCurrentItem(page);
-                return;
             }
         }
         dialog.showLoadingDlg();
@@ -379,7 +382,7 @@ public class OrderReviewFragment extends BaseFragment {
         if (state.equals("待审核")) {
             audit_status = -1;
         }
-        if (state.equals("已通过")) {
+        if (state.equals("已审核")) {
             audit_status = 1;
         }
         if (state.equals("驳回")) {

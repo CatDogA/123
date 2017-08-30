@@ -30,10 +30,12 @@ import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddBaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddPayFragment;
+import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +45,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderAddActivity extends AppCompatActivity {
+import io.realm.internal.TableView;
+
+public class OrderAddActivity extends BaseActivity {
     private static String TAG = "OrderAddActivity";
     private TextView titleText;
     private RelativeLayout rl_back, rl_end;
@@ -69,7 +73,7 @@ public class OrderAddActivity extends AppCompatActivity {
     private JSONArray allocationArray, customerArray;
     private JSONObject paramObject;
     private int orderId;     //储存保存成功后的order_id
-    public static Boolean isPayShow = false;    //判断第二页是否显示过
+    public static Boolean isPayShow;    //判断第二页是否显示过
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +134,7 @@ public class OrderAddActivity extends AppCompatActivity {
                         addBaseInfo = infoOne;
                         modelId = model_Id;
                         companyName = company_name;
+                        Log.i(TAG, "getOrderInfoOne:customerCode            "+customerCode);
                         customer_code = customerCode;
                         sex1 = sex;
                     }
@@ -155,7 +160,11 @@ public class OrderAddActivity extends AppCompatActivity {
                                 JSONObject resultEntity = object.getJSONObject("resultEntity");
                                 orderNumber = resultEntity.getString("order_number");
                                 String url = Constant.URL_ORDER_ADD;
-                                addOrder(url);
+                                if (isPayShow) {
+                                    addOrder(url);
+                                } else {
+                                    Toast.makeText(OrderAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -192,6 +201,20 @@ public class OrderAddActivity extends AppCompatActivity {
                     public void onSuccess(Object responseObj) {
                         Log.i(TAG, "onSuccess:      " + responseObj);
                         dialog.dismissLoadingDlg();
+                        JSONObject result = (JSONObject) responseObj;
+                        try {
+                            int resultEntity = result.getInt("resultEntity");
+                            if (resultEntity == 1) {
+                                Toast.makeText(OrderAddActivity.this, getText(R.string.sub_info_success), Toast.LENGTH_SHORT).show();
+                                Bundle b = new Bundle();
+                                b.putInt(HomeActivity.ORDER_LETTER_SUB, 1);
+                                goToActivity(HomeActivity.class, b);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -228,183 +251,214 @@ public class OrderAddActivity extends AppCompatActivity {
 
     //1.保存、修改
     private void addOrder(String url) {
-        if (orderNumber != null) {
-            //前两页信息   order
-            paramObject = new JSONObject();
-            JSONArray paramArray = new JSONArray();
-            try {
-                if (flag == 0) {
-                    paramObject.put("order_number", orderNumber);
+        OrderAddBaseFragment baseFragment = OrderAddBaseFragment.getInstance();
+        OrderAddPayFragment payFragment = OrderAddPayFragment.getInstance();
+        if (baseFragment.edtCustomerName.getText().toString().equals("")) {
+            Toast.makeText(this, "请选择客户信息", Toast.LENGTH_SHORT).show();
+        } else if (baseFragment.edtModel.getText().toString().equals("")) {
+            Toast.makeText(this, "请选择车型", Toast.LENGTH_SHORT).show();
+        } else if (baseFragment.edt_licensing_address.getText().toString().equals("")) {
+            Toast.makeText(this, "请填写上牌地点", Toast.LENGTH_SHORT).show();
+        } else if (baseFragment.edt_color_determine.getText().toString().equals("")) {
+            Toast.makeText(this, "请选择颜色", Toast.LENGTH_SHORT).show();
+        } else if (baseFragment.edt_number.getText().toString().equals("")) {
+            Toast.makeText(this, "请填数字", Toast.LENGTH_SHORT).show();
+        } else {
+            if (isPayShow) {
+                if (payFragment.payment_method.getText().toString().equals("")) {
+                    Toast.makeText(this, "请选择付款方式", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (payFragment.delivery_time.getText().toString().equals("")) {
+                    Toast.makeText(this, "请填写交付日期", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                paramObject.put("company_name", companyName);
-                paramObject.put("customer_name", addBaseInfo.getCustomer_name());
-                paramObject.put("mobile_phone", addBaseInfo.getMobile_phone());
-                paramObject.put("terminal_customer_name", addBaseInfo.getTerminal_customer_name());
-                paramObject.put("terminal_customer_tel", addBaseInfo.getTerminal_customer_tel());
-                paramObject.put("terminal_customer_address", addBaseInfo.getTerminal_customer_address());
-                paramObject.put("number", addBaseInfo.getNumber());
-
-                paramObject.put("battery_system", addBaseInfo.getBattery_system());
-                paramObject.put("battery_number", addBaseInfo.getBattery_number());
-                paramObject.put("endurance_mileage", addBaseInfo.getEndurance_mileage());
-                paramObject.put("ekg", addBaseInfo.getEkg());
-                paramObject.put("licensing_addeess", addBaseInfo.getLicensing_addeess());
-                paramObject.put("province", OrderAddBaseFragment.provinceId);
-                paramObject.put("city", OrderAddBaseFragment.cityId);
-                paramObject.put("county", OrderAddBaseFragment.countyId);
-
-                paramObject.put("freight", addPayInfo.getFreight());
-                paramObject.put("delivery_time", addPayInfo.getDelivery_time());
-                paramObject.put("payment_method_remarks", addPayInfo.getPayment_method_remarks());
-                paramObject.put("service_fee", addPayInfo.getService_fee());
-                paramObject.put("contract_price", addPayInfo.getContract_price());
-                paramObject.put("carriage", addPayInfo.getCarriage());
-                paramObject.put("invoice_amount", addPayInfo.getInvoice_amount());
-                paramObject.put("billing_requirements", addPayInfo.getBilling_requirements());
-
-                paramObject.put("models_Id", modelId + "");
-                Log.i(TAG, "addOrder:getColor_determine      " + addBaseInfo.getColor_determine());
-                paramObject.put("color_determine", getColorDeterMine(""));
-                if (addBaseInfo.getColor_determine() != null) {
-                    paramObject.put("color_determine", getColorDeterMine(addBaseInfo.getColor_determine()));
-                }
-                if (addPayInfo.getPayment_method() != null) {
-                    paramObject.put("payment_method", getPayMethod(addPayInfo.getPayment_method()));
-                } else {
-                    paramObject.put("payment_method", "");
-                }
-                paramObject.put("order_id", "");
-                paramObject.put("customer_code", customer_code + "");
-                paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
-                paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
-                paramObject.put("address", OrderAddBaseFragment.address);
-                paramObject.put("road_condition", "");
-                paramObject.put("normal_speed", "");
-                paramObject.put("remark", "");
-                if (flag == 1) {
-                    OrderDetailInfoBean.ResultEntity entity = app.getOrderDetailInfoBean().resultEntity;
-                    paramObject.put("order_id", entity.order_id + "");
-//                    paramObject.put("company_name", app.getOrderDetailInfoBean().resultEntity.company_name);
-                    if (OrderAddBaseFragment.address == null) {
-                        paramObject.put("address", app.getOrderDetailInfoBean().resultEntity.address);
+            }
+            if (orderNumber != null) {
+                //前两页信息   order
+                paramObject = new JSONObject();
+                JSONArray paramArray = new JSONArray();
+                try {
+                    if (flag == 0) {
+                        paramObject.put("order_number", orderNumber);
                     }
-//                    paramObject.put("payment_method", app.getOrderDetailInfoBean().resultEntity.payment_method);
-                }
-                paramArray.put(paramObject);
+                    paramObject.put("customerCode", customer_code);
+//                    paramObject.put("company_name", companyName);
+//                    paramObject.put("customer_name", addBaseInfo.getCustomer_name());
+//                    paramObject.put("mobile_phone", addBaseInfo.getMobile_phone());
+//                    paramObject.put("province", OrderAddBaseFragment.provinceId);
+//                    paramObject.put("city", OrderAddBaseFragment.cityId);
+//                    paramObject.put("county", OrderAddBaseFragment.countyId);
 
-                //第三页信息    standardVo
-                //1.取出整体信息
-                //不改变，直接上传
-                JSONObject allocationObject;
-                allocationArray = new JSONArray();
-                for (OrderDetailInfoAllocation info : originList) {
-                    allocationObject = new JSONObject();
-                    allocationObject.put("assembly", info.getAssemblyName());
-                    allocationObject.put("entry_name", info.getEntry_name());
-                    allocationObject.put("standard_information", info.getConfig_information());
-                    Double cost_change = 0.0;
+                    paramObject.put("terminal_customer_name", addBaseInfo.getTerminal_customer_name());
+                    paramObject.put("terminal_customer_tel", addBaseInfo.getTerminal_customer_tel());
+                    paramObject.put("terminal_customer_address", addBaseInfo.getTerminal_customer_address());
+                    paramObject.put("number", addBaseInfo.getNumber());
+
+                    paramObject.put("battery_system", addBaseInfo.getBattery_system());
+                    paramObject.put("battery_number", addBaseInfo.getBattery_number());
+                    paramObject.put("endurance_mileage", addBaseInfo.getEndurance_mileage());
+                    paramObject.put("ekg", addBaseInfo.getEkg());
+                    paramObject.put("licensing_addeess", addBaseInfo.getLicensing_addeess());
+
+
+                    paramObject.put("freight", addPayInfo.getFreight());
+                    paramObject.put("delivery_time", addPayInfo.getDelivery_time());
+                    paramObject.put("payment_method_remarks", addPayInfo.getPayment_method_remarks());
+                    paramObject.put("service_fee", addPayInfo.getService_fee());
+                    paramObject.put("contract_price", addPayInfo.getContract_price());
+                    paramObject.put("carriage", addPayInfo.getCarriage());
+                    paramObject.put("invoice_amount", addPayInfo.getInvoice_amount());
+                    paramObject.put("billing_requirements", addPayInfo.getBilling_requirements());
+
+                    paramObject.put("models_Id", modelId + "");
+                    Log.i(TAG, "addOrder:getColor_determine      " + addBaseInfo.getColor_determine());
+                    paramObject.put("color_determine", getColorDeterMine(""));
+                    if (addBaseInfo.getColor_determine() != null) {
+                        paramObject.put("color_determine", getColorDeterMine(addBaseInfo.getColor_determine()));
+                    }
+                    if (addPayInfo.getPayment_method() != null) {
+                        paramObject.put("payment_method", getPayMethod(addPayInfo.getPayment_method()));
+                    } else {
+                        paramObject.put("payment_method", "");
+                    }
+                    paramObject.put("order_id", "");
+                    paramObject.put("customer_code", customer_code + "");
+                    paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
+                    paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
+                    paramObject.put("address", OrderAddBaseFragment.address);
+                    paramObject.put("road_condition", "");
+                    paramObject.put("normal_speed", "");
+                    paramObject.put("remark", "");
+                    if (flag == 1) {
+                        OrderDetailInfoBean.ResultEntity entity = app.getOrderDetailInfoBean().resultEntity;
+                        paramObject.put("order_id", entity.order_id + "");
+//                    paramObject.put("company_name", app.getOrderDetailInfoBean().resultEntity.company_name);
+                        if (OrderAddBaseFragment.address == null) {
+                            paramObject.put("address", app.getOrderDetailInfoBean().resultEntity.address);
+                        }
+//                    paramObject.put("payment_method", app.getOrderDetailInfoBean().resultEntity.payment_method);
+                    }
+                    paramArray.put(paramObject);
+
+                    //第三页信息    standardVo
+                    //1.取出整体信息
+                    //不改变，直接上传
+                    JSONObject allocationObject;
+                    allocationArray = new JSONArray();
+                    for (OrderDetailInfoAllocation info : originList) {
+                        allocationObject = new JSONObject();
+                        allocationObject.put("assembly", info.getAssemblyName());
+                        allocationObject.put("entry_name", info.getEntry_name());
+                        allocationObject.put("standard_information", info.getConfig_information());
+                        Double cost_change = 0.0;
 //                    if (!info.getCost_change().equals("")) {
 //                        cost_change = Double.parseDouble(info.getCost_change());
 //                    }
-                    allocationObject.put("cost_change", "");
-                    int supporting_id = 0;
-                    if (isNumeric(info.getSupporting_id()) && !info.getSupporting_id().equals("")) {
-                        supporting_id = Integer.parseInt(info.getSupporting_id());
-                    }
-                    allocationObject.put("supporting_id", supporting_id);
-                    JSONArray array = new JSONArray();
-                    if (undefaultInfos != null && undefaultInfos.size() > 0) {
-                        for (AllocationAddChooseUndefaultInfo info2 : undefaultInfos) {
-                            if (info2.getStandard_id() == info.getStandard_id()) {
-                                JSONObject obj = new JSONObject();
-                                obj.put("assembly", info2.getAssembly());
-                                obj.put("entry_name", info2.getEntry_name());
-                                obj.put("config_information", info2.getConfig_information());
-                                obj.put("num", info2.getNum() + "");
-                                obj.put("cost_change", info2.getPrice() + "");
-                                obj.put("remarks", info2.getRemarks());
-                                obj.put("isother", 1);
-                                obj.put("matching_id", info2.getMatching_id() + "");
-                                int supporting_id2 = 0;
-                                if (isNumeric(info2.getSupporting_id()) && !info2.getSupporting_id().equals("")) {
-                                    supporting_id2 = Integer.parseInt(info2.getSupporting_id());
+                        allocationObject.put("cost_change", "");
+                        int supporting_id = 0;
+                        if (isNumeric(info.getSupporting_id()) && !info.getSupporting_id().equals("")) {
+                            supporting_id = Integer.parseInt(info.getSupporting_id());
+                        }
+                        allocationObject.put("supporting_id", supporting_id);
+                        JSONArray array = new JSONArray();
+                        if (undefaultInfos != null && undefaultInfos.size() > 0) {
+                            for (AllocationAddChooseUndefaultInfo info2 : undefaultInfos) {
+                                if (info2.getStandard_id() == info.getStandard_id()) {
+                                    JSONObject obj = new JSONObject();
+                                    obj.put("assembly", info2.getAssembly());
+                                    obj.put("entry_name", info2.getEntry_name());
+                                    obj.put("config_information", info2.getConfig_information());
+                                    obj.put("num", info2.getNum() + "");
+                                    obj.put("cost_change", info2.getPrice() + "");
+                                    obj.put("remarks", info2.getRemarks());
+                                    obj.put("isother", 1);
+                                    obj.put("matching_id", info2.getMatching_id() + "");
+                                    int supporting_id2 = 0;
+                                    if (isNumeric(info2.getSupporting_id()) && !info2.getSupporting_id().equals("")) {
+                                        supporting_id2 = Integer.parseInt(info2.getSupporting_id());
+                                    }
+                                    obj.put("supporting_id", supporting_id2);
+                                    array.put(obj);
                                 }
-                                obj.put("supporting_id", supporting_id2);
-                                array.put(obj);
                             }
                         }
+                        allocationObject.put("matching", array);
+                        allocationArray.put(allocationObject);
                     }
-                    allocationObject.put("matching", array);
-                    allocationArray.put(allocationObject);
-                }
-                Log.i(TAG, "onClick:singleAllocationList     " + singleAllocationList.size());
-                //2.获取要添加作为matching属性的信息
-                ArrayList<OrderDetailInfoAllocation> listForChange = new ArrayList<OrderDetailInfoAllocation>();
-                for (OrderDetailInfoAllocation changeInfo : singleAllocationList) {
-                    if (!changeInfo.getNum().equals("")) {
-                        if (Integer.parseInt(changeInfo.getNum()) > 0) ;
-                        listForChange.add(changeInfo);
-                    }
-                }
-
-                //自定义
-                customerArray = new JSONArray();
-                JSONObject customerObject = new JSONObject();
-                for (OrderDetailInfoAllocation info : customAddList) {
-                    customerObject.put("assembly", info.getAssembly());
-                    customerObject.put("entry_name", info.getEntry_name());
-                    customerObject.put("config_information", info.getConfig_information());
-                    customerObject.put("num", info.getNum());
-                    customerObject.put("cost_change", "");
-                    customerObject.put("remarks", info.getRemarks());
-                    customerObject.put("supporting_id", 0);
-                    customerObject.put("isother", 0);
-                    customerArray.put(customerObject);
-                }
-                //提交请求
-                final Map<String, Object> requestParams = new HashMap<>();
-                if (flag == 0) {
-                    requestParams.put("order", paramArray.toString());
-                }
-                if (flag == 1) {
-                    requestParams.put("orders", paramArray.toString());
-                }
-                Log.i(TAG, "addOrder:originList.size()        "+originList.size());
-                Log.i(TAG, "onClick:        " + paramArray.toString());
-                Log.i(TAG, "onClick:allocationArray      " + allocationArray.toString());
-                Log.i(TAG, "addOrder:customerArray           " + customerArray.toString());
-
-                requestParams.put("standardVo", allocationArray.toString());
-                requestParams.put("matching", customerArray.toString());
-                requestParams.put("loginName", app.getAccount());
-                dialog.showLoadingDlg();
-                OkhttpRequestCenter.getCommonPostRequest(url, requestParams, new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-                        dialog.dismissLoadingDlg();
-                        Log.i(TAG, "onSuccess:responseObj        " + responseObj.toString());
-                        JSONObject result = (JSONObject) responseObj;
-                        try {
-                            orderId = result.getInt("resultEntity");
-                            if (orderId != -1) {
-                                Toast.makeText(OrderAddActivity.this, getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
-                                saveBtn.setEnabled(false);
-                                submitBtn.setEnabled(true);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    Log.i(TAG, "onClick:singleAllocationList     " + singleAllocationList.size());
+                    //2.获取要添加作为matching属性的信息
+                    ArrayList<OrderDetailInfoAllocation> listForChange = new ArrayList<OrderDetailInfoAllocation>();
+                    for (OrderDetailInfoAllocation changeInfo : singleAllocationList) {
+                        if (!changeInfo.getNum().equals("")) {
+                            if (Integer.parseInt(changeInfo.getNum()) > 0) ;
+                            listForChange.add(changeInfo);
                         }
                     }
 
-                    @Override
-                    public void onFailure(Object reasonObj) {
-
+                    //自定义
+                    customerArray = new JSONArray();
+                    for (OrderDetailInfoAllocation info : customAddList) {
+                        if(info.getAssembly().equals("") || info.getEntry_name().equals("") || info.getConfig_information().equals("")){
+                            Log.i(TAG, "addOrder: "+"不可传");
+                        }else {
+                            JSONObject customerObject = new JSONObject();
+                            Log.i(TAG, "addOrder:            " + info.getAssembly());
+                            customerObject.put("assembly", info.getAssembly());
+                            customerObject.put("entry_name", info.getEntry_name());
+                            customerObject.put("config_information", info.getConfig_information());
+                            customerObject.put("num", info.getNum());
+                            customerObject.put("cost_change", "");
+                            customerObject.put("remarks", info.getRemarks());
+                            customerObject.put("supporting_id", 0);
+                            customerObject.put("isother", 0);
+                            customerArray.put(customerObject);
+                        }
                     }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    //提交请求
+                    final Map<String, Object> requestParams = new HashMap<>();
+                    if (flag == 0) {
+                        requestParams.put("order", paramArray.toString());
+                    }
+                    if (flag == 1) {
+                        requestParams.put("orders", paramArray.toString());
+                    }
+                    Log.i(TAG, "addOrder:originList.size()        " + originList.size());
+                    Log.i(TAG, "onClick:        " + paramArray.toString());
+                    Log.i(TAG, "onClick:allocationArray      " + allocationArray.toString());
+                    Log.i(TAG, "addOrder:customerArray           " + customerArray.toString());
+
+                    requestParams.put("standardVo", allocationArray.toString());
+                    requestParams.put("matching", customerArray.toString());
+                    requestParams.put("loginName", app.getAccount());
+                    dialog.showLoadingDlg();
+                    OkhttpRequestCenter.getCommonPostRequest(url, requestParams, new DisposeDataListener() {
+                        @Override
+                        public void onSuccess(Object responseObj) {
+                            dialog.dismissLoadingDlg();
+                            Log.i(TAG, "onSuccess:responseObj        " + responseObj.toString());
+                            JSONObject result = (JSONObject) responseObj;
+                            try {
+                                orderId = result.getInt("resultEntity");
+                                if (orderId != -1) {
+                                    Toast.makeText(OrderAddActivity.this, getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
+                                    saveBtn.setEnabled(false);
+                                    submitBtn.setEnabled(true);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object reasonObj) {
+
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //自增信息
             }
-            //自增信息
         }
     }
 
@@ -453,6 +507,9 @@ public class OrderAddActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        if(flag==1){
+            customer_code = app.getOrderDetailInfoBean().resultEntity.customer_code;
+        }
         //进入即清空
         isPayShow = false;
         assemblyNames = new ArrayList<>();

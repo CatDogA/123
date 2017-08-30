@@ -59,22 +59,10 @@ public class OrderAddNamePopWindow extends PopupWindow {
     private OrderAddSearchInfo selectedInfo = new OrderAddSearchInfo();
     private static String TAG = "OrderAddNamePopWindow";
     private TextView txt_page_num;
-    //    private ArrayList<OrderAddSearchInfo> searchInfos;//每页数据
-//    private int pages = 0;//页数
-//    private int page = 1;//第几页
-//    private ArrayList<SearchTable> tables = new ArrayList<>();//表集合
-    private TablePagerAdapter pagerAdapter;
-    //    private DmsApplication app = DmsApplication.getInstance();
-//    private RelativeLayout.LayoutParams lp = new RelativeLayout.
-//            LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-//            RelativeLayout.LayoutParams.WRAP_CONTENT);
-//    private Boolean IsQuery = true;//判断是查询还是更多
-//    private Boolean IsMore = false;//判断可否请求更多
     private LoadingDialog dialog;
     private EditText edt_name, edt_tel;
 
     private Context context;
-    //    private WrapHeightViewPager vp;
     private Button btnSearch, btnSure;
     private ImageView vp_right, vp_left;
     private Handler mHandler;
@@ -180,12 +168,14 @@ public class OrderAddNamePopWindow extends PopupWindow {
             public void onClick(View v) {
                 Message msg = handler.obtainMessage();
                 Bundle bundle = new Bundle();
-                if (selectedInfo != null) {
+                if (selectedInfo.getCompany() != null) {
                     bundle.putSerializable(OrderAddNamePopWindow.GET_INFO, selectedInfo);
                     msg.setData(bundle);
                     msg.sendToTarget();
                 } else {
-                    Toast.makeText(context, "请选择数据", Toast.LENGTH_SHORT).show();
+                    bundle.putSerializable(OrderAddNamePopWindow.GET_INFO, new OrderAddSearchInfo("", "", "", "", "", -1, "", ""));
+                    msg.setData(bundle);
+                    msg.sendToTarget();
                 }
                 hidePopup();
             }
@@ -210,17 +200,18 @@ public class OrderAddNamePopWindow extends PopupWindow {
     }
 
     private void requestOrderInfo(final int type) {
-        tables.clear();
         //如果有，直接显示
         if (type != 1) {       //已经查询过
-            if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
-                for (TableInfo tableInfo : tableInfos) {
-                    tables.add((SearchTable) tableInfo.table);
+            tables.clear();
+            if(tableInfos.size()>0){
+                if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
+                    for (TableInfo tableInfo : tableInfos) {
+                        tables.add((SearchTable) tableInfo.table);
+                    }
+                    adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
+                    vp.setCurrentItem(page);
+                    return;
                 }
-                adapter.notifyDataSetChanged();     //刷新完毕就无需再走下一步
-                vp.setAdapter(adapter);
-                vp.setCurrentItem(page);
-                return;
             }
         }
 
@@ -267,13 +258,7 @@ public class OrderAddNamePopWindow extends PopupWindow {
                     } else {
                         pages = total / 10 + 1;
                     }
-                    //加入空的tables占位
-                    if (type == 1) {
-                        for (int i = 0; i < pages; i++) {
-                            tableInfos.add(new TableInfo(pages, new SearchTable(context, new ArrayList<OrderAddSearchInfo>(), mHandler), false));
-                        }
-                        isQuery = true;
-                    }
+
                     ArrayList<OrderAddSearchInfo> searchInfos = new ArrayList<>();
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject searchInfo = rows.getJSONObject(i);
@@ -284,7 +269,16 @@ public class OrderAddNamePopWindow extends PopupWindow {
                     table.setLayoutParams(lp);
 
                     //加入infos,更新数据
-                    if(total!=0){
+                    if (total != 0) {
+                        tables.clear();
+                        //加入空的tables占位
+                        if (type == 1) {
+                            tableInfos.clear();
+                            for (int i = 0; i < pages; i++) {
+                                tableInfos.add(new TableInfo(pages, new SearchTable(context, new ArrayList<OrderAddSearchInfo>(), mHandler), false));
+                            }
+                            isQuery = true;
+                        }
                         tableInfos.remove(page);
                         tableInfos.add(page, new TableInfo(page, table, true));
                         for (TableInfo tableInfo : tableInfos) {
@@ -294,10 +288,12 @@ public class OrderAddNamePopWindow extends PopupWindow {
                     adapter.notifyDataSetChanged();
                     vp.setAdapter(adapter);
                     vp.setCurrentItem(page);
-
-                    //查询时，设置页数
-                    if (type == 1) {
+//查询时，设置页数
+                    if (type == 1 && total != 0) {
                         setPages(page + 1, pages);
+                    }
+                    if (total == 0) {
+                        setPages(0, 0);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -313,20 +309,6 @@ public class OrderAddNamePopWindow extends PopupWindow {
     }
 
     private void initViewPager() {
-//        searchInfos = new ArrayList<>();
-//        SearchTable table = new SearchTable(context, searchInfos, mHandler);
-//        table.setLayoutParams(lp);
-//        tables.add(table);
-//        pagerAdapter = new TablePagerAdapter(context, tables);
-//        vp.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return true;//禁止滑动
-//            }
-//        });
-//        vp.setOnClickListener(null);
-//        vp.setAdapter(pagerAdapter);
-
         tableInfos = new ArrayList<>();
         //添加空的table
         SearchTable table = new SearchTable(context, new ArrayList<OrderAddSearchInfo>(), mHandler);
@@ -408,7 +390,8 @@ public class OrderAddNamePopWindow extends PopupWindow {
         }
 
     }
-    private void reQuery(EditText edt){
+
+    private void reQuery(EditText edt) {
         edt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

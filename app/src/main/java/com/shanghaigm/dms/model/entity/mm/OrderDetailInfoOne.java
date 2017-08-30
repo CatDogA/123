@@ -30,6 +30,8 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
     private String color_determine;
     private String ekg;
     private String licensing_addeess;
+    private String company_name;
+
 
     public OrderDetailInfoOne() {
     }
@@ -37,12 +39,17 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
     public OrderDetailInfoOne(OrderDetailInfoBean bean) {
         OrderDetailInfoBean.ResultEntity resultEntity = bean.resultEntity;
         this.customer_name = resultEntity.customer_name;
+        this.company_name = resultEntity.company_name;
         this.sex = resultEntity.sex;
         this.fixed_telephone = resultEntity.fixed_telephone;
         this.mobile_phone = resultEntity.mobile_phone;
-        this.province = resultEntity.province;
-        this.city = resultEntity.city;
-        this.county = resultEntity.county;
+        this.province = resultEntity.addressName.split(",")[0];
+        this.city = resultEntity.addressName.split(",")[1];
+        if (resultEntity.addressName.split(",").length > 2) {
+            this.county = resultEntity.addressName.split(",")[2];
+        } else {
+            this.county = "";
+        }
         this.detailed_address = resultEntity.detailed_address;
         this.terminal_customer_name = resultEntity.terminal_customer_name;
         this.terminal_customer_tel = resultEntity.terminal_customer_tel;
@@ -272,5 +279,13 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
 
     public void setEkg(String ekg) {
         this.ekg = ekg;
+    }
+    @Bindable
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
     }
 }

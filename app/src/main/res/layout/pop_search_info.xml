@@ -2,8 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainColorGD"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
+
+    <EditText
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:id="@+id/edt_contract_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/cic_edt_back"
+        android:gravity="center"
+        android:hint="合同号查询"
+        android:padding="5dp"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,26 +63,29 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
+
         <Button
-            android:background="@drawable/cic_btn"
             android:id="@+id/btn_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/cic_btn"
+            android:textColor="@color/colorWhite"
             android:text="查询" />
 
         <Button
             android:id="@+id/btn_sure"
             android:layout_width="0dp"
-            android:background="@drawable/cic_btn_back_yellow"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/cic_btn_back_yellow"
             android:text="确认" />
     </LinearLayout>
 
@@ -77,10 +96,12 @@
         android:layout_weight="1">
 
     </com.shanghaigm.dms.view.widget.WrapHeightViewPager>
+
     <RelativeLayout
-        android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/include_below_table"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp">
+
+        <include layout="@layout/include_below_table" />
     </RelativeLayout>
 </LinearLayout>
