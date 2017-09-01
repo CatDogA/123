@@ -36,7 +36,7 @@ public class LoadingDialog {
         this.context = context;
         this.loadingStr = loadingStr;
         this.flag = true;
-        time = 10000;
+        time = 20000;
         View view = LayoutInflater.from(context).inflate(R.layout.dlg_loading, null);
         loadingDlg = new Dialog(context, R.style.FullHeightDialog);
         loadingDlg.setContentView(view);

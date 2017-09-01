@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
@@ -37,12 +38,14 @@ public class ChangeLetterAllocationTable extends LinearLayout {
     private ArrayList<ChangeLetterAllocationInfo> saveList;//存储输入信息
     private AddAllocationAdapter adapter;
     private ScrollView scrollView;
+    private DmsApplication app;
 
     public ChangeLetterAllocationTable(Context context, final ArrayList<ChangeLetterAllocationInfo> saveList, final ScrollView scrollView) {
         super(context);
         this.context = context;
         this.saveList = saveList;
         this.scrollView = scrollView;
+        app = DmsApplication.getInstance();
         LayoutInflater lf = LayoutInflater.from(context);
         View v = lf.inflate(R.layout.table_change_letter_allocation, this, true);
         listView = (ListView) v.findViewById(R.id.list_change_letter_allocation);
@@ -111,6 +114,7 @@ public class ChangeLetterAllocationTable extends LinearLayout {
                 edtAllocationPro = (EditText) v.findViewById(R.id.edt_allocation_pro);
                 edtChangeContent = (EditText) v.findViewById(R.id.edt_change_content);
                 edtPrice = (EditText) v.findViewById(R.id.edt_price);
+
                 edtManHour = (EditText) v.findViewById(R.id.edt_man_hour);
                 imgAdd = (ImageView) v.findViewById(R.id.img_add);
                 imgDelete = (ImageView) v.findViewById(R.id.img_delete);
@@ -128,7 +132,9 @@ public class ChangeLetterAllocationTable extends LinearLayout {
                 edtAllocationPro.addTextChangedListener(new AllocationTextListener(1, this));
                 edtChangeContent.addTextChangedListener(new AllocationTextListener(2, this));
                 edtPrice.addTextChangedListener(new AllocationTextListener(3, this));
+                app.controlDot(edtPrice,2,false);
                 edtManHour.addTextChangedListener(new AllocationTextListener(4, this));
+                app.controlDot(edtManHour,2,false);
                 imgAdd.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -188,6 +194,7 @@ public class ChangeLetterAllocationTable extends LinearLayout {
                         saveEdtInfo(3, s.toString(), position);
                         break;
                     case 4:
+                        Log.i(TAG, "onTextChanged:edtManHour             "+s.toString());
                         position = (int) holder.edtManHour.getTag();
                         saveEdtInfo(4, s.toString(), position);
                         break;

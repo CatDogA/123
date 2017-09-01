@@ -22,11 +22,13 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.as.ModelInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryInfoBean;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
+import com.shanghaigm.dms.view.activity.as.HomeActivity;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
@@ -195,7 +197,7 @@ public class ReportSubFragment extends BaseFragment {
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if(tableInfos.size()>0){
+            if (tableInfos.size() > 0) {
                 if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
                     for (TableInfo tableInfo : tableInfos) {
                         tables.add((ReviewTable) tableInfo.table);
@@ -415,5 +417,16 @@ public class ReportSubFragment extends BaseFragment {
             fragment = new ReportSubFragment();
         }
         return fragment;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (isHidden()) {
+            if (!((HomeActivity) getActivity()).isBackClick) {
+                ((HomeActivity) getActivity()).fragmentInfos.add(new FragmentInfo(2));
+            }
+            ((HomeActivity) getActivity()).isBackClick = false;
+        }
     }
 }

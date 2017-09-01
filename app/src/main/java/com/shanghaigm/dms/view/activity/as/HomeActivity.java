@@ -3,6 +3,7 @@ package com.shanghaigm.dms.view.activity.as;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -10,11 +11,14 @@ import android.widget.TextView;
 
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportQueryFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportSubFragment;
 import com.shanghaigm.dms.view.fragment.common.HomeFragment;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fm;
@@ -26,6 +30,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private DmsApplication app;
     private TextView title;
     private View line;
+
+    public Boolean isBackClick;     //判断是否点击回退
+    public ArrayList<FragmentInfo> fragmentInfos;       //回退fragment
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +47,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                back();
             }
         });
 
@@ -71,6 +79,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         app = DmsApplication.getInstance();
 
         fm = getFragmentManager();
+        isBackClick = false;
+        fragmentInfos = new ArrayList<>();
+        if (fragmentInfos.size() > 0) {
+            fragmentInfos.clear();
+        }
     }
 
     private void hideFragment(BaseFragment fragment, FragmentTransaction ft) {
@@ -78,15 +91,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             ft.hide(fragment);
         }
     }
+
     //远程实现刷新操控！
     public static void refresh() {
         ReportSubFragment f = ReportSubFragment.getInstance();
         f.refreshTable();
     }
-    public static void refresh2(){
+
+    public static void refresh2() {
         ReportQueryFragment f = ReportQueryFragment.getInstance();
         f.refreshTable();
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -94,7 +110,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 showHomeTab();
                 break;
             case R.id.sub_tab:
-                if(app.getRoleCode().equals("out_service")){
+                if (app.getRoleCode().equals("out_service")) {
                     showSubTab();
                 }
                 break;
@@ -171,5 +187,38 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         } else {
             ft.show(reportQueryFragment).commit();
         }
+    }
+
+    public void back() {
+        onKeyDown(KeyEvent.KEYCODE_BACK, new KeyEvent(0, 0, 0, 0, 0));
+    }
+
+    public void chooseFragment(int flag) {
+        switch (flag) {
+            case 1:
+                showHomeTab();
+                break;
+            case 2:
+                showSubTab();
+                break;
+            case 3:
+                showQueryTab();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            isBackClick = true;
+            if (fragmentInfos.size() > 0) {
+                chooseFragment(fragmentInfos.get(fragmentInfos.size() - 1).flag);
+                fragmentInfos.remove(fragmentInfos.size() - 1);
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

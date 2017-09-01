@@ -3,9 +3,13 @@ package com.shanghaigm.dms;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.shanghaigm.dms.model.entity.as.SaveUsedPaths;
 import com.shanghaigm.dms.model.entity.ck.AllocationAddChooseUndefaultInfo;
@@ -83,6 +87,48 @@ public class DmsApplication extends Application {
             mApplication = new DmsApplication();
         }
         return mApplication;
+    }
+
+    /**
+     * 控制输入小数位数
+     *
+     * @param edt
+     * @param num
+     * @param flag 判断是否小于1
+     */
+    public void controlDot(EditText edt, final int num, final Boolean flag) {
+        edt.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable edt) {
+                String temp = edt.toString();
+                int posDot = temp.indexOf(".");
+                if (flag) {
+                    if (!(temp.equals("") || temp.equals("."))) {
+                        Double n = Double.parseDouble(temp);
+                        Log.i(TAG, "afterTextChanged:n       "+n);
+                        if (n >= 1) {
+                            if (posDot > 0) {
+                                edt.delete(0, posDot - 1);
+                                Toast.makeText(DmsApplication.this, "数字必须小于1", Toast.LENGTH_SHORT).show();
+                            } else {
+                                edt.clear();
+                                Toast.makeText(DmsApplication.this, "数字必须小于1", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+                if (posDot <= 0) return;
+                if (temp.length() - posDot - 1 > num) {
+                    edt.delete(posDot + num + 1, posDot + num + 2);
+                    Toast.makeText(DmsApplication.this, "小数限制为:" + num + "位", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+        });
     }
 
     public String getAccount() {

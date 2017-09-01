@@ -32,6 +32,7 @@ import com.shanghaigm.dms.view.widget.ChangeletterAddPopWindow;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -89,6 +90,8 @@ public class ChangeLetterAddActivity extends BaseActivity {
     }
 
     private void setUpView() {
+        app.controlDot(edt_contract_price, 4, false);
+        app.controlDot(edt_change_contract_price, 4, false);
         if (app.getChangeLetterSubDetailInfo() != null) {
             binding.setInfo(app.getChangeLetterSubDetailInfo());
         }
@@ -146,13 +149,16 @@ public class ChangeLetterAddActivity extends BaseActivity {
                         JSONArray letterArray = new JSONArray();
                         try {
                             for (ChangeLetterAllocationInfo info : allocationInfos) {
-                                JSONObject infoObj = new JSONObject();
-                                infoObj.put("config_item", info.getConfig_item());
-                                infoObj.put("change_content", info.getChange_content());
-                                infoObj.put("price_change", info.getPrice());
-                                infoObj.put("man_hour", info.getMan_hour());
-                                dataList.put(infoObj);
+                                if (!info.getConfig_item().equals("") && !info.getChange_content().equals("")) {
+                                    JSONObject infoObj = new JSONObject();
+                                    infoObj.put("config_item", info.getConfig_item());
+                                    infoObj.put("change_content", info.getChange_content());
+                                    infoObj.put("price_change", info.getPrice());
+                                    infoObj.put("man_hour", info.getMan_hour());
+                                    dataList.put(infoObj);
+                                }
                             }
+                            Log.i(TAG, "onClick:dataList         " + dataList.toString());
                             if (flag == 0 || type == 1) {
                                 letterObj.put("contract_id", changeLetterAddInfo.getContract_id());
                                 letterObj.put("order_id", changeLetterAddInfo.getOrder_id());
@@ -236,8 +242,8 @@ public class ChangeLetterAddActivity extends BaseActivity {
                         Toast.makeText(ChangeLetterAddActivity.this, getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
                         btn_sub.setEnabled(false);
                         Bundle b = new Bundle();
-                        b.putInt(HomeActivity.ORDER_LETTER_SUB,2);
-                        goToActivity(HomeActivity.class,b);
+                        b.putInt(HomeActivity.ORDER_LETTER_SUB, 2);
+                        goToActivity(HomeActivity.class, b);
                         finish();
                     }
 

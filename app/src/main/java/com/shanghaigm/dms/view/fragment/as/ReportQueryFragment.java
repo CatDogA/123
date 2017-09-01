@@ -26,11 +26,13 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.as.ModelInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryInfoBean;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
+import com.shanghaigm.dms.view.activity.as.HomeActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -400,7 +402,7 @@ public class ReportQueryFragment extends BaseFragment {
         edt_model = (EditText) v.findViewById(R.id.edt_model);
         edt_state = (EditText) v.findViewById(R.id.edt_state);
         edt_id = (EditText) v.findViewById(R.id.edt_report_id);
-        dialog = new LoadingDialog(getActivity(), "正在加载");
+        dialog = new LoadingDialog(getActivity(), "正在加载",25000);
         app = DmsApplication.getInstance();
         img_first = (ImageView) v.findViewById(R.id.viewpager_first);
         img_last = (ImageView) v.findViewById(R.id.viewpager_last);
@@ -416,5 +418,18 @@ public class ReportQueryFragment extends BaseFragment {
             fragment = new ReportQueryFragment();
         }
         return fragment;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden){
+            if (isHidden()) {
+                if (!((HomeActivity) getActivity()).isBackClick) {
+                    ((HomeActivity) getActivity()).fragmentInfos.add(new FragmentInfo(3));
+                }
+                ((HomeActivity) getActivity()).isBackClick = false;
+            }
+        }
     }
 }

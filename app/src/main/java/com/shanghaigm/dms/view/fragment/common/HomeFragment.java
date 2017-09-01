@@ -1,11 +1,13 @@
 package com.shanghaigm.dms.view.fragment.common;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.view.activity.as.HomeActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewOrChangeLetterReviewActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
@@ -31,7 +33,7 @@ public class HomeFragment extends BaseFragment {
     private ReportSubButton btn_report_sub;
     private ReportQueryButton btn_report_review;
     private LinearLayout.LayoutParams lp;
-
+    private static String TAG = "HomeFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,15 +45,19 @@ public class HomeFragment extends BaseFragment {
 
     private void setUpView() {
         switch (app.getRoleCode()) {
+            //四种审核
             case "ssbspy":
             case "regional_Manager":
             case "order_handler":
                 ll_btn.addView(btn_order_review);
                 ll_btn.addView(btn_letter_review);
+                ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).unUseButton(2);
                 break;
             case "test_manager":
             case "logistics_handler":
                 ll_btn.addView(btn_contract_review);
+                ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).unUseButton(1);
+                ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).unUseButton(2);
                 break;
             case "technology_handler_one":
             case "technology_handler_two":
@@ -60,6 +66,7 @@ public class HomeFragment extends BaseFragment {
             case "sales_department_handler":
                 ll_btn.addView(btn_contract_review);
                 ll_btn.addView(btn_bill_review);
+                ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).unUseButton(1);
                 break;
             case "financial_examiner":
             case "general_manager":
@@ -76,6 +83,7 @@ public class HomeFragment extends BaseFragment {
             case "xsfzjl":
             case "finance_director":
                 ll_btn.addView(btn_order_review);
+                ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).unUseButton(2);
 //                for (int i = 0; i < 3; i++) {
 //                    TextView tv = new TextView(getActivity());
 //                    tv.setLayoutParams(lp);
@@ -84,12 +92,14 @@ public class HomeFragment extends BaseFragment {
                 break;
             case "quality_department_handler":
                 ll_btn.addView(btn_bill_review);
+                ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).unUseButton(1);
 //                for (int i = 0; i < 3; i++) {
 //                    TextView tv = new TextView(getActivity());
 //                    tv.setLayoutParams(lp);
 //                    ll_btn.addView(tv);
 //                }
                 break;
+            //订单、更改函提交
             case "ywy":
                 ll_btn.addView(btn_order_sub);
                 ll_btn.addView(btn_letter_sub);
@@ -99,6 +109,7 @@ public class HomeFragment extends BaseFragment {
 //                    ll_btn.addView(tv);
 //                }
                 break;
+            //日报提交
             case "out_service":
                 ll_btn.addView(btn_report_sub);
                 ll_btn.addView(btn_report_review);
@@ -108,6 +119,7 @@ public class HomeFragment extends BaseFragment {
 //                    ll_btn.addView(tv);
 //                }
                 break;
+            //日报审核
             case "fwjl":
                 ll_btn.addView(btn_report_review);
 //                for (int i = 0; i < 3; i++) {
@@ -205,4 +217,46 @@ public class HomeFragment extends BaseFragment {
         }
         return fragment;
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+        }else {
+           switch (app.getRoleCode()){
+               case "out_service":
+               case "fwjl":
+                   if(!((com.shanghaigm.dms.view.activity.as.HomeActivity)getActivity()).isBackClick){
+                       ((com.shanghaigm.dms.view.activity.as.HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(1));
+                   }
+                   ((com.shanghaigm.dms.view.activity.as.HomeActivity)getActivity()).isBackClick = false;
+                   break;
+               case "ywy":
+                   if(!((com.shanghaigm.dms.view.activity.ck.HomeActivity)getActivity()).isBackClick){
+                       ((com.shanghaigm.dms.view.activity.ck.HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(1));
+                   }
+                   ((com.shanghaigm.dms.view.activity.ck.HomeActivity)getActivity()).isBackClick = false;
+                   break;
+               default:
+                   if(!((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).isBackClick){
+                       ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(1));
+                   }
+                   ((com.shanghaigm.dms.view.activity.mm.HomeActivity)getActivity()).isBackClick = false;
+                   break;
+
+           }
+        }
+    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        ((com.shanghaigm.dms.view.activity.ck.HomeActivity)getActivity()).setButton(1);
+//    }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Log.i("homefragment", "onStart: "+"start            1");
+//        ((com.shanghaigm.dms.view.activity.ck.HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(1));
+//    }
 }

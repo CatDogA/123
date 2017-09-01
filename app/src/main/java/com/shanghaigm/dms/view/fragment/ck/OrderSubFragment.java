@@ -25,11 +25,13 @@ import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
+import com.shanghaigm.dms.view.activity.ck.HomeActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
@@ -58,7 +60,6 @@ public class OrderSubFragment extends BaseFragment {
     private JSONArray modelArray, stateArray = new JSONArray();
     private static String TAG = "OrderSubFragment";
     private LoadingDialog dialog;
-
     private ArrayList<TableInfo> tableInfos;
     private ImageView img_first, img_last;
     private ViewPager vp;
@@ -88,13 +89,39 @@ public class OrderSubFragment extends BaseFragment {
         requestOrderInfo(1);
     }
 
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Log.i("homefragment", "onStart: "+"start            2");
+//        ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(2));
+//    }
+    //    @Override
+//    public void onResume() {
+//        super.onResume();
+//        ((HomeActivity)getActivity()).setButton(2);
+//    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            Log.i("homefragment", "onHiddenChanged:show          "+"2222222222222222222222222222222222222222222222");
+//            ((HomeActivity)getActivity()).setButton(2);
+        }else {
+            Log.i("homefragment", "onHiddenChanged:hide          "+"2222222222222222222222222222222222222222222222");
+            if(!((HomeActivity)getActivity()).isBackClick){
+                ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(2));
+            }
+            ((HomeActivity)getActivity()).isBackClick = false;
+        }
+    }
+
     private void setUpView() {
         isQuery = false;
         initViewPager();
         rl_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                ((HomeActivity)getActivity()).back();
             }
         });
         rl_end.setOnClickListener(new View.OnClickListener() {

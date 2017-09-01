@@ -65,6 +65,7 @@ public class ReportAttachSubFragment extends BaseFragment {
     private int countFill = 0;
     private Boolean isPicAdd = false;  //如果都可以，才能上传文件
     private ArrayList<Integer> file_ids = new ArrayList<>();
+    private Button btn_all_car, btn_trouble, btn_repair, btn_other, btn_video;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +83,7 @@ public class ReportAttachSubFragment extends BaseFragment {
         //通过视频路径获取bit
         Bitmap bit = getVideoThumb(s);
         img_video.setImageBitmap(bit);
+        img_video.setVisibility(View.VISIBLE);
         videoPath = s;
         try {
             video_pic_path = SaveCpPic(bit);
@@ -126,71 +128,152 @@ public class ReportAttachSubFragment extends BaseFragment {
         gv_trouble.setAdapter(adapter_trouble);
         gv_repair.setAdapter(adapter_repair);
         gv_other.setAdapter(adapter_other);
-
+        btn_all_car.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(paths1.size()==8){
+                    Toast.makeText(getActivity(),getString(R.string.too_many), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 15);
+                pop.showPopup(img_video);
+            }
+        });
+        btn_trouble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(paths2.size()==8){
+                    Toast.makeText(getActivity(),getString(R.string.too_many), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 16);
+                pop.showPopup(img_video);
+            }
+        });
+        btn_repair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(paths3.size()==8){
+                    Toast.makeText(getActivity(),getString(R.string.too_many), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 18);
+                pop.showPopup(img_video);
+            }
+        });
+        btn_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(paths4.size()==8){
+                    Toast.makeText(getActivity(),getString(R.string.too_many), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 19);
+                pop.showPopup(img_video);
+            }
+        });
+        btn_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 20);
+                pop.showPopup(img_video);
+            }
+        });
+        gv_car_sign.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                bits_car_sign.remove(position);
+                paths1.remove(position);
+                cpPaths1.remove(position);
+                adapter_car_sign.notifyDataSetChanged();
+                return true;
+            }
+        });
+        gv_trouble.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                bits_trouble.remove(position);
+                paths2.remove(position);
+                cpPaths2.remove(position);
+                adapter_trouble.notifyDataSetChanged();
+                return true;
+            }
+        });
+        gv_repair.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                bits_repair.remove(position);
+                paths3.remove(position);
+                cpPaths3.remove(position);
+                adapter_repair.notifyDataSetChanged();
+                return true;
+            }
+        });
+        gv_other.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                bits_other.remove(position);
+                paths4.remove(position);
+                cpPaths4.remove(position);
+                adapter_other.notifyDataSetChanged();
+                return true;
+            }
+        });
+        img_video.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                video_pic_path = "";
+                videoPath = "";
+                img_video.setVisibility(View.GONE);
+                return true;
+            }
+        });
         gv_car_sign.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 15);
-                    pop.showPopup(img_video);
-                } else {
-                    Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths1.get(position - 1).toString());
-                    intent.putExtras(b);
-                    getActivity().startActivity(intent);
-                }
+                Log.i(TAG, "onItemClick:     " + position);
+                Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
+                Bundle b = new Bundle();
+                b.putString(ShowPictureLayout.SHOW_PHOTO, paths1.get(position).toString());
+                intent.putExtras(b);
+                getActivity().startActivity(intent);
             }
         });
 
         gv_trouble.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 16);
-                    pop.showPopup(img_video);
-                } else {
-                    Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths2.get(position - 1).toString());
-                    intent.putExtras(b);
-                    getActivity().startActivity(intent);
-                }
+
+                Log.i(TAG, "onItemClick:     " + position);
+                Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
+                Bundle b = new Bundle();
+                b.putString(ShowPictureLayout.SHOW_PHOTO, paths2.get(position).toString());
+                intent.putExtras(b);
+                getActivity().startActivity(intent);
             }
         });
         gv_repair.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 18);
-                    pop.showPopup(img_video);
-                } else {
-                    Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths3.get(position - 1).toString());
-                    intent.putExtras(b);
-                    getActivity().startActivity(intent);
-                }
+                Log.i(TAG, "onItemClick:     " + position);
+                Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
+                Bundle b = new Bundle();
+                b.putString(ShowPictureLayout.SHOW_PHOTO, paths3.get(position).toString());
+                intent.putExtras(b);
+                getActivity().startActivity(intent);
+
             }
         });
 
         gv_other.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 19);
-                    pop.showPopup(img_video);
-                } else {
-                    Log.i(TAG, "onItemClick:     " + position);
-                    Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString(ShowPictureLayout.SHOW_PHOTO, paths4.get(position - 1).toString());
-                    intent.putExtras(b);
-                    getActivity().startActivity(intent);
-                }
+                Log.i(TAG, "onItemClick:     " + position);
+                Intent intent = new Intent(getActivity(), ShowQueryPhotoActivity.class);
+                Bundle b = new Bundle();
+                b.putString(ShowPictureLayout.SHOW_PHOTO, paths4.get(position).toString());
+                intent.putExtras(b);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -516,8 +599,7 @@ public class ReportAttachSubFragment extends BaseFragment {
         img_video_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SolvePicturePopupWindow pop = new SolvePicturePopupWindow(getActivity(), 20);
-                pop.showPopup(img_video);
+
             }
         });
         img_video.setOnClickListener(new View.OnClickListener() {
@@ -537,6 +619,9 @@ public class ReportAttachSubFragment extends BaseFragment {
             if (isPicAdd) {
                 JSONArray idArray = new JSONArray();
                 Log.i(TAG, "onClick:file_ids            " + file_ids.size());
+                for (int i = 0; i < file_ids.size(); i++) {
+                    Log.i(TAG, "subAttachInfo:           " + file_ids.get(i));
+                }
                 for (int id : file_ids) {
                     JSONObject idObj = new JSONObject();
                     try {
@@ -561,7 +646,7 @@ public class ReportAttachSubFragment extends BaseFragment {
                                 //清空
                                 videoPath = null;
                                 video_pic_path = null;
-                                ((ReportAddActivity)getActivity()).setButton();
+                                ((ReportAddActivity) getActivity()).setButton();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -809,6 +894,7 @@ public class ReportAttachSubFragment extends BaseFragment {
                         cpParams.put("is_compress", "1");
                         if (video_pic_path != null) {
                             File cpFile = new File(video_pic_path);
+                            Log.i(TAG, "runvideo_pic_path        : " + video_pic_path);
                             String cpReuslt = HttpUpLoad.uploadFile(cpFile, Constant.URL_GET_PICTURE_VIDEO_FILE, cpParams);
                             int file_id = 0;
                             if (cpReuslt != null) {
@@ -884,13 +970,13 @@ public class ReportAttachSubFragment extends BaseFragment {
         //这样paths中对应的图片比bits中比，少1
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.add_pic);
         bits_car_sign = ((ReportAddActivity) getActivity()).getBitmaps();
-        bits_car_sign.add(bitmap);
+//        bits_car_sign.add(bitmap);
         bits_trouble = ((ReportAddActivity) getActivity()).getBitmaps2();
-        bits_trouble.add(bitmap);
+//        bits_trouble.add(bitmap);
         bits_repair = ((ReportAddActivity) getActivity()).getBitmaps3();
-        bits_repair.add(bitmap);
+//        bits_repair.add(bitmap);
         bits_other = ((ReportAddActivity) getActivity()).getBitmaps4();
-        bits_other.add(bitmap);
+//        bits_other.add(bitmap);
 
         paths1 = ((ReportAddActivity) getActivity()).getUris();
         paths2 = ((ReportAddActivity) getActivity()).getUris2();
@@ -907,10 +993,15 @@ public class ReportAttachSubFragment extends BaseFragment {
         gv_repair = (GridView) v.findViewById(R.id.gv_repair);
         gv_trouble = (GridView) v.findViewById(R.id.gv_trouble);
         gv_other = (GridView) v.findViewById(R.id.gv_other);
-        dialog = new LoadingDialog(getActivity(), getResources().getString(R.string.upload));
-
+        dialog = new LoadingDialog(getActivity(), getResources().getString(R.string.upload), 300000);
         img_video = (ImageView) v.findViewById(R.id.img_video);
         img_video_add = (ImageView) v.findViewById(R.id.img_video_add);
+        img_video_add.setVisibility(View.GONE);
+        btn_all_car = (Button) v.findViewById(R.id.btn_all_car);
+        btn_trouble = (Button) v.findViewById(R.id.btn_trouble);
+        btn_repair = (Button) v.findViewById(R.id.btn_repair);
+        btn_other = (Button) v.findViewById(R.id.btn_other);
+        btn_video = (Button) v.findViewById(R.id.btn_video);
     }
 
     public static ReportAttachSubFragment getInstance() {

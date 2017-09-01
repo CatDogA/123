@@ -569,7 +569,7 @@
                             android:layout_weight="3"
                             android:background="@null"
                             android:gravity="center_horizontal"
-                            android:inputType="numberDecimal"
+                            android:inputType="number"
                             android:lines="1"
                             android:text="@{info.endurance_mileage}"
                             android:textSize="14sp" />

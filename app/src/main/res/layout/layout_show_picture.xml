@@ -4,10 +4,22 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <Button
         android:id="@+id/text_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_weight="2"
+        android:background="@color/colorWhite"
+        android:drawableEnd="@mipmap/add1"
+        android:drawableLeft="@mipmap/all_car"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/add1"
+        android:drawableStart="@mipmap/all_car"
+        android:gravity="center_vertical|start"
+        android:padding="5dp"
+        android:text="@string/car_name_plate" />
 
     <com.shanghaigm.dms.view.widget.MyGridView
         android:id="@+id/gv_show_pic"

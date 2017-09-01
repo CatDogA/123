@@ -24,12 +24,14 @@ import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewOrChangeLetterReviewActivity;
+import com.shanghaigm.dms.view.activity.mm.HomeActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
@@ -84,7 +86,7 @@ public class OrderReviewFragment extends BaseFragment {
         rl_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                ((HomeActivity)getActivity()).back();
             }
         });
         rl_end.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +150,10 @@ public class OrderReviewFragment extends BaseFragment {
         areaSelectEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(app.getRoleCode().equals("ssbspy") || app.getRoleCode().equals("regional_Manager")){
+                    Toast.makeText(getActivity(), "无法点击", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 dialog.showLoadingDlg();
                 CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_AREA, null), new DisposeDataHandle(new DisposeDataListener() {
                     @Override
@@ -473,5 +479,16 @@ public class OrderReviewFragment extends BaseFragment {
             fragment = new OrderReviewFragment();
         }
         return fragment;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden){
+            if(!((HomeActivity)getActivity()).isBackClick){
+                ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(2));
+            }
+            ((HomeActivity)getActivity()).isBackClick = false;
+        }
     }
 }

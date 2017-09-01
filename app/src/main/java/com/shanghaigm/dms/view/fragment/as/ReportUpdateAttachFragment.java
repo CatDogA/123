@@ -37,7 +37,7 @@ public class ReportUpdateAttachFragment extends BaseFragment {
     private LinearLayout ll_content;
     //    private Button btn_sub;
     private static String TAG = "ReportUpdateAttach";
-    private int c = 0;
+    private int c = 0;     //计数，删除和新增是否完毕
     private LoadingDialog dialog;
 
     @Override
@@ -52,14 +52,7 @@ public class ReportUpdateAttachFragment extends BaseFragment {
     }
 
     private void initHandler() {
-//        mHandler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                if (msg.what == 1) {
-////                    btn_sub.setEnabled(false);
-//                }
-//            }
-//        };
+
     }
 
     private void initData() {
@@ -85,7 +78,6 @@ public class ReportUpdateAttachFragment extends BaseFragment {
             if (paths != null) {
                 if (paths.size() > 0) {
                     if (paths.get(0) != null) {
-
                         if (paths.get(0).type == 15) {
                             for (int j = 0; j < paths.size(); j++) {
                                 carPlatePaths.add(paths.get(j));
@@ -113,12 +105,12 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                 }
             }
         }
-        ShowPictureLayout pictureLayout = new ShowPictureLayout(getActivity(), carPlatePaths, "整车铭牌", true, allPaths, 15, true);
+        ShowPictureLayout pictureLayout = new ShowPictureLayout(getActivity(), carPlatePaths, "整车铭牌", R.mipmap.all_car,true, allPaths, 15, true);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        ShowPictureLayout pictureLayout2 = new ShowPictureLayout(getActivity(), troublePaths, "故障", true, allPaths, 16, true);
-        ShowPictureLayout pictureLayout3 = new ShowPictureLayout(getActivity(), repairPaths, "维修", true, allPaths, 18, true);
-        ShowPictureLayout pictureLayout4 = new ShowPictureLayout(getActivity(), otherPaths, "其他", true, allPaths, 19, true);
-        ShowPictureLayout videoLayout = new ShowPictureLayout(getActivity(), videoPath, "视频", false, allPaths, 20, true);
+        ShowPictureLayout pictureLayout2 = new ShowPictureLayout(getActivity(), troublePaths, "故障",R.mipmap.trouble, true, allPaths, 16, true);
+        ShowPictureLayout pictureLayout3 = new ShowPictureLayout(getActivity(), repairPaths, "维修",R.mipmap.repair, true, allPaths, 18, true);
+        ShowPictureLayout pictureLayout4 = new ShowPictureLayout(getActivity(), otherPaths, "其他",R.mipmap.other, true, allPaths, 19, true);
+        ShowPictureLayout videoLayout = new ShowPictureLayout(getActivity(), videoPath, "视频",R.mipmap.video, false, allPaths, 20, true);
         pictureLayout.setLayoutParams(layoutParams);
         pictureLayout2.setLayoutParams(layoutParams);
         pictureLayout3.setLayoutParams(layoutParams);
@@ -256,7 +248,7 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                             String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, map);
                             if (!result.equals("")) {
                                 //添加id
-                                String[] ss = addFileId(ids, result);
+                                String[] ss = addFileId(ids, result);    //添加id并获取name
                                 String id = ss[1];
                                 Log.i(TAG, "onClick:result压缩图片       " + result);
                                 //根据result获取文件名或路径
@@ -286,12 +278,11 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                                             count++;
                                             if (count == paths.size()) {
                                                 c++;
-                                                Log.i(TAG, "run:添加c " + c);
                                                 subInfo(ids);
+                                                Log.i(TAG, "run:添加c " + c);
                                                 if (c == 2) {
                                                     dialog.dismissLoadingDlg();
-                                                    ((ReportUpdateActivity)getActivity()).setButton();  //灰掉
-                                                    Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
+//                                                    Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
 //                                                            btn_sub.setEnabled(false);
 //                                                            Message msg = mHandler.obtainMessage();
 //                                                            msg.what = 1;
@@ -308,10 +299,6 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                     c++;
                     if (c == 2) {
                         dialog.dismissLoadingDlg();
-//                                Message msg = mHandler.obtainMessage();
-//                                msg.what = 1;
-//                                mHandler.sendMessage(msg);
-                        ((ReportUpdateActivity)getActivity()).setButton();  //灰掉
                         Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -336,16 +323,19 @@ public class ReportUpdateAttachFragment extends BaseFragment {
             }
             Map<String, Object> params = new HashMap<>();
             params.put("fileList", array.toString());
+            dialog.showLoadingDlg();
             OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_SUB_PIC_VIDEO, params, new DisposeDataListener() {
                 @Override
                 public void onSuccess(Object responseObj) {
+                    dialog.dismissLoadingDlg();
                     Log.i(TAG, "onSuccess:       " + responseObj.toString());
                     JSONObject obj = (JSONObject) responseObj;
                     try {
                         String s = obj.getString("returnCode");
                         if (s.equals("1")) {
-//                            Toast.makeText(getActivity(), getResources().getText(R.string.sub_file_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getResources().getText(R.string.sub_file_success), Toast.LENGTH_SHORT).show();
 //                            btn_sub.setEnabled(false);
+                            ((ReportUpdateActivity)getActivity()).setButton();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -378,7 +368,7 @@ public class ReportUpdateAttachFragment extends BaseFragment {
     private void initView(View v) {
         ll_content = (LinearLayout) v.findViewById(R.id.ll_content);
 //        btn_sub = (Button) v.findViewById(R.id.btn_sub);
-        dialog = new LoadingDialog(getActivity(), getResources().getText(R.string.upload).toString());
+        dialog = new LoadingDialog(getActivity(), getResources().getText(R.string.upload).toString(),300000);
     }
 
     public static ReportUpdateAttachFragment getInstance() {

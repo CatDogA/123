@@ -49,6 +49,11 @@ public class OrderAddPayFragment extends BaseFragment {
     }
 
     private void setUpView() {
+        app.controlDot(freight, 4, false);
+        app.controlDot(service_fee, 4, false);
+        app.controlDot(contract_price, 4, false);
+        app.controlDot(carriage, 4, false);
+        app.controlDot(invoice_amount, 4, false);
         imgPayMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +93,7 @@ public class OrderAddPayFragment extends BaseFragment {
 
     public void setInfo() {
         if (OrderAddActivity.addPayInfo == null) {
-            OrderAddActivity.addPayInfo = new OrderDetailInfoTwo("","","","","","","","","");
+            OrderAddActivity.addPayInfo = new OrderDetailInfoTwo("", "", "", "", "", "", "", "", "");
         }
         OrderAddActivity.addPayInfo.setPayment_method(payment_method.getText().toString());
         OrderAddActivity.addPayInfo.setPayment_method_remarks(payment_method_remarks.getText().toString());

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,7 +43,6 @@ public class ShowPictureLayout extends RelativeLayout {
     private Context context;
     private ArrayList<PathInfo> paths;
     private String title;
-    private TextView text_title;
     private MyGridView gv;
     private GridViewAdapter adapter;
     private Boolean isPic;
@@ -55,8 +56,10 @@ public class ShowPictureLayout extends RelativeLayout {
     private int type;
     private Boolean isUpdate;
     public static ArrayList<PathInfo> pathsDelete;
+    private ImageView img;
+    private int img_path;
 
-    public ShowPictureLayout(Context context, ArrayList<PathInfo> paths, String title, Boolean isPic, ArrayList<ArrayList<PathInfo>> allPaths, int type, Boolean isUpdate) {
+    public ShowPictureLayout(Context context, ArrayList<PathInfo> paths, String title, int img_path, Boolean isPic, ArrayList<ArrayList<PathInfo>> allPaths, int type, Boolean isUpdate) {
         super(context);
         this.context = context;
         this.title = title;
@@ -65,6 +68,7 @@ public class ShowPictureLayout extends RelativeLayout {
         this.allPaths = allPaths;
         this.isUpdate = isUpdate;
         this.type = type;
+        this.img_path = img_path;
         LayoutInflater lf = LayoutInflater.from(context);
         View v = lf.inflate(R.layout.layout_show_picture, this, true);
         initView(v);
@@ -73,7 +77,9 @@ public class ShowPictureLayout extends RelativeLayout {
     }
 
     private void setUpView() {
-        text_title.setText(title);
+        Drawable homepressed = getResources().getDrawable(img_path);
+        homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+        btn.setCompoundDrawables(homepressed, null, null, null);
         gv.setAdapter(adapter);
         root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -91,42 +97,42 @@ public class ShowPictureLayout extends RelativeLayout {
                             Log.i(TAG, "onItemLongClick:paths.get(0).type        " + paths.get(0).type);
                             switch (paths.get(0).type) {
                                 case 15:
-                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
                                     if (pathInfos.size() > 0) {
                                         if (pathInfos.get(0).type == 15) {
-                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                            pathInfos.remove(position);        //得到剩余的路径
                                         }
                                     }
                                     break;
                                 case 16:
-                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
                                     if (pathInfos.size() > 0) {
                                         if (pathInfos.get(0).type == 16) {
-                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                            pathInfos.remove(position);        //得到剩余的路径
                                         }
                                     }
                                     break;
                                 case 18:
-                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
                                     if (pathInfos.size() > 0) {
                                         if (pathInfos.get(0).type == 18) {
-                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                            pathInfos.remove(position);        //得到剩余的路径
                                         }
                                     }
                                     break;
                                 case 19:
-                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
                                     if (pathInfos.size() > 0) {
                                         if (pathInfos.get(0).type == 19) {
-                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                            pathInfos.remove(position);        //得到剩余的路径
                                         }
                                     }
                                     break;
                                 case 20:
-                                    pathsDelete.add(paths.get(position - 1));  //保存被删除的路径
+                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
                                     if (pathInfos.size() > 0) {
                                         if (pathInfos.get(0).type == 20) {
-                                            pathInfos.remove(position - 1);        //得到剩余的路径
+                                            pathInfos.remove(position);        //得到剩余的路径
                                         }
                                     }
                                     break;
@@ -144,23 +150,25 @@ public class ShowPictureLayout extends RelativeLayout {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                     if (isUpdate) {
-                        if (position == 0) {
-                            Log.i(TAG, "onItemClick: type           " + type);
-                            SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
-                            pop.showPopup(gv);
-                        } else if (paths.size() > 0) {
-                            if (paths.get(position - 1).file_id == 0) {
+//                        if (position == 0) {
+//                            Log.i(TAG, "onItemClick: type           " + type);
+//                            SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
+//                            pop.showPopup(gv);
+//                        } else if (paths.size() > 0)
+                        {
+                            if (paths.get(position).file_id == 0) {          //新添加的
                                 Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
                                 Bundle b = new Bundle();
-                                b.putString(ShowPictureLayout.SHOW_PHOTO, paths.get(position - 1).path);
+                                b.putString(ShowPictureLayout.SHOW_PHOTO, paths.get(position).path);
                                 intent.putExtras(b);
                                 context.startActivity(intent);
                             } else {
+                                //有则直接取，无则下载
                                 File file = new File(root.getPath() + "/report_pic");
                                 if (!file.exists()) {
                                     file.mkdir();
                                 }
-                                File file2 = new File(file, paths.get(position - 1).name);
+                                File file2 = new File(file, paths.get(position).name);
                                 if (file2.exists()) {
                                     Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
                                     Bundle b = new Bundle();
@@ -168,11 +176,12 @@ public class ShowPictureLayout extends RelativeLayout {
                                     intent.putExtras(b);
                                     context.startActivity(intent);
                                 } else {
-                                    savePic(position - 1);
+                                    savePic(position);
                                 }
                             }
                         }
                     } else {
+                        //查询
                         if (paths.size() > 0) {
                             File file = new File(root.getPath() + "/report_pic");
                             if (!file.exists()) {
@@ -194,42 +203,19 @@ public class ShowPictureLayout extends RelativeLayout {
             });
         }
 
-//                    if(app.usedPaths.size()>0){
-//                        int count = 0;
-//                        for(SaveUsedPaths path:app.usedPaths){
-//                            if(path.name.equals(paths.get(position).name)){
-//                                File file = new File(path.savePath);
-//                                if(file.exists()){
-//                                    count++;
-//                                    Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
-//                                    Bundle b = new Bundle();
-//                                    b.putString(ShowPictureLayout.SHOW_PHOTO, path.savePath);
-//                                    intent.putExtras(b);
-//                                    context.startActivity(intent);
-//                                }
-//                            }
-//                        }
-//                        if(count==0){
-//                            savePic(position);
-//                        }
-//                    }else {
-//                        savePic(position);
-//                    }
-
-
         if (!isPic) {
             gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //修改
                     if (isUpdate) {
-                        if (position == 0) {
-                            Log.i(TAG, "onItemClick: type           " + type);
-                            SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
-                            pop.showPopup(gv);
-                        }
+//                        if (position == 0) {
+//                            Log.i(TAG, "onItemClick: type           " + type);
+//                            SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
+//                            pop.showPopup(gv);
+//                        }
                         if (paths.size() > 0) {
-                            if (position == 1) {
+                            if (position == 0) {
                                 //0说明是修改后的,直接进入
                                 if (paths.get(0).file_id == 0) {
                                     Log.i(TAG, "onItemClick: " + "修改");
@@ -282,27 +268,15 @@ public class ShowPictureLayout extends RelativeLayout {
                 }
             });
         }
-//                    int count = 0;
-//                    if(app.usedPaths.size()>0){
-//                        for(SaveUsedPaths info:app.usedPaths){
-//                            if(paths.get(0).name.equals(info.name)){
-//                                File file = new File(info.savePath);
-//                                if(file.exists()){
-//                                    count++;
-//                                    Intent intent = new Intent(context, ShowVideoActivity.class);
-//                                    Bundle b = new Bundle();
-//                                    b.putString(ReportAttachSubFragment.VIDEO_PATH,info.savePath);
-//                                    intent.putExtras(b);
-//                                    context.startActivity(intent);
-//                                }
-//                            }
-//                        }
-//                        if(count==0){
-//                            saveVideo();
-//                        }
-//                    }else {
-//                        saveVideo();
-//                    }
+        if(isUpdate){
+            btn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SolvePicturePopupWindow pop = new SolvePicturePopupWindow(context, type);
+                    pop.showPopup(gv);
+                }
+            });
+        }
     }
 
     private String saveVideo() {
@@ -359,10 +333,10 @@ public class ShowPictureLayout extends RelativeLayout {
 //        paths
         app = DmsApplication.getInstance();
         bits = new ArrayList<>();
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.add_pic);
-        if (isUpdate) {
-            bits.add(bitmap);
-        }
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.add_pic);    //不用了
+//        if (isUpdate) {
+//            bits.add(bitmap);
+//        }
         for (PathInfo path : paths) {
             //从压缩图片路径中获取bitmap
             Bitmap bit = BitmapFactory.decodeFile(path.cp_path);
@@ -374,9 +348,8 @@ public class ShowPictureLayout extends RelativeLayout {
     }
 
     private void initView(View v) {
-        text_title = (TextView) v.findViewById(R.id.text_title);
         gv = (MyGridView) v.findViewById(R.id.gv_show_pic);
-        btn = (Button) v.findViewById(R.id.btn);
+        btn = (Button) v.findViewById(R.id.text_title);
         dialog = new LoadingDialog(context, "正在加载");
     }
 }

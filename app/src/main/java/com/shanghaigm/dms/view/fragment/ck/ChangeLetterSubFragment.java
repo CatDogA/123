@@ -26,6 +26,7 @@ import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.ChangeLetterDetailInfo;
 import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
@@ -33,6 +34,7 @@ import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
+import com.shanghaigm.dms.view.activity.ck.HomeActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
@@ -72,7 +74,6 @@ public class ChangeLetterSubFragment extends BaseFragment {
     private int page, pages;       //显示页数,总页数
     private DmsApplication app;
     private ArrayList<ReviewTable> tables;
-
     /**
      * @param inflater
      * @param container
@@ -93,7 +94,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         rl_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                ((HomeActivity) getActivity()).back();
             }
         });
         rl_end.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +209,35 @@ public class ChangeLetterSubFragment extends BaseFragment {
         requestOrderInfo(1);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            Log.i("homefragment", "onHiddenChanged:show      " + "3333333333333333333333333333333333333333333333");
+//            ((HomeActivity) getActivity()).setButton(3);
+        }
+        if (hidden) {
+            if(!((HomeActivity)getActivity()).isBackClick){
+                ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(3));
+            }
+            ((HomeActivity)getActivity()).isBackClick = false;
+            Log.i("homefragment", "onHiddenChanged:hide         " + "333333333333333333333333333333");
+        }
+    }
+
+    //    @Override
+//    public void onResume() {
+//        super.onResume();
+//        ((HomeActivity)getActivity()).setButton(3);
+//    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Log.i("homefragment", "onStart: " + "start            3");
+//        ((HomeActivity) getActivity()).fragmentInfos.add(new FragmentInfo(3));
+//    }
+
     //查询
     private void requestOrderInfo(final int type) {
         //如果有，直接显示
@@ -242,7 +272,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         try {
             paramObject.put("contract_id", contractId);
             paramObject.put("customer_name", customerText);
-            paramObject.put("letter_id", changeLetterId);
+            paramObject.put("change_letter_number", changeLetterId);
             paramObject.put("state", stateId);
             paramArray.put(paramObject);
 

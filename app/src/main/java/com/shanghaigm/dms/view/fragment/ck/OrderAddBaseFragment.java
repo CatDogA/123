@@ -155,6 +155,8 @@ public class OrderAddBaseFragment extends BaseFragment {
     }
 
     private void setUpView() {
+        app.controlDot(edt_battery_number,2,false);
+        app.controlDot(edt_ekg,2,true);
         //检测选择的车型,并获取总成整体数据
         edtModel.addTextChangedListener(new TextWatcher() {
             @Override

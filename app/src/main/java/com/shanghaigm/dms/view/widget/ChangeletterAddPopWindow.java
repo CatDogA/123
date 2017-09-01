@@ -199,7 +199,7 @@ public class ChangeletterAddPopWindow extends PopupWindow {
         }
         dialog.showLoadingDlg();
         Map<String, Object> params = new HashMap<>();
-        params.put("contract",contractArray.toString());
+        params.put("coet",contractArray.toString());
         params.put("page", page + 1 + "");
         params.put("rows", 10);
         params.put("loginName", app.getAccount());

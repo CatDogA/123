@@ -5,22 +5,33 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.shanghaigm.dms.R;
-import com.shanghaigm.dms.view.activity.BaseActivity;
+import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.view.fragment.common.HomeFragment;
 import com.shanghaigm.dms.view.fragment.mm.ChangeBillReviewFragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderReviewFragment;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class HomeActivity extends FragmentActivity implements View.OnClickListener {
     public static String ORDER_BILL_REFRESH = "order_bill_refresh";
     private FragmentManager fm;
     private HomeFragment mHomeFragment;
     private OrderReviewFragment mOrderFragment;
     private ChangeBillReviewFragment mChangeBillReviewFragment;
     private LinearLayout text_home, text_order, text_modify;
+    public Boolean useOrder;    //是否使用订单审核
+    public Boolean useBill;     //是否使用更改单审核
+
+    public Boolean isBackClick;     //判断是否点击回退
+    public ArrayList<FragmentInfo> fragmentInfos;       //回退fragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +47,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onNewIntent(intent);
         setIntent(intent);
         Bundle b = intent.getExtras();
-        if(b!=null){
-            if(b.getInt(HomeActivity.ORDER_BILL_REFRESH)==1){
+        if (b != null) {
+            if (b.getInt(HomeActivity.ORDER_BILL_REFRESH) == 1) {
                 mOrderFragment.refresh();
             }
-            if(b.getInt(HomeActivity.ORDER_BILL_REFRESH)==2){
+            if (b.getInt(HomeActivity.ORDER_BILL_REFRESH) == 2) {
                 mChangeBillReviewFragment.refresh();
             }
         }
@@ -53,6 +64,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mHomeFragment = new HomeFragment();
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.replace(R.id.layout_content, mHomeFragment);
         fragmentTransaction.commit();
     }
@@ -64,6 +76,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         text_order.setOnClickListener(this);
         text_modify = (LinearLayout) findViewById(R.id.modify_tab_text);
         text_modify.setOnClickListener(this);
+        useOrder = true;
+        useBill = true;
+        isBackClick = false;
+        fragmentInfos = new ArrayList<>();
+        if (fragmentInfos.size() > 0) {
+            fragmentInfos.clear();
+        }
     }
 
     private void hideFragment(Fragment fragment, FragmentTransaction ft) {
@@ -75,6 +94,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.addToBackStack(null);
         switch (v.getId()) {
             case R.id.home_tab_text:
                 setSelected();
@@ -91,30 +111,40 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
             case R.id.order_tab_text:
-                setSelected();
-                text_order.setSelected(true);
-                hideFragment(mHomeFragment, fragmentTransaction);
-                hideFragment(mChangeBillReviewFragment, fragmentTransaction);
-                if (mOrderFragment == null) {
-                    mOrderFragment = OrderReviewFragment.getInstance();
-                    //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                if (useOrder) {
+                    setSelected();
+                    text_order.setSelected(true);
+                    hideFragment(mHomeFragment, fragmentTransaction);
+                    hideFragment(mChangeBillReviewFragment, fragmentTransaction);
+                    if (mOrderFragment == null) {
+                        mOrderFragment = OrderReviewFragment.getInstance();
+                        //隐藏其他两个fragment
+                        fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                    } else {
+                        fragmentTransaction.show(mOrderFragment);
+                    }
                 } else {
-                    fragmentTransaction.show(mOrderFragment);
+                    Toast.makeText(this, "无此功能", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
             case R.id.modify_tab_text:
-                setSelected();
-                text_modify.setSelected(true);
-                hideFragment(mOrderFragment, fragmentTransaction);
-                hideFragment(mHomeFragment, fragmentTransaction);
-                if (mChangeBillReviewFragment == null) {
-                    mChangeBillReviewFragment = new ChangeBillReviewFragment();
-                    //隐藏其他两个fragment
-                    fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
+                if (useBill) {
+                    setSelected();
+                    text_modify.setSelected(true);
+                    hideFragment(mOrderFragment, fragmentTransaction);
+                    hideFragment(mHomeFragment, fragmentTransaction);
+                    if (mChangeBillReviewFragment == null) {
+                        mChangeBillReviewFragment = new ChangeBillReviewFragment();
+                        //隐藏其他两个fragment
+                        fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
+                    } else {
+                        fragmentTransaction.show(mChangeBillReviewFragment);
+                    }
                 } else {
-                    fragmentTransaction.show(mChangeBillReviewFragment);
+                    Toast.makeText(this, "无此功能", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
         }
         fragmentTransaction.commit();
@@ -129,7 +159,21 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     public void chooseFragment(int i) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.addToBackStack(null);
         switch (i) {
+            case 0:
+                setSelected();
+                text_home.setSelected(true);
+                hideFragment(mOrderFragment, fragmentTransaction);
+                hideFragment(mChangeBillReviewFragment, fragmentTransaction);
+                if (mHomeFragment == null) {
+                    mHomeFragment = new HomeFragment();
+                    //隐藏其他两个fragment
+                    fragmentTransaction.add(R.id.layout_content, mHomeFragment);
+                } else {
+                    fragmentTransaction.show(mHomeFragment);
+                }
+                break;
             case 1:
                 setSelected();
                 text_order.setSelected(true);
@@ -158,5 +202,36 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
         }
         fragmentTransaction.commit();
+    }
+
+    public void unUseButton(int type) {
+        switch (type) {
+            case 1:
+                useOrder = false;
+                break;
+            case 2:
+                useBill = false;
+                break;
+        }
+    }
+
+    public void back() {
+        onKeyDown(KeyEvent.KEYCODE_BACK, new KeyEvent(0, 0, 0, 0, 0));
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            isBackClick = true;
+            Log.i("homeactivity", "onKeyDown:        "+fragmentInfos.size());
+            if(fragmentInfos.size()>0){
+                chooseFragment(fragmentInfos.get(fragmentInfos.size() - 1).flag - 1);
+                fragmentInfos.remove(fragmentInfos.size() - 1);
+            }else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

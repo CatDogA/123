@@ -222,7 +222,7 @@
                                 android:background="@null"
                                 android:focusable="false"
                                 android:gravity="center"
-                                android:inputType="number"
+                                android:inputType="numberDecimal"
                                 android:lines="1"
                                 android:text="@{info.contract_price}"
                                 android:textSize="14sp" />
@@ -258,7 +258,7 @@
                                 android:layout_weight="1"
                                 android:background="@null"
                                 android:gravity="center"
-                                android:inputType="number"
+                                android:inputType="numberDecimal"
                                 android:lines="1"
                                 android:text="@{info.change_contract_price}"
                                 android:textSize="14sp" />

@@ -11,9 +11,9 @@ import java.io.Serializable;
 
 public class PathInfo extends BaseObservable implements Serializable {
     public int type;     //15,16,18,19,20
-    public String path;
+    public String path;     //原文件下载地址
     public String name;
-    public String cp_path;
+    public String cp_path;   //压缩后本地地址
     public int file_id;
     public PathInfo(int type, String path, String cp_path, String name,int file_id) {
         this.type = type;

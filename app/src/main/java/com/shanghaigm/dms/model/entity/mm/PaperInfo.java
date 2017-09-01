@@ -65,6 +65,7 @@ public class PaperInfo extends BasePaperInfo {
     public static String ORDER_MODIFY = "oder_modify";
     private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交
     private LoadingDialog dialog;
+    private LoadingDialog dialog2;
     private static String TAG = "PaperInfo";
     private static DmsApplication app = DmsApplication.getInstance();
     private String number;
@@ -91,7 +92,6 @@ public class PaperInfo extends BasePaperInfo {
     private ReportQueryDetailInfoBean reportQueryDetailInfoBean;
     private int reportCount = 0;
     private ArrayList<ArrayList<PathInfo>> allPaths = new ArrayList<>();
-
     public PaperInfo() {
     }
 
@@ -122,6 +122,7 @@ public class PaperInfo extends BasePaperInfo {
         this.changeLetterDetailInfo = changeLetterDetailInfo;
         this.letter_id = letter_id;
         dialog = new LoadingDialog(this.context, "正在加载");
+
     }
 
     //更改单审核
@@ -186,6 +187,7 @@ public class PaperInfo extends BasePaperInfo {
         this.flag = flag;
         this.context = context;
         dialog = new LoadingDialog(this.context, "正在加载");
+        dialog2 = new LoadingDialog(this.context,"正在加载",300000);
     }
 
     //提交进入修改界面
@@ -266,7 +268,7 @@ public class PaperInfo extends BasePaperInfo {
                         ArrayList<ChangeLetterAllocationInfo> infos = new ArrayList<ChangeLetterAllocationInfo>();
                         for (int i = 0; i < items.length(); i++) {
                             JSONObject item = items.getJSONObject(i);
-                            infos.add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("change_content")));
+                            infos.add(new ChangeLetterAllocationInfo(item.getString("config_item"), item.getString("change_content"), item.getString("price_change"), item.getString("man_hour")));
                         }
                         JSONObject infoObj = result.getJSONObject("fromData");
                         ChangeLetterSubDetailInfo info = new ChangeLetterSubDetailInfo(infoObj.getString("contract_id"), infoObj.getString("models_name"), infoObj.getString("company_name"), infoObj.getString("number"), infoObj.getString("contract_price"), infoObj.getString("change_contract_price"), infoObj.getString("config_change_date"), infoObj.getString("config_chang_delivery_date"), infoObj.getString("contract_delivery_date"), infoObj.getInt("letter_id"), infoObj.getInt("order_id"), infoObj.getString("change_letter_number"));
@@ -287,10 +289,6 @@ public class PaperInfo extends BasePaperInfo {
 
                 }
             });
-//            Map<String, Object> params = new HashMap<>();
-//            app.setChangeLetterSubDetailInfo(changeLetterSubDetailInfo);
-//            Intent intent = new Intent(view.getContext(), ChangeLetterModifyActivity.class);
-//            view.getContext().startActivity(intent);
         }
     }
 
@@ -404,7 +402,7 @@ public class PaperInfo extends BasePaperInfo {
                 reportCount = 0;
                 final Map<String, Object> params = new HashMap<>();
                 params.put("daily_id", daily_id);
-                dialog.showLoadingDlg();
+                dialog2.showLoadingDlg();
                 OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
@@ -414,7 +412,7 @@ public class PaperInfo extends BasePaperInfo {
                             JSONObject resultEntity = object.getJSONObject("resultEntity");
                             reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
                             if (reportCount == 6) {
-                                dialog.dismissLoadingDlg();
+                                dialog2.dismissLoadingDlg();
                                 goToReportDetail(view, allPaths);
                             }
                         } catch (JSONException e) {
@@ -618,7 +616,7 @@ public class PaperInfo extends BasePaperInfo {
                     reportCount = 0;
                     final Map<String, Object> params = new HashMap<>();
                     params.put("daily_id", daily_id);
-                    dialog.showLoadingDlg();
+                    dialog2.showLoadingDlg();
 
                     OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
                         @Override
@@ -630,7 +628,7 @@ public class PaperInfo extends BasePaperInfo {
                                 reportQueryDetailInfoBean = GsonUtil.GsonToBean(resultEntity.toString(), ReportQueryDetailInfoBean.class);
                                 Log.i(TAG, "onSuccess:reportCount    " + reportCount);
                                 if (reportCount == 6) {
-                                    dialog.dismissLoadingDlg();
+                                    dialog2.dismissLoadingDlg();
                                     goToReportDetail(view, allPaths);
                                 }
                             } catch (JSONException e) {
