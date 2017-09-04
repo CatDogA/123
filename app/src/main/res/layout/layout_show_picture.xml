@@ -23,9 +23,9 @@
 
     <com.shanghaigm.dms.view.widget.MyGridView
         android:id="@+id/gv_show_pic"
-        android:numColumns="4"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:numColumns="4">
 
     </com.shanghaigm.dms.view.widget.MyGridView>
 </LinearLayout>

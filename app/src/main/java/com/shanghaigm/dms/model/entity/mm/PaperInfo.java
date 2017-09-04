@@ -798,12 +798,14 @@ public class PaperInfo extends BasePaperInfo {
 //                params2.put("isById",daily_id);
         params2.put("loginRole", app.getJobCode());
         params2.put("loginName", app.getAccount());
+        dialog.showLoadingDlg();
         OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_FILE_INFO, params2, new DisposeDataListener() {
             /**
              * @param responseObj
              */
             @Override
             public void onSuccess(Object responseObj) {
+                dialog.dismissLoadingDlg();
                 Log.i(TAG, "onSuccess:file_info " + responseObj.toString());
                 JSONObject obj = (JSONObject) responseObj;
                 try {
@@ -835,11 +837,11 @@ public class PaperInfo extends BasePaperInfo {
                                         pathInfos.add(new PathInfo(type, file_path, s, file_name, id));
                                         //路径是内存路径
                                         if (pathInfos.size() == resultArray.length()) {   //下载完毕
-                                            reportCount++;
+                                            reportCount++;                    //加载信息完毕
                                             Log.i(TAG, "onSuccess:reportCount    " + reportCount);
                                             allPaths.add(pathInfos);
                                             if (reportCount == 6) {
-                                                dialog.dismissLoadingDlg();
+                                                dialog2.dismissLoadingDlg();
                                                 goToReportDetail(view, allPaths);
                                             }
                                         }
@@ -851,7 +853,7 @@ public class PaperInfo extends BasePaperInfo {
                         Log.i(TAG, "onSuccess:reportCount    " + reportCount);
                         reportCount++;
                         if (reportCount == 6) {
-                            dialog.dismissLoadingDlg();
+                            dialog2.dismissLoadingDlg();
                             goToReportDetail(view, allPaths);
                         }
                     }

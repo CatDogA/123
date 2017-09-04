@@ -9,6 +9,8 @@
     <include layout="@layout/include_title_bar" />
 
     <Button
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/cic_btn"
         android:id="@+id/btn_camera"
         android:layout_marginTop="100dp"
         android:layout_width="300dp"
@@ -16,6 +18,8 @@
         android:text="拍照" />
 
     <Button
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/cic_btn"
         android:id="@+id/btn_album"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -23,6 +27,8 @@
         android:text="相册" />
 
     <Button
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/cic_btn"
         android:id="@+id/btn_video"
         android:layout_width="300dp"
         android:layout_height="wrap_content"

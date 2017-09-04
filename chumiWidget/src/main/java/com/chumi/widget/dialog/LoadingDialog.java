@@ -72,6 +72,7 @@ public class LoadingDialog {
      * 等待对话框
      */
     public void showLoadingDlg() {
+        Log.i(TAG, "showLoadingDlg: "+"sssssssssssssssssssssssssssssssssssssssssssssssssssss");
         dialogCount++;
         flag = true;
         Log.i(TAG, "showLoadingDlg = " + dialogCount);

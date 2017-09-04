@@ -152,6 +152,7 @@ public class ReportUpdateInfoFragment extends BaseFragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 //                String car_no = s.toString();
@@ -340,17 +341,19 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                                         JSONObject resultEntity = resultObj.getJSONObject("resultEntity");
                                         String code = resultEntity.getString("returnCode");
                                         if (code.equals("1")) {
-                                            if(type==1){
+                                            //保存
+                                            if (type == 1) {
                                                 Toast.makeText(getActivity(), getResources().getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
-                                                isInfoAdd = true;
+                                                isInfoAdd = true;        //信息添加
                                                 ReportUpdateAttachFragment fragment1 = ReportUpdateAttachFragment.getInstance();
                                                 if (ReportUpdateActivity.isAttachShow) {
                                                     fragment1.saveAttachInfo();
-                                                }else {
-                                                    ((ReportUpdateActivity)getActivity()).setButton();  //灰掉
+                                                } else {
+                                                    ((ReportUpdateActivity) getActivity()).setButton();  //灰掉
                                                 }
                                             }
-                                            if(type==2){
+                                            //提交
+                                            if (type == 2) {
                                                 Toast.makeText(getActivity(), getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
                                                 getActivity().finish();
                                             }
@@ -382,7 +385,7 @@ public class ReportUpdateInfoFragment extends BaseFragment {
 
     public void subInfo() {
         //再次保存
-        if (isInfoAdd) {
+        if (isInfoAdd) {                  //信息已添加
             try {
                 JSONArray a = new JSONArray();
                 subObj.put("state", 2);

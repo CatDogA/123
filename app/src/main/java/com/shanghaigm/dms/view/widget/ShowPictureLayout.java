@@ -77,9 +77,12 @@ public class ShowPictureLayout extends RelativeLayout {
     }
 
     private void setUpView() {
+        btn.setText(title);
         Drawable homepressed = getResources().getDrawable(img_path);
+        Drawable homepressed2 = getResources().getDrawable(R.mipmap.add1);
         homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
-        btn.setCompoundDrawables(homepressed, null, null, null);
+        homepressed2.setBounds(0, 0, homepressed2.getMinimumWidth(), homepressed2.getMinimumHeight());
+        btn.setCompoundDrawables(homepressed, null, homepressed2, null);
         gv.setAdapter(adapter);
         root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -268,7 +271,7 @@ public class ShowPictureLayout extends RelativeLayout {
                 }
             });
         }
-        if(isUpdate){
+        if (isUpdate) {
             btn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
