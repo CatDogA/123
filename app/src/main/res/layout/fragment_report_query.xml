@@ -5,7 +5,6 @@
     android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context="com.shanghaigm.dms.view.fragment.as.ReportQueryFragment">
-
     <include layout="@layout/include_report_sub_info" />
     <include layout="@layout/layout_sub_states"/>
     <com.shanghaigm.dms.view.widget.WrapHeightViewPager

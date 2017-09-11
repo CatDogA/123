@@ -46,7 +46,7 @@ import java.util.Map;
 public class OrderAddBaseFragment extends BaseFragment {
     private OrderDetailInfoOne orderDetailInfoOne = new OrderDetailInfoOne();
     private static String TAG = "OrderAddBaseFragment";
-    public EditText edtModel, edtCustomerName, edtPhone, edtMobilePhone, edtProvince, edtCity, edtCounty, edtDetailAddress, edtSex, edtFixPhone, edt_terminal_customer_name, edt_terminal_customer_tel, edt_terminal_customer_address, edt_number, edt_battery_system, edt_battery_number, edt_licensing_address, edt_endurance_mileage, edt_ekg, edt_battery_manufacturer, edt_color_determine;
+    public EditText edtModel, edtCustomerName, edtPhone, edtMobilePhone, edtProvince, edtCity, edtCounty, edtDetailAddress, edtSex, edtFixPhone, edt_terminal_customer_name, edt_terminal_customer_tel, edt_terminal_customer_address, edt_number, edt_battery_system, edt_battery_number, edt_licensing_address, edt_endurance_mileage, edt_ekg, edt_battery_manufacturer, edt_color_determine,edt_road_condition,edt_normal_speed;
     public static String address, provinceId, cityId, countyId;
     private ImageView imgModel;
     private ImageView imgSearch;
@@ -139,7 +139,7 @@ public class OrderAddBaseFragment extends BaseFragment {
 
     //先把空值赋给info
     private void initInfoOne() {
-        orderDetailInfoOne = new OrderDetailInfoOne("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        orderDetailInfoOne = new OrderDetailInfoOne("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","","");
     }
 
     private void setData() {
@@ -438,6 +438,10 @@ public class OrderAddBaseFragment extends BaseFragment {
         edt_battery_manufacturer.addTextChangedListener(new TextOrderAddBaseSwitcher(19));
         edt_color_determine = (EditText) v.findViewById(R.id.color_determine);
         edt_color_determine.addTextChangedListener(new TextOrderAddBaseSwitcher(20));
+        edt_road_condition = (EditText) v.findViewById(R.id.edt_road_condition);
+        edt_road_condition.addTextChangedListener(new TextOrderAddBaseSwitcher(21));
+        edt_normal_speed = (EditText) v.findViewById(R.id.edt_normal_speed);
+        edt_normal_speed.addTextChangedListener(new TextOrderAddBaseSwitcher(22));
     }
 
     private class TextOrderAddBaseSwitcher implements TextWatcher {
@@ -516,6 +520,10 @@ public class OrderAddBaseFragment extends BaseFragment {
                 case 20:
                     orderDetailInfoOne.setColor_determine(str);
                     break;
+                case 21:
+                    orderDetailInfoOne.setRoad_condition(str);
+                case 22:
+                    orderDetailInfoOne.setNormal_speed(str);
             }
         }
 

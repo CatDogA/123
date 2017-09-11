@@ -253,6 +253,7 @@ public class OrderAddActivity extends BaseActivity {
     private void addOrder(String url) {
         OrderAddBaseFragment baseFragment = OrderAddBaseFragment.getInstance();
         OrderAddPayFragment payFragment = OrderAddPayFragment.getInstance();
+        //先全部满足上面的条件才会进行else
         if (baseFragment.edtCustomerName.getText().toString().equals("")) {
             Toast.makeText(this, "请选择客户信息", Toast.LENGTH_SHORT).show();
         } else if (baseFragment.edtModel.getText().toString().equals("")) {
@@ -263,13 +264,23 @@ public class OrderAddActivity extends BaseActivity {
             Toast.makeText(this, "请选择颜色", Toast.LENGTH_SHORT).show();
         } else if (baseFragment.edt_number.getText().toString().equals("")) {
             Toast.makeText(this, "请填数字", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if(baseFragment.edt_road_condition.getText().toString().equals("")){
+            Toast.makeText(this, "请填路况", Toast.LENGTH_SHORT).show();
+        }else if(baseFragment.edt_normal_speed.getText().toString().equals("")){
+            Toast.makeText(this, "请填常用车速", Toast.LENGTH_SHORT).show();
+        }else {
             if (isPayShow) {
                 if (payFragment.payment_method.getText().toString().equals("")) {
                     Toast.makeText(this, "请选择付款方式", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (payFragment.delivery_time.getText().toString().equals("")) {
-                    Toast.makeText(this, "请填写交付日期", Toast.LENGTH_SHORT).show();
+                } else if (payFragment.freight.getText().toString().equals("")) {
+                    Toast.makeText(this, "请填写合同价", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(payFragment.service_fee.getText().toString().equals("")){
+                    Toast.makeText(this, "请填写劳务费", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(Double.parseDouble(payFragment.contract_price.getText().toString())<0){
+                    Toast.makeText(this, "扣除劳务费后合同价不小于0", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -326,8 +337,8 @@ public class OrderAddActivity extends BaseActivity {
                     paramObject.put("detailed_address", addBaseInfo.getDetailed_address());
                     paramObject.put("battery_manufacturer", addBaseInfo.getBattery_manufacturer());
                     paramObject.put("address", OrderAddBaseFragment.address);
-                    paramObject.put("road_condition", "");
-                    paramObject.put("normal_speed", "");
+                    paramObject.put("road_condition", addBaseInfo.getRoad_condition());
+                    paramObject.put("normal_speed", addBaseInfo.getNormal_speed());
                     paramObject.put("remark", "");
                     if (flag == 1) {
                         OrderDetailInfoBean.ResultEntity entity = app.getOrderDetailInfoBean().resultEntity;

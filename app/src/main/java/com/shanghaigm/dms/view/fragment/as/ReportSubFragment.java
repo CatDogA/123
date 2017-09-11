@@ -30,6 +30,7 @@ import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.HomeActivity;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
+import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -83,9 +84,10 @@ public class ReportSubFragment extends BaseFragment {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle b = new Bundle();
-                b.putString(ReportSubFragment.FILE_DATA_CLEAR, "clear");
-                goToActivity(ReportAddActivity.class, b);
+//                Bundle b = new Bundle();
+//                b.putString(ReportSubFragment.FILE_DATA_CLEAR, "clear");
+//                goToActivity(ReportAddActivity.class, b);
+                goToActivity(ReportUpdateActivity.class);
             }
         });
         edt_model.setOnClickListener(new View.OnClickListener() {

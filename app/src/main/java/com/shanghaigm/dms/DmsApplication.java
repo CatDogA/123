@@ -49,6 +49,7 @@ public class DmsApplication extends Application {
     private ChangeLetterSubDetailInfo changeLetterSubDetailInfo;
     private ArrayList<BaseActivity> activities;
     private final String TAG = "DmsApplication";
+    public String picPath;      //拍摄照片之后存储路径
 
     //    public ArrayList<SaveUsedPaths> usedPaths = new ArrayList<>();
     @Override

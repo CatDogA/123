@@ -1,6 +1,7 @@
 package com.shanghaigm.dms.view.fragment.ck;
 
 import android.app.DatePickerDialog;
+import android.databinding.BaseObservable;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.FragmentOrderAddPayBinding;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
-import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -66,6 +65,8 @@ public class OrderAddPayFragment extends BaseFragment {
             }
         });
         pickDate(delivery_time);
+        freight.addTextChangedListener(new PriceWatcher());
+        service_fee.addTextChangedListener(new PriceWatcher());
     }
 
     private void initView(View v) {
@@ -131,6 +132,36 @@ public class OrderAddPayFragment extends BaseFragment {
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+    }
+
+    private void getContractPrice(EditText edt1, EditText edt2, EditText edt3) {
+        Double primaryPrice = 0.0;
+        Double offPrice = 0.0;
+        if (!edt1.getText().toString().equals("")) {
+            primaryPrice = Double.parseDouble(edt1.getText().toString());
+        }
+        if (!edt2.getText().toString().equals("")) {
+            offPrice = Double.parseDouble(edt2.getText().toString());
+        }
+        edt3.setText((primaryPrice - offPrice) + "");
+    }
+
+    private class PriceWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            getContractPrice(freight, service_fee, contract_price);
+        }
     }
 
     private void setData() {
@@ -213,4 +244,5 @@ public class OrderAddPayFragment extends BaseFragment {
     public void getOrderInfoTwo(CallOrderInfoTwo call) {
         call.getInfoTwo(orderDetailInfoTwo);
     }
+
 }

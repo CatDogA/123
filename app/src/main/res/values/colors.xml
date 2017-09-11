@@ -9,6 +9,7 @@
     //公用颜色
     <color name="colorTitleText">#000099</color>
     <color name="line">#CCCCCC</color>
+    <color name="text">#858585</color>
     <color name="colorBlackText">#333333</color>
     <color name="colorRedText">#FF0000</color>
     <color name="colorYellow">#FEFF05</color>

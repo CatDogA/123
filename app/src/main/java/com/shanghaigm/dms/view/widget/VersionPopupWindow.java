@@ -60,6 +60,10 @@ public class VersionPopupWindow extends PopupWindow {
         });
     }
 
+    /**
+     * @param parent 控件所在layout
+     * @param w  pop宽
+     */
     public void showPopup(View parent,int w) {
         if (!this.isShowing()) {
             int H = ScreenUtil.getScreenHeight(context);

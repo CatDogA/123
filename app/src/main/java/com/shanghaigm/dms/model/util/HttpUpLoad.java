@@ -207,7 +207,7 @@ public class HttpUpLoad {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
 
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
             File file = new File(path.getPath() + file_dir);
             if (!file.exists()) {
                 file.mkdir();

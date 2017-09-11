@@ -31,7 +31,8 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
     private String ekg;
     private String licensing_addeess;
     private String company_name;
-
+    private String road_condition;
+    private String normal_speed;
 
     public OrderDetailInfoOne() {
     }
@@ -62,6 +63,8 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
         this.battery_manufacturer = resultEntity.battery_manufacturer;
         this.ekg = resultEntity.ekg;
         this.licensing_addeess = resultEntity.licensing_addeess;
+        this.road_condition = resultEntity.road_condition;
+        this.normal_speed = resultEntity.normal_speed;
         if (!resultEntity.color_determine.equals("")) {
             int detemine = Integer.parseInt(resultEntity.color_determine);
             switch (detemine) {
@@ -78,7 +81,7 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
         }
     }
 
-    public OrderDetailInfoOne(String customer_name, String sex, String fixed_telephone, String mobile_phone, String province, String city, String county, String detailed_address, String terminal_customer_name, String terminal_customer_tel, String terminal_customer_address, String models_name, String number, String battery_system, String battery_number, String endurance_mileage, String battery_manufacturer, String color_determine, String ekg, String licensing_addeess) {
+    public OrderDetailInfoOne(String customer_name, String sex, String fixed_telephone, String mobile_phone, String province, String city, String county, String detailed_address, String terminal_customer_name, String terminal_customer_tel, String terminal_customer_address, String models_name, String number, String battery_system, String battery_number, String endurance_mileage, String battery_manufacturer, String color_determine, String ekg, String licensing_addeess, String road_condition, String normal_speed) {
         this.customer_name = customer_name;
         this.sex = sex;
         this.fixed_telephone = fixed_telephone;
@@ -99,6 +102,8 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
         this.color_determine = color_determine;
         this.ekg = ekg;
         this.licensing_addeess = licensing_addeess;
+        this.road_condition = road_condition;
+        this.normal_speed = normal_speed;
     }
 
     @Bindable
@@ -280,6 +285,7 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
     public void setEkg(String ekg) {
         this.ekg = ekg;
     }
+
     @Bindable
     public String getCompany_name() {
         return company_name;
@@ -287,5 +293,23 @@ public class OrderDetailInfoOne extends BaseObservable implements Serializable {
 
     public void setCompany_name(String company_name) {
         this.company_name = company_name;
+    }
+
+    @Bindable
+    public String getRoad_condition() {
+        return road_condition;
+    }
+
+    public void setRoad_condition(String road_condition) {
+        this.road_condition = road_condition;
+    }
+
+    @Bindable
+    public String getNormal_speed() {
+        return normal_speed;
+    }
+
+    public void setNormal_speed(String normal_speed) {
+        this.normal_speed = normal_speed;
     }
 }

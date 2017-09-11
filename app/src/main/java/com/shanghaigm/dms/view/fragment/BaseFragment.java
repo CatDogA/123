@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 
-public class BaseFragment extends Fragment{
+public class BaseFragment extends Fragment {
     protected Activity mContext;
     public DmsApplication app = DmsApplication.getInstance();
     @Override

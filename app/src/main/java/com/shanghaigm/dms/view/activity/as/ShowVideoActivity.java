@@ -7,9 +7,10 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 
-public class ShowVideoActivity extends AppCompatActivity {
+public class ShowVideoActivity extends BaseActivity {
     private VideoView vv;
     private static String TAG = "ShowVideoActivity";
 

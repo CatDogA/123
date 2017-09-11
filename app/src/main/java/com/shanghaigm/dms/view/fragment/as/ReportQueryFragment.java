@@ -52,7 +52,7 @@ public class ReportQueryFragment extends BaseFragment {
     private static ReportQueryFragment fragment;
     private Button btn_query,btn_add;
     private View mid;
-    private static String TAG = "OrderReviewFragment";
+    private static String TAG = "ReportQueryFragment";
     private ImageView vpRight, vpLeft;
     private EditText edt_model, edt_car_sign, edt_state, edt_id;
     private TextView pageNumText;
@@ -70,7 +70,7 @@ public class ReportQueryFragment extends BaseFragment {
     private int page, pages;       //显示页数,总页数
     private DmsApplication app;
     private ArrayList<ReviewTable> tables;
-    private TextView txt_reviewing,text_reviewed;
+    private TextView txt_reviewing,text_reviewed,text_un_sub;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -171,7 +171,12 @@ public class ReportQueryFragment extends BaseFragment {
         edt_state.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] s = new String[]{"已提交", "未提交", "已驳回"};
+                String[] s;
+                if(app.getRoleCode().equals("fwjl")){
+                    s = new String[]{"已提交","已驳回"};
+                }else {
+                    s = new String[]{"已提交", "未提交", "已驳回"};
+                }
                 ArrayList<PopListInfo> infos = new ArrayList<PopListInfo>();
                 infos.add(new PopListInfo(""));
                 for (int i = 0; i < s.length; i++) {
@@ -411,6 +416,13 @@ public class ReportQueryFragment extends BaseFragment {
         txt_reviewing.setVisibility(View.GONE);
         text_reviewed = (TextView) v.findViewById(R.id.txt_reviewed);
         text_reviewed.setVisibility(View.GONE);
+        text_un_sub = (TextView) v.findViewById(R.id.txt_un_sub);
+        if(app.getRoleCode().equals("fwjl")){
+            text_un_sub.setVisibility(View.GONE);
+            txt_reviewing.setVisibility(View.VISIBLE);
+            txt_reviewing.setText("已提交");
+            txt_reviewing.setTextColor(getResources().getColor(R.color.text));
+        }
     }
 
     public static ReportQueryFragment getInstance() {

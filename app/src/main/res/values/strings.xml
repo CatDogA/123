@@ -49,6 +49,9 @@
     <string name="cancel">取消</string>
     <string name="version_info">出现新的版本，是否更新?</string>
     <string name="fill_contract">请选择合同号</string>
+    <string name="sure_delete">是否确定删除?</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
     <!--ck提报-->
     <string name="ck_order_sub">订单提报</string>
     <string name="ck_change_letter_sub">更改函提报</string>
@@ -96,7 +99,7 @@
     <string name="video">相关视频</string>
     <string name="city_car">城市客车</string>
     <string name="between_city_car">城间客车</string>
-    <string name="full_filled">请填写完整信息</string>
+    <string name="full_filled">请完成必填信息</string>
     <string name="too_many">已达到最大</string>
     <!--日报查询-->
     <string name="report_detail">质量日报管理</string>
@@ -195,5 +198,8 @@
     <string name="address_d">地址:</string>
     <string name="change_date">更改日期</string>
     <string name="change_date_d">更改日期:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

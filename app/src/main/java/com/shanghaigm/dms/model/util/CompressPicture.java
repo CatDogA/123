@@ -25,7 +25,7 @@ public class CompressPicture {
         // Get the dimensions of the bitmap
         bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(SolvePicturePopupWindow.mPublicPhotoPath, bmOptions);
+        BitmapFactory.decodeFile("123", bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 

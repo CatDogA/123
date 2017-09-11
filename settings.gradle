@@ -1,2 +1,2 @@
-include ':chumiWidget'
+include ':chumiWidget', ':multi-image-selector'
 include ':app'

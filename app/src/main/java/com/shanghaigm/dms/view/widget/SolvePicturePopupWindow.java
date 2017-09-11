@@ -211,6 +211,7 @@ public class SolvePicturePopupWindow extends PopupWindow {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
         String imageFileName = "JPG" + timeStamp;
+        Log.i(TAG, "createPublicImageFile:           "+imageFileName+"        path        "  +path.getPath());
         File image = File.createTempFile(
                 imageFileName,  /* 前缀 */
                 ".jpg",         /* 后缀 */

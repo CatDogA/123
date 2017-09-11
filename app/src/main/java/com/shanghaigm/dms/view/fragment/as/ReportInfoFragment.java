@@ -68,178 +68,10 @@ public class ReportInfoFragment extends BaseFragment {
 
     private void setUpView() {
         edt_feed_back.setText(getDate());
+        edt_factory_date.setText(getDate());
+        edt_license_date.setText(getDate());
         pickDate(edt_factory_date);
         pickDate(edt_license_date);
-//        btn_save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String feed_back = edt_feed_back.getText().toString();
-//                String model = edt_model.getText().toString();
-//                String vehicle = edt_vehicle.getText().toString();
-//                String car_no = edt_car_no.getText().toString();
-//                String car_sign = edt_car_sign.getText().toString();
-//                String chassis_num = edt_chassis_num.getText().toString();
-//                String factory_date = edt_factory_date.getText().toString();
-//                String license_date = edt_license_date.getText().toString();
-//                String mile = edt_mile.getText().toString();
-//                String fault_describe = edt_fault_describe.getText().toString();
-//                String treatment_process = edt_treatment_process.getText().toString();
-//                String treatment_result = edt_treatment_result.getText().toString();
-//                String rc = edt_rc.getText().toString();
-//                String first_fault_name = edt_first_fault_name.getText().toString();
-//                String fault_makers = edt_fault_makers.getText().toString();
-//                infos = new String[]{feed_back, model, vehicle, car_no, car_sign, chassis_num, factory_date, license_date, mile, fault_describe, treatment_process, treatment_result, rc, first_fault_name, fault_makers};
-//                Boolean flag = true;
-//                for (int i = 0; i < infos.length; i++) {
-//                    if (infos[i].equals("")) {
-//                        flag = false;
-//                        Toast.makeText(getActivity(), getResources().getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//                if (flag) {
-//                    int model_id = 0;
-//                    if (models != null) {
-//                        for (ModelInfo modelInfo : models) {
-//                            if (modelInfo.model_name.equals(model)) {
-//                                model_id = Integer.parseInt(modelInfo.model_Id);
-//                            }
-//                        }
-//                    }
-//                    int vehicle_id = 0;
-//                    if (!vehicle.equals("")) {
-//                        if (vehicle.equals(getResources().getString(R.string.city_car))) {
-//                            vehicle_id = 1;
-//                        } else {
-//                            vehicle_id = 2;
-//                        }
-//                    }
-//                    Double miles = Double.parseDouble(mile);
-//
-//                    //                1生产、2配套、3设计、4商务、5其他
-//                    int rc_type = 0;
-//                    switch (rc) {
-//                        case "生产":
-//                            rc_type = 1;
-//                            break;
-//                        case "配套":
-//                            rc_type = 2;
-//                            break;
-//                        case "设计":
-//                            rc_type = 3;
-//                            break;
-//                        case "商务":
-//                            rc_type = 4;
-//                            break;
-//                        case "其他":
-//                            rc_type = 5;
-//                            break;
-//                    }
-//                    JSONObject params = new JSONObject();
-//                    JSONArray array = new JSONArray();
-//                    Map<String, Object> map = new HashMap<>();
-//                    try {
-//                        params.put("feedback_date", feed_back);
-//                        params.put("models_Id", model_id);
-//                        params.put("vehicle_series", vehicle_id);
-//                        params.put("car_no", car_no);
-//                        params.put("car_sign", car_sign);
-//                        params.put("chassis_num", chassis_num);
-//                        params.put("factory_date", factory_date);
-//                        params.put("license_date", license_date);
-//                        params.put("mileage_num", miles);
-//                        params.put("fault_describe", fault_describe);
-//                        params.put("treatment_process", treatment_process);
-//                        params.put("treatment_result", treatment_result);
-//                        params.put("responsibility_classification", rc_type);
-//                        params.put("rc_value", rc);           //?从何处获取
-//                        params.put("first_fault_name", first_fault_name);
-//                        params.put("fault_makers", fault_makers);
-//                        subObj = params;
-//                        array.put(params);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    map.put("dailyStr", array.toString());
-//                    map.put("jobCode", app.getJobCode());
-//                    map.put("loginName", app.getAccount());
-//                    dialog.showLoadingDlg();
-//                    OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_ADD_REPORT, map, new DisposeDataListener() {
-//                        @Override
-//                        public void onSuccess(Object responseObj) {
-//                            Log.i(TAG, "onSuccess: " + responseObj.toString());
-//                            dialog.dismissLoadingDlg();
-//                            JSONObject resultObj = (JSONObject) responseObj;
-//                            try {
-//                                JSONObject resultEntity = resultObj.getJSONObject("resultEntity");
-//                                String code = resultEntity.getString("returnCode");
-//                                file_id = resultEntity.getInt("result");
-//                                if (code.equals("1")) {
-//                                    Toast.makeText(getActivity(), getResources().getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
-//                                }
-//                                btn_save.setEnabled(false);
-//                                isInfoAdd = true;
-//                                ((ReportAddActivity) getActivity()).setInfoAdd(true);
-//                                ((ReportAddActivity) getActivity()).setReport_id(file_id);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                            Toast.makeText(getActivity(), getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Object reasonObj) {
-//                            dialog.dismissLoadingDlg();
-//                            Toast.makeText(getActivity(), getResources().getText(R.string.check_info), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//        btn_sub.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isInfoAdd) {
-//                    try {
-//                        Map<String, Object> params = new HashMap<>();
-//                        JSONArray array = new JSONArray();
-//                        subObj.put("daily_id", file_id);
-//                        subObj.put("state", 2);
-//                        array.put(subObj);
-//                        params.put("dailyStr", array.toString());
-//                        params.put("loginName", app.getAccount());
-//                        dialog.showLoadingDlg();
-//                        OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_SUB_REPORT, params, new DisposeDataListener() {
-//                            @Override
-//                            public void onSuccess(Object responseObj) {
-//                                Log.i(TAG, "onSuccess: " + responseObj.toString());
-//                                dialog.dismissLoadingDlg();
-//                                JSONObject resultObj = (JSONObject) responseObj;
-//                                try {
-//                                    JSONObject resultEntity = resultObj.getJSONObject("resultEntity");
-//                                    String s = resultEntity.getString("returnCode");
-//                                    if (s.equals("1")) {
-//                                        Toast.makeText(getActivity(), getResources().getText(R.string.sub_info_success), Toast.LENGTH_SHORT).show();
-//                                        btn_sub.setEnabled(false);
-//                                    }
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//
-//                            }
-//
-//                            @Override
-//                            public void onFailure(Object reasonObj) {
-//
-//                            }
-//                        });
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    Toast.makeText(getActivity(), getResources().getText(R.string.save_info), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
         img_model.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,7 +153,6 @@ public class ReportInfoFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                String car_no = s.toString();
                 if (s.equals("")) {
                     Toast.makeText(getActivity(), getResources().getText(R.string.choose_car_no), Toast.LENGTH_SHORT).show();
                 } else {
@@ -336,10 +167,6 @@ public class ReportInfoFragment extends BaseFragment {
                                 JSONObject result = object.getJSONObject("resultEntity");
                                 edt_car_sign.setText(result.getString("car_sign"));
                                 edt_chassis_num.setText(result.getString("chassis_num"));
-//                                if(result.getString("factory_date")!=null){
-//                                    edt_factory_date.setText(result.getString("factory_date"));
-//                                    edt_license_date.setText(result.getString("factory_date"));
-//                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -446,12 +273,22 @@ public class ReportInfoFragment extends BaseFragment {
         String rc = edt_rc.getText().toString();
         String first_fault_name = edt_first_fault_name.getText().toString();
         String fault_makers = edt_fault_makers.getText().toString();
-        infos = new String[]{feed_back, model, vehicle, car_no, car_sign, chassis_num, factory_date, license_date, mile, fault_describe, treatment_process, treatment_result, rc, first_fault_name, fault_makers};
+        infos = new String[]{feed_back, model, vehicle, car_no, chassis_num, factory_date, mile, fault_describe, treatment_process, treatment_result, rc, first_fault_name};
+        Boolean compareDate = compareDate(edt_license_date, edt_factory_date);
+        Boolean compareDate2 = compareDate(edt_feed_back, edt_license_date);
         Boolean flag = true;
         for (int i = 0; i < infos.length; i++) {
             if (infos[i].equals("")) {
                 flag = false;
             }
+        }
+        if (!compareDate2) {
+            Toast.makeText(getActivity(), "反馈日期应在上牌日期之后", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!compareDate) {
+            Toast.makeText(getActivity(), "生产日期应在上牌日期之前", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if (flag) {
@@ -558,6 +395,26 @@ public class ReportInfoFragment extends BaseFragment {
         } else {
             Toast.makeText(getActivity(), getResources().getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private Boolean compareDate(EditText edt1, EditText edt2) {
+        if (!edt1.getText().toString().equals("") && !edt2.getText().toString().equals("")) {
+            int y1 = Integer.parseInt(edt1.getText().toString().split("-")[0]);
+            int m1 = Integer.parseInt(edt1.getText().toString().split("-")[1]);
+            int d1 = Integer.parseInt(edt1.getText().toString().split("-")[2]);
+
+            int y2 = Integer.parseInt(edt2.getText().toString().split("-")[0]);
+            int m2 = Integer.parseInt(edt2.getText().toString().split("-")[1]);
+            int d2 = Integer.parseInt(edt2.getText().toString().split("-")[2]);
+            if (y1 < y2) {
+                return false;
+            } else if (m1 < m2) {
+                return false;
+            } else if (d1 <= d2) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void initView(View v) {

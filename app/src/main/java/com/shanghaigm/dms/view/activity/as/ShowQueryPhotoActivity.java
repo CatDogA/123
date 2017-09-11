@@ -1,20 +1,21 @@
 package com.shanghaigm.dms.view.activity.as;
 
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
+import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 
 import java.io.File;
 
-public class ShowQueryPhotoActivity extends AppCompatActivity {
+public class ShowQueryPhotoActivity extends BaseActivity {
     private ImageView img;
     private RelativeLayout rl_back,rl_out;
     private DmsApplication app;
@@ -41,14 +42,13 @@ public class ShowQueryPhotoActivity extends AppCompatActivity {
     }
 
     private void initBundle() {
-
         Bundle b = getIntent().getExtras();
         String s = b.getString(ShowPictureLayout.SHOW_PHOTO);
         Log.i(TAG, "initBundle: "+s);
-
         File file = new File(s);
         if (file.exists()) {
-            img.setImageBitmap(BitmapFactory.decodeFile(s));
+//            img.setImageBitmap(BitmapFactory.decodeFile(s));
+            Glide.with(context).load(s).into(img);
         }
     }
 }

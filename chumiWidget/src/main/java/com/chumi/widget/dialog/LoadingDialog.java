@@ -36,7 +36,7 @@ public class LoadingDialog {
         this.context = context;
         this.loadingStr = loadingStr;
         this.flag = true;
-        time = 20000;
+        time = 30000;
         View view = LayoutInflater.from(context).inflate(R.layout.dlg_loading, null);
         loadingDlg = new Dialog(context, R.style.FullHeightDialog);
         loadingDlg.setContentView(view);
@@ -72,7 +72,6 @@ public class LoadingDialog {
      * 等待对话框
      */
     public void showLoadingDlg() {
-        Log.i(TAG, "showLoadingDlg: "+"sssssssssssssssssssssssssssssssssssssssssssssssssssss");
         dialogCount++;
         flag = true;
         Log.i(TAG, "showLoadingDlg = " + dialogCount);
@@ -81,7 +80,7 @@ public class LoadingDialog {
                 loadingDlg.setCancelable(false);
                 loadingDlg.setCanceledOnTouchOutside(false);
                 loadingDlg.show();
-                mThread.start();
+//                mThread.start();
             } else {
                 dialogCount--;
             }
@@ -101,6 +100,7 @@ public class LoadingDialog {
             if (loadingDlg != null && loadingDlg.isShowing()) {
                 try {
                     loadingDlg.dismiss();
+//                    mThread.interrupt();
                     flag = false;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -133,6 +133,7 @@ public class LoadingDialog {
                         if (flag) {
                             Thread.sleep(1);
                         } else {
+//                            mThread.interrupt();
                             return;
                         }
                     }
@@ -151,6 +152,7 @@ public class LoadingDialog {
             }
         }
     };
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

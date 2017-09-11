@@ -29,7 +29,6 @@ public class ReportQueryDetailInfo extends BaseObservable implements Serializabl
 
     public ReportQueryDetailInfo() {
     }
-
     public ReportQueryDetailInfo(ReportQueryDetailInfoBean bean) {
         this.feedback_date = bean.feedback_date.split(" ")[0];
         this.models_name = bean.models_name;

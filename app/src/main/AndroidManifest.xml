@@ -7,7 +7,6 @@
     //存取
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:name=".DmsApplication"
         android:allowBackup="true"
@@ -28,15 +27,16 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.BaseActivity" />
+        <activity
+            android:name=".view.activity.BaseActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.ck.HomeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.mm.OrderDetailActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -94,6 +94,7 @@
         <activity android:name=".view.activity.as.ShowQueryPhotoActivity" />
         <activity
             android:name=".view.activity.as.ReportUpdateActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
     </application>
 

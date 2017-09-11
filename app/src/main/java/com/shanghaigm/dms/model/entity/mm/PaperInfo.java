@@ -7,6 +7,7 @@ import android.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,11 +35,13 @@ import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
+import com.shanghaigm.dms.view.activity.common.LoginActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
 import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
+import com.shanghaigm.dms.view.widget.EnsureDeletePopUpWindow;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
 
 import org.json.JSONArray;
@@ -92,6 +95,7 @@ public class PaperInfo extends BasePaperInfo {
     private ReportQueryDetailInfoBean reportQueryDetailInfoBean;
     private int reportCount = 0;
     private ArrayList<ArrayList<PathInfo>> allPaths = new ArrayList<>();
+
     public PaperInfo() {
     }
 
@@ -187,7 +191,7 @@ public class PaperInfo extends BasePaperInfo {
         this.flag = flag;
         this.context = context;
         dialog = new LoadingDialog(this.context, "正在加载");
-        dialog2 = new LoadingDialog(this.context,"正在加载",300000);
+        dialog2 = new LoadingDialog(this.context, "正在加载", 300000);
     }
 
     //提交进入修改界面
@@ -406,6 +410,7 @@ public class PaperInfo extends BasePaperInfo {
                 OkhttpRequestCenter.getCommonReportRequest(Constant.URL_GET_REPORT_DETAIL, params, new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
+                        Log.i(TAG, "onSuccess:report_info " + responseObj.toString());
                         JSONObject object = (JSONObject) responseObj;
                         try {
                             reportCount++;
@@ -653,23 +658,12 @@ public class PaperInfo extends BasePaperInfo {
 
     public void OnDeleteOrderClick(final View v) {
         if (state.equals("1") || state.equals("4")) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("order_id", orderId + "");
-            dialog.showLoadingDlg();
-            OkhttpRequestCenter.getCommonReportRequest(Constant.URL_ORDER_DELETE, params, new DisposeDataListener() {
-                @Override
-                public void onSuccess(Object responseObj) {
-                    dialog.dismissLoadingDlg();
-                    Log.i(TAG, "onSuccess: " + responseObj.toString());
-                    OrderSubFragment fragment = OrderSubFragment.getInstance();
-                    fragment.refresh();
-                }
-
-                @Override
-                public void onFailure(Object reasonObj) {
-
-                }
-            });
+            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(v.getContext(), 3, orderId);
+            pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            View layout = LayoutInflater.from(v.getContext()).inflate(R.layout.ck_activity_home, null, false);
+            pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
+        } else {
+            Toast.makeText(v.getContext(), "无法修改", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -679,62 +673,22 @@ public class PaperInfo extends BasePaperInfo {
     //删除更改函
     public void OnDeleteChangeLetterClick(final View v) {
         if (state.equals("1") || state.equals("4")) {
-            Map<String, Object> params = new HashMap<>();
-            Log.i(TAG, "OnDeleteChangeLetterClick: letter_id            " + letter_id);
-            params.put("letterIds", letter_id + "");
-            dialog.showLoadingDlg();
-            OkhttpRequestCenter.getCommonReportRequest(Constant.URL_DELETE_CHANGE_LETTER, params, new DisposeDataListener() {
-                @Override
-                public void onSuccess(Object responseObj) {
-                    dialog.dismissLoadingDlg();
-                    Log.i(TAG, "onSuccess:       " + responseObj.toString());
-
-                    Bundle b = new Bundle();
-                    b.putInt(com.shanghaigm.dms.view.activity.ck.HomeActivity.ORDER_LETTER_SUB, 2);
-                    Intent intent = new Intent(v.getContext(), com.shanghaigm.dms.view.activity.ck.HomeActivity.class);
-                    intent.putExtras(b);
-                    v.getContext().startActivity(intent);
-//                    context.startActivity(intent);
-                    Toast.makeText(context, context.getResources().getText(R.string.delete_success), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(Object reasonObj) {
-                    dialog.dismissLoadingDlg();
-                }
-            });
+            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(v.getContext(), 2, letter_id);
+            pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            View layout = LayoutInflater.from(v.getContext()).inflate(R.layout.ck_activity_home, null, false);
+            pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
+        } else {
+            Toast.makeText(v.getContext(), "无法修改", Toast.LENGTH_SHORT).show();
         }
     }
 
     //report删除
     public void OnDeleteClick(final View view) {
         if (report_state != 2) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("daily_id", daily_id);
-            dialog.showLoadingDlg();
-            OkhttpRequestCenter.getCommonRequest(Constant.URL_REPORT_DELETE, params, new DisposeDataListener() {
-                @Override
-                public void onSuccess(Object responseObj) {
-                    Log.i(TAG, "onSuccess:OnDeleteClick      " + responseObj.toString());
-                    dialog.dismissLoadingDlg();
-                    JSONObject obj = (JSONObject) responseObj;
-                    try {
-                        JSONObject result = obj.getJSONObject("resultEntity");
-                        String code = result.getString("returnCode");
-                        if (code.equals("1")) {
-                            Toast.makeText(context, context.getResources().getText(R.string.delete_success), Toast.LENGTH_SHORT).show();
-                            HomeActivity.refresh();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(Object reasonObj) {
-
-                }
-            });
+            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(view.getContext(), 1, daily_id);
+            pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            View layout = LayoutInflater.from(view.getContext()).inflate(R.layout.as_activity_home, null, false);
+            pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
         } else {
             Toast.makeText(context, context.getResources().getText(R.string.no_click), Toast.LENGTH_SHORT).show();
         }
@@ -829,9 +783,9 @@ public class PaperInfo extends BasePaperInfo {
                                 public void run() {
                                     //把压缩图片下载到本地并传回地址
                                     String s = HttpUpLoad.downloadFile(file_name, params3, Constant.URL_DOWNLOAD_FILE, "/report_cp");
-                                    if (!s.equals("") && s != null) {
+                                    if (!s.equals("")) {
 //                                        dialog.dismissLoadingDlg();
-                                        Log.i(TAG, "run:    " + s.toString());
+                                        Log.i(TAG, "run:    " + s);
                                         //s是处理后压缩文件在内存中的路径
                                         //file_path是原文件下载路径
                                         pathInfos.add(new PathInfo(type, file_path, s, file_name, id));

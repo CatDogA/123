@@ -49,6 +49,8 @@ public class OrderDetailInfoBean implements Serializable {
         public String address;
         public String mobile_phone;
         public String addressName;
+        public String road_condition;
+        public String normal_speed;
 //        public List<MatchingBean> matching;
 //        public class MatchingBean{
 //            public String assembly;

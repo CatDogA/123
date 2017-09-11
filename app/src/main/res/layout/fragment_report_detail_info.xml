@@ -61,10 +61,11 @@
                     android:text="@string/model_d" />
 
                 <EditText
-                    android:background="@null"
+                    android:id="@+id/editText13"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
+                    android:background="@null"
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.models_name}"
@@ -284,13 +285,31 @@
                     android:text="@{info.mileage_num}"
                     android:textSize="12dp" />
             </LinearLayout>
-
-
-
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/cic_edt_back"
+                android:gravity="center"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="@string/duty_type" />
+
+                <EditText
+                    android:background="@null"
+                    android:id="@+id/editText11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:focusable="false"
+                    android:gravity="center"
+                    android:text="@{info.rc_value}"
+                    android:textSize="12dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -404,51 +423,28 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
 
+
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:background="@drawable/cic_edt_back"
                 android:gravity="center"
                 android:padding="5dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="@string/duty_type" />
-
-                <EditText
-                    android:background="@null"
-                    android:id="@+id/editText11"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:focusable="false"
-                    android:gravity="center"
-                    android:text="@{info.rc_value}"
-                    android:textSize="12dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="5"
-                android:background="@drawable/cic_edt_back"
-                android:gravity="center"
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:text="@string/first_trouble_thing_name" />
 
                 <EditText
-                    android:background="@null"
+                    android:id="@+id/editText8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="2"
+                    android:background="@null"
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.first_fault_name}"
@@ -478,19 +474,16 @@
                     android:text="@string/trouble_thing_factory" />
 
                 <EditText
-                    android:background="@null"
+                    android:id="@+id/editText9"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
+                    android:background="@null"
                     android:focusable="false"
                     android:gravity="center"
                     android:text="@{info.fault_makers}"
                     android:textSize="12dp" />
             </LinearLayout>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 </layout>
