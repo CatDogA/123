@@ -150,6 +150,7 @@ public class HttpUpLoad {
         }
         return result;
     }
+
     public static String getRequest(Map<String, String> params, String url) {
         getHttps();
         String result = null;
@@ -172,7 +173,7 @@ public class HttpUpLoad {
                 StringBuffer out = new StringBuffer();
                 byte[] b = new byte[4096];
                 for (int n; (n = is.read(b)) != -1; ) {
-                    out.append(new String(b,0,n));
+                    out.append(new String(b, 0, n));
                 }
                 result = out.toString();
             }
@@ -198,6 +199,13 @@ public class HttpUpLoad {
         }
     }
 
+    /**
+     * @param fileName
+     * @param params
+     * @param Url
+     * @param file_dir
+     * @return
+     */
     public static String downloadFile(String fileName, Map<String, String> params, String Url, String file_dir) {
         SSLContext sc = null;
         File picFile = null;
@@ -206,8 +214,9 @@ public class HttpUpLoad {
             sc.init(null, new TrustManager[]{new MyTrustManager()}, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
+            File path = null;
+            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
 
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
             File file = new File(path.getPath() + file_dir);
             if (!file.exists()) {
                 file.mkdir();

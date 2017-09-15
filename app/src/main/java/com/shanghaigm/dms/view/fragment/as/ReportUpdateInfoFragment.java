@@ -387,15 +387,23 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                                                     isInfoAdd = true;        //信息添加
                                                     ReportUpdateAttachFragment fragment1 = ReportUpdateAttachFragment.getInstance();
                                                     if (ReportUpdateActivity.isAttachShow) {
-                                                        fragment1.saveAttachInfo();
+                                                        fragment1.saveAttachInfo(false);
                                                     } else {
                                                         ((ReportUpdateActivity) getActivity()).setButton();  //灰掉
                                                     }
                                                 }
-                                                //提交
+                                                //没有保存直接提交
                                                 if (type == 2) {
                                                     Toast.makeText(getActivity(), getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
-                                                    getActivity().finish();
+                                                    if (ReportUpdateActivity.isAttachShow) {
+                                                        ReportUpdateAttachFragment fragment1 = ReportUpdateAttachFragment.getInstance();
+                                                        fragment1.saveAttachInfo(true);
+                                                    } else {
+                                                        ((ReportUpdateActivity) getActivity()).setButton();  //灰掉
+                                                        getActivity().finish();
+                                                        ReportSubFragment fragment = ReportSubFragment.getInstance();
+                                                        fragment.refreshTable();
+                                                    }
                                                 }
                                             }
                                         } catch (JSONException e) {
@@ -411,7 +419,7 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                                 });
                             }
                             //新增
-                            if (ReportUpdateActivity.flag == 1) {
+                            if (ReportUpdateActivity.flag == 1 && type != 2) {
                                 OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_ADD_REPORT, map, new DisposeDataListener() {
                                     @Override
                                     public void onSuccess(Object responseObj) {
@@ -426,24 +434,15 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                                                 isInfoAdd = true;
                                                 ReportUpdateAttachFragment fragment1 = ReportUpdateAttachFragment.getInstance();
                                                 if (ReportUpdateActivity.isAttachShow) {
-                                                    fragment1.saveAttachInfo();
+                                                    fragment1.saveAttachInfo(false);
                                                 } else {
                                                     ((ReportUpdateActivity) getActivity()).setButton();  //灰掉
                                                 }
-//                                                ((ReportAddActivity) getActivity()).setInfoAdd(true);
-//                                                ((ReportAddActivity) getActivity()).setReport_id(ReportUpdateActivity.daily_id);
-//                                                //判断第二页是否出现
-//                                                if (ReportAddActivity.isAtttachShow) {
-//                                                    ReportAttachSubFragment.getInstance().saveAttachInfo();
-//                                                } else {
-//                                                    Toast.makeText(getActivity(), getResources().getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
-//                                                    ((ReportAddActivity) getActivity()).setButton();
-//                                                }
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        Toast.makeText(getActivity(), getResources().getText(R.string.sub_success), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), getResources().getText(R.string.save_info_success), Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
@@ -452,6 +451,10 @@ public class ReportUpdateInfoFragment extends BaseFragment {
                                         Toast.makeText(getActivity(), getResources().getText(R.string.check_info), Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                            }
+                            if (ReportUpdateActivity.flag == 1 && type == 2) {
+                                dialog.dismissLoadingDlg();
+                                Toast.makeText(getActivity(),getResources().getText(R.string.save_info), Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(getActivity(), getResources().getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
@@ -474,6 +477,9 @@ public class ReportUpdateInfoFragment extends BaseFragment {
         if (isInfoAdd) {                  //信息已添加
             try {
                 JSONArray a = new JSONArray();
+                if (ReportUpdateActivity.flag == 1) {
+                    subObj.put("daily_id", ReportUpdateActivity.daily_id);
+                }
                 subObj.put("state", 2);
                 a.put(subObj);
                 Map<String, Object> map = new HashMap<>();

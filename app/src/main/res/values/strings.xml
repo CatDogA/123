@@ -30,6 +30,8 @@
     <string name="sub_success">提交成功</string>
     <string name="loading">正在加载</string>
     <string name="upload">正在上传</string>
+    <string name="loaded">下载完成</string>
+    <string name="cached">缓存完成</string>
     <string name="save_file">请先保存文件</string>
     <string name="save_info">请先保存信息</string>
     <string name="save_info_success">保存信息成功</string>
@@ -50,6 +52,7 @@
     <string name="version_info">出现新的版本，是否更新?</string>
     <string name="fill_contract">请选择合同号</string>
     <string name="sure_delete">是否确定删除?</string>
+    <string name="delete">删除</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <!--ck提报-->
@@ -72,7 +75,7 @@
     <string name="report_num">日报编号:</string>
     <string name="report_info">日报信息</string>
     <string name="attach_sub">附件上传</string>
-    <string name="attacn_preview">附件预览</string>
+    <string name="attach_preview">附件预览</string>
     <string name="report_fill">日报填写</string>
 
     <!--日报填写  日报信息-->
@@ -101,12 +104,17 @@
     <string name="between_city_car">城间客车</string>
     <string name="full_filled">请完成必填信息</string>
     <string name="too_many">已达到最大</string>
+    <string name="choose">选取</string>
+    <string name="video_tape">拍摄</string>
     <!--日报查询-->
     <string name="report_detail">质量日报管理</string>
     <string name="report_query">质量日报查询</string>
     <string name="after_report_query">售后日报查询</string>
     <string name="car_id">车牌号</string>
     <string name="car_num">车牌号:</string>
+    <string name="big_pic">大图</string>
+    <string name="preview">预览</string>
+    <string name="load">下载</string>
 
     <!--mm订单审核-->
     <string name="review_number">合同号</string>

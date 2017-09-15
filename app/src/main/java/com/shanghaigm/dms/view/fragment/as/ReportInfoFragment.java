@@ -40,6 +40,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 废弃
+ */
 public class ReportInfoFragment extends BaseFragment {
     private static ReportInfoFragment reportInfoFragment;
     private static String TAG = "ReportInfoFragment";

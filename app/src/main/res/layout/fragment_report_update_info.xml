@@ -72,14 +72,15 @@
                             android:layout_weight="1"
                             android:text="@string/model_d" />
 
-                        <RelativeLayout
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2">
 
                             <EditText
+                                android:layout_weight="1"
                                 android:id="@+id/edt_model"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:background="@null"
                                 android:focusable="false"
@@ -93,7 +94,7 @@
                                 android:layout_height="15dp"
                                 android:layout_alignRight="@+id/edt_model"
                                 android:src="@mipmap/down" />
-                        </RelativeLayout>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -156,25 +157,22 @@
                         android:padding="5dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:text="@string/factory_id" />
 
-                        <RelativeLayout
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <EditText
+                                android:layout_weight="1"
                                 android:id="@+id/edt_factory_id"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_alignParentTop="true"
                                 android:background="@null"
-                                android:focusable="false"
                                 android:gravity="center"
                                 android:text="@{info.car_no}"
                                 android:textSize="12dp" />
@@ -183,9 +181,8 @@
                                 android:id="@+id/img_factory_id"
                                 android:layout_width="15dp"
                                 android:layout_height="15dp"
-                                android:layout_alignRight="@+id/edt_factory_id"
                                 android:src="@mipmap/down" />
-                        </RelativeLayout>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 

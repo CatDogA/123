@@ -46,6 +46,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * 废弃
+ */
 public class ReportAttachSubFragment extends BaseFragment {
     private static ReportAttachSubFragment reportAttachSubFragment;
     private ArrayList<Bitmap> bits_car_sign, bits_trouble, bits_repair, bits_other;
@@ -675,7 +678,7 @@ public class ReportAttachSubFragment extends BaseFragment {
         gv_repair = (GridView) v.findViewById(R.id.gv_repair);
         gv_trouble = (GridView) v.findViewById(R.id.gv_trouble);
         gv_other = (GridView) v.findViewById(R.id.gv_other);
-        dialog = new LoadingDialog(getActivity(), getResources().getString(R.string.upload), 300000);
+        dialog = new LoadingDialog(getActivity(), getResources().getString(R.string.upload), 180000);
         img_video = (ImageView) v.findViewById(R.id.img_video);
         img_video_add = (ImageView) v.findViewById(R.id.img_video_add);
         img_video_add.setVisibility(View.GONE);

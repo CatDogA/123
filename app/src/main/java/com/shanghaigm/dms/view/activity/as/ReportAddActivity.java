@@ -1,17 +1,12 @@
 package com.shanghaigm.dms.view.activity.as;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,17 +19,14 @@ import android.widget.TextView;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.as.PathInfo;
-import com.shanghaigm.dms.model.util.ContentUriUtil;
 import com.shanghaigm.dms.model.util.FileUtils;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
-import com.shanghaigm.dms.view.fragment.as.ReportAttachSubFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportInfoFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportSubFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportUpdateAttachFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout2;
 import com.shanghaigm.dms.view.widget.SolvePicturePopupWindow;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,6 +38,9 @@ import java.util.Locale;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
 
+/**
+ * 废弃
+ */
 public class ReportAddActivity extends BaseActivity {
     private TabLayout tablayout;
     private FragmentManager fm;
@@ -93,18 +88,6 @@ public class ReportAddActivity extends BaseActivity {
         if (b != null) {
             s = b.getString(ReportSubFragment.FILE_DATA_CLEAR);
         }
-//        if(s.equals("clear")){
-//            uris.clear();
-//            uris2.clear();
-//            uris3.clear();
-//            uris4.clear();
-//            cpPaths.clear();
-//            cpPaths2.clear();
-//            cpPaths3.clear();
-//            cpPaths4.clear();
-//            ReportAttachSubFragment f = new ReportAttachSubFragment();
-//            f.clear();
-//        }
     }
 
     private void initData() {

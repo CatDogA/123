@@ -18,11 +18,11 @@ import java.util.ArrayList;
  */
 
 public class FileUtils {
-    public static String SDPATH = Environment.getExternalStorageDirectory() + "/report_cp/";
+    private static String SDPATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/report_cp";
     private String cpPath;
 
     //储存日报压缩图片
-    public void saveCpBitmap(Bitmap bm, String picName,SavePic savePic,String path) {
+    public void saveCpBitmap(Bitmap bm, String picName, SavePic savePic, String path) {
         try {
             if (!isFileExist("")) {
                 File tempf = createSDDir("");
@@ -33,7 +33,8 @@ public class FileUtils {
             bm.compress(Bitmap.CompressFormat.JPEG, 40, out);
             out.flush();
             out.close();
-            savePic.onExchangeFinish(cpPath,picName,path);              //接口
+            Log.i("cpPath", "saveCpBitmap: " + cpPath);
+            savePic.onExchangeFinish(cpPath, picName, path);              //接口
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -67,17 +68,20 @@ public class FileUtils {
     }
 
     //清空压缩图片文件夹
-    public static void deleteCpDir() {
-        File dir = new File(SDPATH);
+    public static void deleteCpDir(String dirPath) {
+        int c = 0;
+        File dir = new File(dirPath);
         if (dir == null || !dir.exists() || !dir.isDirectory())
             return;
-
+        Log.i("listFiles", "deleteCpDir:listFiles        " + dir.listFiles().length);
         for (File file : dir.listFiles()) {
-            if (file.isFile())
-                file.delete();
-            else if (file.isDirectory())
-                deleteCpDir();
+            if (file.isFile()) {
+                if (file.delete()) {
+                    c++;
+                }
+            }
         }
+        Log.i("listFiles", "deleteCpDir:c        "+c);
         dir.delete();
     }
 
@@ -94,8 +98,8 @@ public class FileUtils {
         return true;
     }
 
-    public interface SavePic{
-        void onExchangeFinish(String cpPath,String name,String path);
+    public interface SavePic {
+        void onExchangeFinish(String cpPath, String name, String path);
     }
 //
 //    public void setOnSavePic(SavePic savePic) {

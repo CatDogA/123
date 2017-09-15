@@ -80,7 +80,38 @@ public class LoadingDialog {
                 loadingDlg.setCancelable(false);
                 loadingDlg.setCanceledOnTouchOutside(false);
                 loadingDlg.show();
-//                mThread.start();
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        Lock lock = new ReentrantLock();
+                        Log.i(TAG, "run:flag线程前：     " + flag);
+                        while (flag) {
+                            try {
+                                lock.lock();
+                                Log.i(TAG, "run: " + "睡觉");
+                                for (int i = 0; i < time; i++) {
+                                    if (flag) {
+                                        Thread.sleep(1);
+                                    } else {
+                                        return;
+                                    }
+                                }
+                                Log.i(TAG, "run: " + "睡醒");
+                                Log.i(TAG, "run:flag线程后：     " + flag);
+                                if (flag) {    //如果sleep期间,dialog已经消失则不再继续执行
+                                    Message msg = mHandler.obtainMessage();
+                                    msg.what = 1;
+                                    mHandler.sendMessage(msg);
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } finally {
+                                lock.unlock();
+                            }
+                        }
+                    }
+                }.start();
             } else {
                 dialogCount--;
             }
@@ -100,7 +131,6 @@ public class LoadingDialog {
             if (loadingDlg != null && loadingDlg.isShowing()) {
                 try {
                     loadingDlg.dismiss();
-//                    mThread.interrupt();
                     flag = false;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -125,7 +155,7 @@ public class LoadingDialog {
             super.run();
             Lock lock = new ReentrantLock();
             Log.i(TAG, "run:flag线程前：     " + flag);
-            if (flag) {
+            while (flag) {
                 try {
                     lock.lock();
                     Log.i(TAG, "run: " + "睡觉");
@@ -133,7 +163,6 @@ public class LoadingDialog {
                         if (flag) {
                             Thread.sleep(1);
                         } else {
-//                            mThread.interrupt();
                             return;
                         }
                     }

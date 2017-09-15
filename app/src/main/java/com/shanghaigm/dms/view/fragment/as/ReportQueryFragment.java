@@ -407,7 +407,7 @@ public class ReportQueryFragment extends BaseFragment {
         edt_model = (EditText) v.findViewById(R.id.edt_model);
         edt_state = (EditText) v.findViewById(R.id.edt_state);
         edt_id = (EditText) v.findViewById(R.id.edt_report_id);
-        dialog = new LoadingDialog(getActivity(), "正在加载",25000);
+        dialog = new LoadingDialog(getActivity(), "正在加载",30000);
         app = DmsApplication.getInstance();
         img_first = (ImageView) v.findViewById(R.id.viewpager_first);
         img_last = (ImageView) v.findViewById(R.id.viewpager_last);

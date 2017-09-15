@@ -150,16 +150,7 @@ public class LoadOrScanPopupWindow extends PopupWindow {
             public void onClick(View v) {
                 if (isUpdate) {
                     if (paths.size() > 0) {
-//                        if (position == 0) {
-//                            //0说明是修改后的,直接进入
-//                            if (paths.get(0).file_id == 0) {
-//                                Log.i(TAG, "onItemClick: " + "修改");
-//                                Intent intent = new Intent(context, ShowVideoActivity.class);
-//                                Bundle b = new Bundle();
-//                                b.putString(ReportAttachSubFragment.VIDEO_PATH, paths.get(0).path);
-//                                intent.putExtras(b);
-//                                context.startActivity(intent);
-//                            } else {
+
                         //加载视频
                         File file = new File(root.getPath() + "/report_video");
                         if (!file.exists()) {
@@ -171,23 +162,11 @@ public class LoadOrScanPopupWindow extends PopupWindow {
                         }
                         File file2 = new File(file, name);
                         if (file2.exists()) {
-                            //strDir视频路径
-//                            Uri localUri = Uri.parse(file2.getPath());
-//                            Intent localIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-//                            localIntent.setData(localUri);
-//                            context.sendBroadcast(localIntent);
                             Toast.makeText(context, "文件已存在", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(context, ShowVideoActivity.class);
-//                                    Bundle b = new Bundle();
-//                                    b.putString(ReportAttachSubFragment.VIDEO_PATH, file2.getPath());
-//                                    intent.putExtras(b);
-//                                    context.startActivity(intent);
                         } else {
                             Log.i(TAG, "onItemClick: " + "保存");
                             saveVideo(true);
                         }
-//                            }
-//                        }
                     }
                     //查询
                 } else {
@@ -213,7 +192,6 @@ public class LoadOrScanPopupWindow extends PopupWindow {
                         saveVideo(true);
                     }
                 }
-//                dismiss();
             }
         });
     }

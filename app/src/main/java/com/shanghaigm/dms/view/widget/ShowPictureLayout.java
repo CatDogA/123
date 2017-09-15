@@ -90,66 +90,67 @@ public class ShowPictureLayout extends RelativeLayout {
         gv.setAdapter(adapter);
         root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (isUpdate) {
-                    bits.remove(position);
-                    adapter.notifyDataSetChanged();
-                    for (ArrayList<PathInfo> pathInfos : allPaths) {
-                        if (paths.size() > 0) {
-                            if (pathsDelete == null) {
-                                pathsDelete = new ArrayList<PathInfo>();
-                            }
-                            Log.i(TAG, "onItemLongClick:paths.get(0).type        " + paths.get(0).type);
-                            switch (paths.get(0).type) {
-                                case 15:
-                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
-                                    if (pathInfos.size() > 0) {
-                                        if (pathInfos.get(0).type == 15) {
-                                            pathInfos.remove(position);        //得到剩余的路径
-                                        }
-                                    }
-                                    break;
-                                case 16:
-                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
-                                    if (pathInfos.size() > 0) {
-                                        if (pathInfos.get(0).type == 16) {
-                                            pathInfos.remove(position);        //得到剩余的路径
-                                        }
-                                    }
-                                    break;
-                                case 18:
-                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
-                                    if (pathInfos.size() > 0) {
-                                        if (pathInfos.get(0).type == 18) {
-                                            pathInfos.remove(position);        //得到剩余的路径
-                                        }
-                                    }
-                                    break;
-                                case 19:
-                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
-                                    if (pathInfos.size() > 0) {
-                                        if (pathInfos.get(0).type == 19) {
-                                            pathInfos.remove(position);        //得到剩余的路径
-                                        }
-                                    }
-                                    break;
-                                case 20:
-                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
-                                    if (pathInfos.size() > 0) {
-                                        if (pathInfos.get(0).type == 20) {
-                                            pathInfos.remove(position);        //得到剩余的路径
-                                        }
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                }
-                return true;
-            }
-        });
+//        gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (isUpdate) {
+//                    bits.remove(position);
+//                    adapter.notifyDataSetChanged();
+//                    for (ArrayList<PathInfo> pathInfos : allPaths) {
+//                        if (paths.size() > 0) {
+//                            if (pathsDelete == null) {
+//                                pathsDelete = new ArrayList<PathInfo>();
+//                            }
+//                            Log.i(TAG, "onItemLongClick:paths.get(0).type        " + paths.get(0).type);
+//                            switch (paths.get(0).type) {
+//                                case 15:
+//                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
+//                                    Log.i(TAG, "onItemLongClick:        "+pathsDelete.size());
+//                                    if (pathInfos.size() > 0) {
+//                                        if (pathInfos.get(0).type == 15) {
+//                                            pathInfos.remove(position);        //得到剩余的路径
+//                                        }
+//                                    }
+//                                    break;
+//                                case 16:
+//                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
+//                                    if (pathInfos.size() > 0) {
+//                                        if (pathInfos.get(0).type == 16) {
+//                                            pathInfos.remove(position);        //得到剩余的路径
+//                                        }
+//                                    }
+//                                    break;
+//                                case 18:
+//                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
+//                                    if (pathInfos.size() > 0) {
+//                                        if (pathInfos.get(0).type == 18) {
+//                                            pathInfos.remove(position);        //得到剩余的路径
+//                                        }
+//                                    }
+//                                    break;
+//                                case 19:
+//                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
+//                                    if (pathInfos.size() > 0) {
+//                                        if (pathInfos.get(0).type == 19) {
+//                                            pathInfos.remove(position);        //得到剩余的路径
+//                                        }
+//                                    }
+//                                    break;
+//                                case 20:
+//                                    pathsDelete.add(paths.get(position));  //保存被删除的路径
+//                                    if (pathInfos.size() > 0) {
+//                                        if (pathInfos.get(0).type == 20) {
+//                                            pathInfos.remove(position);        //得到剩余的路径
+//                                        }
+//                                    }
+//                                    break;
+//                            }
+//                        }
+//                    }
+//                }
+//                return true;
+//            }
+//        });
 
         if (isPic) {
             //如果有文件，就不要再下载
@@ -207,7 +208,7 @@ public class ShowPictureLayout extends RelativeLayout {
             gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                   LoadOrScanPopupWindow pop = new LoadOrScanPopupWindow(context,paths,isUpdate,0);
+                    LoadOrScanPopupWindow pop = new LoadOrScanPopupWindow(context, paths, isUpdate, 0);
                     pop.showPopup(gv);
                 }
             });
@@ -235,12 +236,12 @@ public class ShowPictureLayout extends RelativeLayout {
                 params.put("fileId", paths.get(position).path);
                 s[0] = HttpUpLoad.downloadFile(name, params, Constant.URL_DOWNLOAD_FILE, "/report_pic");
                 if (!s[0].equals("")) {
-                    dialog.dismissLoadingDlg();
-                    Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString(ShowPictureLayout.SHOW_PHOTO, s[0]);
-                    intent.putExtras(b);
-                    context.startActivity(intent);
+//                    dialog.dismissLoadingDlg();
+//                    Intent intent = new Intent(context, ShowQueryPhotoActivity.class);
+//                    Bundle b = new Bundle();
+//                    b.putString(ShowPictureLayout.SHOW_PHOTO, s[0]);
+//                    intent.putExtras(b);
+//                    context.startActivity(intent);
                 }
             }
         }).start();

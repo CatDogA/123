@@ -3,6 +3,7 @@ package com.shanghaigm.dms.view.activity.as;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.model.entity.as.ReportQueryDetailInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
+import com.shanghaigm.dms.model.util.FileUtils;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
@@ -145,7 +147,7 @@ public class ReportDetailActivity extends BaseActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
 
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.report_info)).setTag(0));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.attacn_preview)).setTag(1));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.attach_preview)).setTag(1));
 
 //        fm.beginTransaction().add(R.id.fragment_content, fragments.get(0)).commit();
 
@@ -182,5 +184,14 @@ public class ReportDetailActivity extends BaseActivity {
         rl_end = (RelativeLayout) findViewById(R.id.rl_out);
         title = (TextView) findViewById(R.id.title_text);
         btn_return_back = (Button) findViewById(R.id.btn_return_back);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        String cpPicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/report_cp";
+        String preVideoDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/report_video_cp";
+        FileUtils.deleteCpDir(cpPicDir);
+        FileUtils.deleteCpDir(preVideoDir);
     }
 }

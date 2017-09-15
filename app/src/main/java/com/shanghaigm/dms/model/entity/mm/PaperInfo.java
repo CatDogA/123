@@ -40,9 +40,8 @@ import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ContractReviewDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
-import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
 import com.shanghaigm.dms.view.widget.EnsureDeletePopUpWindow;
-import com.shanghaigm.dms.view.widget.ShowPictureLayout;
+import com.shanghaigm.dms.view.widget.ShowPictureLayout2;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,8 +63,8 @@ public class PaperInfo extends BasePaperInfo {
     public static String CHANGE_LETTER_INFO = "change_letter_info";
     public static String REPORT_DETAI_INFO = "report_detail_info";
     public static String REPORT_FILE_INFO = "report_file_info";
-    public static String REPORT_DELETE = "report_delete";
     public static String ORDER_MODIFY = "oder_modify";
+    public static String REPORT_FLAG = "report_flag";
     private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交
     private LoadingDialog dialog;
     private LoadingDialog dialog2;
@@ -191,7 +190,7 @@ public class PaperInfo extends BasePaperInfo {
         this.flag = flag;
         this.context = context;
         dialog = new LoadingDialog(this.context, "正在加载");
-        dialog2 = new LoadingDialog(this.context, "正在加载", 300000);
+        dialog2 = new LoadingDialog(this.context, "正在加载", 90000);
     }
 
     //提交进入修改界面
@@ -399,8 +398,8 @@ public class PaperInfo extends BasePaperInfo {
             if (report_state != 2) {
                 allPaths.clear();
                 //先清空
-                if (ShowPictureLayout.pathsDelete != null) {
-                    ShowPictureLayout.pathsDelete.clear();
+                if (ShowPictureLayout2.pathsDelete != null) {
+                    ShowPictureLayout2.pathsDelete.clear();
                 }
                 //把要删除的文件清空
                 reportCount = 0;
@@ -615,8 +614,8 @@ public class PaperInfo extends BasePaperInfo {
                     Toast.makeText(context, context.getResources().getText(R.string.no_click), Toast.LENGTH_SHORT).show();
                 } else {
                     allPaths.clear();      //把要展示的文件清空
-                    if (ShowPictureLayout.pathsDelete != null) {
-                        ShowPictureLayout.pathsDelete.clear();   //把要删除的文件清空
+                    if (ShowPictureLayout2.pathsDelete != null) {
+                        ShowPictureLayout2.pathsDelete.clear();   //把要删除的文件清空
                     }
                     reportCount = 0;
                     final Map<String, Object> params = new HashMap<>();
@@ -749,7 +748,6 @@ public class PaperInfo extends BasePaperInfo {
         final ArrayList<PathInfo> pathInfos = new ArrayList<>();
         params2.put("id", daily_id);
         params2.put("type", type + "");
-//                params2.put("isById",daily_id);
         params2.put("loginRole", app.getJobCode());
         params2.put("loginName", app.getAccount());
         dialog.showLoadingDlg();
@@ -763,7 +761,7 @@ public class PaperInfo extends BasePaperInfo {
                 Log.i(TAG, "onSuccess:file_info " + responseObj.toString());
                 JSONObject obj = (JSONObject) responseObj;
                 try {
-                    final JSONArray resultArray = obj.getJSONArray("result");
+                    final JSONArray resultArray = obj.getJSONArray("result");    //图片信息数组
                     if (resultArray.length() > 0) {
                         for (int i = 0; i < resultArray.length(); i++) {
                             final JSONObject fileObj = resultArray.getJSONObject(i);
@@ -772,7 +770,7 @@ public class PaperInfo extends BasePaperInfo {
                             final String file_path = fileObj.getString("upload_path");
                             final int id = fileObj.getInt("id");
                             //整体信息添加
-                            Log.i(TAG, "onSuccess: path " + file_path.toString() + " pathsize " + pathInfos.size() + "    " + cp_file_path + "   " + file_name);
+                            Log.i(TAG, "onSuccess: path压缩前：   path   " + file_path.toString() + " pathsize： " + pathInfos.size() + "  cp_file_path：  " + cp_file_path + "  file_name：  " + file_name);
                             //作用：拼接Url
                             final Map<String, String> params3 = new HashMap<String, String>();
                             params3.put("fileNames", file_name);
@@ -788,6 +786,7 @@ public class PaperInfo extends BasePaperInfo {
                                         Log.i(TAG, "run:    " + s);
                                         //s是处理后压缩文件在内存中的路径
                                         //file_path是原文件下载路径
+                                        Log.i(TAG, "onSuccess: path压缩后 " + file_path + " pathsize " + pathInfos.size() + "    " + s + "   " + file_name+"  id    "+id);
                                         pathInfos.add(new PathInfo(type, file_path, s, file_name, id));
                                         //路径是内存路径
                                         if (pathInfos.size() == resultArray.length()) {   //下载完毕

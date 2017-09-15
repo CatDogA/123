@@ -12,6 +12,7 @@ import com.shanghaigm.dms.model.entity.as.PathInfo;
 import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout;
+import com.shanghaigm.dms.view.widget.ShowPictureLayout2;
 
 import java.util.ArrayList;
 
@@ -69,12 +70,12 @@ public class ReportDetailAttachFragment extends BaseFragment {
             }
         }
         //allPtahs,15,16..作用于修改，对于查询没有作用，isUpDate:判断是否为修改
-        ShowPictureLayout pictureLayout = new ShowPictureLayout(getActivity(), carPlatePaths, "整车铭牌", R.mipmap.all_car, true, allPaths, 15, false);
+        ShowPictureLayout2 pictureLayout = new ShowPictureLayout2(getActivity(), carPlatePaths, "整车铭牌", R.mipmap.all_car, true, allPaths, 15, true);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        ShowPictureLayout pictureLayout2 = new ShowPictureLayout(getActivity(), troublePaths, "故障", R.mipmap.trouble, true, allPaths, 16, false);
-        ShowPictureLayout pictureLayout3 = new ShowPictureLayout(getActivity(), repairPaths, "维修", R.mipmap.repair, true, allPaths, 18, false);
-        ShowPictureLayout pictureLayout4 = new ShowPictureLayout(getActivity(), otherPaths, "其他", R.mipmap.other, true, allPaths, 19, false);
-        ShowPictureLayout videoLayout = new ShowPictureLayout(getActivity(), videoPath, "视频", R.mipmap.video, false, allPaths, 20, false);
+        ShowPictureLayout2 pictureLayout2 = new ShowPictureLayout2(getActivity(), troublePaths, "故障", R.mipmap.trouble, true, allPaths, 16, true);
+        ShowPictureLayout2 pictureLayout3 = new ShowPictureLayout2(getActivity(), repairPaths, "维修", R.mipmap.repair, true, allPaths, 18, true);
+        ShowPictureLayout2 pictureLayout4 = new ShowPictureLayout2(getActivity(), otherPaths, "其他", R.mipmap.other, true, allPaths, 19, true);
+        ShowPictureLayout2 videoLayout = new ShowPictureLayout2(getActivity(), videoPath, "视频", R.mipmap.video, false, allPaths, 20, true);
         pictureLayout.setLayoutParams(layoutParams);
         pictureLayout2.setLayoutParams(layoutParams);
         pictureLayout3.setLayoutParams(layoutParams);

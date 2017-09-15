@@ -34,10 +34,10 @@ public class ReportUpdateAttachFragment extends BaseFragment {
     private static ReportUpdateAttachFragment fragment = null;
     private ArrayList<ArrayList<PathInfo>> allPaths;
     private LinearLayout ll_content;
-    //    private Button btn_sub;
     private static String TAG = "ReportUpdateAttach";
     private int c = 0;     //计数，删除和新增是否完毕
     private LoadingDialog dialog;
+    private Boolean isSub;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,19 +46,18 @@ public class ReportUpdateAttachFragment extends BaseFragment {
         initView(v);
         initData();
         setUpView();
-        initHandler();
         return v;
-    }
-
-    private void initHandler() {
-
     }
 
     private void initData() {
         ReportUpdateActivity.isAttachShow = true;
-        if (allPaths != null) {
-            allPaths.clear();
-            allPaths = ReportUpdateActivity.allPaths;    //获取数据
+        if (ReportUpdateActivity.allPaths != null) {
+            if (allPaths != null) {
+                allPaths.clear();
+                allPaths = ReportUpdateActivity.allPaths;    //获取数据
+            } else {
+                allPaths = ReportUpdateActivity.allPaths;    //获取数据
+            }
         } else {
             allPaths = new ArrayList<>();
         }
@@ -108,12 +107,12 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                 }
             }
         }
-        ShowPictureLayout2 pictureLayout = new ShowPictureLayout2(getActivity(), carPlatePaths, "整车铭牌", R.mipmap.all_car, true, allPaths, 15, 2);
+        ShowPictureLayout2 pictureLayout = new ShowPictureLayout2(getActivity(), carPlatePaths, "整车铭牌", R.mipmap.all_car, true, allPaths, 15, false);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        ShowPictureLayout2 pictureLayout2 = new ShowPictureLayout2(getActivity(), troublePaths, "故障", R.mipmap.trouble, true, allPaths, 16, 2);
-        ShowPictureLayout2 pictureLayout3 = new ShowPictureLayout2(getActivity(), repairPaths, "维修", R.mipmap.repair, true, allPaths, 18, 2);
-        ShowPictureLayout2 pictureLayout4 = new ShowPictureLayout2(getActivity(), otherPaths, "其他", R.mipmap.other, true, allPaths, 19, 2);
-        ShowPictureLayout2 videoLayout = new ShowPictureLayout2(getActivity(), videoPath, "视频", R.mipmap.video, false, allPaths, 20, 2);
+        ShowPictureLayout2 pictureLayout2 = new ShowPictureLayout2(getActivity(), troublePaths, "故障", R.mipmap.trouble, true, allPaths, 16, false);
+        ShowPictureLayout2 pictureLayout3 = new ShowPictureLayout2(getActivity(), repairPaths, "维修", R.mipmap.repair, true, allPaths, 18, false);
+        ShowPictureLayout2 pictureLayout4 = new ShowPictureLayout2(getActivity(), otherPaths, "其他", R.mipmap.other, true, allPaths, 19, false);
+        ShowPictureLayout2 videoLayout = new ShowPictureLayout2(getActivity(), videoPath, "视频", R.mipmap.video, false, allPaths, 20, false);
         pictureLayout.setLayoutParams(layoutParams);
         pictureLayout2.setLayoutParams(layoutParams);
         pictureLayout3.setLayoutParams(layoutParams);
@@ -126,51 +125,18 @@ public class ReportUpdateAttachFragment extends BaseFragment {
         ll_content.addView(videoLayout);
     }
 
-    //先把id取出
-//                ArrayList<Integer> ids = new ArrayList<Integer>();
-//                for (ArrayList<PathInfo> paths : allPaths) {
-//                    for (PathInfo pathInfo : paths) {
-//                        ids.add(pathInfo.file_id);
-//                    }
-//                }
-//                JSONObject object = new JSONObject();
-//                JSONArray array = new JSONArray();
-//                for (int id : ids) {
-//                    try {
-//                        object.put("file_id", ReportUpdateActivity.daily_id);
-//                        object.put("id", id);
-//                        array.put(object);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                Map<String, Object> params = new HashMap<>();
-//                params.put("fileList", array.toString());
-//                OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_SUB_PIC_VIDEO, params, new DisposeDataListener() {
-//                    @Override
-//                    public void onSuccess(Object responseObj) {
-//                        Log.i(TAG, "onSuccess: " + responseObj);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Object reasonObj) {
-//
-//                    }
-//                });
-//
-//        });
-//    }
-    public void saveAttachInfo() {
+    public void saveAttachInfo(Boolean isSub) {
+        this.isSub = isSub;
         c = 0;
         dialog.showLoadingDlg();
 //                //先删后存
         final ArrayList<Integer> ids = new ArrayList<Integer>();    //新增的id
         final ArrayList<PathInfo> paths = new ArrayList<PathInfo>();   //新增的paths
-        if (ShowPictureLayout.pathsDelete != null) {
-            Log.i(TAG, "onClick:pathsDelete        " + ShowPictureLayout.pathsDelete.size());
+        if (ShowPictureLayout2.pathsDelete != null) {
+            Log.i(TAG, "onClick:pathsDelete        " + ShowPictureLayout2.pathsDelete.size());
             //取出用来删除的数据
             final ArrayList<PathInfo> idDelete = new ArrayList<>();
-            for (PathInfo info : ShowPictureLayout.pathsDelete) {
+            for (PathInfo info : ShowPictureLayout2.pathsDelete) {
                 if (info.file_id != 0) {
                     idDelete.add(info);
                 }
@@ -192,8 +158,7 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                             Log.i(TAG, "onSuccess:delete     " + responseObj.toString() + "   删除c:  " + c);
                             if (c == 2) {
                                 subInfo(ids);
-//                                Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
-                                dialog.dismissLoadingDlg();
+                                Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -208,12 +173,8 @@ public class ReportUpdateAttachFragment extends BaseFragment {
             c++;
             if (c == 2) {
                 subInfo(ids);
-                dialog.dismissLoadingDlg();
-//                Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
             }
         }
-
-
         for (int i = 0; i < allPaths.size(); i++) {
             Log.i(TAG, "onClick:allPaths.get(0).size     " + allPaths.get(0).size());
             for (PathInfo info : allPaths.get(i)) {
@@ -240,33 +201,33 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                             map.put("is_compress", 1 + "");
                             //先存压缩的
                             String result = HttpUpLoad.uploadFile(file, Constant.URL_GET_PICTURE_VIDEO_FILE, map);
-                            if (!result.equals("")) {
-                                //添加id
-                                String[] ss = addFileId(ids, result);    //添加id并获取name
-                                String id = ss[1];
-                                Log.i(TAG, "onClick:result压缩图片       " + result);
-                                //根据result获取文件名或路径
-                                String name = ss[0];
-                                //遍历找对应
-                                for (int j = 0; j < paths.size(); j++) {
-                                    File file1 = new File(paths.get(j).path);
-                                    //判断
-                                    if (name.equals(paths.get(j).name)) {
-                                        Map<String, String> map1 = new HashMap<String, String>();
-                                        map1.put("type", paths.get(i).type + "");
-                                        map1.put("is_compress", 2 + "");
-                                        map1.put("id", id);
-                                        //存入
-                                        String result1 = HttpUpLoad.uploadFile(file1, Constant.URL_GET_PICTURE_VIDEO_FILE, map1);
-                                        Log.i(TAG, "onClick: result原图     " + result.toString());
-                                        if (!result1.equals("")) {
-                                            count++;
-                                            if (count == paths.size()) {
-                                                c++;
-                                                subInfo(ids);
-                                                Log.i(TAG, "run:添加c " + c);
-                                                if (c == 2) {
-                                                    dialog.dismissLoadingDlg();
+                            if (result != null) {
+                                if (!result.equals("")) {
+                                    //添加id
+                                    String[] ss = addFileId(ids, result);    //添加id并获取name
+                                    String id = ss[1];
+                                    Log.i(TAG, "onClick:result压缩图片       " + result);
+                                    //根据result获取文件名或路径
+                                    String name = ss[0];
+                                    //遍历找对应
+                                    for (int j = 0; j < paths.size(); j++) {
+                                        File file1 = new File(paths.get(j).path);
+                                        //判断
+                                        if (name.equals(paths.get(j).name)) {
+                                            Map<String, String> map1 = new HashMap<String, String>();
+                                            map1.put("type", paths.get(i).type + "");
+                                            map1.put("is_compress", 2 + "");
+                                            map1.put("id", id);
+                                            //存入
+                                            String result1 = HttpUpLoad.uploadFile(file1, Constant.URL_GET_PICTURE_VIDEO_FILE, map1);
+                                            Log.i(TAG, "onClick: result原图     " + result.toString());
+                                            if (!result1.equals("")) {
+                                                count++;
+                                                if (count == paths.size()) {
+                                                    c++;
+                                                    if (c == 2) {
+                                                        subInfo(ids);
+                                                    }
                                                 }
                                             }
                                         }
@@ -279,16 +240,21 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                     c++;
                     if (c == 2) {
                         subInfo(ids);
-                        dialog.dismissLoadingDlg();
-//                        Toast.makeText(getActivity(), getResources().getText(R.string.modify_success), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         }).start();
     }
 
+    private void finishSub() {
+        getActivity().finish();
+        ReportSubFragment fragment = ReportSubFragment.getInstance();
+        fragment.refreshTable();
+    }
+
     //关联id
     private void subInfo(ArrayList<Integer> ids) {
+        Log.i(TAG, "subInfo: " + ids.size());
         //存入
         if (ids.size() > 0) {
             JSONArray array = new JSONArray();
@@ -304,7 +270,6 @@ public class ReportUpdateAttachFragment extends BaseFragment {
             }
             Map<String, Object> params = new HashMap<>();
             params.put("fileList", array.toString());
-            dialog.showLoadingDlg();
             OkhttpRequestCenter.getCommonRequest(Constant.URL_GET_SUB_PIC_VIDEO, params, new DisposeDataListener() {
                 @Override
                 public void onSuccess(Object responseObj) {
@@ -315,9 +280,13 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                     try {
                         String s = obj.getString("returnCode");
                         if (s.equals("1")) {
-                            Intent intent = new Intent(getActivity(), ReportUpdateActivity.class);
-                            getActivity().startActivity(intent);
-                            Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                            if (!isSub) {
+                                Intent intent = new Intent(getActivity(), ReportUpdateActivity.class);
+                                getActivity().startActivity(intent);
+                                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                            } else {
+                                finishSub();
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -330,9 +299,14 @@ public class ReportUpdateAttachFragment extends BaseFragment {
                 }
             });
         } else {
-            Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getActivity(), ReportUpdateActivity.class);
-            getActivity().startActivity(intent);
+            dialog.dismissLoadingDlg();
+            if (!isSub) {
+                Toast.makeText(getActivity(), getResources().getText(R.string.save_file_success), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ReportUpdateActivity.class);
+                getActivity().startActivity(intent);
+            } else {
+                finishSub();
+            }
         }
     }
 
@@ -353,8 +327,7 @@ public class ReportUpdateAttachFragment extends BaseFragment {
 
     private void initView(View v) {
         ll_content = (LinearLayout) v.findViewById(R.id.ll_content);
-//        btn_sub = (Button) v.findViewById(R.id.btn_sub);
-        dialog = new LoadingDialog(getActivity(), getResources().getText(R.string.upload).toString(), 300000);
+        dialog = new LoadingDialog(getActivity(), getResources().getText(R.string.upload).toString(), 180000);
     }
 
     public static ReportUpdateAttachFragment getInstance() {
@@ -362,5 +335,11 @@ public class ReportUpdateAttachFragment extends BaseFragment {
             fragment = new ReportUpdateAttachFragment();
         }
         return fragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: " + allPaths.size());
     }
 }

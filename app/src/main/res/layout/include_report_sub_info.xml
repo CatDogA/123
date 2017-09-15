@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="@string/mm_car_model" />
+                android:text="@string/model_d" />
 
             <RelativeLayout
                 android:layout_width="0dp"
