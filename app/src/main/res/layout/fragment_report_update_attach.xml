@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/colorWhite"
         tools:context="com.shanghaigm.dms.view.fragment.as.ReportUpdateAttachFragment">
 
         <LinearLayout
@@ -15,17 +16,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
-
         </LinearLayout>
-
-        <!--<Button-->
-            <!--android:background="@drawable/cic_btn"-->
-            <!--android:id="@+id/btn_sub"-->
-            <!--android:layout_width="200dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="30dp"-->
-            <!--android:text="@string/submit" />-->
     </LinearLayout>
 </ScrollView>
 

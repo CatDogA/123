@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -22,7 +21,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.as.PathInfo;
@@ -34,7 +32,6 @@ import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportUpdateAttachFragment;
 import com.shanghaigm.dms.view.fragment.as.ReportUpdateInfoFragment;
 import com.shanghaigm.dms.view.widget.ShowPictureLayout2;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -75,13 +72,19 @@ public class ReportUpdateActivity extends BaseActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("videoPath", ShowPictureLayout2.mPublicVideoPath);
+        Log.i(TAG, "onSaveInstanceState:videoPath            " + ShowPictureLayout2.mPublicVideoPath);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            videoPath = savedInstanceState.getString("videoPath");
+            Log.i(TAG, "onRestoreInstanceState:videoPath             " + videoPath);
+        }
     }
 
     @Override
@@ -154,7 +157,7 @@ public class ReportUpdateActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(ReportUpdateActivity.this);
             }
         });
         rl_back.setOnClickListener(new View.OnClickListener() {
@@ -166,10 +169,10 @@ public class ReportUpdateActivity extends BaseActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setSelectedTabIndicatorColor(Color.GRAY);
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
-        if(flag==1){
+        if (flag == 1) {
             tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.report_fill)).setTag(0));
             tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.attach_sub)).setTag(1));
-        }else {
+        } else {
             tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.report_info)).setTag(0));
             tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.attach_preview)).setTag(1));
         }
@@ -306,12 +309,15 @@ public class ReportUpdateActivity extends BaseActivity {
             } else {
                 String vName = null;
                 Boolean isUse = false;
+                //拍摄
                 if (requestCode == ShowPictureLayout2.REQUEST_VIDEO) {
                     isUse = true;
                     File video = new File(ShowPictureLayout2.mPublicVideoPath);
                     vName = video.getName();
                     videoPath = ShowPictureLayout2.mPublicVideoPath;
+                    solveVideo(isUse,vName);
                 }
+                //选取
                 if (requestCode == ShowPictureLayout2.REQUEST_VIDEO2 && data != null) {
                     isUse = true;
                     Uri selectedVideo = data.getData();
@@ -324,61 +330,112 @@ public class ReportUpdateActivity extends BaseActivity {
                     File video = new File(videoPath);
                     vName = video.getName();
                     cursor.close();
+                    solveVideo(isUse,vName);
                 }
                 //通过路径获得图片
-                Log.i(TAG, "onActivityResult:   " + videoPath);
-                File file = new File(videoPath);
-                if (file.exists()) {
-                    Bitmap video_bit = null;
-                    try {
-                        video_bit = getVideoThumb(videoPath);
-                    } catch (RuntimeException e) {
-                        Log.i(TAG, "onActivityResult: " + "直接返回");
-                        isUse = false;
-                    }
-
-                    String video_cp_path = "";
-                    try {
-                        //保存图片到路径
-                        video_cp_path = SaveCpPic(video_bit, vName);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //把视频信息存入
-                    if (isUse) {
-                        int i = -1;
-                        for (int j = 0; j < allPaths.size(); j++) {
-                            if (allPaths.get(j).size() > 0) {
-                                if (allPaths.get(j).get(0).type == 20) {
-                                    i = j;
-                                }
-                            }
-                        }
-                        //已经有
-                        if (i != -1) {
-                            if (ShowPictureLayout2.pathsDelete == null) {
-                                ShowPictureLayout2.pathsDelete = new ArrayList<>();
-                                ShowPictureLayout2.pathsDelete.add(allPaths.get(i).get(0));
-                            }
-                            allPaths.get(i).clear();
-                            ArrayList<PathInfo> videoPaths = new ArrayList<>();
-                            videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
-                            allPaths.add(videoPaths);
-                        }
-                        //还没有
-                        if (i == -1) {
-                            ArrayList<PathInfo> videoPaths = new ArrayList<>();
-                            videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
-                            allPaths.add(videoPaths);
-                        }
-                        ((ReportUpdateAttachFragment) fragments.get(1)).setPaths(allPaths);
-                    }
-                }
+//                Log.i(TAG, "onActivityResult:   " + videoPath);
+//                File file = new File(videoPath);
+//                if (file.exists()) {
+//                    Bitmap video_bit = null;
+//                    try {
+//                        video_bit = getVideoThumb(videoPath);
+//                    } catch (RuntimeException e) {
+//                        Log.i(TAG, "onActivityResult: " + "直接返回");
+//                        isUse = false;
+//                    }
+//
+//                    String video_cp_path = "";
+//                    try {
+//                        //保存图片到路径
+//                        video_cp_path = SaveCpPic(video_bit, vName);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    //把视频信息存入
+//                    if (isUse) {
+//                        int i = -1;
+//                        for (int j = 0; j < allPaths.size(); j++) {
+//                            if (allPaths.get(j).size() > 0) {
+//                                if (allPaths.get(j).get(0).type == 20) {
+//                                    i = j;
+//                                }
+//                            }
+//                        }
+//                        //已经有
+//                        if (i != -1) {
+//                            if (ShowPictureLayout2.pathsDelete == null) {
+//                                ShowPictureLayout2.pathsDelete = new ArrayList<>();
+//                                ShowPictureLayout2.pathsDelete.add(allPaths.get(i).get(0));
+//                            }
+//                            allPaths.get(i).clear();
+//                            ArrayList<PathInfo> videoPaths = new ArrayList<>();
+//                            videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
+//                            allPaths.add(videoPaths);
+//                        }
+//                        //还没有
+//                        if (i == -1) {
+//                            ArrayList<PathInfo> videoPaths = new ArrayList<>();
+//                            videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
+//                            allPaths.add(videoPaths);
+//                        }
+//                        ((ReportUpdateAttachFragment) fragments.get(1)).setPaths(allPaths);
+//                    }
+//                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    public void solveVideo(Boolean isUse,String vName){
+        //通过路径获得图片
+        Log.i(TAG, "onActivityResult:   " + videoPath);
+        File file = new File(videoPath);
+        if (file.exists()) {
+            Bitmap video_bit = null;
+            try {
+                video_bit = getVideoThumb(videoPath);
+            } catch (RuntimeException e) {
+                Log.i(TAG, "onActivityResult: " + "直接返回");
+                isUse = false;
+            }
 
+            String video_cp_path = "";
+            try {
+                //保存图片到路径
+                video_cp_path = SaveCpPic(video_bit, vName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //把视频信息存入
+            if (isUse) {
+                int i = -1;
+                for (int j = 0; j < allPaths.size(); j++) {
+                    if (allPaths.get(j).size() > 0) {
+                        if (allPaths.get(j).get(0).type == 20) {
+                            i = j;
+                        }
+                    }
+                }
+                //已经有
+                if (i != -1) {
+                    if (ShowPictureLayout2.pathsDelete == null) {
+                        ShowPictureLayout2.pathsDelete = new ArrayList<>();
+                        ShowPictureLayout2.pathsDelete.add(allPaths.get(i).get(0));
+                    }
+                    allPaths.get(i).clear();
+                    ArrayList<PathInfo> videoPaths = new ArrayList<>();
+                    videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
+                    allPaths.add(videoPaths);
+                }
+                //还没有
+                if (i == -1) {
+                    ArrayList<PathInfo> videoPaths = new ArrayList<>();
+                    videoPaths.add(new PathInfo(20, videoPath, video_cp_path, vName, 0));
+                    allPaths.add(videoPaths);
+                }
+                ((ReportUpdateAttachFragment) fragments.get(1)).setPaths(allPaths);
+            }
+        }
+    }
     public Bitmap getVideoThumb(String path) {
         MediaMetadataRetriever media = new MediaMetadataRetriever();
         media.setDataSource(path);

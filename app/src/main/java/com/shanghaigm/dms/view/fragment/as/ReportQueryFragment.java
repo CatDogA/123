@@ -16,11 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chumi.widget.dialog.LoadingDialog;
-import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
-import com.chumi.widget.http.okhttp.CommonRequest;
-import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
@@ -325,7 +321,7 @@ public class ReportQueryFragment extends BaseFragment {
 
             @Override
             public void onFailure(Object reasonObj) {
-
+                dialog.dismissLoadingDlg();
             }
         });
     }

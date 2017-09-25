@@ -85,7 +85,6 @@ public class OkHttpClient {
         call.enqueue(new CommonJsonCallback(handle));
         return call;
     }
-
     public static Call post(Request request, DisposeDataHandle handle) {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new CommonJsonCallback(handle));

@@ -53,7 +53,7 @@ public class ChangeLetterQueryDetailActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(ChangeLetterQueryDetailActivity.this);
             }
         });
     }

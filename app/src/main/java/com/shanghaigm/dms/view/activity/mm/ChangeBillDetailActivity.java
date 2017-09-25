@@ -1,7 +1,6 @@
 package com.shanghaigm.dms.view.activity.mm;
 
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,15 +13,12 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
-import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.ActivityChangeBillReviewBinding;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.view.activity.BaseActivity;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +51,7 @@ public class ChangeBillDetailActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(ChangeBillDetailActivity.this);
             }
         });
 

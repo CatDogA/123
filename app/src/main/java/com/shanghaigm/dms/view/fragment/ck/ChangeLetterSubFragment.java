@@ -18,24 +18,19 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
-import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailBean;
 import com.shanghaigm.dms.model.entity.ck.ChangeLetterSubDetailInfo;
 import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
-import com.shanghaigm.dms.model.entity.mm.ChangeLetterDetailInfo;
-import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
-import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
 import com.shanghaigm.dms.view.activity.ck.HomeActivity;
-import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -47,7 +42,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChangeLetterSubFragment extends BaseFragment {
     private static ChangeLetterSubFragment fragment;
@@ -100,7 +94,7 @@ public class ChangeLetterSubFragment extends BaseFragment {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(getActivity());
             }
         });
         vpLeft.setOnClickListener(new View.OnClickListener() {
@@ -213,30 +207,14 @@ public class ChangeLetterSubFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            Log.i("homefragment", "onHiddenChanged:show      " + "3333333333333333333333333333333333333333333333");
-//            ((HomeActivity) getActivity()).setButton(3);
         }
         if (hidden) {
             if(!((HomeActivity)getActivity()).isBackClick){
                 ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(3));
             }
             ((HomeActivity)getActivity()).isBackClick = false;
-            Log.i("homefragment", "onHiddenChanged:hide         " + "333333333333333333333333333333");
         }
     }
-
-    //    @Override
-//    public void onResume() {
-//        super.onResume();
-//        ((HomeActivity)getActivity()).setButton(3);
-//    }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        Log.i("homefragment", "onStart: " + "start            3");
-//        ((HomeActivity) getActivity()).fragmentInfos.add(new FragmentInfo(3));
-//    }
 
     //查询
     private void requestOrderInfo(final int type) {
@@ -280,7 +258,6 @@ public class ChangeLetterSubFragment extends BaseFragment {
             e.printStackTrace();
         }
         RequestParams params = new RequestParams();
-
         params.put("cls", paramArray.toString());
         params.put("page", page + 1 + "");
         params.put("rows", "8");

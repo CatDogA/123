@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.R;
@@ -27,7 +27,6 @@ import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
-import com.shanghaigm.dms.view.fragment.mm.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;

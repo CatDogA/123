@@ -1,6 +1,5 @@
 package com.shanghaigm.dms.view.widget;
 
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -27,16 +26,14 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.ck.OrderAddSearchInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
-import com.shanghaigm.dms.model.entity.mm.PaperInfo;
-import com.shanghaigm.dms.view.activity.mm.ContractReviewOrChangeLetterReviewActivity;
-import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,9 +42,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.LogRecord;
-
-import io.realm.internal.TableView;
 
 /**
  * Created by Tom on 2017/6/26.
@@ -303,7 +297,7 @@ public class OrderAddNamePopWindow extends PopupWindow {
             @Override
             public void onFailure(Object reasonObj) {
                 dialog.dismissLoadingDlg();
-                Log.i(TAG, "onFailure: " + reasonObj.toString());
+                Toast.makeText(context, "无数据", Toast.LENGTH_SHORT).show();
             }
         }));
     }

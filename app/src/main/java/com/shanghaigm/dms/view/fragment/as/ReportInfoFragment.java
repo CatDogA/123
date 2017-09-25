@@ -1,7 +1,6 @@
 package com.shanghaigm.dms.view.fragment.as;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,16 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
@@ -28,7 +24,6 @@ import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.as.ReportAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
-import com.shanghaigm.dms.view.widget.PopDatePicker;
 
 import org.json.JSONArray;
 import org.json.JSONException;

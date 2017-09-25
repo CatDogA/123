@@ -1,7 +1,6 @@
 package com.shanghaigm.dms.view.activity.mm;
 
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.DmsApplication;
@@ -28,7 +27,6 @@ import com.shanghaigm.dms.model.entity.ck.ChangeLetterAllocationInfo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
-import com.shanghaigm.dms.view.fragment.mm.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +84,7 @@ public class ChangeLetterDetailActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(ChangeLetterDetailActivity.this);
             }
         });
 

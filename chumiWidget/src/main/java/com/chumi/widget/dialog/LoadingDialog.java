@@ -149,39 +149,6 @@ public class LoadingDialog {
         dialogCount = 0;
     }
 
-    private Thread mThread = new Thread() {
-        @Override
-        public void run() {
-            super.run();
-            Lock lock = new ReentrantLock();
-            Log.i(TAG, "run:flag线程前：     " + flag);
-            while (flag) {
-                try {
-                    lock.lock();
-                    Log.i(TAG, "run: " + "睡觉");
-                    for (int i = 0; i < time; i++) {
-                        if (flag) {
-                            Thread.sleep(1);
-                        } else {
-                            return;
-                        }
-                    }
-                    Log.i(TAG, "run: " + "睡醒");
-                    Log.i(TAG, "run:flag线程后：     " + flag);
-                    if (flag) {    //如果sleep期间,dialog已经消失则不再继续执行
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 1;
-                        mHandler.sendMessage(msg);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    lock.unlock();
-                }
-            }
-        }
-    };
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

@@ -1,8 +1,10 @@
 package com.shanghaigm.dms.view.activity.common;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +19,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
@@ -27,20 +29,17 @@ import com.shanghaigm.dms.model.entity.common.LoginInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.model.util.SharedPreferencesUtil;
-import com.shanghaigm.dms.view.activity.BaseActivity;
 import com.shanghaigm.dms.view.activity.ck.HomeActivity;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 import com.shanghaigm.dms.view.widget.VersionPopupWindow;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity {
     private static String TAG = "LoginActivity";
     public static final String POSITION_FLAG = "position_flag";
     public static final String DB_ACCOUNT_INFO = "account_info";
@@ -161,7 +160,7 @@ public class LoginActivity extends BaseActivity {
         edtPassWord = (EditText) findViewById(R.id.pass_edit);
         roleEdt = (EditText) findViewById(R.id.role_edit);
         version = (TextView) findViewById(R.id.version);
-        dialog = new LoadingDialog(context, "正在加载");
+        dialog = new LoadingDialog(this, "正在加载");
         isUpdate();
     }
 
@@ -181,7 +180,9 @@ public class LoginActivity extends BaseActivity {
         switch (roleCode) {
             case "ywy":
 //                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
-                goToActivity(HomeActivity.class);
+                Intent i = new Intent(this,HomeActivity.class);
+                startActivity(i);
+//                goToActivity(HomeActivity.class);
                 finish();
                 break;
             case "ssbspy":
@@ -202,12 +203,16 @@ public class LoginActivity extends BaseActivity {
             case "xsfzjl":
 //            case "out_service":
                 //同名冲突
-                goToActivity(com.shanghaigm.dms.view.activity.mm.HomeActivity.class);
+                Intent i2 = new Intent(this,com.shanghaigm.dms.view.activity.mm.HomeActivity.class);
+                startActivity(i2);
+//                goToActivity(com.shanghaigm.dms.view.activity.mm.HomeActivity.class);
                 finish();
                 break;
             case "out_service":
             case "fwjl":
-                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
+                Intent i3 = new Intent(this,com.shanghaigm.dms.view.activity.as.HomeActivity.class);
+                startActivity(i3);
+//                goToActivity(com.shanghaigm.dms.view.activity.as.HomeActivity.class);
                 break;
         }
     }
@@ -341,6 +346,7 @@ public class LoginActivity extends BaseActivity {
                 try {
                     JSONArray resultEntity = result.getJSONArray("resultEntity");
                     String version = resultEntity.getJSONObject(0).getString("date_value");
+                    Log.i(TAG, "onSuccess: "+version+"      "+getVersion());
                     if (getVersion().equals(version)) {
                         Toast.makeText(LoginActivity.this, getText(R.string.latest_version), Toast.LENGTH_SHORT).show();
                     } else {

@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -219,6 +221,7 @@ public class ShowPictureLayout2 extends RelativeLayout {
                 path      /* 文件夹 */
         );
         mPublicVideoPath = video.getAbsolutePath();
+        Log.i("ReportUpdateActivity", "createPublicVideoFile:mPublicVideoPath           "+mPublicVideoPath);
         return video;
     }
 
@@ -257,7 +260,14 @@ public class ShowPictureLayout2 extends RelativeLayout {
                         context.startActivity(intent);
                     } else {
                         dialog.dismissLoadingDlg();
-                        Toast.makeText(context, getResources().getString(R.string.loaded), Toast.LENGTH_SHORT).show();
+                        //Toast必须在UI线程中，子线程要用new Handler(Looper.getMainLooper())来弹。
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, getResources().getString(R.string.loaded), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             }
@@ -305,6 +315,7 @@ public class ShowPictureLayout2 extends RelativeLayout {
             animation.setInterpolator(new AccelerateInterpolator());
             animation.setDuration(200);
         }
+        //录像
         if (isVideotape) {
             popupView.findViewById(R.id.btn_video_tape).setVisibility(View.VISIBLE);
             popupView.findViewById(R.id.btn_choose).setVisibility(View.VISIBLE);
@@ -680,7 +691,13 @@ public class ShowPictureLayout2 extends RelativeLayout {
                     dialog.dismissLoadingDlg();
                     if (isLoad) {
                         //strDir视频路径
-                        Toast.makeText(context, "下载完成", Toast.LENGTH_SHORT).show();
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, getResources().getString(R.string.loaded), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         Intent intent = new Intent(context, ShowVideoActivity.class);
                         Bundle b = new Bundle();

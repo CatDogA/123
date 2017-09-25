@@ -3,9 +3,7 @@ package com.shanghaigm.dms.view.activity.ck;
 import android.app.FragmentManager;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +14,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
@@ -31,11 +29,11 @@ import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoTwo;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.BaseActivity;
+import com.shanghaigm.dms.view.activity.common.LoginActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddAllocation2Fragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddBaseFragment;
 import com.shanghaigm.dms.view.fragment.ck.OrderAddPayFragment;
-import com.shanghaigm.dms.view.fragment.ck.OrderSubFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +42,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.realm.internal.TableView;
 
 public class OrderAddActivity extends BaseActivity {
     private static String TAG = "OrderAddActivity";
@@ -121,8 +117,7 @@ public class OrderAddActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.os.Process.killProcess(android.os.Process.myPid());   //获取PID，目前获取自己的也只有该API，否则从/proc中自己的枚举其他进程吧，不过要说明的是，结束其他进程不一定有权限，不然就乱套了。
-                System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
+                goToActivity(LoginActivity.class);
             }
         });
         saveBtn.setOnClickListener(new View.OnClickListener() {

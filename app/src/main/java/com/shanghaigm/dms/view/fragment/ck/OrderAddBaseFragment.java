@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.databinding.FragmentOrderAddBaseBinding;
@@ -33,7 +33,6 @@ import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 import com.shanghaigm.dms.view.widget.OrderAddNamePopWindow;
-import com.shanghaigm.dms.view.widget.SearchTable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -385,6 +384,7 @@ public class OrderAddBaseFragment extends BaseFragment {
 
             @Override
             public void onFailure(Object reasonObj) {
+
             }
         }));
     }

@@ -1,7 +1,6 @@
 package com.shanghaigm.dms.view.fragment.mm;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,9 +18,8 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
-import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.Constant;
@@ -29,12 +27,10 @@ import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.model.entity.common.TableInfo;
 import com.shanghaigm.dms.model.entity.mm.ChangeBillDetailInfo;
 import com.shanghaigm.dms.model.entity.mm.ChangeBillInfoBean;
-import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
 import com.shanghaigm.dms.view.activity.mm.HomeActivity;
-import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -49,8 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.support.design.R.id.info;
 
 
 public class ChangeBillReviewFragment extends BaseFragment {
@@ -99,7 +93,7 @@ public class ChangeBillReviewFragment extends BaseFragment {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(getActivity());
             }
         });
         initViewPager();

@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
@@ -30,9 +30,7 @@ import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
-import com.shanghaigm.dms.view.activity.mm.ContractReviewOrChangeLetterReviewActivity;
 import com.shanghaigm.dms.view.activity.mm.HomeActivity;
-import com.shanghaigm.dms.view.activity.mm.OrderDetailActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
@@ -86,13 +84,13 @@ public class OrderReviewFragment extends BaseFragment {
         rl_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity)getActivity()).back();
+                ((HomeActivity) getActivity()).back();
             }
         });
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(getActivity());
             }
         });
         initViewPager();
@@ -150,7 +148,7 @@ public class OrderReviewFragment extends BaseFragment {
         areaSelectEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(app.getRoleCode().equals("ssbspy") || app.getRoleCode().equals("regional_Manager")){
+                if (app.getRoleCode().equals("ssbspy") || app.getRoleCode().equals("regional_Manager")) {
                     Toast.makeText(getActivity(), "无法点击", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -210,7 +208,6 @@ public class OrderReviewFragment extends BaseFragment {
 
                     }
                 }));
-//
             }
         });
         stateSelectEdt.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +215,6 @@ public class OrderReviewFragment extends BaseFragment {
             public void onClick(View v) {
                 String[] strings = {"", "待审核", "已审核", "驳回"};
                 ArrayList<PopListInfo> states = new ArrayList<PopListInfo>();
-                states.add(new PopListInfo(""));
                 for (int i = 0; i < strings.length; i++) {
                     states.add(new PopListInfo(strings[i]));
                 }
@@ -248,7 +244,7 @@ public class OrderReviewFragment extends BaseFragment {
         //如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();
-            if(tableInfos.size()>0){
+            if (tableInfos.size() > 0) {
                 if (tableInfos.get(page).isAdded) {    //满足即取出显示返回
                     for (TableInfo tableInfo : tableInfos) {
                         tables.add((ReviewTable) tableInfo.table);
@@ -484,11 +480,11 @@ public class OrderReviewFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(hidden){
-            if(!((HomeActivity)getActivity()).isBackClick){
-                ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(2));
+        if (hidden) {
+            if (!((HomeActivity) getActivity()).isBackClick) {
+                ((HomeActivity) getActivity()).fragmentInfos.add(new FragmentInfo(2));
             }
-            ((HomeActivity)getActivity()).isBackClick = false;
+            ((HomeActivity) getActivity()).isBackClick = false;
         }
     }
 }

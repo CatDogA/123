@@ -133,7 +133,7 @@ public class ReportDetailActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(ReportDetailActivity.this);
             }
         });
         rl_back.setOnClickListener(new View.OnClickListener() {

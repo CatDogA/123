@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.chumi.widget.http.okhttp.RequestParams;
 import com.shanghaigm.dms.DmsApplication;
@@ -31,22 +31,22 @@ import com.shanghaigm.dms.model.entity.mm.OrderQueryInfoBean;
 import com.shanghaigm.dms.model.entity.mm.PaperInfo;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
 import com.shanghaigm.dms.model.util.GsonUtil;
+import com.shanghaigm.dms.model.util.OkhttpRequestCenter;
 import com.shanghaigm.dms.view.activity.ck.HomeActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
-import com.shanghaigm.dms.view.activity.ck.OrderModifyActivity;
 import com.shanghaigm.dms.view.adapter.TablePagerAdapter;
 import com.shanghaigm.dms.view.fragment.BaseFragment;
-import com.shanghaigm.dms.view.fragment.mm.OrderReview2Fragment;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 import com.shanghaigm.dms.view.widget.ReviewTable;
-import com.shanghaigm.dms.view.widget.WrapHeightViewPager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderSubFragment extends BaseFragment {
     private static OrderSubFragment fragment;
@@ -89,29 +89,15 @@ public class OrderSubFragment extends BaseFragment {
         requestOrderInfo(1);
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        Log.i("homefragment", "onStart: "+"start            2");
-//        ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(2));
-//    }
-    //    @Override
-//    public void onResume() {
-//        super.onResume();
-//        ((HomeActivity)getActivity()).setButton(2);
-//    }
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden){
-            Log.i("homefragment", "onHiddenChanged:show          "+"2222222222222222222222222222222222222222222222");
-//            ((HomeActivity)getActivity()).setButton(2);
-        }else {
-            Log.i("homefragment", "onHiddenChanged:hide          "+"2222222222222222222222222222222222222222222222");
-            if(!((HomeActivity)getActivity()).isBackClick){
-                ((HomeActivity)getActivity()).fragmentInfos.add(new FragmentInfo(2));
+        if (!hidden) {
+        } else {
+            if (!((HomeActivity) getActivity()).isBackClick) {
+                ((HomeActivity) getActivity()).fragmentInfos.add(new FragmentInfo(2));
             }
-            ((HomeActivity)getActivity()).isBackClick = false;
+            ((HomeActivity) getActivity()).isBackClick = false;
         }
     }
 
@@ -121,13 +107,13 @@ public class OrderSubFragment extends BaseFragment {
         rl_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity)getActivity()).back();
+                ((HomeActivity) getActivity()).back();
             }
         });
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(getActivity());
             }
         });
         vpLeft.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +198,7 @@ public class OrderSubFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(Object reasonObj) {
-
+                        dialog.dismissLoadingDlg();
                     }
                 }));
             }
@@ -245,7 +231,7 @@ public class OrderSubFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(Object reasonObj) {
-
+                        dialog.dismissLoadingDlg();
                     }
                 }));
             }
@@ -264,14 +250,13 @@ public class OrderSubFragment extends BaseFragment {
     }
 
     /**
-     * @param type
-     * 判断是否有数据，没有，则请求数据并刷新
+     * @param type 判断是否有数据，没有，则请求数据并刷新
      */
     private void requestOrderInfo(final int type) {
 //        如果有，直接显示
         if (type != 1) {       //已经查询过
             tables.clear();    //先把tables刷新
-            if(tableInfos.size()>0){
+            if (tableInfos.size() > 0) {
                 if (tableInfos.get(page).isAdded) {    //满足已有即立即取出显示返回
                     for (TableInfo tableInfo : tableInfos) {
                         tables.add((ReviewTable) tableInfo.table);
@@ -312,16 +297,16 @@ public class OrderSubFragment extends BaseFragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestParams params = new RequestParams();
+        Map<String,Object> params = new HashMap<>();
         params.put("order", paramArray.toString());
         params.put("page", (page + 1) + "");
         params.put("rows", "8");
         params.put("loginName", app.getAccount());
         params.put("jobCode", app.getJobCode());
-        CommonOkHttpClient.get(new CommonRequest().createGetRequest(Constant.URL_QUERY_ORDER_SUB_INFO, params), new DisposeDataHandle(new DisposeDataListener() {
+        OkhttpRequestCenter.getCommonReportRequest(Constant.URL_QUERY_ORDER_SUB_INFO, params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
-                Log.i(TAG, "onSuccess:responseObj      " + responseObj.toString());
+                Log.i(TAG, "onSuccess:       " + responseObj.toString());
                 dialog.dismissLoadingDlg();
                 OrderQueryInfoBean info = GsonUtil.GsonToBean(responseObj.toString(), OrderQueryInfoBean.class);
                 List<OrderQueryInfoBean.ResultEntity.OrderInfo> rows = info.resultEntity.rows;
@@ -382,12 +367,12 @@ public class OrderSubFragment extends BaseFragment {
                     setPages(0, 0);
                 }
             }
+
             @Override
             public void onFailure(Object reasonObj) {
-                Log.i(TAG, "onFailure:       " + reasonObj.toString());
                 dialog.dismissLoadingDlg();
             }
-        }));
+        });
     }
 
     private Object getParam(JSONArray array, String text, String name, String code) {

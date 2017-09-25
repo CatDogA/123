@@ -3,8 +3,6 @@ package com.shanghaigm.dms.view.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +13,12 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.chumi.widget.http.listener.DisposeDataHandle;
-import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
-import com.chumi.widget.http.okhttp.CommonRequest;
 import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.R;
-import com.shanghaigm.dms.model.Constant;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
-import com.shanghaigm.dms.model.entity.mm.ProvincialCitysInfo;
-import com.shanghaigm.dms.model.util.ScreenUtil;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Tom on 2017/5/23.

@@ -2,6 +2,7 @@ package com.shanghaigm.dms;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +24,7 @@ import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoOne;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoBean;
 import com.shanghaigm.dms.view.activity.BaseActivity;
+import com.shanghaigm.dms.view.activity.common.LoginActivity;
 
 import java.util.ArrayList;
 
@@ -62,10 +64,13 @@ public class DmsApplication extends Application {
         mainData = new MainData();
     }
 
-    public void endApp() {
-        for (BaseActivity a : activities) {
-            a.finish();
-        }
+    public void endApp(Context context) {
+        Log.i(TAG, "endApp:         " + activities.size());
+//        for (int i = 0; i < activities.size(); i++) {
+//            activities.get(i).finish();   //保留登录
+//        }
+        Intent i = new Intent(context, LoginActivity.class);
+        context.startActivity(i);
     }
 
     public Boolean isSoftKeyBoardOpen() {
@@ -105,7 +110,7 @@ public class DmsApplication extends Application {
                 if (flag) {
                     if (!(temp.equals("") || temp.equals("."))) {
                         Double n = Double.parseDouble(temp);
-                        Log.i(TAG, "afterTextChanged:n       "+n);
+                        Log.i(TAG, "afterTextChanged:n       " + n);
                         if (n >= 1) {
                             if (posDot > 0) {
                                 edt.delete(0, posDot - 1);

@@ -55,7 +55,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(HomeActivity.this);
             }
         });
     }

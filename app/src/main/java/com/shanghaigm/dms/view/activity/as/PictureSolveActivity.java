@@ -81,7 +81,7 @@ public class PictureSolveActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 DmsApplication app = DmsApplication.getInstance();
-                app.endApp();
+                app.endApp(PictureSolveActivity.this);
             }
         });
         rl_back.setOnClickListener(new View.OnClickListener() {

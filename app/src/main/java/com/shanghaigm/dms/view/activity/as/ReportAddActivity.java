@@ -127,7 +127,7 @@ public class ReportAddActivity extends BaseActivity {
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.endApp();
+                app.endApp(ReportAddActivity.this);
             }
         });
         title.setText(getResources().getText(R.string.report_fill));

@@ -2,7 +2,6 @@ package com.shanghaigm.dms.model.util;
 
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.chumi.widget.http.okhttp.RequestParams;
 
@@ -21,7 +20,7 @@ public class OkhttpRequestCenter {
 
     //有int的get
     public static void getRequest(String url, Map<String, Object> params, DisposeDataListener listener) {
-        CommonOkHttpClient.get(CommonRequest.createGetRequestInt(url, params), new DisposeDataHandle(listener));
+        OkHttpClient.get(CommonRequest.createGetRequestInt(url, params), new DisposeDataHandle(listener));
     }
 
     //大多数的get请求

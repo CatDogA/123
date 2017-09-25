@@ -1,6 +1,5 @@
 package com.shanghaigm.dms.view.activity.mm;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 import com.chumi.widget.dialog.LoadingDialog;
 import com.chumi.widget.http.listener.DisposeDataHandle;
 import com.chumi.widget.http.listener.DisposeDataListener;
-import com.chumi.widget.http.okhttp.CommonOkHttpClient;
+import com.shanghaigm.dms.model.util.CommonOkHttpClient;
 import com.chumi.widget.http.okhttp.CommonRequest;
 import com.shanghaigm.dms.DmsApplication;
 import com.shanghaigm.dms.R;
@@ -29,7 +28,6 @@ import com.shanghaigm.dms.view.fragment.BaseFragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderDetailAllocationInfoFragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderDetailInfoOneFragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderDetailInfoTwoFragment;
-import com.shanghaigm.dms.view.fragment.mm.OrderReviewFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
