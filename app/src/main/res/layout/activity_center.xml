@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    tools:context="com.shanghaigm.dms.view.activity.mm.CenterActivity">
+
+    <include layout="@layout/include_title_bar" />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_order_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_order_review" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_custom_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_custom_file" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_month" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_week"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_week" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_day" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_area_com"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_area_com_sub" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_month_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_month_review" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_week_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_week_review" />
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_day_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_day_review" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_query_add"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/query_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/cic_btn"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:onClick="onClick"
+            android:textColor="@color/colorWhite"
+            android:text="@string/query" />
+        <Button
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/mm_add_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/cic_btn"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:onClick="onClick"
+            android:textColor="@color/colorWhite"
+            android:text="@string/add"
+            tools:ignore="OnClick" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_query"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/query_button2"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/cic_btn"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:onClick="onClick"
+            android:textColor="@color/colorWhite"
+            android:text="@string/query" />
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_review"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_order_review_state"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_sub"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_sub_state"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_report_sub_state"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_report_sub_state"/>
+    </RelativeLayout>
+    <com.shanghaigm.dms.view.widget.WrapHeightViewPager
+        android:id="@+id/order_review_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </com.shanghaigm.dms.view.widget.WrapHeightViewPager>
+    <include layout="@layout/include_below_table"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+</LinearLayout>

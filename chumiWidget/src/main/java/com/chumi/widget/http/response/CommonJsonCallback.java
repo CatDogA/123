@@ -11,6 +11,7 @@ import com.chumi.widget.http.listener.DisposeDataListener;
 import com.chumi.widget.http.listener.DisposeHandleCookieListener;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -112,15 +113,22 @@ public class CommonJsonCallback implements Callback {
             /**
              * 协议确定后看这里如何修改
              */
-            JSONObject result = new JSONObject(responseObj.toString());
-            if (mClass == null) {
-                mListener.onSuccess(result);
+            if (responseObj.toString().startsWith("[")) {
+                JSONArray result = new JSONArray(responseObj.toString());
+                if (mClass == null) {
+                    mListener.onSuccess(result);
+                }
             } else {
-                Object obj = ResponseEntityToModule.parseJsonObjectToModule(result, mClass);
-                if (obj != null) {
-                    mListener.onSuccess(obj);
+                JSONObject result = new JSONObject(responseObj.toString());
+                if (mClass == null) {
+                    mListener.onSuccess(result);
                 } else {
-                    mListener.onFailure(new OkHttpException(JSON_ERROR, EMPTY_MSG));
+                    Object obj = ResponseEntityToModule.parseJsonObjectToModule(result, mClass);
+                    if (obj != null) {
+                        mListener.onSuccess(obj);
+                    } else {
+                        mListener.onFailure(new OkHttpException(JSON_ERROR, EMPTY_MSG));
+                    }
                 }
             }
         } catch (Exception e) {

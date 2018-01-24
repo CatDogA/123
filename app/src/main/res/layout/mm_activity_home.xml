@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
     <LinearLayout
+        android:id="@+id/ll_tabs"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorWhite"
@@ -42,47 +43,47 @@
                 android:textColor="?attr/tabBarTextColor" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/order_tab_text"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_marginTop="3dp"
-                android:src="@drawable/tab_order_review"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="5dp"
-                android:text="@string/order"
-                android:textColor="?attr/tabBarTextColor" />
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/order_tab_text"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="vertical"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent">-->
+            <!--<ImageView-->
+                <!--android:layout_marginTop="3dp"-->
+                <!--android:src="@drawable/tab_order_review"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp" />-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:padding="5dp"-->
+                <!--android:text="@string/order"-->
+                <!--android:textColor="?attr/tabBarTextColor" />-->
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/modify_tab_text"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:gravity="center_horizontal"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_marginTop="3dp"
-                android:src="@drawable/tab_bill_review"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawablePadding="3dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="@string/mm_change_bill_review"
-                android:textColor="?attr/tabBarTextColor" />
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/modify_tab_text"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:layout_height="match_parent">-->
+            <!--<ImageView-->
+                <!--android:layout_marginTop="3dp"-->
+                <!--android:src="@drawable/tab_bill_review"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp" />-->
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:drawablePadding="3dp"-->
+                <!--android:gravity="center"-->
+                <!--android:padding="5dp"-->
+                <!--android:text="@string/mm_change_bill_review"-->
+                <!--android:textColor="?attr/tabBarTextColor" />-->
+        <!--</LinearLayout>-->
 
     </LinearLayout>
 </LinearLayout>

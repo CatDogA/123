@@ -15,7 +15,7 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 输出日志，所需tag
      */
-    public String TAG="luo";
+    public String TAG="hhhhhhhhhhhhhhhhhhh";
     public DmsApplication app = DmsApplication.getInstance();
     public Context context;
     @Override

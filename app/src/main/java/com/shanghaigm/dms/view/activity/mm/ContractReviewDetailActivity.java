@@ -153,7 +153,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                             btn_return.setEnabled(false);
                             btn_pass.setEnabled(false);
 
-                            goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                            goToActivity(CenterActivity.class);
                             finish();
                         }
 
@@ -197,7 +197,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                                 btn_return.setEnabled(false);
                                 btn_pass.setEnabled(false);
 
-                                goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                                goToActivity(CenterActivity.class);
                                 finish();
                             }
 
@@ -207,7 +207,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                             }
                         }));
                     } else {
-                        Toast.makeText(ContractReviewDetailActivity.this, "备注不可为空", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ContractReviewDetailActivity.this, getText(R.string.need_remark), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

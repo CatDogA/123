@@ -118,7 +118,7 @@ public class ChangeBillDetailActivity extends BaseActivity {
                         }
                     }));
                 }else {
-                    Toast.makeText(ChangeBillDetailActivity.this, "添加备注", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangeBillDetailActivity.this, "请添加备注", Toast.LENGTH_SHORT).show();
                 }
             }
         });

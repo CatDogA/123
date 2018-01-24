@@ -46,7 +46,82 @@
         android:layout_height="wrap_content">
         <include layout="@layout/include_report_table_title"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/custom_file_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_custom_file_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_month_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_month_manage_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_week_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_week_report_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_day_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_day_report_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_area_sub_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_area_com_out_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_month_review_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_month_review_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_week_review_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_week_review_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_day_review_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_day_review_table_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_area_com_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_area_com_review_table_title"/>
+    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_area_com"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<include layout="@layout/include_area_com_table_title"/>-->
+    <!--</RelativeLayout>-->
+    <RelativeLayout
+        android:id="@+id/rl_swipe_list"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/swipe_list"
+            android:divider="@color/colorWhite"
+            android:dividerHeight="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
+    </RelativeLayout>
     <ListView
+        android:visibility="gone"
         android:id="@+id/review_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

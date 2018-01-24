@@ -14,7 +14,6 @@
         android:layout_weight="1" />
 
     <include layout="@layout/include_allocation_choose_undefault_title" />
-
     <ListView
         android:id="@+id/list_allocation_choose_undefault"
         android:layout_width="match_parent"

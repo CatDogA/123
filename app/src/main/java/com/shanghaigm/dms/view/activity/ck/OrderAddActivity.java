@@ -436,6 +436,7 @@ public class OrderAddActivity extends BaseActivity {
                     requestParams.put("standardVo", allocationArray.toString());
                     requestParams.put("matching", customerArray.toString());
                     requestParams.put("loginName", app.getAccount());
+                    requestParams.put("job_code", app.getJobCode());
                     dialog.showLoadingDlg();
                     OkhttpRequestCenter.getCommonPostRequest(url, requestParams, new DisposeDataListener() {
                         @Override

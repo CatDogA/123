@@ -15,7 +15,7 @@ public class DatePickerDialog extends DateTimePickerDialog {
         return new DatePickerDialog(mContext, DatePickerDialog.TYPE_DATE);
     }
 
-    private DatePickerDialog(Context mContext, int mType) {
+    protected DatePickerDialog(Context mContext, int mType) {
         super(mContext, mType);
     }
 }

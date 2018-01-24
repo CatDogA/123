@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     private ArrayList<LoginInfo> loginInfos = new ArrayList<>();
     private TextView version;
     private View v;
+    private TextView txtPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
         edtPassWord = (EditText) findViewById(R.id.pass_edit);
         roleEdt = (EditText) findViewById(R.id.role_edit);
         version = (TextView) findViewById(R.id.version);
+        txtPosition = (TextView) findViewById(R.id.txt_position);
         dialog = new LoadingDialog(this, "正在加载");
         isUpdate();
     }
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent i = new Intent(this,HomeActivity.class);
                 startActivity(i);
 //                goToActivity(HomeActivity.class);
-                finish();
+//                finish();
                 break;
             case "ssbspy":
             case "regional_Manager":
@@ -206,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent i2 = new Intent(this,com.shanghaigm.dms.view.activity.mm.HomeActivity.class);
                 startActivity(i2);
 //                goToActivity(com.shanghaigm.dms.view.activity.mm.HomeActivity.class);
-                finish();
+//                finish();
                 break;
             case "out_service":
             case "fwjl":
@@ -255,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "用户名密码错误", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(LoginActivity.this, "请输入完整正确信息", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -329,7 +331,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initPopWindow(ArrayList<PopListInfo> list) {
         jobListPop = new MmPopupWindow(this, roleEdt, list, 5);
-        jobListPop.showPopup(roleEdt);
+        jobListPop.showPopup(txtPosition);
     }
 
     //判断是否更新

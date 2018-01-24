@@ -42,13 +42,16 @@
                 android:id="@+id/name_edit"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
                 android:layout_marginLeft="23dp"
                 android:background="@null"
+                android:drawableStart="@mipmap/customer"
                 android:drawableLeft="@mipmap/customer"
                 android:drawablePadding="25dp"
                 android:hint="@string/username"
                 android:imeOptions="actionNext"
                 android:lines="1"
+                android:textSize="13sp"
                 android:paddingBottom="20dp"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorWhite"
@@ -77,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="20dp"
+                android:textSize="13sp"
                 android:drawableLeft="@mipmap/password1"
                 android:drawablePadding="25dp"
                 android:hint="@string/pass"
@@ -111,6 +115,7 @@
                 <EditText
                     android:id="@+id/role_edit"
                     android:layout_width="200dp"
+                    android:textSize="13sp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="20dp"
@@ -123,7 +128,13 @@
                     android:textColor="@color/colorWhite"
                     android:textColorHint="@color/colorWhite"
                     android:theme="@style/MyText" />
-
+                <TextView
+                    android:layout_marginTop="35dp"
+                    android:id="@+id/txt_position"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"

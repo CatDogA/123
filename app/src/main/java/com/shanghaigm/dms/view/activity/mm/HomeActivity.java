@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -17,21 +18,25 @@ import com.shanghaigm.dms.model.entity.ck.FragmentInfo;
 import com.shanghaigm.dms.view.fragment.common.HomeFragment;
 import com.shanghaigm.dms.view.fragment.mm.ChangeBillReviewFragment;
 import com.shanghaigm.dms.view.fragment.mm.OrderReviewFragment;
+import com.shanghaigm.dms.view.widget.TabBottom;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends FragmentActivity implements View.OnClickListener {
+public class HomeActivity extends FragmentActivity {
     public static String ORDER_BILL_REFRESH = "order_bill_refresh";
     private FragmentManager fm;
     private HomeFragment mHomeFragment;
     private OrderReviewFragment mOrderFragment;
     private ChangeBillReviewFragment mChangeBillReviewFragment;
-    private LinearLayout text_home, text_order, text_modify;
+    private LinearLayout text_home;
     public Boolean useOrder;    //是否使用订单审核
     public Boolean useBill;     //是否使用更改单审核
-
+    private LinearLayout llTabs;
     public Boolean isBackClick;     //判断是否点击回退
     public ArrayList<FragmentInfo> fragmentInfos;       //回退fragment
+    private TabBottom tab1, tab2;
+    private LinearLayout.LayoutParams lp;
+    public static int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         //初始化控件
         initView();
         showHome();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        chooseFragment(0);
     }
 
     @Override
@@ -70,18 +81,67 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void initView() {
+        lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
         text_home = (LinearLayout) findViewById(R.id.home_tab_text);
-        text_home.setOnClickListener(this);
-        text_order = (LinearLayout) findViewById(R.id.order_tab_text);
-        text_order.setOnClickListener(this);
-        text_modify = (LinearLayout) findViewById(R.id.modify_tab_text);
-        text_modify.setOnClickListener(this);
+        llTabs = (LinearLayout) findViewById(R.id.ll_tabs);
         useOrder = true;
         useBill = true;
         isBackClick = false;
         fragmentInfos = new ArrayList<>();
         if (fragmentInfos.size() > 0) {
             fragmentInfos.clear();
+        }
+        tab1 = new TabBottom(this, "订单审核", R.drawable.tab_order_review);
+        tab2 = new TabBottom(this, "更改函审核", R.drawable.tab_bill_review);
+        tab1.setLayoutParams(lp);
+        tab2.setLayoutParams(lp);
+        llTabs.addView(tab1);
+        llTabs.addView(tab2);
+        text_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                click(1);
+            }
+        });
+        tab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                click(2);
+            }
+        });
+        tab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                click(3);
+
+            }
+        });
+
+    }
+
+    public void setTab(int flag) {
+        switch (flag) {
+            case 1:
+                tab1.setTxt("合同审核");
+                tab2.setVisibility(View.INVISIBLE);
+                tab2.setEnabled(false);
+                break;
+            case 2:
+                tab1.setTxt("合同审核");
+                tab2.setTxt("更改单审核");
+                break;
+            case 3:
+                tab2.setTxt("更改单审核");
+                break;
+            case 4:
+                tab2.setVisibility(View.INVISIBLE);
+                tab2.setEnabled(false);
+                break;
+            case 5:
+                tab1.setTxt("更改单审核");
+                tab2.setVisibility(View.INVISIBLE);
+                tab2.setEnabled(false);
+                break;
         }
     }
 
@@ -91,12 +151,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.addToBackStack(null);
-        switch (v.getId()) {
-            case R.id.home_tab_text:
+    private void click(int type) {
+        final FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        Intent i = new Intent(this,CenterActivity.class);
+        Bundle bundle = new Bundle();
+        switch (type) {
+            case 1:
                 setSelected();
                 text_home.setSelected(true);
                 hideFragment(mOrderFragment, fragmentTransaction);
@@ -109,42 +169,71 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     fragmentTransaction.show(mHomeFragment);
                 }
                 break;
-
-            case R.id.order_tab_text:
-                if (useOrder) {
-                    setSelected();
-                    text_order.setSelected(true);
-                    hideFragment(mHomeFragment, fragmentTransaction);
-                    hideFragment(mChangeBillReviewFragment, fragmentTransaction);
-                    if (mOrderFragment == null) {
-                        mOrderFragment = OrderReviewFragment.getInstance();
-                        //隐藏其他两个fragment
-                        fragmentTransaction.add(R.id.layout_content, mOrderFragment);
-                    } else {
-                        fragmentTransaction.show(mOrderFragment);
-                    }
-                } else {
-                    Toast.makeText(this, "无此功能", Toast.LENGTH_SHORT).show();
+            case 2:
+                switch (flag){
+                    case 0:
+                    case 3:
+                    case 4:
+                        setSelected();
+                        tab1.setSelected(true);
+                        hideFragment(mHomeFragment, fragmentTransaction);
+                        hideFragment(mChangeBillReviewFragment, fragmentTransaction);
+                        if (mOrderFragment == null) {
+                            mOrderFragment = OrderReviewFragment.getInstance();
+                            //隐藏其他两个fragment
+                            fragmentTransaction.add(R.id.layout_content, mOrderFragment);
+                        } else {
+                            fragmentTransaction.show(mOrderFragment);
+                        }
+                        break;
+                    case 1:
+                    case 2:
+                        bundle.putInt(com.shanghaigm.dms.view.fragment.common.HomeFragment.CONTRACT_OR_LETTER, 2);
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    case 5:
+                        setSelected();
+                        tab1.setSelected(true);
+                        hideFragment(mOrderFragment, fragmentTransaction);
+                        hideFragment(mHomeFragment, fragmentTransaction);
+                        if (mChangeBillReviewFragment == null) {
+                            mChangeBillReviewFragment = new ChangeBillReviewFragment();
+                            //隐藏其他两个fragment
+                            fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
+                        } else {
+                            fragmentTransaction.show(mChangeBillReviewFragment);
+                        }
+                        break;
+//                    case 3:
+//                        bundle.putInt(com.shanghaigm.dms.view.fragment.common.HomeFragment.CONTRACT_OR_LETTER, 2);
+//                        goToActivity(CenterActivity.class, bundle);
+//                        break;
                 }
 
                 break;
-            case R.id.modify_tab_text:
-                if (useBill) {
-                    setSelected();
-                    text_modify.setSelected(true);
-                    hideFragment(mOrderFragment, fragmentTransaction);
-                    hideFragment(mHomeFragment, fragmentTransaction);
-                    if (mChangeBillReviewFragment == null) {
-                        mChangeBillReviewFragment = new ChangeBillReviewFragment();
-                        //隐藏其他两个fragment
-                        fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
-                    } else {
-                        fragmentTransaction.show(mChangeBillReviewFragment);
-                    }
-                } else {
-                    Toast.makeText(this, "无此功能", Toast.LENGTH_SHORT).show();
+            case 3:
+                switch (flag){
+                    case 0:
+                        bundle.putInt(com.shanghaigm.dms.view.fragment.common.HomeFragment.CONTRACT_OR_LETTER, 3);
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    case 2:
+                    case 3:
+                        setSelected();
+                        tab2.setSelected(true);
+                        hideFragment(mOrderFragment, fragmentTransaction);
+                        hideFragment(mHomeFragment, fragmentTransaction);
+                        if (mChangeBillReviewFragment == null) {
+                            mChangeBillReviewFragment = new ChangeBillReviewFragment();
+                            //隐藏其他两个fragment
+                            fragmentTransaction.add(R.id.layout_content, mChangeBillReviewFragment);
+                        } else {
+                            fragmentTransaction.show(mChangeBillReviewFragment);
+                        }
+                        break;
                 }
-
                 break;
         }
         fragmentTransaction.commit();
@@ -153,8 +242,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     //重置所有文本的选中状态
     private void setSelected() {
         text_home.setSelected(false);
-        text_order.setSelected(false);
-        text_modify.setSelected(false);
+        tab1.setSelected(false);
+        tab2.setSelected(false);
     }
 
     public void chooseFragment(int i) {
@@ -176,7 +265,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case 1:
                 setSelected();
-                text_order.setSelected(true);
+                tab1.setSelected(true);
                 hideFragment(mHomeFragment, fragmentTransaction);
                 hideFragment(mChangeBillReviewFragment, fragmentTransaction);
                 if (mOrderFragment == null) {
@@ -189,7 +278,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case 2:
                 setSelected();
-                text_modify.setSelected(true);
+                tab2.setSelected(true);
                 hideFragment(mOrderFragment, fragmentTransaction);
                 hideFragment(mHomeFragment, fragmentTransaction);
                 if (mChangeBillReviewFragment == null) {
@@ -223,11 +312,11 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             isBackClick = true;
-            Log.i("homeactivity", "onKeyDown:        "+fragmentInfos.size());
-            if(fragmentInfos.size()>0){
+            Log.i("homeactivity", "onKeyDown:        " + fragmentInfos.size());
+            if (fragmentInfos.size() > 0) {
                 chooseFragment(fragmentInfos.get(fragmentInfos.size() - 1).flag - 1);
                 fragmentInfos.remove(fragmentInfos.size() - 1);
-            }else {
+            } else {
                 finish();
             }
             return true;

@@ -6,6 +6,7 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.shanghaigm.dms.view.activity.as.ReportDetailActivity;
 import com.shanghaigm.dms.view.activity.as.ReportUpdateActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterAddActivity;
 import com.shanghaigm.dms.view.activity.ck.ChangeLetterQueryDetailActivity;
+import com.shanghaigm.dms.view.activity.ck.CustomFileAddActivity;
 import com.shanghaigm.dms.view.activity.ck.OrderAddActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeBillDetailActivity;
 import com.shanghaigm.dms.view.activity.mm.ChangeLetterDetailActivity;
@@ -45,15 +47,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Tom on 2017/5/15.
+ * 各种列表枢纽
  */
 
-public class PaperInfo extends BasePaperInfo {
+public class PaperInfo extends BasePaperInfo implements Serializable{
     public static String ORDER_TYPE = "order_type";
     public static String ORDER_SUB_DETAIL_INFO = "query_order_sub_detail";      //判断查询还是修改
     public static String ORDER_REVIEW_DETIAL_INFO = "query_order_review_detail";
@@ -62,8 +66,9 @@ public class PaperInfo extends BasePaperInfo {
     public static String REPORT_DETAI_INFO = "report_detail_info";
     public static String REPORT_FILE_INFO = "report_file_info";
     public static String ORDER_MODIFY = "oder_modify";
-    public static String REPORT_FLAG = "report_flag";
-    private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交
+    public static String TASK_TYPE = "task_type";
+    private int flag;//判断进入的详情页面  1.订单审核，2.合同审核，3.更改函审核，4.更改单审核，5.订单提交，6.更改函提交，7.日报提交，8.日报审核，
+    // 9.客户文档
     private LoadingDialog dialog;
     private LoadingDialog dialog2;
     private static String TAG = "PaperInfo";
@@ -80,9 +85,9 @@ public class PaperInfo extends BasePaperInfo {
     private int report_state;
     private String car_sign;
     private String daily_code;
-    private int daily_id;
+    private int daily_id, custome_id;
     private int letter_id;
-
+    private int id, id2, id3,id4;                   //客户文档、月报、日报、周报统一id   id2,id3用于审核
     private Context context;
     private ChangeLetterDetailInfo changeLetterDetailInfo;
     private ContractDetailInfo contractDetailInfo;
@@ -93,7 +98,40 @@ public class PaperInfo extends BasePaperInfo {
     private int reportCount = 0;
     private ArrayList<ArrayList<PathInfo>> allPaths = new ArrayList<>();
 
+    private String info, info2, info3, info4, info5;
+    private Boolean isSlide;
+
     public PaperInfo() {
+        //测试
+        this.daily_code = "萨拉哈哈";
+        this.model = "12";
+        this.car_sign = "06";
+    }
+
+    //客户文档、月、周、日、竞品
+    public PaperInfo(String info, String info2, String info3, String info4, int flag, int id,Boolean isSlide) {
+        this.info = info;
+        this.info2 = info2;
+        this.info3 = info3;
+        this.info4 = info4;
+        this.id = id;
+        this.isSlide = isSlide;
+        this.flag = flag;
+    }
+
+    //月报审核
+    public PaperInfo(String info, String info2, String info3, String info4, String info5, int flag, int id, int id2, int id3,int id4,Boolean isSlide) {
+        this.info = info;
+        this.info2 = info2;
+        this.info3 = info3;
+        this.info4 = info4;
+        this.info5 = info5;
+        this.id = id;
+        this.id2 = id2;
+        this.id3 = id3;
+        this.id4  = id4;
+        this.flag = flag;
+        this.isSlide = isSlide;
     }
 
     //合同审核
@@ -291,6 +329,7 @@ public class PaperInfo extends BasePaperInfo {
                 }
             });
         }
+
     }
 
     public void onNoAccessClick(final View view) {
@@ -655,7 +694,7 @@ public class PaperInfo extends BasePaperInfo {
 
     public void OnDeleteOrderClick(final View v) {
         if (state.equals("1") || state.equals("4")) {
-            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(v.getContext(), 3, orderId);
+            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(v.getContext(), 3, orderId, -1, -1);
             pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             View layout = LayoutInflater.from(v.getContext()).inflate(R.layout.ck_activity_home, null, false);
             pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
@@ -670,7 +709,7 @@ public class PaperInfo extends BasePaperInfo {
     //删除更改函
     public void OnDeleteChangeLetterClick(final View v) {
         if (state.equals("1") || state.equals("4")) {
-            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(v.getContext(), 2, letter_id);
+            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(v.getContext(), 2, letter_id, -1, -1);
             pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             View layout = LayoutInflater.from(v.getContext()).inflate(R.layout.ck_activity_home, null, false);
             pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
@@ -682,7 +721,7 @@ public class PaperInfo extends BasePaperInfo {
     //report删除
     public void OnDeleteClick(final View view) {
         if (report_state != 2) {
-            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(view.getContext(), 1, daily_id);
+            EnsureDeletePopUpWindow pop = new EnsureDeletePopUpWindow(view.getContext(), 1, daily_id, -1, -1);
             pop.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             View layout = LayoutInflater.from(view.getContext()).inflate(R.layout.as_activity_home, null, false);
             pop.showPopup(layout, pop.getContentView().getMeasuredWidth());
@@ -784,7 +823,7 @@ public class PaperInfo extends BasePaperInfo {
                                         Log.i(TAG, "run:    " + s);
                                         //s是处理后压缩文件在内存中的路径
                                         //file_path是原文件下载路径
-                                        Log.i(TAG, "onSuccess: path压缩后 " + file_path + " pathsize " + pathInfos.size() + "    " + s + "   " + file_name+"  id    "+id);
+                                        Log.i(TAG, "onSuccess: path压缩后 " + file_path + " pathsize " + pathInfos.size() + "    " + s + "   " + file_name + "  id    " + id);
                                         pathInfos.add(new PathInfo(type, file_path, s, file_name, id));
                                         //路径是内存路径
                                         if (pathInfos.size() == resultArray.length()) {   //下载完毕
@@ -818,21 +857,6 @@ public class PaperInfo extends BasePaperInfo {
 
             }
         });
-    }
-
-    //     1 未提交   默认    2 审核中 3 已通过  4 驳回  //针对业务员
-    @BindingAdapter("set_img")
-    public static void getImage(ImageView iv, String state) {
-        switch (state) {
-            case "1":
-            case "2":
-                iv.setImageResource(R.mipmap.order_sub_pre);
-                break;
-            case "3":
-            case "4":
-                iv.setImageResource(R.mipmap.order_sub);
-                break;
-        }
     }
 
     @BindingAdapter("set_review_img")
@@ -969,6 +993,58 @@ public class PaperInfo extends BasePaperInfo {
         }
     }
 
+    @BindingAdapter("set_review_state")
+    public static void setReviewState(TextView tv, String info4) {
+        switch (info4) {
+            case "-1":
+                tv.setTextColor(0xff0000fe);   //蓝
+                break;
+            case "1":
+                tv.setTextColor(0xff018000);   //绿
+                break;
+            case "2":
+                tv.setTextColor(0xff858585);   //灰
+                break;
+            default:
+                break;
+        }
+    }
+    @BindingAdapter("set_area_com_sub_state")
+    public static void setAreaComSubState(TextView tv, String info4) {
+        switch (info4) {
+            case "1":
+                tv.setTextColor(0XFFff0000);   //红    未提交
+                break;
+            case "2":
+                tv.setTextColor(0xff0000fe);   //蓝    审核中
+                break;
+            case "3":
+                tv.setTextColor(0xff858585);   //灰    驳回
+                break;
+            default:
+                break;
+        }
+    }
+    @BindingAdapter("set_sub_state")
+    public static void setSubState(TextView tv, String info4) {
+        switch (info4) {
+            case "1":
+                tv.setTextColor(0XFFff0000);   //红    未提交
+                break;
+            case "2":
+                tv.setTextColor(0xff0000fe);   //蓝    审核中
+                break;
+            case "4":
+                tv.setTextColor(0xff858585);   //灰    驳回
+                break;
+            case "3":
+                tv.setTextColor(0xff018000);   //绿    通过
+                break;
+            default:
+                break;
+        }
+    }
+
     @BindingAdapter("set_report_text")
     public static void setReportTableText(TextView tv, int report_state) {
         switch (report_state) {
@@ -1080,5 +1156,86 @@ public class PaperInfo extends BasePaperInfo {
 
     public void setDaily_code(String daily_code) {
         this.daily_code = daily_code;
+    }
+
+    @Bindable
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    @Bindable
+    public String getInfo2() {
+        return info2;
+    }
+
+    public void setInfo2(String info2) {
+        this.info2 = info2;
+    }
+
+    @Bindable
+    public String getInfo3() {
+        return info3;
+    }
+
+    public void setInfo3(String info3) {
+        this.info3 = info3;
+    }
+
+    @Bindable
+    public String getInfo4() {
+        return info4;
+    }
+
+    public void setInfo4(String info4) {
+        this.info4 = info4;
+    }
+
+    @Bindable
+    public String getInfo5() {
+        return info5;
+    }
+
+    public void setInfo5(String info5) {
+        this.info5 = info5;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId2() {
+        return id2;
+    }
+
+    public void setId2(int id2) {
+        this.id2 = id2;
+    }
+
+    public int getId3() {
+        return id3;
+    }
+
+    public int getId4() {
+        return id4;
+    }
+
+    public void setId3(int id3) {
+        this.id3 = id3;
+    }
+
+    public Boolean getSlide() {
+        return isSlide;
+    }
+
+    public void setSlide(Boolean slide) {
+        isSlide = slide;
     }
 }

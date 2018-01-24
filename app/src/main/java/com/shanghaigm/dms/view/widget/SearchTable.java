@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.shanghaigm.dms.BR;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.ck.OrderAddSearchInfo;
+import com.shanghaigm.dms.model.entity.common.CustomManageInfo;
 import com.shanghaigm.dms.view.adapter.ListAdapter;
 
 import java.util.ArrayList;

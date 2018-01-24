@@ -106,7 +106,7 @@ public class ChangeLetterDetailActivity extends BaseActivity {
                         Toast.makeText(ChangeLetterDetailActivity.this, "通过成功", Toast.LENGTH_SHORT).show();
                         btn_return.setEnabled(false);
                         btn_pass.setEnabled(false);
-                        goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                        goToActivity(CenterActivity.class);
                         finish();
                     }
 
@@ -138,7 +138,7 @@ public class ChangeLetterDetailActivity extends BaseActivity {
                             btn_return.setEnabled(false);
                             btn_pass.setEnabled(false);
 
-                            goToActivity(ContractReviewOrChangeLetterReviewActivity.class);
+                            goToActivity(CenterActivity.class);
 
                             finish();
                         }
@@ -148,6 +148,8 @@ public class ChangeLetterDetailActivity extends BaseActivity {
 
                         }
                     }));
+                }else {
+                    Toast.makeText(ChangeLetterDetailActivity.this, getText(R.string.need_remark), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -11,16 +11,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.android.databinding.library.baseAdapters.BR;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -28,7 +23,6 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.shanghaigm.dms.R;
 import com.shanghaigm.dms.model.entity.mm.OrderDetailInfoAllocation;
 import com.shanghaigm.dms.model.entity.mm.PopListInfo;
-import com.shanghaigm.dms.view.adapter.ListAdapter;
 
 import java.util.ArrayList;
 
