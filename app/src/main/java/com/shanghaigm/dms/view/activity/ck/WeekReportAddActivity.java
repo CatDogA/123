@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -56,7 +58,8 @@ public class WeekReportAddActivity extends BaseActivity {
     private ListView left_drawer;
     private DrawerLayout drawerLayout;
     private LinearLayout ll_week_time, ll_week_work, ll_other_work, ll_review_note;
-    private EditText edtYear, edtWeek, edtSchedule, edtCustom, edtWorkContent, edtEffect, edtRemark,
+    private EditText edtYear, edtWeek,
+            edtSchedule, edtCustom, edtWorkContent, edtEffect, edtRemark,
             edtOtherWorkContent, edtDescribe;
     private Button btnWorkContentSave, btnOtherSave, btnAdd;
     private SwipeMenuListView workContentList, listOtherContent, listReviewNotes;
@@ -66,9 +69,10 @@ public class WeekReportAddActivity extends BaseActivity {
     private ArrayList<CustomManageInfo> workContents, others, reviewNotes;
     private ListAdapter workContentAdapter, otherAdapter, reviewNotesAdapter;
     private LoadingDialog dialog;
-    private ImageView imgSchedule, imgSearch,imgYear, imgWeek;
+    private ImageView imgSchedule, imgSearch, imgYear, imgWeek;
     private int flag = 0;   //0新增 1 修改  2查看
     private PaperInfo info;
+    private TextView txtWeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +86,12 @@ public class WeekReportAddActivity extends BaseActivity {
 
     private void initIntent() {
         Bundle b = getIntent().getExtras();
-        weekId=-1;
+        weekId = -1;
         if (b != null) {
             info = (PaperInfo) b.getSerializable(ReviewTable.TASK_INFO);
             weekId = info.getId();
             Log.i(TAG, "initIntent:weekId        " + weekId);
-            if (b.getString(ReviewTable.STATE_ID).equals("1")||b.getString(ReviewTable.STATE_ID).equals("4")) {   //modify
+            if (b.getString(ReviewTable.STATE_ID).equals("1") || b.getString(ReviewTable.STATE_ID).equals("4")) {   //modify
                 flag = 1;
             } else if (b.getString(ReviewTable.STATE_ID).equals("-1")) {
                 flag = 3;         //review just see
@@ -122,10 +126,12 @@ public class WeekReportAddActivity extends BaseActivity {
                 ArrayList<PopListInfo> arr = new ArrayList<>();
                 arr.add(new PopListInfo(year + ""));
                 arr.add(new PopListInfo((year + 1) + ""));
-                MmPopupWindow pop = new MmPopupWindow(WeekReportAddActivity.this,edtYear,arr,5);
+                MmPopupWindow pop = new MmPopupWindow(WeekReportAddActivity.this, edtYear, arr, 5);
                 pop.showPopup(edtYear);
             }
         });
+        edtYear.addTextChangedListener(new WeekTextWatcher());
+        edtWeek.addTextChangedListener(new WeekTextWatcher());
         ll_week_time.setVisibility(View.VISIBLE);
         title.setText("周报管理");
         rl_back.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +164,7 @@ public class WeekReportAddActivity extends BaseActivity {
                 setWeekWorkList();
                 setOtherWorkContentList();
             }
-        }else {
+        } else {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
@@ -171,11 +177,11 @@ public class WeekReportAddActivity extends BaseActivity {
             edtWeek.setEnabled(false);
             edtSchedule.setEnabled(false);
             edtCustom.setEnabled(false);
-            edtWorkContent.setEnabled(false);
-            edtEffect.setEnabled(false);
-            edtRemark.setEnabled(false);
-            edtOtherWorkContent.setEnabled(false);
-            edtDescribe.setEnabled(false);
+            edtWorkContent.setFocusable(false);
+            edtEffect.setFocusable(false);
+            edtRemark.setFocusable(false);
+            edtOtherWorkContent.setFocusable(false);
+            edtDescribe.setFocusable(false);
             imgWeek.setVisibility(View.GONE);
             imgSchedule.setVisibility(View.GONE);
             imgSearch.setVisibility(View.GONE);
@@ -470,7 +476,7 @@ public class WeekReportAddActivity extends BaseActivity {
                                     Toast.makeText(app, getString(R.string.modify_success), Toast.LENGTH_SHORT).show();
                                 }
                                 Log.i(TAG, "onSuccess: " + weekId);
-                            }else if(obj.getString("result").equals("对不起,您本周已经添加过周报信息,不能重复添加")){
+                            } else if (obj.getString("result").equals("对不起,您本周已经添加过周报信息,不能重复添加")) {
                                 Toast.makeText(WeekReportAddActivity.this, "您本周已经添加过周报信息,不能重复添加", Toast.LENGTH_SHORT).show();
                             }
                             break;
@@ -536,6 +542,8 @@ public class WeekReportAddActivity extends BaseActivity {
         imgSearch = (ImageView) findViewById(R.id.img_search);
         imgWeek = (ImageView) findViewById(R.id.img_week);
         imgYear = (ImageView) findViewById(img_year);
+        //text
+        txtWeek = (TextView) findViewById(R.id.txt_week);
     }
 
     private void setWeekWorkList() {
@@ -551,7 +559,7 @@ public class WeekReportAddActivity extends BaseActivity {
                 if (arr.length() != 0) {
                     for (int i = 0; i < arr.length(); i++) {
                         try {
-                            if(!arr.getJSONObject(i).optString("next_week_id").equals("null")){
+                            if (!arr.getJSONObject(i).optString("next_week_id").equals("null")) {
                                 workContents.add(new CustomManageInfo(arr.getJSONObject(i).getString("creator_week_num"), arr.getJSONObject(i).getString("company_name"),
                                         arr.getJSONObject(i).getString("work_content"), arr.getJSONObject(i).getString("custome_id") + "", arr.getJSONObject(i).getString("work_effect"),
                                         arr.getJSONObject(i).getString("remark"), arr.getJSONObject(i).optInt("next_week_id")));
@@ -665,5 +673,46 @@ public class WeekReportAddActivity extends BaseActivity {
         workContentAdapter = new ListAdapter(WeekReportAddActivity.this, R.layout.item_week_work_content, BR.info, workContents);
         otherAdapter = new ListAdapter(WeekReportAddActivity.this, R.layout.item_month_other, BR.info, others);
         reviewNotesAdapter = new ListAdapter(WeekReportAddActivity.this, R.layout.item_records, BR.info, reviewNotes);
+    }
+
+    private class WeekTextWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (!edtWeek.getText().toString().equals("") && !edtYear.getText().toString().equals("")) {
+                Calendar cal = Calendar.getInstance();
+                cal.clear();
+                cal.set(Calendar.YEAR, Integer.parseInt(edtYear.getText().toString()));
+                cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(edtWeek.getText().toString()));
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                //获取月份，0表示1月份
+                int month = cal.get(Calendar.MONTH) + 1;
+                //获取当前天数
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                cal.clear();
+                cal.set(Calendar.YEAR, Integer.parseInt(edtYear.getText().toString()));
+                cal.set(Calendar.WEEK_OF_YEAR, (Integer.parseInt(edtWeek.getText().toString())+1));
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                //获取月份，0表示1月份
+                int month2 = cal.get(Calendar.MONTH) + 1;
+                //获取当前天数
+                int day2 = cal.get(Calendar.DAY_OF_MONTH);
+                Log.i(TAG, "afterTextChanged: "+(Integer.parseInt(edtWeek.getText().toString())+1)+"  "+cal.get(Calendar.DAY_OF_MONTH));
+                txtWeek.setText("周区间:("+month+"月"+day+"号到"+month2+"月"+day2+"号)");
+
+            }else {
+                txtWeek.setText("");
+            }
+        }
     }
 }

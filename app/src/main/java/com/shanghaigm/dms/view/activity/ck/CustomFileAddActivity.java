@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -33,9 +34,12 @@ import com.shanghaigm.dms.view.adapter.ListAdapter;
 import com.shanghaigm.dms.view.adapter.SlideMenuAdapter;
 import com.shanghaigm.dms.view.widget.MmPopupWindow;
 import com.shanghaigm.dms.view.widget.ReviewTable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -401,6 +405,8 @@ public class CustomFileAddActivity extends BaseActivity {
                 levelPopup.showPopup(edtLevel1);
             }
         });
+        edtLevel1.addTextChangedListener(new CustomInfoTextListener(9));
+        edtLevel2.addTextChangedListener(new CustomInfoTextListener(9));
         edtLevel2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -584,7 +590,7 @@ public class CustomFileAddActivity extends BaseActivity {
                 ArrayList<PopListInfo> years = new ArrayList<PopListInfo>();
                 years.add(new PopListInfo(""));
                 for (int i = 1990; i <= Calendar.getInstance().get(Calendar.YEAR); i++) {
-                    years.add(new PopListInfo(i+""));
+                    years.add(new PopListInfo(i + ""));
                 }
                 MmPopupWindow levelPopup = new MmPopupWindow(CustomFileAddActivity.this, edtBuyYear, years, 3);
                 levelPopup.showPopup(edtBuyYear);
@@ -789,7 +795,7 @@ public class CustomFileAddActivity extends BaseActivity {
                 String linkHobby = edtHobby.getText().toString();
                 String linkType = edtLinkManType.getText().toString();
                 //需要客户ID
-                if (!linkName.equals("") && !linkPhone.equals("") && !linkDuty.equals("") && !linkType.equals("")) {
+                if (!linkName.equals("") && !linkDuty.equals("") && !linkType.equals("")) {
                     Map<String, Object> params = new HashMap<>();
                     JSONArray linkArr = new JSONArray();
                     JSONObject linkObj = new JSONObject();
@@ -868,102 +874,105 @@ public class CustomFileAddActivity extends BaseActivity {
                 String customCounty = edtCounty.getText().toString();
                 String customAddress = edtAddress.getText().toString();
                 if (!customName.equals("")) {
-                    if (!customPhone.equals("")) {
-                        if (!customNature.equals("")) {
-                            if (!customProvince.equals("")) {
-                                if (!customCity.equals("")) {
-                                    if (!customAddress.equals("")) {
-                                        if (customNature.equals("其它")) {
-                                            if (customNature2.equals("")) {
-                                                Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
-                                                return;
+                    if (!customNature.equals("")) {
+                        if (!customProvince.equals("")) {
+                            if (!customCity.equals("")) {
+                                if (!customAddress.equals("")) {
+                                    if (customNature.equals("其它")) {
+                                        if (customNature2.equals("")) {
+                                            Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                    if (customType.equals("其他")) {
+                                        if (customType2.equals("")) {
+                                            Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                    if (haveCounty) {
+                                        if (customCounty.equals("")) {
+                                            Toast.makeText(CustomFileAddActivity.this, getString(R.string.full_filled), Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                    if (!edtLevel1.getText().toString().equals("") && edtLevel2.getText().toString().equals("")) {
+                                        Toast.makeText(CustomFileAddActivity.this, "等级须填写完整", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    } else if (edtLevel1.getText().toString().equals("") && !edtLevel2.getText().toString().equals("")) {
+                                        Toast.makeText(CustomFileAddActivity.this, "等级须填写完整", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    if (countys.length() != 0) {
+                                        for (int i = 0; i < countys.length(); i++) {
+                                            try {
+                                                if (customCounty.equals(countys.getJSONObject(i).getString("name"))) {
+                                                    countyId = countys.getJSONObject(i).getInt("id");
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
                                         }
-                                        if (customType.equals("其他")) {
-                                            if (customType2.equals("")) {
-                                                Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
-                                                return;
-                                            }
+                                    } else {
+                                        countyId = -1;
+                                    }
+                                    Map<String, Object> params = new HashMap<>();
+                                    JSONObject paramObj = new JSONObject();
+                                    JSONArray paramArr = new JSONArray();
+                                    try {
+                                        paramObj.put("company_name", customName);
+                                        paramObj.put("company_nature", customNatureId);
+                                        paramObj.put("nature_other_value", customNature2);
+                                        paramObj.put("company_type", customTypeId);
+                                        paramObj.put("type_other_value", customType2);
+                                        paramObj.put("level_num", customLevel1);
+                                        paramObj.put("level_letter", customLevel2);
+                                        paramObj.put("fixed_line", customPhone);
+                                        paramObj.put("address", provinceId + "," + cityId + "," + countyId);
+                                        if (!isAdd || !isFirstAdd) {
+                                            paramObj.put("custome_id", customId);
                                         }
-                                        if (haveCounty) {
-                                            if (customCounty.equals("")) {
-                                                Toast.makeText(CustomFileAddActivity.this, getString(R.string.full_filled), Toast.LENGTH_SHORT).show();
-                                                return;
-                                            }
+                                        paramObj.put("detailed_address", customAddress);
+                                        paramArr.put(paramObj);
+                                        params.put("crmCustomerInfoStr", paramArr.toString());
+                                        params.put("login_name", app.getAccount());
+                                        params.put("role_code", app.getRoleCode());
+                                        params.put("job_code", app.getJobCode());
+                                        Log.i(TAG, "onClick: " + params.toString());
+                                        String url = Constant.URL_ADD_CUTOM;
+                                        if (!isAdd || !isFirstAdd) {
+                                            url = Constant.URL_MODIFY_CUSTOM_INFO;
                                         }
-                                        if (countys.length() != 0) {
-                                            for (int i = 0; i < countys.length(); i++) {
+                                        Log.i(TAG, "onClick:params   " + params.toString());
+                                        OkhttpRequestCenter.getCommonReportRequest(url, params, new DisposeDataListener() {
+                                            @Override
+                                            public void onSuccess(Object responseObj) {
+                                                Log.i(TAG, "onSuccess: " + responseObj.toString() + isAdd + isFirstAdd);
                                                 try {
-                                                    if (customCounty.equals(countys.getJSONObject(i).getString("name"))) {
-                                                        countyId = countys.getJSONObject(i).getInt("id");
+                                                    if (((JSONObject) responseObj).getString("returnCode").equals("1")) {
+                                                        if (isAdd && isFirstAdd) {
+                                                            customId = ((JSONObject) responseObj).getString("result");
+                                                            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                                                            isFirstAdd = false;
+                                                            Toast.makeText(CustomFileAddActivity.this, getString(R.string.add_success), Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(CustomFileAddActivity.this, getString(R.string.modify_success), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } else if (((JSONObject) responseObj).getString("returnCode").equals("-1")) {
+                                                        Toast.makeText(CustomFileAddActivity.this, ((JSONObject) responseObj).getString("result"), Toast.LENGTH_SHORT).show();
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
                                             }
-                                        } else {
-                                            countyId = -1;
-                                        }
-                                        Map<String, Object> params = new HashMap<>();
-                                        JSONObject paramObj = new JSONObject();
-                                        JSONArray paramArr = new JSONArray();
-                                        try {
-                                            paramObj.put("company_name", customName);
-                                            paramObj.put("company_nature", customNatureId);
-                                            paramObj.put("nature_other_value", customNature2);
-                                            paramObj.put("company_type", customTypeId);
-                                            paramObj.put("type_other_value", customType2);
-                                            paramObj.put("level_num", customLevel1);
-                                            paramObj.put("level_letter", customLevel2);
-                                            paramObj.put("fixed_line", customPhone);
-                                            paramObj.put("address", provinceId + "," + cityId + "," + countyId);
-                                            if (!isAdd) {
-                                                paramObj.put("custome_id", customId);
-                                            }
-                                            paramObj.put("detailed_address", customAddress);
-                                            paramArr.put(paramObj);
-                                            params.put("crmCustomerInfoStr", paramArr.toString());
-                                            params.put("login_name", app.getAccount());
-                                            params.put("role_code", app.getRoleCode());
-                                            params.put("job_code", app.getJobCode());
-                                            Log.i(TAG, "onClick: " + params.toString());
-                                            String url = Constant.URL_ADD_CUTOM;
-                                            if (!isAdd) {
-                                                url = Constant.URL_MODIFY_CUSTOM_INFO;
-                                            }
-                                            Log.i(TAG, "onClick:params   " + params.toString());
-                                            OkhttpRequestCenter.getCommonReportRequest(url, params, new DisposeDataListener() {
-                                                @Override
-                                                public void onSuccess(Object responseObj) {
-                                                    Log.i(TAG, "onSuccess: " + responseObj.toString());
-                                                    try {
-                                                        if (((JSONObject) responseObj).getString("returnCode").equals("1")) {
-                                                            if (isAdd && isFirstAdd) {
-                                                                customId = ((JSONObject) responseObj).getString("result");
-                                                                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                                                                isFirstAdd = false;
-                                                                Toast.makeText(CustomFileAddActivity.this, getString(R.string.add_success), Toast.LENGTH_SHORT).show();
-                                                            } else {
-                                                                Toast.makeText(CustomFileAddActivity.this, getString(R.string.modify_success), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } else if (((JSONObject) responseObj).getString("returnCode").equals("-1")) {
-                                                            Toast.makeText(CustomFileAddActivity.this, ((JSONObject) responseObj).getString("result"), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
 
-                                                @Override
-                                                public void onFailure(Object reasonObj) {
+                                            @Override
+                                            public void onFailure(Object reasonObj) {
 
-                                                }
-                                            });
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    } else {
-                                        Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 } else {
                                     Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
@@ -972,7 +981,7 @@ public class CustomFileAddActivity extends BaseActivity {
                                 Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(CustomFileAddActivity.this, getString(R.string.full_filled), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CustomFileAddActivity.this, getText(R.string.full_filled), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(CustomFileAddActivity.this, getString(R.string.full_filled), Toast.LENGTH_SHORT).show();
@@ -1042,7 +1051,7 @@ public class CustomFileAddActivity extends BaseActivity {
                 setEdtText(edtCoachType2, coaches.get(position).getName1());
                 setEdtText(edtCoachLength, coaches.get(position).getName4());
                 setEdtText(edtCoachLength2, coaches.get(position).getName5().
-                        equals("null")?"":coaches.get(position).getName5());
+                        equals("null") ? "" : coaches.get(position).getName5());
                 carTypeId = coaches.get(position).getName3();
                 lengthId = coaches.get(position).getName6();
                 productId = coaches.get(position).getId();
@@ -1508,6 +1517,65 @@ public class CustomFileAddActivity extends BaseActivity {
 
                         }
                     });
+                    break;
+                case 9:
+                    if (!edtLevel1.getText().toString().equals("") && !edtLevel2.getText().toString().equals("")) {
+                        String levelText = "";
+                        switch (edtLevel1.getText().toString() + edtLevel2.getText().toString()) {
+                            case "1A":
+                                levelText = "购买过南龙车（300台以上），愿买南金车";
+                                break;
+                            case "1B":
+                                levelText = "购买过南龙车（100台到300台），愿买南金车";
+                                break;
+                            case "1C":
+                                levelText = "购买过南龙车（15到100台），愿买南龙车";
+                                break;
+                            case "1D":
+                                levelText = "购买过南龙车（小于15台），愿买南龙车";
+                                break;
+                            case "2A":
+                                levelText = "购买过南龙车（300台以上），不愿买南金车";
+                                break;
+                            case "2B":
+                                levelText = "购买过南龙车（100台到300台），不愿买南金车";
+                                break;
+                            case "2C":
+                                levelText = "购买过南龙车（15到100台），不愿买南龙车";
+                                break;
+                            case "2D":
+                                levelText = "购买过南龙车（小于15台），不愿买南龙车";
+                                break;
+                            case "3A":
+                                levelText = "未购买过南龙车；保有量大于300台，愿买南金车";
+                                break;
+                            case "3B":
+                                levelText = "未购买过南龙车；保有量100台到300台，愿买南金车";
+                                break;
+                            case "3C":
+                                levelText = "未购买过南龙车：保有量15到100台；愿买南龙车";
+                                break;
+                            case "3D":
+                                levelText = "未购买过南龙车：保有量小于15台；愿买南龙车";
+                                break;
+                            case "4A":
+                                levelText = "未购买过南龙车；保有量大于300台，不愿买南金车";
+                                break;
+                            case "4B":
+                                levelText = "未购买过南龙车；保有量100台到300台，不愿买南金车";
+                                break;
+                            case "4C":
+                                levelText = "未购买过南龙车：保有量15到100台；不愿买南龙车";
+                                break;
+                            case "4D":
+                                levelText = "未购买过南龙车：保有量小于15台；不愿买南龙车";
+                                break;
+                        }
+                        ((TextView) findViewById(R.id.txt_level)).setVisibility(View.VISIBLE);
+                        ((TextView) findViewById(R.id.txt_level)).setText(levelText);
+                    } else {
+                        ((TextView) findViewById(R.id.txt_level)).setVisibility(View.GONE);
+                    }
                     break;
             }
         }

@@ -721,13 +721,13 @@ public class DayReportAddActivity extends BaseActivity {
             btnOther.setVisibility(View.GONE);
             btnIntentContent.setVisibility(View.GONE);
             btnVisitContent.setVisibility(View.GONE);
-            edtOtherCotent.setEnabled(false);
-            edtDescribe.setEnabled(false);
+            edtOtherCotent.setFocusable(false);
+            edtDescribe.setFocusable(false);
             for (int i = 0; i < intentOrderEdts.size(); i++) {
                 intentOrderEdts.get(i).setEnabled(false);
             }
             for (int i = 0; i < visitInfoEdts.size(); i++) {
-                visitInfoEdts.get(i).setEnabled(false);
+                visitInfoEdts.get(i).setFocusable(false);
             }
         }
     }

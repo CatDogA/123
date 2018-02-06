@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -230,12 +230,20 @@
                             android:src="@mipmap/down" />
                     </LinearLayout>
                 </LinearLayout>
-
+                <TextView
+                    android:textSize="12sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/txt_level"
+                    android:visibility="gone"
+                    android:textColor="@color/refreshSchemeRed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/cic_edt_pink_back"
+                    android:background="@drawable/cic_edt_back"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -1221,7 +1229,7 @@
 
         <ListView
             android:id="@+id/left_drawer"
-            android:layout_width="170dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#fff"

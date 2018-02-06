@@ -153,18 +153,17 @@ public class MonthReportAddActivity extends BaseActivity {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
         if (flag == 2) {
-            edtContent.setEnabled(false);
-            edtEffect.setEnabled(false);
-            edtRemark.setEnabled(false);
+            edtContent.setFocusable(false);
+            edtEffect.setFocusable(false);
+            edtRemark.setFocusable(false);
             edtNextMonthLeast.setEnabled(false);
             edtNextMonthFight.setEnabled(false);
             edtSaleds.setEnabled(false);
-            edtContent2.setEnabled(false);
-            edtEffect2.setEnabled(false);
-            edtRemark2.setEnabled(false);
-            edtOtherContent.setEnabled(false);
-            edtContent2.setEnabled(false);
-            edtDescribe.setEnabled(false);
+            edtContent2.setFocusable(false);
+            edtEffect2.setFocusable(false);
+            edtRemark2.setFocusable(false);
+            edtOtherContent.setFocusable(false);
+            edtDescribe.setFocusable(false);
             btnSave.setVisibility(View.GONE);
             btnSave2.setVisibility(View.GONE);
             btnSave3.setVisibility(View.GONE);

@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,6 +130,14 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+                <TextView
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/txt_week"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorRedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
                 <Button
                     android:onClick="onClick"
                     android:id="@+id/btn_week_add"
@@ -648,7 +656,7 @@
 
         <ListView
             android:id="@+id/left_drawer"
-            android:layout_width="240dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#fff"
