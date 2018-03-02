@@ -63,6 +63,7 @@ public class CustomFileAddActivity extends BaseActivity {
             edtCarType, edtModel, edtBrand, edtHoldings,
             edtCoachType2, edtCoachLength, edtCoachLength2,
             edtBuyYear, edtRemark;
+    private LinearLayout llNatureOther,llTypeOther;
     private LoadingDialog dialog;
     private Button btnCustomInfo, btnSaveLinkMan, btnSaveHoldings, btnHistory, btnProduct;
     private ImageView imgNature, imgCustomType;
@@ -1381,6 +1382,9 @@ public class CustomFileAddActivity extends BaseActivity {
         edtRemark = (EditText) findViewById(R.id.edt_remark);
         btnProduct = (Button) findViewById(R.id.btn_product);
         ll_county = (LinearLayout) findViewById(R.id.ll_county);
+
+        llNatureOther = (LinearLayout) findViewById(R.id.ll_nature_other);
+        llTypeOther = (LinearLayout) findViewById(R.id.ll_type_other);
     }
 
     private void allGone() {
@@ -1431,8 +1435,10 @@ public class CustomFileAddActivity extends BaseActivity {
                 case 1:
                     if (result.equals("其他") || result.equals("其它")) {
                         edtNature2.setVisibility(View.VISIBLE);
+                        llNatureOther.setVisibility(View.VISIBLE);
                     } else {
                         edtNature2.setVisibility(View.GONE);
+                        llNatureOther.setVisibility(View.GONE);
                     }
                     if (natureArr.length() != 0) {
                         customNatureId = getParam(natureArr, result, "date_value", "date_key");
@@ -1441,8 +1447,10 @@ public class CustomFileAddActivity extends BaseActivity {
                 case 2:
                     if (result.equals("其他") || result.equals("其它")) {
                         edtType2.setVisibility(View.VISIBLE);
+                        llTypeOther.setVisibility(View.VISIBLE);
                     } else {
                         edtType2.setVisibility(View.GONE);
+                        llTypeOther.setVisibility(View.GONE);
                     }
                     if (typeArr.length() != 0) {
                         customTypeId = getParam(typeArr, result, "date_value", "date_key");

@@ -39,6 +39,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jiguang.analytics.android.api.CountEvent;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+import cn.jiguang.analytics.android.api.LoginEvent;
+
 public class LoginActivity extends AppCompatActivity {
     private static String TAG = "LoginActivity";
     public static final String POSITION_FLAG = "position_flag";
@@ -107,7 +111,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                goToActivity(TestActivity.class);
-
+                LoginEvent cEvent = new LoginEvent("login_key",true);
+                JAnalyticsInterface.onEvent(LoginActivity.this, cEvent);
                 requestAccessToken();
             }
         });
@@ -115,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         edtAccount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 if (actionId == EditorInfo.IME_ACTION_NEXT || (event != null
                         && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     edtPassWord.requestFocus();
@@ -246,9 +252,9 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject object = new JSONObject(responseObj.toString());
                         String resultCode = object.getString("resultCode");
                         JSONObject resultEntity = object.getJSONObject("resultEntity");
-                        if (resultCode.equals("100")) {
+                        if (resultCode.equals("1")) {
                             String roleCode = resultEntity.getString("role_code");
-                            if (resultCode != "") {
+                            if (!roleCode.equals("")) {
                                 login(roleCode);
                             } else {
                                 Toast.makeText(LoginActivity.this, "请选择职位", Toast.LENGTH_SHORT).show();

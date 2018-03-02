@@ -9,9 +9,24 @@ android {
         multiDexEnabled true
         targetSdkVersion 25
         versionCode 1
-        versionName "1.2"
+        versionName "1.2.4"
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                JPUSH_APPKEY : "fe764e13bc750dce4e7d4725", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
+    }
+    buildscript {
+        repositories {
+            jcenter()
+        }
+    }
+
+    allprojects {
+        repositories {
+            jcenter()
+        }
     }
     buildTypes {
         release {
@@ -69,4 +84,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile 'com.lovedise:permissiongen:0.0.6'
     testCompile 'junit:junit:4.12'
+    //极光统计
+    compile 'cn.jiguang.sdk:janalytics:1.1.1' // 此处以JAnalytics 1.1.1 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.2' // 此处以JCore 1.1.2 版本为例。
 }

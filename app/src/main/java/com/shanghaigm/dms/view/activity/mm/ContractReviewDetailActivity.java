@@ -143,6 +143,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                     map.put("loginName", app.getAccount());
                     map.put("flow_details_id", app.getFlow_detail_id());
                     map.put("jobCode", app.getJobCode());
+                    map.put("roleCode", app.getRoleCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CONTRACT_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                         @Override
@@ -186,6 +187,7 @@ public class ContractReviewDetailActivity extends BaseActivity {
                         map.put("jobCode", app.getJobCode());
                         map.put("examination_result", 2);
                         map.put("loginName", app.getAccount());
+                        map.put("roleCode", app.getRoleCode());
                         map.put("flow_details_id", app.getFlow_detail_id());
                         dialog.showLoadingDlg();
                         CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CONTRACT_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {

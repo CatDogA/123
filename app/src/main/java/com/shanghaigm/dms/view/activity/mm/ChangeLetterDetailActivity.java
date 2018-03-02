@@ -97,6 +97,7 @@ public class ChangeLetterDetailActivity extends BaseActivity {
                 map.put("loginName", app.getAccount());
                 map.put("flow_details_id", app.getFlow_detail_id());
                 map.put("jobCode", app.getJobCode());
+                map.put("roleCode",app.getRoleCode());
                 dialog.showLoadingDlg();
                 CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_LETTER_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                     @Override
@@ -128,6 +129,7 @@ public class ChangeLetterDetailActivity extends BaseActivity {
                     map.put("loginName", app.getAccount());
                     map.put("flow_details_id", app.getFlow_detail_id());
                     map.put("jobCode", app.getJobCode());
+                    map.put("roleCode",app.getRoleCode());
                     dialog.showLoadingDlg();
                     CommonOkHttpClient.get(new CommonRequest().createGetRequestInt(Constant.URL_GET_CHANGE_LETTER_REVIEW, map), new DisposeDataHandle(new DisposeDataListener() {
                         @Override

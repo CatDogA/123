@@ -28,6 +28,8 @@ import com.shanghaigm.dms.view.activity.common.LoginActivity;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by LuoXiaoBin on 2017/4/28.
  *
@@ -62,6 +64,8 @@ public class DmsApplication extends Application {
         // 而不需要设置一个app静态变量去设置，具体实现还需要等后续实际使用时验证
         mApplication = this;
         mainData = new MainData();
+        JAnalyticsInterface.init(this);
+        JAnalyticsInterface.setDebugMode(true);
     }
 
     public void endApp(Context context) {

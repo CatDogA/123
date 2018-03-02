@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -50,10 +51,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DayReportAddActivity extends BaseActivity {
+public class DayReportAddActivity extends BaseActivity implements View.OnTouchListener{
     private TextView title;
     private RelativeLayout rl_back, rl_end;
     private ArrayList<String> datas = new ArrayList<>();
@@ -74,7 +76,6 @@ public class DayReportAddActivity extends BaseActivity {
     private static String TAG = "DayReportAddActivity";
     private PaperInfo info;
     private Button btnVisitContent, btnIntentContent, btnOther;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -731,7 +732,40 @@ public class DayReportAddActivity extends BaseActivity {
             }
         }
     }
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        //触摸的是EditText并且当前EditText可以滚动则将事件交给EditText处理；否则将事件交由其父类处理
+        if (((view.getId() == R.id.edt_product_need && canVerticalScroll(edtProductNeed)))||
+                ((view.getId() == R.id.edt_remark && canVerticalScroll(edtRemark)))||
+                ((view.getId() == R.id.edt_visit_result && canVerticalScroll(edtResult)))) {
+            view.getParent().requestDisallowInterceptTouchEvent(true);
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+            }
+        }
+        return false;
+    }
+    /**
+     * EditText竖直方向是否可以滚动
+     * @param editText  需要判断的EditText
+     * @return  true：可以滚动   false：不可以滚动
+     */
+    private boolean canVerticalScroll(EditText editText) {
+        //滚动的距离
+        int scrollY = editText.getScrollY();
+        //控件内容的总高度
+        int scrollRange = editText.getLayout().getHeight();
+        //控件实际显示的高度
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        //控件内容总高度与实际显示高度的差值
+        int scrollDifference = scrollRange - scrollExtent;
 
+        if(scrollDifference == 0) {
+            return false;
+        }
+
+        return (scrollY > 0) || (scrollY < scrollDifference - 1);
+    }
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
@@ -876,8 +910,11 @@ public class DayReportAddActivity extends BaseActivity {
         edtDuty = (EditText) findViewById(R.id.edt_duty);
         edtPhone = (EditText) findViewById(R.id.edt_phone);
         edtProductNeed = (EditText) findViewById(R.id.edt_product_need);
+        edtProductNeed.setOnTouchListener(this);
         edtRemark = (EditText) findViewById(R.id.edt_remark);
+        edtRemark.setOnTouchListener(this);
         edtResult = (EditText) findViewById(R.id.edt_visit_result);
+        edtResult.setOnTouchListener(this);
         //意向订单信息
         edtCustomName2 = (EditText) findViewById(R.id.edt_custom_name2);
         edtLinkMan = (EditText) findViewById(R.id.edt_link_man);
@@ -1041,7 +1078,7 @@ public class DayReportAddActivity extends BaseActivity {
         edt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(DayReportAddActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(DayReportAddActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         mYear[0] = year;
@@ -1051,9 +1088,13 @@ public class DayReportAddActivity extends BaseActivity {
                                 .append((mMonth[0] + 1) < 10 ? "0" + (mMonth[0] + 1) : (mMonth[0] + 1))
                                 .append("-")
                                 .append((mDay[0] < 10) ? "0" + mDay[0] : mDay[0]));
+                        view.setMaxDate(new Date().getTime());
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+                datePickerDialog.show();
+
             }
         });
     }
