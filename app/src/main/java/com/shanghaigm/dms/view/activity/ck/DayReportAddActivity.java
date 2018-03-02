@@ -61,6 +61,7 @@ public class DayReportAddActivity extends BaseActivity implements View.OnTouchLi
     private ArrayList<String> datas = new ArrayList<>();
     private ListView left_drawer;
     private DrawerLayout drawerLayout;
+
     private LinearLayout ll_other, ll_review_note;
     private ScrollView sv_visit_condition, sv_intent_info;
     private EditText edtVisitDate, edtVisitTime, edtVisitTime2, edtCustomName, edtIntent, edtOtherIntent, edtVisitMan, edtDuty, edtPhone, edtProductNeed, edtRemark, edtResult,//走访客户情况

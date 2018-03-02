@@ -317,10 +317,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                     if (flag == 2) {
-                        if (jobList.size() == 1) {
                             roleEdt.setText(resutEntity.getJSONObject(0).getString("job_name"));
                             jobCode = jobCodes.get(0);
-                        }
                     }
                 } catch (JSONException e) {
                     Toast.makeText(LoginActivity.this, "用户名错误", Toast.LENGTH_SHORT).show();
