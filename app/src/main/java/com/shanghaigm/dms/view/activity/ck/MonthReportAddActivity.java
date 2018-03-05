@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +58,8 @@ public class MonthReportAddActivity extends BaseActivity {
     private ListView left_drawer;
     private DrawerLayout drawerLayout;
     private LoadingDialog dialog;
-    private LinearLayout ll_sale_target, ll_month, ll_next_month, ll_other, ll_review_note;
+    private LinearLayout ll_month, ll_next_month, ll_other, ll_review_note;
+    private ScrollView mSaleTagetSv;
     private EditText edtYear, edtMonth, edtNextMonthLeast, edtNextMonthFight, edtSaleds, edtYearSaleds, edtPreMonthLeast, edtPreMonthFight,//销售指标
             edtContent, edtEffect, edtRemark,  //本月情况
             edtContent2, edtEffect2, edtRemark2,   //下本月情况
@@ -170,7 +172,7 @@ public class MonthReportAddActivity extends BaseActivity {
             btnSave4.setVisibility(View.GONE);
         }
         allGone();
-        ll_sale_target.setVisibility(View.VISIBLE);
+        mSaleTagetSv.setVisibility(View.VISIBLE);
         rl_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,7 +194,7 @@ public class MonthReportAddActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         allGone();
-                        ll_sale_target.setVisibility(View.VISIBLE);
+                        mSaleTagetSv.setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         allGone();
@@ -877,7 +879,7 @@ public class MonthReportAddActivity extends BaseActivity {
         left_drawer = (ListView) findViewById(R.id.left_drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //布局
-        ll_sale_target = (LinearLayout) findViewById(R.id.ll_sale_target);
+        mSaleTagetSv = (ScrollView) findViewById(R.id.sv_sale_target);
         ll_month = (LinearLayout) findViewById(R.id.ll_month);
         ll_next_month = (LinearLayout) findViewById(R.id.ll_next_month);
         ll_other = (LinearLayout) findViewById(R.id.ll_other);
@@ -918,7 +920,7 @@ public class MonthReportAddActivity extends BaseActivity {
 
     private void allGone() {
 
-        ll_sale_target.setVisibility(View.GONE);
+        mSaleTagetSv.setVisibility(View.GONE);
         ll_month.setVisibility(View.GONE);
         ll_next_month.setVisibility(View.GONE);
         ll_other.setVisibility(View.GONE);
