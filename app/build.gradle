@@ -9,7 +9,7 @@ android {
         multiDexEnabled true
         targetSdkVersion 25
         versionCode 1
-        versionName "1.2.5"
+        versionName "1.2.7"
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [

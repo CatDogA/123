@@ -307,6 +307,8 @@ public class EnsureDeletePopUpWindow extends PopupWindow {
                                     Intent intent = new Intent(context, CenterActivity.class);
                                     context.startActivity(intent);
                                     dismiss();
+                                }else if(((JSONObject) responseObj).getString("returnCode").equals("-1")){
+                                    Toast.makeText(context, ((JSONObject) responseObj).getString("result"), Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
